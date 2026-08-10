@@ -76,10 +76,10 @@
         }
     </style>
 </head>
-<body class="min-h-screen p-2 sm:p-4 pt-8 sm:pt-12 flex flex-col items-center text-white">
+<body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-white">
 
-    <!-- Header (Sticky / Tetap di Atas saat digeser - Tanpa Frame & Logo Lebih Besar) -->
-    <header class="w-full max-w-6xl flex flex-col items-center justify-center gap-2 mb-6 sticky top-2 sm:top-4 z-50 text-center">
+    <!-- Header (Dipastikan tidak menggunakan sticky/fixed, sehingga ikut bergeser ke atas saat discroll) -->
+    <header class="w-full max-w-6xl flex flex-col items-center justify-center gap-2 mb-6 text-center">
         <img src="logo.png" class="w-30 h-24 sm:w-30 sm:h-28 object-contain rounded-xl">
         <h1 class="text-lg sm:text-2xl font-bold text-white drop-shadow">SANDAGA MINISOCCER 2</h1>
     </header>
@@ -970,10 +970,8 @@
             let hasMin = false;
             let hasKel = false;
 
-            // Objek untuk mengakumulasi rekap minuman per jenis produk pada tanggal terpilih
             let rekapMinumanPerProduk = {};
 
-            // 1. Pemasukan Lainnya / Pelunasan
             Object.entries(globalCache.pemasukan).forEach(([key, item]) => {
                 if(item.tgl === selectedDate) {
                     hasLap = true;
@@ -996,7 +994,6 @@
                 }
             });
 
-            // 2. Booking Lapangan (DP / Member)
             Object.entries(globalCache.booking).forEach(([key, item]) => {
                 if(item.tgl && item.tgl.split('T')[0] === selectedDate) {
                     hasLap = true;
@@ -1020,7 +1017,6 @@
                 }
             });
 
-            // 3. Minuman
             Object.entries(globalCache.minuman).forEach(([key, item]) => {
                 if(item.tgl === selectedDate) {
                     hasMin = true;
@@ -1037,7 +1033,6 @@
                     let prod = item.produk || 'Lainnya';
                     let pcs = Number(item.jumlahPcs || 0);
 
-                    // Akumulasi ke ringkasan per produk
                     if(!rekapMinumanPerProduk[prod]) {
                         rekapMinumanPerProduk[prod] = { pcs: 0, total: 0 };
                     }
@@ -1053,7 +1048,6 @@
                 }
             });
 
-            // Render Ringkasan Minuman Box di Halaman Utama
             if(Object.keys(rekapMinumanPerProduk).length > 0) {
                 Object.entries(rekapMinumanPerProduk).forEach(([namaProduk, dataVal]) => {
                     ringkasanMinumanBox.innerHTML += `
@@ -1070,7 +1064,6 @@
                 ringkasanMinumanBox.innerHTML = `<div class="col-span-full text-center p-3 text-white/50 italic text-[8px] sm:text-xs">Belum ada penjualan minuman pada tanggal ini.</div>`;
             }
 
-            // 4. Pengeluaran (Berdasarkan Tanggal Pencatatan Pengeluaran)
             Object.entries(globalCache.pengeluaran).forEach(([key, item]) => {
                 if(item.tgl === selectedDate) {
                     hasKel = true;
@@ -1095,7 +1088,6 @@
             document.getElementById('subtotal-minuman').innerText = "Total: Rp " + totalMinuman.toLocaleString('id-ID');
             document.getElementById('subtotal-keluar').innerText = "Total: Rp " + totalKeluar.toLocaleString('id-ID');
 
-            // Hitung Saldo Bersih Cash (Total Cash hari ini - Total Keluar yang bersumber dari cash hari ini)
             let totalKeluarDariCashHariIni = 0;
             Object.values(globalCache.pengeluaran).forEach(item => {
                 let sumberTgl = item.sumberTgl || item.tgl;
