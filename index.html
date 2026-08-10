@@ -392,6 +392,22 @@
                 <label class="block text-xs font-medium mb-1 text-white/90">Jam Main (Otomatis)</label>
                 <input type="text" id="in-jam-main" placeholder="Jam main akan otomatis terisi" class="w-full p-2 rounded mb-3 text-sm glass-input bg-black/20" readonly>
 
+                <!-- Opsi Tambahan Sewa Bola & Rompi (Opsional) -->
+                <div class="glass-panel-sub p-3 rounded-xl border border-emerald-400/30 mb-3 space-y-3">
+                    <label class="block text-xs font-bold text-emerald-200">⚽ Opsi Tambahan Sewa (Opsional)</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <label class="flex items-center gap-2 cursor-pointer bg-black/20 p-2 rounded-lg border border-white/10">
+                            <input type="checkbox" id="in-sewa-bola" onchange="hitungOtomatisBiaya()" class="w-4 h-4 rounded accent-emerald-500">
+                            <span class="text-xs text-white">Sewa Bola (Rp 25.000/jam)</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer bg-black/20 p-2 rounded-lg border border-white/10">
+                            <input type="checkbox" id="in-sewa-rompi" onchange="hitungOtomatisBiaya()" class="w-4 h-4 rounded accent-emerald-500">
+                            <span class="text-xs text-white">Sewa Rompi (Rp 30.000/jam)</span>
+                        </label>
+                    </div>
+                    <p id="info-biaya-tambahan" class="text-[10px] text-amber-300 font-semibold italic">Biaya tambahan sewa: Rp 0</p>
+                </div>
+
                 <!-- 2. Pembayaran Dipisah Menjadi 2 Metode (Karena Sparring Bayar Masing-masing) -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
                     <div class="glass-panel-sub p-3 rounded-xl border border-emerald-400/30 space-y-2">
@@ -653,6 +669,9 @@
             if(!selectTim) return;
             selectTim.innerHTML = `<option value="">-- Pilih Tim yang Main --</option>`;
             document.getElementById('in-jam-main').value = "";
+            document.getElementById('in-sewa-bola').checked = false;
+            document.getElementById('in-sewa-rompi').checked = false;
+            document.getElementById('info-biaya-tambahan').innerText = "Biaya tambahan sewa: Rp 0";
 
             if(!tglInput) return;
 
@@ -686,8 +705,8 @@
             } else {
                 let opt = document.createElement('option');
                 opt.value = "Lainnya / Umum";
-                opt.setAttribute('data-jam', "-");
-                opt.text = "Lainnya / Umum (Tanpa Jadwal)";
+                opt.setAttribute('data-jam', "01:00");
+                opt.text = "Lainnya / Umum (Tanpa Jadwal - Durasi 1 Jam)";
                 selectTim.appendChild(opt);
             }
         }
@@ -698,6 +717,52 @@
             let selectedOption = selectTim.options[selectTim.selectedIndex];
             let jam = selectedOption ? selectedOption.getAttribute('data-jam') : "";
             document.getElementById('in-jam-main').value = jam || "-";
+            hitungOtomatisBiaya();
+        }
+
+        // Hitung Otomatis Tambahan Biaya Sewa Berdasarkan Durasi Main (Dihitung per Jam)
+        window.hitungOtomatisBiaya = () => {
+            let jamMainStr = document.getElementById('in-jam-main').value;
+            let durasiJam = 1; // Default 1 jam jika format tidak terdeteksi
+
+            if(jamMainStr && jamMainStr.includes('-')) {
+                // Jika format rentang jam misal "15:00-17:00"
+                let parts = jamMainStr.split('-');
+                if(parts.length === 2) {
+                    let startH = parseInt(parts[0].split(':')[0]);
+                    let endH = parseInt(parts[1].split(':')[0]);
+                    if(!isNaN(startH) && !isNaN(endH) && endH > startH) {
+                        durasiJam = endH - startH;
+                    }
+                }
+            }
+
+            let pakaiBola = document.getElementById('in-sewa-bola').checked;
+            let pakaiRompi = document.getElementById('in-sewa-rompi').checked;
+
+            let biayaBola = pakaiBola ? (25000 * durasiJam) : 0;
+            let biayaRompi = pakaiRompi ? (30000 * durasiJam) : 0;
+            let totalTambahan = biayaBola + biayaRompi;
+
+            let rincianTxt = [];
+            if(pakaiBola) rincianTxt.push(`Bola: Rp ${biayaBola.toLocaleString('id-ID')} (${durasiJam} jam)`);
+            if(pakaiRompi) rincianTxt.push(`Rompi: Rp ${biayaRompi.toLocaleString('id-ID')} (${durasiJam} jam)`);
+
+            let infoEl = document.getElementById('info-biaya-tambahan');
+            if(infoEl) {
+                if(rincianTxt.length > 0) {
+                    infoEl.innerText = `Biaya tambahan sewa (${durasiJam} jam): Rp ${totalTambahan.toLocaleString('id-ID')} [${rincianTxt.join(', ')}]`;
+                } else {
+                    infoEl.innerText = `Biaya tambahan sewa: Rp 0`;
+                }
+            }
+
+            // Otomatis masukkan ke Tim 1 sebagai kemudahan pengisian
+            let inputJml1 = document.getElementById('in-jumlah-1');
+            if(inputJml1 && totalTambahan > 0) {
+                let currentVal = Number(inputJml1.value || 0);
+                // Jika belum diisi atau ingin di-update otomatis, kita set nilainya
+            }
         }
 
         window.submitData = async (e, type) => {
@@ -726,13 +791,35 @@
                 let met2 = document.getElementById('in-metode-2').value;
                 let tgl = document.getElementById('in-tgl').value;
 
+                // Hitung biaya tambahan sewa bola & rompi berdasarkan durasi
+                let durasiJam = 1;
+                if(jamMain && jamMain.includes('-')) {
+                    let parts = jamMain.split('-');
+                    if(parts.length === 2) {
+                        let startH = parseInt(parts[0].split(':')[0]);
+                        let endH = parseInt(parts[1].split(':')[0]);
+                        if(!isNaN(startH) && !isNaN(endH) && endH > startH) durasiJam = endH - startH;
+                    }
+                }
+                let pakaiBola = document.getElementById('in-sewa-bola').checked;
+                let pakaiRompi = document.getElementById('in-sewa-rompi').checked;
+                let tambahanSewa = (pakaiBola ? 25000 * durasiJam : 0) + (pakaiRompi ? 30000 * durasiJam : 0);
+
+                // Tambahkan biaya sewa ke Tim 1 secara otomatis jika dicentang
+                let totalTim1 = jml1 + tambahanSewa;
+
+                let ketSewa = [];
+                if(pakaiBola) ketSewa.push(`Sewa Bola(${durasiJam}j)`);
+                if(pakaiRompi) ketSewa.push(`Sewa Rompi(${durasiJam}j)`);
+                let ketTambahanStr = ketSewa.length > 0 ? ` + ${ketSewa.join(', ')}` : "";
+
                 data = { 
-                    ket: `Pelunasan ${tim} (${jamMain})`, 
-                    jumlah1: jml1,
+                    ket: `Pelunasan ${tim} (${jamMain})${ketTambahanStr}`, 
+                    jumlah1: totalTim1,
                     metode1: met1,
                     jumlah2: jml2,
                     metode2: met2,
-                    jumlah: jml1 + jml2, // Total gabungan untuk kompatibilitas rekap
+                    jumlah: totalTim1 + jml2, // Total gabungan untuk kompatibilitas rekap
                     tgl: tgl
                 };
             } else if(type === 'minuman') {
