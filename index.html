@@ -76,11 +76,11 @@
         }
     </style>
 </head>
-<body class="min-h-screen p-2 sm:p-4 flex flex-col items-center text-white">
+<body class="min-h-screen p-2 sm:p-4 pt-8 sm:pt-12 flex flex-col items-center text-white">
 
-    <!-- Header (Sticky / Tetap di Atas saat digeser - Logo & Judul di Tengah) -->
-    <header class="glass-panel rounded-2xl p-4 w-full max-w-6xl flex flex-col items-center justify-center gap-2 mb-6 sticky top-2 sm:top-4 z-50 text-center">
-        <img src="logo.png" class="w-16 h-16 sm:w-20 sm:h-20 object-contain rounded-xl">
+    <!-- Header (Sticky / Tetap di Atas saat digeser - Tanpa Frame & Logo Lebih Besar) -->
+    <header class="w-full max-w-6xl flex flex-col items-center justify-center gap-2 mb-6 sticky top-2 sm:top-4 z-50 text-center">
+        <img src="logo.png" class="w-30 h-24 sm:w-30 sm:h-28 object-contain rounded-xl">
         <h1 class="text-lg sm:text-2xl font-bold text-white drop-shadow">SANDAGA MINISOCCER 2</h1>
     </header>
 
@@ -88,7 +88,7 @@
         
         <!-- BERANDA -->
         <div id="page-home" class="glass-panel p-3 sm:p-6 rounded-2xl">
-            <h2 class="text-center font-bold mb-4 text-xl drop-shadow">MAIN MENU</h2>
+            <h2 class="text-center font-bold mb-4 text-lg sm:text-xl text-cyan-300 drop-shadow tracking-wider">MAIN MENU</h2>
             
             <!-- 4 TOMBOL UTAMA BERJEJER SATU-SATU KE BAWAH -->
             <div class="flex flex-col gap-3 mb-6">
@@ -103,7 +103,7 @@
 
             <!-- HEADER RESULT & 3 TOMBOL TAMBAHAN -->
             <div class="space-y-3">
-                <h3 class="text-center font-bold text-sm tracking-widest text-white/80 uppercase">RESULT</h3>
+                <h3 class="text-center font-bold text-lg sm:text-xl tracking-wider text-amber-300 drop-shadow uppercase">RESULT</h3>
                 <div class="flex flex-col gap-3">
                     <button onclick="showPage('booking-schedule')" class="glass-btn p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm w-full">BOOKING SCHEDULE</button>
                     <button onclick="showPage('daily-recap')" class="glass-btn p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm w-full">DAILY RECAP</button>
@@ -418,7 +418,7 @@
                 <select id="m-select-pilihan" onchange="pilihMinuman(this)" class="w-full p-2 rounded mb-3 text-sm glass-input">
                     <option value="" data-harga="0">-- Pilih Minuman --</option>
                     <option value="Air Mineral" data-harga="4000">Air Mineral (Rp 4.000)</option>
-                    <option value="Air Mineral (Pas)" data-harga="5000">Air Mineral [Tanpa Kembalian] (Rp 5.000)</option>
+                    <option value="Air Mineral + 3 Permen" data-harga="5000">Air Mineral + 3 Permen (Rp 5.000)</option>
                     <option value="Pocari Sweat" data-harga="10000">Pocari Sweat (Rp 10.000)</option>
                     <option value="Fanta" data-harga="5000">Fanta (Rp 5.000)</option>
                     <option value="Sprite" data-harga="5000">Sprite (Rp 5.000)</option>
