@@ -150,13 +150,27 @@
                     </div>
                 </div>
 
-                <!-- 2. TABEL KHUSUS MINUMAN -->
+                <!-- 2. RINGKASAN PENJUALAN MINUMAN -->
                 <div class="space-y-2">
                     <div class="flex justify-between items-center">
-                        <h3 class="font-bold text-xs sm:text-sm text-amber-200 flex items-center gap-1.5">🥤 2. Penjualan Minuman</h3>
+                        <h3 class="font-bold text-xs sm:text-sm text-amber-200 flex items-center gap-1.5">🥤 2. Penjualan Minuman (Ringkasan)</h3>
                         <span id="subtotal-minuman" class="text-[10px] sm:text-xs font-bold text-amber-200 bg-slate-900/80 border border-white/10 px-2 py-1 rounded-lg">Total: Rp 0</span>
                     </div>
-                    <div class="shadow rounded-xl border border-white/10 bg-black/30 backdrop-blur-md overflow-hidden">
+                    
+                    <!-- Box Ringkasan Minuman Per Jenis -->
+                    <div id="ringkasan-minuman-box" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                        <!-- Diisi otomatis oleh JS -->
+                    </div>
+
+                    <!-- Tombol Toggle Rincian Minuman -->
+                    <div class="text-right pt-1">
+                        <button type="button" onclick="toggleRincianMinuman()" id="btn-toggle-rincian" class="bg-amber-600/70 hover:bg-amber-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur border border-amber-400/40 shadow transition">
+                            ▼ Lihat Rincian Transaksi Minuman
+                        </button>
+                    </div>
+
+                    <!-- TABEL RINCIAN MINUMAN (Hidden secara default) -->
+                    <div id="container-tabel-minuman" class="shadow rounded-xl border border-white/10 bg-black/30 backdrop-blur-md overflow-hidden hidden mt-2">
                         <table class="w-full text-left text-[8px] sm:text-xs border-collapse table-fixed">
                             <thead>
                                 <tr class="bg-slate-900/80 text-white border-b border-white/10">
@@ -481,6 +495,19 @@
                 divBukti.classList.add('hidden');
             } else {
                 divBukti.classList.remove('hidden');
+            }
+        }
+
+        // Toggle untuk menampilkan/menyembunyikan tabel rincian minuman
+        window.toggleRincianMinuman = () => {
+            let container = document.getElementById('container-tabel-minuman');
+            let btn = document.getElementById('btn-toggle-rincian');
+            if(container.classList.contains('hidden')) {
+                container.classList.remove('hidden');
+                btn.innerText = "▲ Sembunyikan Rincian Transaksi Minuman";
+            } else {
+                container.classList.add('hidden');
+                btn.innerText = "▼ Lihat Rincian Transaksi Minuman";
             }
         }
 
@@ -871,14 +898,19 @@
             let tLap = document.getElementById('tabel-lapangan');
             let tMin = document.getElementById('tabel-minuman');
             let tKel = document.getElementById('tabel-keluar');
+            let ringkasanMinumanBox = document.getElementById('ringkasan-minuman-box');
 
             tLap.innerHTML = "";
             tMin.innerHTML = "";
             tKel.innerHTML = "";
+            ringkasanMinumanBox.innerHTML = "";
 
             let hasLap = false;
             let hasMin = false;
             let hasKel = false;
+
+            // Objek untuk mengakumulasi rekap minuman per jenis produk pada tanggal terpilih
+            let rekapMinumanPerProduk = {};
 
             // 1. Pemasukan Lainnya / Pelunasan
             Object.entries(globalCache.pemasukan).forEach(([key, item]) => {
@@ -944,6 +976,13 @@
                     let prod = item.produk || 'Lainnya';
                     let pcs = Number(item.jumlahPcs || 0);
 
+                    // Akumulasi ke ringkasan per produk
+                    if(!rekapMinumanPerProduk[prod]) {
+                        rekapMinumanPerProduk[prod] = { pcs: 0, total: 0 };
+                    }
+                    rekapMinumanPerProduk[prod].pcs += pcs;
+                    rekapMinumanPerProduk[prod].total += nominal;
+
                     tMin.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5">
                         <td class="p-1.5 sm:p-2 border border-white/10 font-medium truncate">${prod} (${metode})</td>
                         <td class="p-1.5 sm:p-2 border border-white/10 text-white/70 truncate">${pcs}</td>
@@ -952,6 +991,23 @@
                     </tr>`;
                 }
             });
+
+            // Render Ringkasan Minuman Box di Halaman Utama
+            if(Object.keys(rekapMinumanPerProduk).length > 0) {
+                Object.entries(rekapMinumanPerProduk).forEach(([namaProduk, dataVal]) => {
+                    ringkasanMinumanBox.innerHTML += `
+                        <div class="glass-panel-sub p-2.5 rounded-xl border border-amber-400/20 flex justify-between items-center text-xs">
+                            <span class="font-bold text-white truncate">${namaProduk}</span>
+                            <div class="text-right">
+                                <span class="bg-amber-500/30 text-amber-200 px-1.5 py-0.5 rounded font-bold mr-1">${dataVal.pcs} Pcs</span>
+                                <span class="font-bold text-amber-300">Rp ${dataVal.total.toLocaleString('id-ID')}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                ringkasanMinumanBox.innerHTML = `<div class="col-span-full text-center p-3 text-white/50 italic text-[8px] sm:text-xs">Belum ada penjualan minuman pada tanggal ini.</div>`;
+            }
 
             // 4. Pengeluaran (Berdasarkan Tanggal Pencatatan Pengeluaran)
             Object.entries(globalCache.pengeluaran).forEach(([key, item]) => {
