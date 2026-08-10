@@ -179,12 +179,14 @@
                 <section class="glass-panel-sub p-3 sm:p-5 rounded-2xl border border-blue-400/30 space-y-3 shadow-lg">
                     <!-- Header Tengah Top Section -->
                     <div class="flex flex-col items-center justify-center text-center border-b border-blue-400/20 pb-3 gap-1">
-                        <h3 class="font-bold text-sm sm:text-base text-blue-200 flex items-center justify-center gap-2">
+                        <h3 id="title-lapangan" class="font-bold text-sm sm:text-base text-blue-200 flex items-center justify-center gap-2">
                             ⚽ UANG LAPANGAN
                         </h3>
-                        <span id="subtotal-lapangan" class="text-xs sm:text-sm font-bold text-blue-300 bg-slate-900/90 border border-blue-400/30 px-3 py-1 rounded-lg mt-1 shadow">
-                            Total: Rp 0
-                        </span>
+                        <div id="subtotal-lapangan" class="flex flex-wrap justify-center gap-2 text-xs font-bold text-blue-300 mt-1">
+                            <span class="bg-slate-900/90 border border-blue-400/30 px-2.5 py-1 rounded-lg shadow">Total: Rp 0</span>
+                            <span class="bg-slate-900/90 border border-emerald-400/30 px-2.5 py-1 rounded-lg text-emerald-300 shadow">Cash: Rp 0</span>
+                            <span class="bg-slate-900/90 border border-sky-400/30 px-2.5 py-1 rounded-lg text-sky-300 shadow">QRIS/TF: Rp 0</span>
+                        </div>
                     </div>
 
                     <!-- Tabel Uang Lapangan -->
@@ -207,12 +209,14 @@
                 <section class="glass-panel-sub p-3 sm:p-5 rounded-2xl border border-amber-400/30 space-y-3 shadow-lg">
                     <!-- Header Tengah Top Section -->
                     <div class="flex flex-col items-center justify-center text-center border-b border-amber-400/20 pb-3 gap-1">
-                        <h3 class="font-bold text-sm sm:text-base text-amber-200 flex items-center justify-center gap-2">
-                            🥤 PENJUALAN MINUMAN (RINGKASAN)
+                        <h3 id="title-minuman" class="font-bold text-sm sm:text-base text-amber-200 flex items-center justify-center gap-2">
+                            🥤 PENJUALAN MINUMAN
                         </h3>
-                        <span id="subtotal-minuman" class="text-xs sm:text-sm font-bold text-amber-300 bg-slate-900/90 border border-amber-400/30 px-3 py-1 rounded-lg mt-1 shadow">
-                            Total: Rp 0
-                        </span>
+                        <div id="subtotal-minuman" class="flex flex-wrap justify-center gap-2 text-xs font-bold text-amber-300 mt-1">
+                            <span class="bg-slate-900/90 border border-amber-400/30 px-2.5 py-1 rounded-lg shadow">Total: Rp 0</span>
+                            <span class="bg-slate-900/90 border border-emerald-400/30 px-2.5 py-1 rounded-lg text-emerald-300 shadow">Cash: Rp 0</span>
+                            <span class="bg-slate-900/90 border border-sky-400/30 px-2.5 py-1 rounded-lg text-sky-300 shadow">QRIS/TF: Rp 0</span>
+                        </div>
                     </div>
 
                     <!-- Grid Ringkasan Produk Minuman -->
@@ -243,12 +247,12 @@
                 <section class="glass-panel-sub p-3 sm:p-5 rounded-2xl border border-rose-400/30 space-y-3 shadow-lg">
                     <!-- Header Tengah Top Section -->
                     <div class="flex flex-col items-center justify-center text-center border-b border-rose-400/20 pb-3 gap-1">
-                        <h3 class="font-bold text-sm sm:text-base text-rose-200 flex items-center justify-center gap-2">
-                            💸 UANG KELUAR / PENGELUARAN
+                        <h3 id="title-keluar" class="font-bold text-sm sm:text-base text-rose-200 flex items-center justify-center gap-2">
+                            💸 PENGELUARAN
                         </h3>
-                        <span id="subtotal-keluar" class="text-xs sm:text-sm font-bold text-rose-300 bg-slate-900/90 border border-rose-400/30 px-3 py-1 rounded-lg mt-1 shadow">
-                            Total: Rp 0
-                        </span>
+                        <div id="subtotal-keluar" class="flex flex-wrap justify-center gap-2 text-xs font-bold text-rose-300 mt-1">
+                            <span class="bg-slate-900/90 border border-rose-400/30 px-2.5 py-1 rounded-lg shadow">Total: Rp 0</span>
+                        </div>
                     </div>
 
                     <!-- Tabel Uang Keluar -->
@@ -271,7 +275,7 @@
                 <section class="glass-panel-sub p-3 sm:p-5 rounded-2xl border border-emerald-400/30 space-y-4 shadow-lg">
                     <!-- Header Tengah Top Section -->
                     <div class="flex flex-col items-center justify-center text-center border-b border-emerald-400/20 pb-3 gap-1">
-                        <h3 class="font-bold text-sm sm:text-base text-emerald-200 flex items-center justify-center gap-2">
+                        <h3 id="title-ringkasan-total" class="font-bold text-sm sm:text-base text-emerald-200 flex items-center justify-center gap-2">
                             📌 RINGKASAN TOTAL KEUANGAN
                         </h3>
                     </div>
@@ -556,6 +560,14 @@
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const day = String(date.getDate()).padStart(2, '0');
             return `${year}-${month}-${day}`;
+        }
+
+        function formatTanggalFull(dateStr) {
+            if(!dateStr) return "";
+            let d = new Date(dateStr);
+            if(isNaN(d)) return dateStr;
+            let options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            return d.toLocaleDateString('id-ID', options);
         }
 
         function initPeriodeDropdown() {
@@ -1135,9 +1147,23 @@
             let filterTglEl = document.getElementById('filter-tanggal');
             if(!filterTglEl) return;
             let selectedDate = filterTglEl.value;
+            let tanggalFormattedStr = formatTanggalFull(selectedDate);
+
+            // Update Judul dengan Hari & Tanggal Sesuai Permintaan
+            document.getElementById('title-lapangan').innerHTML = `⚽ UANG LAPANGAN ${tanggalFormattedStr.toUpperCase()}`;
+            document.getElementById('title-minuman').innerHTML = `🥤 PENJUALAN MINUMAN ${tanggalFormattedStr.toUpperCase()}`;
+            document.getElementById('title-keluar').innerHTML = `💸 PENGELUARAN ${tanggalFormattedStr.toUpperCase()}`;
+            document.getElementById('title-ringkasan-total').innerHTML = `📌 RINGKASAN TOTAL KEUANGAN ${tanggalFormattedStr.toUpperCase()}`;
+
             let totalLapangan = 0;
             let totalMinuman = 0;
             let totalKeluar = 0;
+
+            let totalLapanganCash = 0;
+            let totalLapanganQrisTf = 0;
+
+            let totalMinumanCash = 0;
+            let totalMinumanQrisTf = 0;
 
             let totalMasukCash = 0;
             let totalMasukQrif = 0;
@@ -1176,11 +1202,23 @@
 
                     if(jml1 > 0) {
                         totalLapangan += jml1;
-                        if(met1 === 'Cash') totalMasukCash += jml1; else totalMasukQrif += jml1;
+                        if(met1 === 'Cash') {
+                            totalMasukCash += jml1;
+                            totalLapanganCash += jml1;
+                        } else {
+                            totalMasukQrif += jml1;
+                            totalLapanganQrisTf += jml1;
+                        }
                     }
                     if(jml2 > 0) {
                         totalLapangan += jml2;
-                        if(met2 === 'Cash') totalMasukCash += jml2; else totalMasukQrif += jml2;
+                        if(met2 === 'Cash') {
+                            totalMasukCash += jml2;
+                            totalLapanganCash += jml2;
+                        } else {
+                            totalMasukQrif += jml2;
+                            totalLapanganQrisTf += jml2;
+                        }
                     }
 
                     let rincianMetodeText = jml2 > 0 ? `Tim1(${met1}), Tim2(${met2})` : `${met1}`;
@@ -1203,8 +1241,10 @@
 
                     if (metode === 'Cash') {
                         totalMasukCash += nominal;
+                        totalLapanganCash += nominal;
                     } else {
                         totalMasukQrif += nominal;
+                        totalLapanganQrisTf += nominal;
                     }
 
                     let labelStatus = item.status === 'Member' ? 'Member' : 'DP';
@@ -1226,8 +1266,10 @@
 
                     if (metode === 'Cash') {
                         totalMasukCash += nominal;
+                        totalMinumanCash += nominal;
                     } else {
                         totalMasukQrif += nominal;
+                        totalMinumanQrisTf += nominal;
                     }
 
                     let prod = item.produk || 'Lainnya';
@@ -1284,9 +1326,24 @@
             if(!hasMin) tMin.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-white/50 italic text-xs">Belum ada penjualan minuman.</td></tr>`;
             if(!hasKel) tKel.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-white/50 italic text-xs">Belum ada pengeluaran.</td></tr>`;
 
-            document.getElementById('subtotal-lapangan').innerText = "Total: Rp " + totalLapangan.toLocaleString('id-ID');
-            document.getElementById('subtotal-minuman').innerText = "Total: Rp " + totalMinuman.toLocaleString('id-ID');
-            document.getElementById('subtotal-keluar').innerText = "Total: Rp " + totalKeluar.toLocaleString('id-ID');
+            // Update Subtotal Lapangan dengan konsistensi warna Cash (emerald) & QRIS/TF (sky)
+            document.getElementById('subtotal-lapangan').innerHTML = `
+                <span class="bg-slate-900/90 border border-blue-400/30 px-2.5 py-1 rounded-lg shadow">Total: Rp ${totalLapangan.toLocaleString('id-ID')}</span>
+                <span class="bg-slate-900/90 border border-emerald-400/30 px-2.5 py-1 rounded-lg text-emerald-300 shadow">Cash: Rp ${totalLapanganCash.toLocaleString('id-ID')}</span>
+                <span class="bg-slate-900/90 border border-sky-400/30 px-2.5 py-1 rounded-lg text-sky-300 shadow">QRIS/TF: Rp ${totalLapanganQrisTf.toLocaleString('id-ID')}</span>
+            `;
+
+            // Update Subtotal Minuman dengan konsistensi warna Cash (emerald) & QRIS/TF (sky)
+            document.getElementById('subtotal-minuman').innerHTML = `
+                <span class="bg-slate-900/90 border border-amber-400/30 px-2.5 py-1 rounded-lg shadow">Total: Rp ${totalMinuman.toLocaleString('id-ID')}</span>
+                <span class="bg-slate-900/90 border border-emerald-400/30 px-2.5 py-1 rounded-lg text-emerald-300 shadow">Cash: Rp ${totalMinumanCash.toLocaleString('id-ID')}</span>
+                <span class="bg-slate-900/90 border border-sky-400/30 px-2.5 py-1 rounded-lg text-sky-300 shadow">QRIS/TF: Rp ${totalMinumanQrisTf.toLocaleString('id-ID')}</span>
+            `;
+
+            // Update Subtotal Pengeluaran (Hanya Total karena Cash)
+            document.getElementById('subtotal-keluar').innerHTML = `
+                <span class="bg-slate-900/90 border border-rose-400/30 px-2.5 py-1 rounded-lg shadow">Total: Rp ${totalKeluar.toLocaleString('id-ID')}</span>
+            `;
 
             let totalKeluarDariCashHariIni = 0;
             Object.values(globalCache.pengeluaran).forEach(item => {
