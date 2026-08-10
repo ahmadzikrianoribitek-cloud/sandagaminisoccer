@@ -9,11 +9,11 @@
     <link rel="manifest" href="manifest.json">
 
     <!-- Ikon Standar & Apple Touch Icon -->
-<link rel="icon" type="image/png" href="ikon.png">
-<link rel="apple-touch-icon" href="ikon.png">
-<link rel="apple-touch-icon" sizes="152x152" href="ikon.png">
-<link rel="apple-touch-icon" sizes="167x167" href="ikon.png">
-<link rel="apple-touch-icon" sizes="180x180" href="ikon.png">
+    <link rel="icon" type="image/png" href="ikon.png">
+    <link rel="apple-touch-icon" href="ikon.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="ikon.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="ikon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="ikon.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -162,107 +162,141 @@
 
         <!-- HALAMAN DAILY RECAP -->
         <div id="page-daily-recap" class="glass-panel p-3 sm:p-6 rounded-2xl hidden">
-            <div class="flex justify-between items-center mb-4">
+            <!-- Top Header & Filter -->
+            <div class="flex justify-between items-center mb-4 border-b border-white/20 pb-3">
                 <h2 class="font-bold text-base sm:text-lg text-white drop-shadow">📊 REKAP KEUANGAN HARIAN</h2>
                 <button type="button" onclick="showPage('home')" class="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur border border-white/30">Kembali</button>
             </div>
 
-            <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-6">
-                <span class="text-xs text-white/80">Pilih Tanggal Rekap:</span>
-                <input type="date" id="filter-tanggal" onchange="renderRekapHarian()" class="p-2 rounded-xl text-xs glass-input w-full sm:w-auto">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-6 glass-panel-sub p-3 rounded-xl border border-white/20">
+                <span class="text-xs text-white/90 font-bold uppercase tracking-wide">Pilih Tanggal Rekap:</span>
+                <input type="date" id="filter-tanggal" onchange="renderRekapHarian()" class="p-2 rounded-xl text-xs glass-input w-full sm:w-auto font-semibold text-center">
             </div>
 
             <div class="space-y-6">
-                <!-- 1. UANG LAPANGAN -->
-                <div class="space-y-2">
-                    <div class="flex justify-between items-center">
-                        <h3 class="font-bold text-xs sm:text-sm text-blue-200 flex items-center gap-1.5">⚽ 1. Uang Lapangan</h3>
-                        <span id="subtotal-lapangan" class="text-[10px] sm:text-xs font-bold text-blue-200 bg-slate-900/80 border border-white/10 px-2 py-1 rounded-lg">Total: Rp 0</span>
+                
+                <!-- UANG LAPANGAN -->
+                <section class="glass-panel-sub p-3 sm:p-5 rounded-2xl border border-blue-400/30 space-y-3 shadow-lg">
+                    <!-- Header Tengah Top Section -->
+                    <div class="flex flex-col items-center justify-center text-center border-b border-blue-400/20 pb-3 gap-1">
+                        <h3 class="font-bold text-sm sm:text-base text-blue-200 flex items-center justify-center gap-2">
+                            ⚽ UANG LAPANGAN
+                        </h3>
+                        <span id="subtotal-lapangan" class="text-xs sm:text-sm font-bold text-blue-300 bg-slate-900/90 border border-blue-400/30 px-3 py-1 rounded-lg mt-1 shadow">
+                            Total: Rp 0
+                        </span>
                     </div>
+
+                    <!-- Tabel Uang Lapangan -->
                     <div class="shadow rounded-xl border border-white/10 bg-black/30 backdrop-blur-md overflow-hidden">
-                        <table class="w-full text-left text-[8px] sm:text-xs border-collapse table-fixed">
+                        <table class="w-full text-left text-[10px] sm:text-xs border-collapse table-auto">
                             <thead>
                                 <tr class="bg-slate-900/80 text-white border-b border-white/10">
-                                    <th class="p-1.5 sm:p-2 border border-white/10 w-[35%]">Tim / Ket</th>
-                                    <th class="p-1.5 sm:p-2 border border-white/10 w-[30%]">Detail</th>
-                                    <th class="p-1.5 sm:p-2 border border-white/10 w-[20%]">Jumlah</th>
-                                    <th class="p-1.5 sm:p-2 border border-white/10 text-center w-[15%]">Aksi</th>
+                                    <th class="p-2 border border-white/10 w-[45%]">Tim / Ket</th>
+                                    <th class="p-2 border border-white/10 w-[25%]">Detail</th>
+                                    <th class="p-2 border border-white/10 w-[20%]">Jumlah</th>
+                                    <th class="p-2 border border-white/10 text-center w-[10%]">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="tabel-lapangan"></tbody>
                         </table>
                     </div>
-                </div>
+                </section>
 
-                <!-- 2. RINGKASAN PENJUALAN MINUMAN -->
-                <div class="space-y-2">
-                    <div class="flex justify-between items-center">
-                        <h3 class="font-bold text-xs sm:text-sm text-amber-200 flex items-center gap-1.5">🥤 2. Penjualan Minuman (Ringkasan)</h3>
-                        <span id="subtotal-minuman" class="text-[10px] sm:text-xs font-bold text-amber-200 bg-slate-900/80 border border-white/10 px-2 py-1 rounded-lg">Total: Rp 0</span>
+                <!-- PENJUALAN MINUMAN -->
+                <section class="glass-panel-sub p-3 sm:p-5 rounded-2xl border border-amber-400/30 space-y-3 shadow-lg">
+                    <!-- Header Tengah Top Section -->
+                    <div class="flex flex-col items-center justify-center text-center border-b border-amber-400/20 pb-3 gap-1">
+                        <h3 class="font-bold text-sm sm:text-base text-amber-200 flex items-center justify-center gap-2">
+                            🥤 PENJUALAN MINUMAN (RINGKASAN)
+                        </h3>
+                        <span id="subtotal-minuman" class="text-xs sm:text-sm font-bold text-amber-300 bg-slate-900/90 border border-amber-400/30 px-3 py-1 rounded-lg mt-1 shadow">
+                            Total: Rp 0
+                        </span>
                     </div>
-                    
+
+                    <!-- Grid Ringkasan Produk Minuman -->
                     <div id="ringkasan-minuman-box" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2"></div>
 
-                    <div class="text-right pt-1">
-                        <button type="button" onclick="toggleRincianMinuman()" id="btn-toggle-rincian" class="bg-amber-600/70 hover:bg-amber-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur border border-amber-400/40 shadow transition">
+                    <div class="text-center pt-2">
+                        <button type="button" onclick="toggleRincianMinuman()" id="btn-toggle-rincian" class="bg-amber-600/70 hover:bg-amber-600 text-white px-4 py-2 rounded-xl text-xs font-semibold backdrop-blur border border-amber-400/40 shadow transition">
                             ▼ Lihat Rincian Transaksi Minuman
                         </button>
                     </div>
 
                     <div id="container-tabel-minuman" class="shadow rounded-xl border border-white/10 bg-black/30 backdrop-blur-md overflow-hidden hidden mt-2">
-                        <table class="w-full text-left text-[8px] sm:text-xs border-collapse table-fixed">
+                        <table class="w-full text-left text-[10px] sm:text-xs border-collapse table-auto">
                             <thead>
                                 <tr class="bg-slate-900/80 text-white border-b border-white/10">
-                                    <th class="p-1.5 sm:p-2 border border-white/10 w-[40%]">Produk</th>
-                                    <th class="p-1.5 sm:p-2 border border-white/10 w-[20%]">Pcs</th>
-                                    <th class="p-1.5 sm:p-2 border border-white/10 w-[25%]">Total</th>
-                                    <th class="p-1.5 sm:p-2 border border-white/10 text-center w-[15%]">Aksi</th>
+                                    <th class="p-2 border border-white/10 w-[45%]">Produk</th>
+                                    <th class="p-2 border border-white/10 w-[20%]">Pcs</th>
+                                    <th class="p-2 border border-white/10 w-[25%]">Total</th>
+                                    <th class="p-2 border border-white/10 text-center w-[10%]">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="tabel-minuman"></tbody>
                         </table>
                     </div>
-                </div>
+                </section>
 
-                <!-- 3. UANG KELUAR -->
-                <div class="space-y-2">
-                    <div class="flex justify-between items-center">
-                        <h3 class="font-bold text-xs sm:text-sm text-rose-200 flex items-center gap-1.5">💸 3. Uang Keluar / Pengeluaran</h3>
-                        <span id="subtotal-keluar" class="text-[10px] sm:text-xs font-bold text-rose-200 bg-slate-900/80 border border-white/10 px-2 py-1 rounded-lg">Total: Rp 0</span>
+                <!-- UANG KELUAR -->
+                <section class="glass-panel-sub p-3 sm:p-5 rounded-2xl border border-rose-400/30 space-y-3 shadow-lg">
+                    <!-- Header Tengah Top Section -->
+                    <div class="flex flex-col items-center justify-center text-center border-b border-rose-400/20 pb-3 gap-1">
+                        <h3 class="font-bold text-sm sm:text-base text-rose-200 flex items-center justify-center gap-2">
+                            💸 UANG KELUAR / PENGELUARAN
+                        </h3>
+                        <span id="subtotal-keluar" class="text-xs sm:text-sm font-bold text-rose-300 bg-slate-900/90 border border-rose-400/30 px-3 py-1 rounded-lg mt-1 shadow">
+                            Total: Rp 0
+                        </span>
                     </div>
+
+                    <!-- Tabel Uang Keluar -->
                     <div class="shadow rounded-xl border border-white/10 bg-black/30 backdrop-blur-md overflow-hidden">
-                        <table class="w-full text-left text-[8px] sm:text-xs border-collapse table-fixed">
+                        <table class="w-full text-left text-[10px] sm:text-xs border-collapse table-auto">
                             <thead>
                                 <tr class="bg-slate-900/80 text-white border-b border-white/10">
-                                    <th class="p-1.5 sm:p-2 border border-white/10 w-[40%]">Keterangan</th>
-                                    <th class="p-1.5 sm:p-2 border border-white/10 w-[30%]">Sumber Dana</th>
-                                    <th class="p-1.5 sm:p-2 border border-white/10 w-[15%]">Nominal</th>
-                                    <th class="p-1.5 sm:p-2 border border-white/10 text-center w-[15%]">Aksi</th>
+                                    <th class="p-2 border border-white/10 w-[45%]">Keterangan</th>
+                                    <th class="p-2 border border-white/10 w-[25%]">Sumber Dana</th>
+                                    <th class="p-2 border border-white/10 w-[20%]">Nominal</th>
+                                    <th class="p-2 border border-white/10 text-center w-[10%]">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="tabel-keluar"></tbody>
                         </table>
                     </div>
-                </div>
+                </section>
 
-                <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 sm:gap-4 pt-2">
-                    <div class="glass-panel-sub p-3 sm:p-4 rounded-xl border border-emerald-500/30">
-                        <p class="text-xs text-white/70 font-medium">Total Masuk (Cash)</p>
-                        <p id="rekap-masuk-cash" class="text-base font-bold text-emerald-400">Rp 0</p>
+                <!-- RINGKASAN AKHIR / TOTAL KEUANGAN -->
+                <section class="glass-panel-sub p-3 sm:p-5 rounded-2xl border border-emerald-400/30 space-y-4 shadow-lg">
+                    <!-- Header Tengah Top Section -->
+                    <div class="flex flex-col items-center justify-center text-center border-b border-emerald-400/20 pb-3 gap-1">
+                        <h3 class="font-bold text-sm sm:text-base text-emerald-200 flex items-center justify-center gap-2">
+                            📌 RINGKASAN TOTAL KEUANGAN
+                        </h3>
                     </div>
-                    <div class="glass-panel-sub p-3 sm:p-4 rounded-xl border border-sky-500/30">
-                        <p class="text-xs text-white/70 font-medium">Total Masuk (QRIS / TF)</p>
-                        <p id="rekap-masuk-qrif" class="text-base font-bold text-sky-300">Rp 0</p>
+
+                    <!-- Grid Card Ringkasan Keseluruhan -->
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 sm:gap-4">
+                        <div class="glass-panel-sub p-3 sm:p-4 rounded-xl border border-emerald-500/40 text-center shadow">
+                            <p class="text-xs text-white/80 font-semibold mb-1">Total Masuk (Cash)</p>
+                            <p id="rekap-masuk-cash" class="text-base sm:text-lg font-black text-emerald-400">Rp 0</p>
+                        </div>
+                        <div class="glass-panel-sub p-3 sm:p-4 rounded-xl border border-sky-500/40 text-center shadow">
+                            <p class="text-xs text-white/80 font-semibold mb-1">Total Masuk (QRIS / TF)</p>
+                            <p id="rekap-masuk-qrif" class="text-base sm:text-lg font-black text-sky-300">Rp 0</p>
+                        </div>
+                        <div class="glass-panel-sub p-3 sm:p-4 rounded-xl border border-rose-500/40 text-center shadow">
+                            <p class="text-xs text-white/80 font-semibold mb-1">Total Keluar</p>
+                            <p id="rekap-keluar" class="text-base sm:text-lg font-black text-rose-400">Rp 0</p>
+                        </div>
+                        <div class="glass-panel-sub p-3 sm:p-4 rounded-xl border border-indigo-500/40 text-center shadow">
+                            <p class="text-xs text-white/80 font-semibold mb-1">Saldo Bersih (Cash - Keluar)</p>
+                            <p id="rekap-saldo-cash" class="text-base sm:text-lg font-black text-indigo-300">Rp 0</p>
+                        </div>
                     </div>
-                    <div class="glass-panel-sub p-3 sm:p-4 rounded-xl border border-rose-500/30">
-                        <p class="text-xs text-white/70 font-medium">Total Keluar</p>
-                        <p id="rekap-keluar" class="text-base font-bold text-rose-400">Rp 0</p>
-                    </div>
-                    <div class="glass-panel-sub p-3 sm:p-4 rounded-xl border border-indigo-500/30">
-                        <p class="text-xs text-white/70 font-medium">Saldo Bersih (Cash - Keluar)</p>
-                        <p id="rekap-saldo-cash" class="text-base font-bold text-indigo-300">Rp 0</p>
-                    </div>
-                </div>
+                </section>
+
             </div>
         </div>
 
@@ -274,15 +308,15 @@
             </div>
             
             <div class="shadow-2xl rounded-xl border border-white/20 mb-4 overflow-hidden">
-                <table class="w-full text-center border-collapse text-[6px] sm:text-xs bg-black/30 backdrop-blur-md table-fixed">
+                <table class="w-full text-center border-collapse text-[10px] sm:text-xs bg-black/30 backdrop-blur-md table-auto">
                     <thead>
                         <tr class="bg-slate-900/80 text-white">
-                            <th class="p-1 sm:p-2 border border-white/10 w-[24%]">Waktu</th>
-                            <th class="p-1 sm:p-2 border border-white/10 w-[26%]">Tim</th>
-                            <th class="p-1 sm:p-2 border border-white/10 w-[14%]">Status</th>
-                            <th class="p-1 sm:p-2 border border-white/10 w-[16%]">DP</th>
-                            <th class="p-1 sm:p-2 border border-white/10 w-[10%]">Metode</th>
-                            <th class="p-1 sm:p-2 border border-white/10 w-[10%]">Aksi</th>
+                            <th class="p-2 border border-white/10">Waktu</th>
+                            <th class="p-2 border border-white/10">Tim</th>
+                            <th class="p-2 border border-white/10">Status</th>
+                            <th class="p-2 border border-white/10">DP</th>
+                            <th class="p-2 border border-white/10">Metode</th>
+                            <th class="p-2 border border-white/10">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="tabel-booking"></tbody>
@@ -319,7 +353,7 @@
 
             <h3 class="font-bold text-sm text-white/90 mb-2">Daftar Jadwal / Member Aktif</h3>
             <div class="shadow rounded-xl border border-white/10 bg-black/20 backdrop-blur overflow-hidden">
-                <table class="w-full text-left text-xs table-fixed">
+                <table class="w-full text-left text-xs table-auto">
                     <thead class="bg-slate-900/70 text-white border-b border-white/10">
                         <tr>
                             <th class="p-2 border border-white/10 w-[45%]">Tim / Keterangan</th>
@@ -382,13 +416,13 @@
                 <label class="block text-xs font-medium mb-1 text-white/90">Pilih Tanggal Main / Pelunasan</label>
                 <input type="date" id="in-tgl" onchange="updateDropdownTimMasuk()" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
 
-                <!-- 1. Dropdown Nama Tim Sesuai Jadwal -->
+                <!-- Dropdown Nama Tim Sesuai Jadwal -->
                 <label class="block text-xs font-medium mb-1 text-white/90">Pilih Tim / Keterangan</label>
                 <select id="in-tim" onchange="updateJamMainMasuk()" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
                     <option value="">-- Pilih Tanggal Terlebih Dahulu --</option>
                 </select>
 
-                <!-- 3. Jam Main Menyesuaikan Langsung dengan Jadwal -->
+                <!-- Jam Main Menyesuaikan Langsung dengan Jadwal -->
                 <label class="block text-xs font-medium mb-1 text-white/90">Jam Main (Otomatis)</label>
                 <input type="text" id="in-jam-main" placeholder="Jam main akan otomatis terisi" class="w-full p-2 rounded mb-3 text-sm glass-input bg-black/20" readonly>
 
@@ -408,7 +442,7 @@
                     <p id="info-biaya-tambahan" class="text-[10px] text-amber-300 font-semibold italic">Biaya tambahan sewa: Rp 0</p>
                 </div>
 
-                <!-- 2. Pembayaran Dipisah Menjadi 2 Metode (Karena Sparring Bayar Masing-masing) -->
+                <!-- Pembayaran Dipisah Menjadi 2 Metode (Karena Sparring Bayar Masing-masing) -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
                     <div class="glass-panel-sub p-3 rounded-xl border border-emerald-400/30 space-y-2">
                         <label class="block text-xs font-bold text-emerald-200">Pembayaran Tim 1</label>
@@ -761,7 +795,6 @@
             let inputJml1 = document.getElementById('in-jumlah-1');
             if(inputJml1 && totalTambahan > 0) {
                 let currentVal = Number(inputJml1.value || 0);
-                // Jika belum diisi atau ingin di-update otomatis, kita set nilainya
             }
         }
 
@@ -846,7 +879,7 @@
             // Khusus halaman minuman: tetap di halaman input (tidak kembali ke home)
             if(type === 'minuman') {
                 if(document.getElementById('m-select-pilihan')) document.getElementById('m-select-pilihan').value = "";
-                return; // Menghentikan agar tidak menjalankan showPage('home')
+                return; 
             }
 
             if(document.getElementById('m-select-pilihan')) document.getElementById('m-select-pilihan').value = "";
@@ -931,7 +964,7 @@
                     let m = child.val();
                     let key = child.key;
                     listTbody.innerHTML += `<tr class="border-b border-white/10">
-                        <td class="p-2 border border-white/10 font-medium truncate">${m.nama}</td>
+                        <td class="p-2 border border-white/10 font-medium">${m.nama}</td>
                         <td class="p-2 border border-white/10">${m.hari}</td>
                         <td class="p-2 border border-white/10">${m.jam}</td>
                         <td class="p-2 border border-white/10 text-center"><button type="button" onclick="hapusMember('${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
@@ -1006,7 +1039,7 @@
                 let badgeDone = isFullDayPassed ? `<div class="mt-0.5"><span class="px-1 py-0.2 bg-slate-700/90 text-amber-300 font-bold rounded text-[6px] sm:text-[9px] uppercase border border-slate-600">DONE</span></div>` : "";
 
                 headerHtml += `<th class="p-0.5 sm:p-2 border border-white/10 align-middle">
-                    <div class="truncate">${h.nama.substring(0,3)}</div>
+                    <div>${h.nama.substring(0,3)}</div>
                     <div class="text-[6px] sm:text-[10px] text-amber-300/90 font-normal">${labelTgl}</div>
                     ${badgeDone}
                 </th>`;
@@ -1084,13 +1117,13 @@
 
                     let formattedTglJam = item.tgl ? item.tgl.replace('T', ' ') : '-';
 
-                    tbody.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5 h-7 sm:h-12">
-                        <td class="p-1 border border-white/10 text-[6px] sm:text-xs leading-tight truncate">${formattedTglJam}</td>
-                        <td class="p-1 border border-white/10 font-medium text-[7px] sm:text-xs truncate">${item.nama}</td>
-                        <td class="p-1 border border-white/10">${badgeStatus}</td>
-                        <td class="p-1 border border-white/10 text-[6px] sm:text-xs truncate">Rp ${Number(item.dp).toLocaleString('id-ID')}</td>
-                        <td class="p-1 border border-white/10 text-[6px] sm:text-xs truncate">${item.metode}</td>
-                        <td class="p-1 border border-white/10 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1 py-0.5 rounded text-[6px] sm:text-xs">Hapus</button></td>
+                    tbody.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5">
+                        <td class="p-2 border border-white/10 text-[10px] sm:text-xs leading-tight">${formattedTglJam}</td>
+                        <td class="p-2 border border-white/10 font-medium text-[10px] sm:text-xs">${item.nama}</td>
+                        <td class="p-2 border border-white/10">${badgeStatus}</td>
+                        <td class="p-2 border border-white/10 text-[10px] sm:text-xs">Rp ${Number(item.dp).toLocaleString('id-ID')}</td>
+                        <td class="p-2 border border-white/10 text-[10px] sm:text-xs">${item.metode}</td>
+                        <td class="p-2 border border-white/10 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1.5 py-1 rounded text-[10px] sm:text-xs">Hapus</button></td>
                     </tr>`;
                 });
             } else {
@@ -1136,7 +1169,6 @@
                     let jml2 = Number(item.jumlah2 || 0);
                     let met2 = item.metode2 || 'Cash';
 
-                    // Support data lama jika hanya menggunakan `jumlah` & `metode`
                     if(!item.jumlah1 && item.jumlah) {
                         jml1 = Number(item.jumlah);
                         met1 = item.metode || 'Cash';
@@ -1154,10 +1186,10 @@
                     let rincianMetodeText = jml2 > 0 ? `Tim1(${met1}), Tim2(${met2})` : `${met1}`;
 
                     tLap.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5">
-                        <td class="p-1.5 sm:p-2 border border-white/10 font-medium truncate">${item.ket}</td>
-                        <td class="p-1.5 sm:p-2 border border-white/10 text-white/70 truncate">${rincianMetodeText}</td>
-                        <td class="p-1.5 sm:p-2 border border-white/10 font-bold text-emerald-300 truncate">Rp ${(jml1 + jml2).toLocaleString('id-ID')}</td>
-                        <td class="p-1.5 sm:p-2 border border-white/10 text-center"><button type="button" onclick="hapusDataKeuangan('pemasukan', '${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1.5 py-0.5 rounded text-[7px] sm:text-xs">Hapus</button></td>
+                        <td class="p-2 border border-white/10 font-medium">${item.ket}</td>
+                        <td class="p-2 border border-white/10 text-white/70">${rincianMetodeText}</td>
+                        <td class="p-2 border border-white/10 font-bold text-emerald-300">Rp ${(jml1 + jml2).toLocaleString('id-ID')}</td>
+                        <td class="p-2 border border-white/10 text-center"><button type="button" onclick="hapusDataKeuangan('pemasukan', '${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-2 py-1 rounded text-[10px] sm:text-xs">Hapus</button></td>
                     </tr>`;
                 }
             });
@@ -1177,10 +1209,10 @@
 
                     let labelStatus = item.status === 'Member' ? 'Member' : 'DP';
                     tLap.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5">
-                        <td class="p-1.5 sm:p-2 border border-white/10 font-medium truncate">${item.nama}</td>
-                        <td class="p-1.5 sm:p-2 border border-white/10 text-white/70 truncate">${labelStatus} (${metode})</td>
-                        <td class="p-1.5 sm:p-2 border border-white/10 font-bold text-emerald-300 truncate">Rp ${nominal.toLocaleString('id-ID')}</td>
-                        <td class="p-1.5 sm:p-2 border border-white/10 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1.5 py-0.5 rounded text-[7px] sm:text-xs">Hapus</button></td>
+                        <td class="p-2 border border-white/10 font-medium">${item.nama}</td>
+                        <td class="p-2 border border-white/10 text-white/70">${labelStatus} (${metode})</td>
+                        <td class="p-2 border border-white/10 font-bold text-emerald-300">Rp ${nominal.toLocaleString('id-ID')}</td>
+                        <td class="p-2 border border-white/10 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-2 py-1 rounded text-[10px] sm:text-xs">Hapus</button></td>
                     </tr>`;
                 }
             });
@@ -1208,10 +1240,10 @@
                     rekapMinumanPerProduk[prod].total += nominal;
 
                     tMin.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5">
-                        <td class="p-1.5 sm:p-2 border border-white/10 font-medium truncate">${prod} (${metode})</td>
-                        <td class="p-1.5 sm:p-2 border border-white/10 text-white/70 truncate">${pcs}</td>
-                        <td class="p-1.5 sm:p-2 border border-white/10 font-bold text-amber-300 truncate">Rp ${nominal.toLocaleString('id-ID')}</td>
-                        <td class="p-1.5 sm:p-2 border border-white/10 text-center"><button type="button" onclick="hapusDataKeuangan('minuman', '${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1.5 py-0.5 rounded text-[7px] sm:text-xs">Hapus</button></td>
+                        <td class="p-2 border border-white/10 font-medium">${prod} (${metode})</td>
+                        <td class="p-2 border border-white/10 text-white/70">${pcs}</td>
+                        <td class="p-2 border border-white/10 font-bold text-amber-300">Rp ${nominal.toLocaleString('id-ID')}</td>
+                        <td class="p-2 border border-white/10 text-center"><button type="button" onclick="hapusDataKeuangan('minuman', '${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-2 py-1 rounded text-[10px] sm:text-xs">Hapus</button></td>
                     </tr>`;
                 }
             });
@@ -1219,8 +1251,8 @@
             if(Object.keys(rekapMinumanPerProduk).length > 0) {
                 Object.entries(rekapMinumanPerProduk).forEach(([namaProduk, dataVal]) => {
                     ringkasanMinumanBox.innerHTML += `
-                        <div class="glass-panel-sub p-2.5 rounded-xl border border-amber-400/20 flex justify-between items-center text-xs">
-                            <span class="font-bold text-white truncate">${namaProduk}</span>
+                        <div class="glass-panel-sub p-2.5 rounded-xl border border-amber-400/20 flex justify-between items-center text-xs shadow-sm">
+                            <span class="font-bold text-white">${namaProduk}</span>
                             <div class="text-right">
                                 <span class="bg-amber-500/30 text-amber-200 px-1.5 py-0.5 rounded font-bold mr-1">${dataVal.pcs} Pcs</span>
                                 <span class="font-bold text-amber-300">Rp ${dataVal.total.toLocaleString('id-ID')}</span>
@@ -1229,7 +1261,7 @@
                     `;
                 });
             } else {
-                ringkasanMinumanBox.innerHTML = `<div class="col-span-full text-center p-3 text-white/50 italic text-[8px] sm:text-xs">Belum ada penjualan minuman pada tanggal ini.</div>`;
+                ringkasanMinumanBox.innerHTML = `<div class="col-span-full text-center p-3 text-white/50 italic text-xs">Belum ada penjualan minuman pada tanggal ini.</div>`;
             }
 
             Object.entries(globalCache.pengeluaran).forEach(([key, item]) => {
@@ -1240,17 +1272,17 @@
                     let sumberTgl = item.sumberTgl || item.tgl;
 
                     tKel.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5">
-                        <td class="p-1.5 sm:p-2 border border-white/10 font-medium truncate">${item.ket}</td>
-                        <td class="p-1.5 sm:p-2 border border-white/10 text-white/70 text-[7px] sm:text-xs truncate">Cash tgl: ${sumberTgl}</td>
-                        <td class="p-1.5 sm:p-2 border border-white/10 font-bold text-rose-300 truncate">Rp ${nominal.toLocaleString('id-ID')}</td>
-                        <td class="p-1.5 sm:p-2 border border-white/10 text-center"><button type="button" onclick="hapusDataKeuangan('pengeluaran', '${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1.5 py-0.5 rounded text-[7px] sm:text-xs">Hapus</button></td>
+                        <td class="p-2 border border-white/10 font-medium">${item.ket}</td>
+                        <td class="p-2 border border-white/10 text-white/70 text-[10px] sm:text-xs">Cash tgl: ${sumberTgl}</td>
+                        <td class="p-2 border border-white/10 font-bold text-rose-300">Rp ${nominal.toLocaleString('id-ID')}</td>
+                        <td class="p-2 border border-white/10 text-center"><button type="button" onclick="hapusDataKeuangan('pengeluaran', '${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-2 py-1 rounded text-[10px] sm:text-xs">Hapus</button></td>
                     </tr>`;
                 }
             });
 
-            if(!hasLap) tLap.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-white/50 italic text-[8px] sm:text-xs">Belum ada data uang lapangan.</td></tr>`;
-            if(!hasMin) tMin.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-white/50 italic text-[8px] sm:text-xs">Belum ada penjualan minuman.</td></tr>`;
-            if(!hasKel) tKel.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-white/50 italic text-[8px] sm:text-xs">Belum ada pengeluaran.</td></tr>`;
+            if(!hasLap) tLap.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-white/50 italic text-xs">Belum ada data uang lapangan.</td></tr>`;
+            if(!hasMin) tMin.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-white/50 italic text-xs">Belum ada penjualan minuman.</td></tr>`;
+            if(!hasKel) tKel.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-white/50 italic text-xs">Belum ada pengeluaran.</td></tr>`;
 
             document.getElementById('subtotal-lapangan').innerText = "Total: Rp " + totalLapangan.toLocaleString('id-ID');
             document.getElementById('subtotal-minuman').innerText = "Total: Rp " + totalMinuman.toLocaleString('id-ID');
