@@ -101,19 +101,19 @@
                 <span class="flex items-center gap-1.5"><span class="px-1.5 py-0.5 bg-slate-700 text-slate-300 rounded text-[10px] font-bold">DONE</span> Selesai</span>
             </div>
             
-            <!-- TABEL JADWAL MATRIX (UKURAN FONT LEBIH KECIL AGAR TIDAK TERPOTONG) -->
+            <!-- TABEL JADWAL MATRIX -->
             <div class="shadow-2xl rounded-xl border border-white/20 mb-8 overflow-hidden">
-                <table class="w-full text-center border-collapse text-[6px] sm:text-xs bg-black/30 backdrop-blur-md table-fixed">
+                <table class="w-full text-center border-collapse text-[6px] sm:text-[10px] bg-black/30 backdrop-blur-md table-fixed">
                     <thead>
                         <tr id="header-tabel-jadwal" class="bg-slate-900/80 text-white">
-                            <th class="p-0.5 border border-white/10 w-7 sm:w-20">Jam</th>
-                            <th class="p-0.5 border border-white/10">Sen</th>
-                            <th class="p-0.5 border border-white/10">Sel</th>
-                            <th class="p-0.5 border border-white/10">Rab</th>
-                            <th class="p-0.5 border border-white/10">Kam</th>
-                            <th class="p-0.5 border border-white/10">Jum</th>
-                            <th class="p-0.5 border border-white/10">Sab</th>
-                            <th class="p-0.5 border border-white/10">Min</th>
+                            <th class="p-0.5 sm:p-2 border border-white/10 w-7 sm:w-20">Jam</th>
+                            <th class="p-0.5 sm:p-2 border border-white/10">Sen</th>
+                            <th class="p-0.5 sm:p-2 border border-white/10">Sel</th>
+                            <th class="p-0.5 sm:p-2 border border-white/10">Rab</th>
+                            <th class="p-0.5 sm:p-2 border border-white/10">Kam</th>
+                            <th class="p-0.5 sm:p-2 border border-white/10">Jum</th>
+                            <th class="p-0.5 sm:p-2 border border-white/10">Sab</th>
+                            <th class="p-0.5 sm:p-2 border border-white/10">Min</th>
                         </tr>
                     </thead>
                     <tbody id="grid-jadwal-gabung">
@@ -122,7 +122,7 @@
                 </table>
             </div>
 
-            <!-- REKAP KEUANGAN TERPISAH (3 TABEL) -->
+            <!-- REKAP KEUANGAN HARIAN -->
             <div class="glass-panel p-3 sm:p-4 rounded-2xl mb-8 space-y-6">
                 <div class="flex flex-col sm:flex-row justify-between items-center gap-3">
                     <h2 class="font-bold text-base sm:text-lg text-white drop-shadow">📊 REKAP KEUANGAN HARIAN</h2>
@@ -133,12 +133,12 @@
                 <div class="space-y-2">
                     <div class="flex justify-between items-center">
                         <h3 class="font-bold text-xs sm:text-sm text-blue-200 flex items-center gap-1.5">⚽ 1. Uang Lapangan</h3>
-                        <span id="subtotal-lapangan" class="text-[10px] sm:text-xs font-bold text-blue-200 bg-blue-900/50 border border-blue-400/30 px-2 py-1 rounded-lg">Total: Rp 0</span>
+                        <span id="subtotal-lapangan" class="text-[10px] sm:text-xs font-bold text-blue-200 bg-slate-900/80 border border-white/10 px-2 py-1 rounded-lg">Total: Rp 0</span>
                     </div>
                     <div class="shadow rounded-xl border border-white/10 bg-black/30 backdrop-blur-md overflow-hidden">
-                        <table class="w-full text-left text-[9px] sm:text-xs border-collapse table-fixed">
+                        <table class="w-full text-left text-[8px] sm:text-xs border-collapse table-fixed">
                             <thead>
-                                <tr class="bg-blue-900/70 text-white border-b border-white/10">
+                                <tr class="bg-slate-900/80 text-white border-b border-white/10">
                                     <th class="p-1.5 sm:p-2 border border-white/10 w-[35%]">Tim / Ket</th>
                                     <th class="p-1.5 sm:p-2 border border-white/10 w-[30%]">Detail</th>
                                     <th class="p-1.5 sm:p-2 border border-white/10 w-[20%]">Jumlah</th>
@@ -154,12 +154,12 @@
                 <div class="space-y-2">
                     <div class="flex justify-between items-center">
                         <h3 class="font-bold text-xs sm:text-sm text-amber-200 flex items-center gap-1.5">🥤 2. Penjualan Minuman</h3>
-                        <span id="subtotal-minuman" class="text-[10px] sm:text-xs font-bold text-amber-200 bg-amber-900/50 border border-amber-400/30 px-2 py-1 rounded-lg">Total: Rp 0</span>
+                        <span id="subtotal-minuman" class="text-[10px] sm:text-xs font-bold text-amber-200 bg-slate-900/80 border border-white/10 px-2 py-1 rounded-lg">Total: Rp 0</span>
                     </div>
                     <div class="shadow rounded-xl border border-white/10 bg-black/30 backdrop-blur-md overflow-hidden">
-                        <table class="w-full text-left text-[9px] sm:text-xs border-collapse table-fixed">
+                        <table class="w-full text-left text-[8px] sm:text-xs border-collapse table-fixed">
                             <thead>
-                                <tr class="bg-amber-900/70 text-white border-b border-white/10">
+                                <tr class="bg-slate-900/80 text-white border-b border-white/10">
                                     <th class="p-1.5 sm:p-2 border border-white/10 w-[40%]">Produk</th>
                                     <th class="p-1.5 sm:p-2 border border-white/10 w-[20%]">Pcs</th>
                                     <th class="p-1.5 sm:p-2 border border-white/10 w-[25%]">Total</th>
@@ -175,14 +175,15 @@
                 <div class="space-y-2">
                     <div class="flex justify-between items-center">
                         <h3 class="font-bold text-xs sm:text-sm text-rose-200 flex items-center gap-1.5">💸 3. Uang Keluar / Pengeluaran</h3>
-                        <span id="subtotal-keluar" class="text-[10px] sm:text-xs font-bold text-rose-200 bg-rose-900/50 border border-rose-400/30 px-2 py-1 rounded-lg">Total: Rp 0</span>
+                        <span id="subtotal-keluar" class="text-[10px] sm:text-xs font-bold text-rose-200 bg-slate-900/80 border border-white/10 px-2 py-1 rounded-lg">Total: Rp 0</span>
                     </div>
                     <div class="shadow rounded-xl border border-white/10 bg-black/30 backdrop-blur-md overflow-hidden">
-                        <table class="w-full text-left text-[9px] sm:text-xs border-collapse table-fixed">
+                        <table class="w-full text-left text-[8px] sm:text-xs border-collapse table-fixed">
                             <thead>
-                                <tr class="bg-rose-900/70 text-white border-b border-white/10">
-                                    <th class="p-1.5 sm:p-2 border border-white/10 w-[55%]">Keterangan</th>
-                                    <th class="p-1.5 sm:p-2 border border-white/10 w-[30%]">Nominal</th>
+                                <tr class="bg-slate-900/80 text-white border-b border-white/10">
+                                    <th class="p-1.5 sm:p-2 border border-white/10 w-[40%]">Keterangan</th>
+                                    <th class="p-1.5 sm:p-2 border border-white/10 w-[30%]">Sumber Dana</th>
+                                    <th class="p-1.5 sm:p-2 border border-white/10 w-[15%]">Nominal</th>
                                     <th class="p-1.5 sm:p-2 border border-white/10 text-center w-[15%]">Aksi</th>
                                 </tr>
                             </thead>
@@ -380,7 +381,19 @@
             <form onsubmit="submitData(event, 'pengeluaran')">
                 <input type="text" id="k-ket" placeholder="Keterangan Pengeluaran" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
                 <input type="number" id="k-jumlah" placeholder="Nominal (Rp)" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
+                
+                <label class="block text-xs font-medium mb-1 text-white/90">Tanggal Catat Pengeluaran</label>
                 <input type="date" id="k-tgl" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
+
+                <!-- FITUR PILIH SUMBER CASH TANGGAL LAIN -->
+                <div class="glass-panel-sub p-3 rounded-xl border border-rose-400/30 mb-3 space-y-2">
+                    <label class="block text-xs font-bold text-rose-200">Sumber Dana (Ambil dari Cash Tanggal Lain):</label>
+                    <div class="flex items-center gap-2">
+                        <input type="date" id="k-sumber-tgl" onchange="cekSaldoSumberCash()" class="w-full p-2 rounded text-sm glass-input" required>
+                    </div>
+                    <p id="info-saldo-sumber" class="text-xs text-amber-300 font-semibold">Sisa Cash Tanggal Terpilih: Menghitung...</p>
+                </div>
+
                 <div class="flex gap-2">
                     <button type="submit" class="bg-rose-600 hover:bg-rose-500 text-white px-4 py-2 rounded text-sm font-semibold border border-rose-400/40 shadow">Simpan</button>
                     <button type="button" onclick="showPage('home')" class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded text-sm font-semibold backdrop-blur border border-white/30">Kembali</button>
@@ -448,6 +461,7 @@
             if(document.getElementById('in-tgl')) document.getElementById('in-tgl').value = today;
             if(document.getElementById('m-tgl')) document.getElementById('m-tgl').value = today;
             if(document.getElementById('k-tgl')) document.getElementById('k-tgl').value = today;
+            if(document.getElementById('k-sumber-tgl')) document.getElementById('k-sumber-tgl').value = today;
             
             renderGridJadwal();
         });
@@ -455,6 +469,9 @@
         window.showPage = (id) => {
             document.querySelectorAll('main > div').forEach(div => div.classList.add('hidden'));
             document.getElementById('page-' + id).classList.remove('hidden');
+            if(id === 'keluar') {
+                cekSaldoSumberCash();
+            }
         }
 
         window.toggleBukti = () => {
@@ -490,6 +507,48 @@
             let pcs = Number(document.getElementById('m-jumlah-pcs').value || 0);
             if(hargaSatuan > 0) {
                 document.getElementById('m-total').value = hargaSatuan * pcs;
+            }
+        }
+
+        // Fungsi menghitung sisa cash pada tanggal tertentu untuk validasi/informasi sumber dana
+        window.cekSaldoSumberCash = () => {
+            let tglSumber = document.getElementById('k-sumber-tgl').value;
+            if(!tglSumber) return;
+
+            let totalMasukCash = 0;
+            let totalKeluar = 0;
+
+            // Hitung pemasukan cash pada tanggal sumber
+            Object.values(globalCache.pemasukan).forEach(item => {
+                if(item.tgl === tglSumber && (item.metode || 'Cash') === 'Cash') {
+                    totalMasukCash += Number(item.jumlah || 0);
+                }
+            });
+
+            Object.values(globalCache.booking).forEach(item => {
+                if(item.tgl && item.tgl.split('T')[0] === tglSumber && (item.metode || 'Cash') === 'Cash') {
+                    totalMasukCash += Number(item.dp || 0);
+                }
+            });
+
+            Object.values(globalCache.minuman).forEach(item => {
+                if(item.tgl === tglSumber && (item.metode || 'Cash') === 'Cash') {
+                    totalMasukCash += Number(item.total || 0);
+                }
+            });
+
+            // Hitung pengeluaran yang mengambil dari tanggal sumber ini
+            Object.values(globalCache.pengeluaran).forEach(item => {
+                let sumberDana = item.sumberTgl || item.tgl; // Support data lama & baru
+                if(sumberDana === tglSumber) {
+                    totalKeluar += Number(item.jumlah || 0);
+                }
+            });
+
+            let sisaCash = totalMasukCash - totalKeluar;
+            let infoEl = document.getElementById('info-saldo-sumber');
+            if(infoEl) {
+                infoEl.innerText = `Sisa Cash Tanggal ${tglSumber}: Rp ${sisaCash.toLocaleString('id-ID')}`;
             }
         }
 
@@ -539,7 +598,8 @@
                 data = { 
                     ket: document.getElementById('k-ket').value, 
                     jumlah: Number(document.getElementById('k-jumlah').value),
-                    tgl: document.getElementById('k-tgl').value
+                    tgl: document.getElementById('k-tgl').value,
+                    sumberTgl: document.getElementById('k-sumber-tgl').value // Menyimpan tanggal asal cash diambil
                 };
             }
             await push(ref(db, type), data);
@@ -550,6 +610,7 @@
             if(document.getElementById('in-tgl')) document.getElementById('in-tgl').value = today;
             if(document.getElementById('m-tgl')) document.getElementById('m-tgl').value = today;
             if(document.getElementById('k-tgl')) document.getElementById('k-tgl').value = today;
+            if(document.getElementById('k-sumber-tgl')) document.getElementById('k-sumber-tgl').value = today;
             if(document.getElementById('m-select-pilihan')) document.getElementById('m-select-pilihan').value = "";
             
             toggleBukti();
@@ -666,7 +727,7 @@
             let monday = mondayStrVal ? new Date(mondayStrVal) : new Date();
 
             let currentWeekDates = {};
-            let headerHtml = `<th class="p-0.5 border border-white/10 w-7 sm:w-20">Jam</th>`;
+            let headerHtml = `<th class="p-0.5 sm:p-2 border border-white/10 w-7 sm:w-20">Jam</th>`;
 
             let optDateFormat = { day: 'numeric', month: 'short', year: 'numeric' };
             let formatDateShort = { day: 'numeric', month: 'numeric' };
@@ -704,14 +765,12 @@
                 tempDate.setHours(0,0,0,0);
                 let isFullDayPassed = tempDate < nowTime;
 
-                let badgeDone = isFullDayPassed ? `<span class="px-0.5 py-0.2 bg-slate-700/90 text-amber-300 font-bold rounded text-[5px] sm:text-[8px] uppercase border border-slate-600 ml-0.5">DONE</span>` : "";
+                let badgeDone = isFullDayPassed ? `<div class="mt-0.5"><span class="px-1 py-0.2 bg-slate-700/90 text-amber-300 font-bold rounded text-[6px] sm:text-[9px] uppercase border border-slate-600">DONE</span></div>` : "";
 
-                headerHtml += `<th class="p-0.5 border border-white/10 align-middle">
-                    <div class="flex items-center justify-center gap-0.5">
-                        <span class="truncate">${h.nama.substring(0,3)}</span>
-                        <span class="text-[5px] sm:text-[9px] text-amber-300/90 font-normal">${labelTgl}</span>
-                        ${badgeDone}
-                    </div>
+                headerHtml += `<th class="p-0.5 sm:p-2 border border-white/10 align-middle">
+                    <div class="truncate">${h.nama.substring(0,3)}</div>
+                    <div class="text-[6px] sm:text-[10px] text-amber-300/90 font-normal">${labelTgl}</div>
+                    ${badgeDone}
                 </th>`;
             });
 
@@ -743,8 +802,8 @@
             });
 
             listJam.forEach(jam => {
-                let tr = `<tr class="border-b border-white/10 h-4 sm:h-9">`;
-                tr += `<td class="p-0.5 border border-white/10 font-bold bg-black/40 text-white text-[6px] sm:text-xs">${jam}</td>`;
+                let tr = `<tr class="border-b border-white/10 h-7 sm:h-14">`;
+                tr += `<td class="p-0.5 sm:p-2 border border-white/10 font-bold bg-black/40 text-white text-[6px] sm:text-xs">${jam}</td>`;
                 
                 listHariKey.forEach(hari => {
                     let cellData = (matrix[jam] && matrix[jam][hari]) ? matrix[jam][hari] : null;
@@ -764,8 +823,8 @@
                         }
                     }
 
-                    tr += `<td class="p-0.5 ${bgClass} align-middle h-4 sm:h-9 overflow-hidden">
-                        <div class="flex items-center justify-center h-full text-[6px] sm:text-xs text-center leading-tight line-clamp-1">${textVal}</div>
+                    tr += `<td class="p-0.5 sm:p-1 ${bgClass} align-middle h-7 sm:h-14 overflow-hidden">
+                        <div class="flex items-center justify-center h-full text-[6px] sm:text-[10px] text-center leading-tight line-clamp-2">${textVal}</div>
                     </td>`;
                 });
                 tr += `</tr>`;
@@ -786,13 +845,13 @@
 
                     let formattedTglJam = item.tgl ? item.tgl.replace('T', ' ') : '-';
 
-                    tbody.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5 h-6 sm:h-12">
-                        <td class="p-0.5 sm:p-1 border border-white/10 text-[6px] sm:text-xs leading-tight truncate">${formattedTglJam}</td>
-                        <td class="p-0.5 sm:p-1 border border-white/10 font-medium text-[7px] sm:text-xs truncate">${item.nama}</td>
-                        <td class="p-0.5 sm:p-1 border border-white/10">${badgeStatus}</td>
-                        <td class="p-0.5 sm:p-1 border border-white/10 text-[6px] sm:text-xs truncate">Rp ${Number(item.dp).toLocaleString('id-ID')}</td>
-                        <td class="p-0.5 sm:p-1 border border-white/10 text-[6px] sm:text-xs truncate">${item.metode}</td>
-                        <td class="p-0.5 sm:p-1 border border-white/10 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1 py-0.5 rounded text-[6px] sm:text-xs">Hapus</button></td>
+                    tbody.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5 h-7 sm:h-12">
+                        <td class="p-1 border border-white/10 text-[6px] sm:text-xs leading-tight truncate">${formattedTglJam}</td>
+                        <td class="p-1 border border-white/10 font-medium text-[7px] sm:text-xs truncate">${item.nama}</td>
+                        <td class="p-1 border border-white/10">${badgeStatus}</td>
+                        <td class="p-1 border border-white/10 text-[6px] sm:text-xs truncate">Rp ${Number(item.dp).toLocaleString('id-ID')}</td>
+                        <td class="p-1 border border-white/10 text-[6px] sm:text-xs truncate">${item.metode}</td>
+                        <td class="p-1 border border-white/10 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1 py-0.5 rounded text-[6px] sm:text-xs">Hapus</button></td>
                     </tr>`;
                 });
             } else {
@@ -839,7 +898,7 @@
                         <td class="p-1.5 sm:p-2 border border-white/10 font-medium truncate">${item.ket}</td>
                         <td class="p-1.5 sm:p-2 border border-white/10 text-white/70 truncate">Masuk (${metode})</td>
                         <td class="p-1.5 sm:p-2 border border-white/10 font-bold text-emerald-300 truncate">Rp ${nominal.toLocaleString('id-ID')}</td>
-                        <td class="p-1.5 sm:p-2 border border-white/10 text-center"><button type="button" onclick="hapusDataKeuangan('pemasukan', '${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1.5 py-0.5 rounded text-[8px] sm:text-xs">Hapus</button></td>
+                        <td class="p-1.5 sm:p-2 border border-white/10 text-center"><button type="button" onclick="hapusDataKeuangan('pemasukan', '${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1.5 py-0.5 rounded text-[7px] sm:text-xs">Hapus</button></td>
                     </tr>`;
                 }
             });
@@ -863,7 +922,7 @@
                         <td class="p-1.5 sm:p-2 border border-white/10 font-medium truncate">${item.nama}</td>
                         <td class="p-1.5 sm:p-2 border border-white/10 text-white/70 truncate">${labelStatus} (${metode})</td>
                         <td class="p-1.5 sm:p-2 border border-white/10 font-bold text-emerald-300 truncate">Rp ${nominal.toLocaleString('id-ID')}</td>
-                        <td class="p-1.5 sm:p-2 border border-white/10 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1.5 py-0.5 rounded text-[8px] sm:text-xs">Hapus</button></td>
+                        <td class="p-1.5 sm:p-2 border border-white/10 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1.5 py-0.5 rounded text-[7px] sm:text-xs">Hapus</button></td>
                     </tr>`;
                 }
             });
@@ -889,35 +948,45 @@
                         <td class="p-1.5 sm:p-2 border border-white/10 font-medium truncate">${prod} (${metode})</td>
                         <td class="p-1.5 sm:p-2 border border-white/10 text-white/70 truncate">${pcs}</td>
                         <td class="p-1.5 sm:p-2 border border-white/10 font-bold text-amber-300 truncate">Rp ${nominal.toLocaleString('id-ID')}</td>
-                        <td class="p-1.5 sm:p-2 border border-white/10 text-center"><button type="button" onclick="hapusDataKeuangan('minuman', '${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1.5 py-0.5 rounded text-[8px] sm:text-xs">Hapus</button></td>
+                        <td class="p-1.5 sm:p-2 border border-white/10 text-center"><button type="button" onclick="hapusDataKeuangan('minuman', '${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1.5 py-0.5 rounded text-[7px] sm:text-xs">Hapus</button></td>
                     </tr>`;
                 }
             });
 
-            // 4. Pengeluaran
+            // 4. Pengeluaran (Berdasarkan Tanggal Pencatatan Pengeluaran)
             Object.entries(globalCache.pengeluaran).forEach(([key, item]) => {
                 if(item.tgl === selectedDate) {
                     hasKel = true;
                     let nominal = Number(item.jumlah || 0);
                     totalKeluar += nominal;
+                    let sumberTgl = item.sumberTgl || item.tgl;
+
                     tKel.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5">
                         <td class="p-1.5 sm:p-2 border border-white/10 font-medium truncate">${item.ket}</td>
+                        <td class="p-1.5 sm:p-2 border border-white/10 text-white/70 text-[7px] sm:text-xs truncate">Cash tgl: ${sumberTgl}</td>
                         <td class="p-1.5 sm:p-2 border border-white/10 font-bold text-rose-300 truncate">Rp ${nominal.toLocaleString('id-ID')}</td>
-                        <td class="p-1.5 sm:p-2 border border-white/10 text-center"><button type="button" onclick="hapusDataKeuangan('pengeluaran', '${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1.5 py-0.5 rounded text-[8px] sm:text-xs">Hapus</button></td>
+                        <td class="p-1.5 sm:p-2 border border-white/10 text-center"><button type="button" onclick="hapusDataKeuangan('pengeluaran', '${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1.5 py-0.5 rounded text-[7px] sm:text-xs">Hapus</button></td>
                     </tr>`;
                 }
             });
 
-            if(!hasLap) tLap.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-white/50 italic text-[9px] sm:text-xs">Belum ada data uang lapangan.</td></tr>`;
-            if(!hasMin) tMin.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-white/50 italic text-[9px] sm:text-xs">Belum ada penjualan minuman.</td></tr>`;
-            if(!hasKel) tKel.innerHTML = `<tr><td colspan="3" class="text-center p-3 text-white/50 italic text-[9px] sm:text-xs">Belum ada pengeluaran.</td></tr>`;
+            if(!hasLap) tLap.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-white/50 italic text-[8px] sm:text-xs">Belum ada data uang lapangan.</td></tr>`;
+            if(!hasMin) tMin.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-white/50 italic text-[8px] sm:text-xs">Belum ada penjualan minuman.</td></tr>`;
+            if(!hasKel) tKel.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-white/50 italic text-[8px] sm:text-xs">Belum ada pengeluaran.</td></tr>`;
 
             document.getElementById('subtotal-lapangan').innerText = "Total: Rp " + totalLapangan.toLocaleString('id-ID');
             document.getElementById('subtotal-minuman').innerText = "Total: Rp " + totalMinuman.toLocaleString('id-ID');
             document.getElementById('subtotal-keluar').innerText = "Total: Rp " + totalKeluar.toLocaleString('id-ID');
 
-            // Hitung Saldo Bersih Cash (Total Cash - Total Keluar)
-            let saldoBersihCash = totalMasukCash - totalKeluar;
+            // Hitung Saldo Bersih Cash (Total Cash hari ini - Total Keluar yang bersumber dari cash hari ini)
+            let totalKeluarDariCashHariIni = 0;
+            Object.values(globalCache.pengeluaran).forEach(item => {
+                let sumberTgl = item.sumberTgl || item.tgl;
+                if(sumberTgl === selectedDate) {
+                    totalKeluarDariCashHariIni += Number(item.jumlah || 0);
+                }
+            });
+            let saldoBersihCash = totalMasukCash - totalKeluarDariCashHariIni;
 
             document.getElementById('rekap-masuk-cash').innerText = "Rp " + totalMasukCash.toLocaleString('id-ID');
             document.getElementById('rekap-masuk-qrif').innerText = "Rp " + totalMasukQrif.toLocaleString('id-ID');
