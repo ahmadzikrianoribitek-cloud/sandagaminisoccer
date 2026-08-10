@@ -361,16 +361,11 @@
                 <input type="number" id="b-dp" placeholder="Jumlah DP / Bayar (Rp)" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
                 
                 <label class="block text-xs font-medium mb-1 text-white/90">Metode Pembayaran</label>
-                <select id="b-metode" onchange="toggleBukti()" class="w-full p-2 rounded mb-3 text-sm glass-input">
-                    <option value="Cash">Cash (Tanpa Bukti)</option>
+                <select id="b-metode" class="w-full p-2 rounded mb-3 text-sm glass-input">
+                    <option value="Cash">Cash</option>
                     <option value="QRIS">QRIS</option>
                     <option value="Transfer">Transfer</option>
                 </select>
-                
-                <div id="div-bukti" class="hidden mb-3">
-                    <label class="block text-xs font-medium mb-1 text-white/90">Upload Bukti Foto</label>
-                    <input type="file" id="b-bukti" accept="image/*" class="w-full p-2 rounded text-sm glass-input">
-                </div>
                 
                 <div class="flex gap-2">
                     <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded text-sm font-semibold border border-blue-400/40 shadow">Simpan</button>
@@ -379,7 +374,7 @@
             </form>
         </div>
 
-        <!-- FORM UANG MASUK (REVISI SESUAI PERMINTAAN) -->
+        <!-- FORM UANG MASUK -->
         <div id="page-masuk" class="glass-panel p-4 sm:p-6 rounded-2xl hidden">
             <h2 class="text-base sm:text-lg font-bold mb-4 text-emerald-300">Uang Masuk / Pelunasan Lapangan</h2>
             <form onsubmit="submitData(event, 'pemasukan')">
@@ -491,7 +486,6 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getDatabase, ref, push, remove, onValue } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
-        import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDO6gVCRzTClDEwAS2FAWZVf-pB5CG2Pbc",
@@ -506,7 +500,6 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-        const storage = getStorage(app);
 
         function getLocalDateString(date = new Date()) {
             const year = date.getFullYear();
@@ -571,16 +564,6 @@
             }
             if(id === 'masuk') {
                 updateDropdownTimMasuk();
-            }
-        }
-
-        window.toggleBukti = () => {
-            let metode = document.getElementById('b-metode').value;
-            let divBukti = document.getElementById('div-bukti');
-            if(metode === 'Cash') {
-                divBukti.classList.add('hidden');
-            } else {
-                divBukti.classList.remove('hidden');
             }
         }
 
@@ -723,26 +706,16 @@
             if(type === 'booking') {
                 let status = document.getElementById('b-status').value;
                 let metode = document.getElementById('b-metode').value;
-                let url = "";
                 let tglInput = document.getElementById('b-tanggal').value;
                 let jamInput = document.getElementById('b-jam').value;
                 let gabungTglJam = tglInput + "T" + jamInput;
 
-                if(metode !== 'Cash') {
-                    let file = document.getElementById('b-bukti').files[0];
-                    if(file) {
-                        let sRef = storageRef(storage, 'bukti/' + Date.now());
-                        let snap = await uploadBytes(sRef, file);
-                        url = await getDownloadURL(snap.ref);
-                    }
-                }
                 data = { 
                     status,
                     nama: document.getElementById('b-nama').value, 
                     tgl: gabungTglJam, 
                     dp: document.getElementById('b-dp').value, 
-                    metode, 
-                    bukti: url 
+                    metode 
                 };
             } else if(type === 'pemasukan') {
                 let tim = document.getElementById('in-tim').value;
@@ -782,9 +755,14 @@
             alert("Berhasil disimpan!");
             e.target.reset();
             setDefaultDates();
-            if(document.getElementById('m-select-pilihan')) document.getElementById('m-select-pilihan').value = "";
             
-            toggleBukti();
+            // Khusus halaman minuman: tetap di halaman input (tidak kembali ke home)
+            if(type === 'minuman') {
+                if(document.getElementById('m-select-pilihan')) document.getElementById('m-select-pilihan').value = "";
+                return; // Menghentikan agar tidak menjalankan showPage('home')
+            }
+
+            if(document.getElementById('m-select-pilihan')) document.getElementById('m-select-pilihan').value = "";
             showPage('home');
         }
 
