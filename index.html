@@ -55,6 +55,25 @@
         .glass-input::placeholder {
             color: rgba(255, 255, 255, 0.7);
         }
+
+        /* Tombol Transparan Elegan seperti Kaca */
+        .glass-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+            text-align: center;
+            text-transform: uppercase;
+            box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .glass-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 6px 24px 0 rgba(0, 0, 0, 0.3);
+        }
     </style>
 </head>
 <body class="min-h-screen p-2 sm:p-4 flex flex-col items-center text-white">
@@ -69,24 +88,27 @@
         
         <!-- BERANDA -->
         <div id="page-home" class="glass-panel p-3 sm:p-6 rounded-2xl">
-            <h2 class="text-center font-bold mb-4 text-xl drop-shadow">Menu Utama</h2>
+            <h2 class="text-center font-bold mb-4 text-xl drop-shadow">MAIN MENU</h2>
             
-            <!-- 4 TOMBOL UTAMA BERJEJER KE BAWAH -->
+            <!-- 4 TOMBOL UTAMA BERJEJER SATU-SATU KE BAWAH -->
             <div class="flex flex-col gap-3 mb-6">
-                <button onclick="showPage('booking')" class="bg-blue-600/70 hover:bg-blue-600 backdrop-blur border border-blue-400/30 text-white p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm text-left px-4">⚽ Booking</button>
-                <button onclick="showPage('masuk')" class="bg-emerald-600/70 hover:bg-emerald-600 backdrop-blur border border-emerald-400/30 text-white p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm text-left px-4">💰 Uang Masuk</button>
-                <button onclick="showPage('minuman')" class="bg-amber-600/70 hover:bg-amber-600 backdrop-blur border border-amber-400/30 text-white p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm text-left px-4">🥤 Minuman</button>
-                <button onclick="showPage('keluar')" class="bg-rose-600/70 hover:bg-rose-600 backdrop-blur border border-rose-400/30 text-white p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm text-left px-4">💸 Uang Keluar</button>
+                <button onclick="showPage('booking')" class="glass-btn p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm w-full">BOOKING</button>
+                <button onclick="showPage('masuk')" class="glass-btn p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm w-full">UANG MASUK</button>
+                <button onclick="showPage('minuman')" class="glass-btn p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm w-full">MINUMAN</button>
+                <button onclick="showPage('keluar')" class="glass-btn p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm w-full">UANG KELUAR</button>
             </div>
 
             <!-- GARIS PEMISAH -->
             <hr class="border-t border-white/20 my-6">
 
-            <!-- 3 TOMBOL TAMBAHAN BERJEJER KE BAWAH -->
-            <div class="flex flex-col gap-3">
-                <button onclick="showPage('booking-schedule')" class="bg-cyan-600/70 hover:bg-cyan-600 backdrop-blur border border-cyan-400/30 text-white p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm text-left px-4">📅 BOOKING SCHEDULE</button>
-                <button onclick="showPage('daily-recap')" class="bg-purple-600/70 hover:bg-purple-600 backdrop-blur border border-purple-400/30 text-white p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm text-left px-4">📊 DAILY RECAP</button>
-                <button onclick="showPage('booking-history')" class="bg-indigo-600/70 hover:bg-indigo-600 backdrop-blur border border-indigo-400/30 text-white p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm text-left px-4">📋 BOOKING HISTORY</button>
+            <!-- HEADER RESULT & 3 TOMBOL TAMBAHAN -->
+            <div class="space-y-3">
+                <h3 class="text-center font-bold text-sm tracking-widest text-white/80 uppercase">RESULT</h3>
+                <div class="flex flex-col gap-3">
+                    <button onclick="showPage('booking-schedule')" class="glass-btn p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm w-full">BOOKING SCHEDULE</button>
+                    <button onclick="showPage('daily-recap')" class="glass-btn p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm w-full">DAILY RECAP</button>
+                    <button onclick="showPage('booking-history')" class="glass-btn p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm w-full">BOOKING HISTORY</button>
+                </div>
             </div>
         </div>
 
