@@ -101,19 +101,19 @@
                 <span class="flex items-center gap-1.5"><span class="px-1.5 py-0.5 bg-slate-700 text-slate-300 rounded text-[10px] font-bold">DONE</span> Selesai</span>
             </div>
             
-            <!-- TABEL JADWAL MATRIX (KOMPAK / TIDAK PANJANG KEBAWAH) -->
+            <!-- TABEL JADWAL MATRIX (UKURAN FONT LEBIH KECIL AGAR TIDAK TERPOTONG) -->
             <div class="shadow-2xl rounded-xl border border-white/20 mb-8 overflow-hidden">
-                <table class="w-full text-center border-collapse text-[7px] sm:text-xs bg-black/30 backdrop-blur-md table-fixed">
+                <table class="w-full text-center border-collapse text-[6px] sm:text-xs bg-black/30 backdrop-blur-md table-fixed">
                     <thead>
                         <tr id="header-tabel-jadwal" class="bg-slate-900/80 text-white">
-                            <th class="p-1 border border-white/10 w-8 sm:w-20">Jam</th>
-                            <th class="p-1 border border-white/10">Sen</th>
-                            <th class="p-1 border border-white/10">Sel</th>
-                            <th class="p-1 border border-white/10">Rab</th>
-                            <th class="p-1 border border-white/10">Kam</th>
-                            <th class="p-1 border border-white/10">Jum</th>
-                            <th class="p-1 border border-white/10">Sab</th>
-                            <th class="p-1 border border-white/10">Min</th>
+                            <th class="p-0.5 border border-white/10 w-7 sm:w-20">Jam</th>
+                            <th class="p-0.5 border border-white/10">Sen</th>
+                            <th class="p-0.5 border border-white/10">Sel</th>
+                            <th class="p-0.5 border border-white/10">Rab</th>
+                            <th class="p-0.5 border border-white/10">Kam</th>
+                            <th class="p-0.5 border border-white/10">Jum</th>
+                            <th class="p-0.5 border border-white/10">Sab</th>
+                            <th class="p-0.5 border border-white/10">Min</th>
                         </tr>
                     </thead>
                     <tbody id="grid-jadwal-gabung">
@@ -215,7 +215,7 @@
             <!-- TABEL DAFTAR BOOKING HARIAN -->
             <h2 class="font-bold mb-4 text-base sm:text-lg text-white drop-shadow">📋 Daftar Riwayat Booking / Non-Member</h2>
             <div class="shadow-2xl rounded-xl border border-white/20 mb-8 overflow-hidden">
-                <table class="w-full text-center border-collapse text-[7px] sm:text-xs bg-black/30 backdrop-blur-md table-fixed">
+                <table class="w-full text-center border-collapse text-[6px] sm:text-xs bg-black/30 backdrop-blur-md table-fixed">
                     <thead>
                         <tr class="bg-slate-900/80 text-white">
                             <th class="p-1 sm:p-2 border border-white/10 w-[24%]">Waktu</th>
@@ -666,7 +666,7 @@
             let monday = mondayStrVal ? new Date(mondayStrVal) : new Date();
 
             let currentWeekDates = {};
-            let headerHtml = `<th class="p-1 border border-white/10 w-8 sm:w-20">Jam</th>`;
+            let headerHtml = `<th class="p-0.5 border border-white/10 w-7 sm:w-20">Jam</th>`;
 
             let optDateFormat = { day: 'numeric', month: 'short', year: 'numeric' };
             let formatDateShort = { day: 'numeric', month: 'numeric' };
@@ -704,12 +704,12 @@
                 tempDate.setHours(0,0,0,0);
                 let isFullDayPassed = tempDate < nowTime;
 
-                let badgeDone = isFullDayPassed ? `<span class="px-1 py-0.2 bg-slate-700/90 text-amber-300 font-bold rounded text-[5px] sm:text-[8px] uppercase border border-slate-600 ml-1">DONE</span>` : "";
+                let badgeDone = isFullDayPassed ? `<span class="px-0.5 py-0.2 bg-slate-700/90 text-amber-300 font-bold rounded text-[5px] sm:text-[8px] uppercase border border-slate-600 ml-0.5">DONE</span>` : "";
 
-                headerHtml += `<th class="p-1 border border-white/10 align-middle">
-                    <div class="flex items-center justify-center gap-1">
+                headerHtml += `<th class="p-0.5 border border-white/10 align-middle">
+                    <div class="flex items-center justify-center gap-0.5">
                         <span class="truncate">${h.nama.substring(0,3)}</span>
-                        <span class="text-[6px] sm:text-[9px] text-amber-300/90 font-normal">${labelTgl}</span>
+                        <span class="text-[5px] sm:text-[9px] text-amber-300/90 font-normal">${labelTgl}</span>
                         ${badgeDone}
                     </div>
                 </th>`;
@@ -743,8 +743,8 @@
             });
 
             listJam.forEach(jam => {
-                let tr = `<tr class="border-b border-white/10 h-5 sm:h-9">`;
-                tr += `<td class="p-0.5 border border-white/10 font-bold bg-black/40 text-white text-[7px] sm:text-xs">${jam}</td>`;
+                let tr = `<tr class="border-b border-white/10 h-4 sm:h-9">`;
+                tr += `<td class="p-0.5 border border-white/10 font-bold bg-black/40 text-white text-[6px] sm:text-xs">${jam}</td>`;
                 
                 listHariKey.forEach(hari => {
                     let cellData = (matrix[jam] && matrix[jam][hari]) ? matrix[jam][hari] : null;
@@ -764,8 +764,8 @@
                         }
                     }
 
-                    tr += `<td class="p-0.5 ${bgClass} align-middle h-5 sm:h-9 overflow-hidden">
-                        <div class="flex items-center justify-center h-full text-[7px] sm:text-xs text-center leading-tight line-clamp-1">${textVal}</div>
+                    tr += `<td class="p-0.5 ${bgClass} align-middle h-4 sm:h-9 overflow-hidden">
+                        <div class="flex items-center justify-center h-full text-[6px] sm:text-xs text-center leading-tight line-clamp-1">${textVal}</div>
                     </td>`;
                 });
                 tr += `</tr>`;
@@ -781,18 +781,18 @@
             if (Object.keys(data).length > 0) {
                 Object.entries(data).forEach(([key, item]) => {
                     let badgeStatus = item.status === 'Member' 
-                        ? '<span class="px-1 py-0.5 bg-blue-500/30 text-blue-200 border border-blue-400/40 rounded text-[7px] sm:text-xs font-bold">M</span>' 
-                        : '<span class="px-1 py-0.5 bg-rose-500/30 text-rose-200 border border-rose-400/40 rounded text-[7px] sm:text-xs font-bold">Non</span>';
+                        ? '<span class="px-1 py-0.5 bg-blue-500/30 text-blue-200 border border-blue-400/40 rounded text-[6px] sm:text-xs font-bold">M</span>' 
+                        : '<span class="px-1 py-0.5 bg-rose-500/30 text-rose-200 border border-rose-400/40 rounded text-[6px] sm:text-xs font-bold">Non</span>';
 
                     let formattedTglJam = item.tgl ? item.tgl.replace('T', ' ') : '-';
 
-                    tbody.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5 h-7 sm:h-12">
-                        <td class="p-1 border border-white/10 text-[7px] sm:text-xs leading-tight truncate">${formattedTglJam}</td>
-                        <td class="p-1 border border-white/10 font-medium text-[8px] sm:text-xs truncate">${item.nama}</td>
-                        <td class="p-1 border border-white/10">${badgeStatus}</td>
-                        <td class="p-1 border border-white/10 text-[7px] sm:text-xs truncate">Rp ${Number(item.dp).toLocaleString('id-ID')}</td>
-                        <td class="p-1 border border-white/10 text-[7px] sm:text-xs truncate">${item.metode}</td>
-                        <td class="p-1 border border-white/10 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1 py-0.5 rounded text-[7px] sm:text-xs">Hapus</button></td>
+                    tbody.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5 h-6 sm:h-12">
+                        <td class="p-0.5 sm:p-1 border border-white/10 text-[6px] sm:text-xs leading-tight truncate">${formattedTglJam}</td>
+                        <td class="p-0.5 sm:p-1 border border-white/10 font-medium text-[7px] sm:text-xs truncate">${item.nama}</td>
+                        <td class="p-0.5 sm:p-1 border border-white/10">${badgeStatus}</td>
+                        <td class="p-0.5 sm:p-1 border border-white/10 text-[6px] sm:text-xs truncate">Rp ${Number(item.dp).toLocaleString('id-ID')}</td>
+                        <td class="p-0.5 sm:p-1 border border-white/10 text-[6px] sm:text-xs truncate">${item.metode}</td>
+                        <td class="p-0.5 sm:p-1 border border-white/10 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1 py-0.5 rounded text-[6px] sm:text-xs">Hapus</button></td>
                     </tr>`;
                 });
             } else {
