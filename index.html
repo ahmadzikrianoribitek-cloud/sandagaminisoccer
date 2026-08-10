@@ -44,7 +44,8 @@
             background: rgba(255, 255, 255, 0.2) !important;
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.4) !important;
-            color: #fff;
+            color: #0f172a;
+            font-weight: 600;
             width: 100%;
             box-sizing: border-box;
             -webkit-appearance: none;
@@ -56,16 +57,17 @@
         }
 
         .glass-input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(15, 23, 42, 0.7);
         }
 
         /* Tombol Transparan Elegan seperti Kaca */
         .glass-btn {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #0f172a;
+            font-weight: 700;
             text-align: center;
             text-transform: uppercase;
             box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.2);
@@ -73,25 +75,25 @@
         }
 
         .glass-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.6);
             box-shadow: 0 6px 24px 0 rgba(0, 0, 0, 0.3);
         }
     </style>
 </head>
-<body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-white">
+<body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium">
 
     <!-- Header -->
     <header class="w-full max-w-6xl flex flex-col items-center justify-center gap-2 mb-6 text-center">
         <img src="logo.png" class="w-30 h-24 sm:w-30 sm:h-28 object-contain rounded-xl">
-        <h1 class="text-lg sm:text-2xl font-bold text-white drop-shadow">SANDAGA MINISOCCER 2</h1>
+        <h1 class="text-lg sm:text-2xl font-black text-slate-900 drop-shadow-sm">SANDAGA MINISOCCER 2</h1>
     </header>
 
     <main class="w-full max-w-6xl space-y-6">
         
         <!-- BERANDA -->
         <div id="page-home" class="glass-panel p-3 sm:p-6 rounded-2xl">
-            <h2 class="text-center font-bold mb-4 text-lg sm:text-xl text-cyan-300 drop-shadow tracking-wider">MAIN MENU</h2>
+            <h2 class="text-center font-black mb-4 text-lg sm:text-xl text-blue-900 drop-shadow-sm tracking-wider">MAIN MENU</h2>
             
             <div class="flex flex-col gap-3 mb-6">
                 <button onclick="showPage('booking')" class="glass-btn p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm w-full">BOOKING</button>
@@ -100,10 +102,10 @@
                 <button onclick="showPage('keluar')" class="glass-btn p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm w-full">UANG KELUAR</button>
             </div>
 
-            <hr class="border-t border-white/20 my-6">
+            <hr class="border-t border-slate-900/20 my-6">
 
             <div class="space-y-3">
-                <h3 class="text-center font-bold text-lg sm:text-xl tracking-wider text-amber-300 drop-shadow uppercase">RESULT</h3>
+                <h3 class="text-center font-black text-lg sm:text-xl tracking-wider text-amber-900 drop-shadow-sm uppercase">RESULT</h3>
                 <div class="flex flex-col gap-3">
                     <button onclick="showPage('booking-schedule')" class="glass-btn p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm w-full">BOOKING SCHEDULE</button>
                     <button onclick="showPage('daily-recap')" class="glass-btn p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm w-full">DAILY RECAP</button>
@@ -116,82 +118,82 @@
         <!-- HALAMAN BOOKING SCHEDULE -->
         <div id="page-booking-schedule" class="glass-panel p-3 sm:p-6 rounded-2xl hidden">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="font-bold text-base sm:text-lg text-white drop-shadow">📅 Jadwal Lapangan (Member & Booking)</h2>
-                <button type="button" onclick="showPage('home')" class="bg-white/25 hover:bg-white/35 text-white px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur border border-white/30">Kembali</button>
+                <h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm">📅 Jadwal Lapangan (Member & Booking)</h2>
+                <button type="button" onclick="showPage('home')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
             </div>
 
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
                 <div>
-                    <p id="info-rentang-minggu" class="text-xs text-white/80 mt-0.5">Menampilkan rentang tanggal minggu ini</p>
+                    <p id="info-rentang-minggu" class="text-xs text-slate-800 font-semibold mt-0.5">Menampilkan rentang tanggal minggu ini</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-between sm:justify-start">
-                    <div class="flex items-center gap-2 glass-panel-sub p-1.5 rounded-xl">
-                        <label for="filter-periode-jadwal" class="text-xs font-medium text-white/90 pl-1">Pilih Periode:</label>
-                        <select id="filter-periode-jadwal" onchange="renderGridJadwal()" class="p-1.5 rounded-lg text-xs glass-input">
+                    <div class="flex items-center gap-2 p-1.5 rounded-xl border border-white/20">
+                        <label for="filter-periode-jadwal" class="text-xs font-bold text-slate-900 pl-1">Pilih Periode:</label>
+                        <select id="filter-periode-jadwal" onchange="renderGridJadwal()" class="p-1.5 rounded-lg text-xs glass-input font-bold">
                         </select>
                     </div>
-                    <button onclick="showPage('atur-member')" class="bg-indigo-600/80 hover:bg-indigo-600 backdrop-blur text-white px-3 py-2 rounded-xl text-xs font-semibold border border-indigo-400/40 shadow">⚙️ Atur Member</button>
+                    <button onclick="showPage('atur-member')" class="bg-indigo-700 hover:bg-indigo-800 backdrop-blur text-white px-3 py-2 rounded-xl text-xs font-bold border border-indigo-500/50 shadow">⚙️ Atur Member</button>
                 </div>
             </div>
 
-            <div class="flex flex-wrap items-center gap-3 sm:gap-4 text-xs font-semibold mb-3 glass-panel-sub p-2.5 rounded-xl">
-                <span class="text-white font-bold">Keterangan:</span>
-                <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-blue-400/40 border border-blue-300 rounded"></span> Member (Biru)</span>
-                <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-rose-500/40 border border-rose-300 rounded"></span> Booking (Merah)</span>
-                <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-red-500/20 border border-red-500 border-dashed rounded"></span> OFF</span>
-                <span class="flex items-center gap-1.5"><span class="px-1.5 py-0.5 bg-slate-700 text-slate-300 rounded text-[10px] font-bold">DONE</span> Selesai</span>
+            <div class="flex flex-wrap items-center gap-3 sm:gap-4 text-xs font-bold mb-3 p-2.5 rounded-xl border border-white/20 text-slate-900">
+                <span class="font-black">Keterangan:</span>
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-blue-600 border border-blue-400 rounded"></span> Member (Biru)</span>
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-rose-600 border border-rose-400 rounded"></span> Booking (Merah)</span>
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-red-500/20 border border-red-600 border-dashed rounded"></span> OFF</span>
+                <span class="flex items-center gap-1.5"><span class="px-1.5 py-0.5 bg-slate-800 text-slate-200 rounded text-[10px] font-bold">DONE</span> Selesai</span>
             </div>
             
-            <div class="shadow-2xl rounded-xl border border-white/20 mb-4 overflow-hidden">
-                <table class="w-full text-center border-collapse text-[6px] sm:text-[10px] bg-black/30 backdrop-blur-md table-fixed">
+            <div class="shadow-2xl rounded-xl border border-white/30 mb-4 overflow-hidden">
+                <table class="w-full text-center border-collapse text-[6px] sm:text-[10px] bg-white/20 backdrop-blur-md table-fixed border-slate-900/40">
                     <thead>
-                        <tr id="header-tabel-jadwal" class="bg-slate-900/80 text-white">
-                            <th class="p-0.5 sm:p-2 border border-white/10 w-7 sm:w-20">Jam</th>
-                            <th class="p-0.5 sm:p-2 border border-white/10">Sen</th>
-                            <th class="p-0.5 sm:p-2 border border-white/10">Sel</th>
-                            <th class="p-0.5 sm:p-2 border border-white/10">Rab</th>
-                            <th class="p-0.5 sm:p-2 border border-white/10">Kam</th>
-                            <th class="p-0.5 sm:p-2 border border-white/10">Jum</th>
-                            <th class="p-0.5 sm:p-2 border border-white/10">Sab</th>
-                            <th class="p-0.5 sm:p-2 border border-white/10">Min</th>
+                        <tr id="header-tabel-jadwal" class="bg-slate-900 text-white font-bold">
+                            <th class="p-0.5 sm:p-2 border border-slate-900/40 w-7 sm:w-20">Jam</th>
+                            <th class="p-0.5 sm:p-2 border border-slate-900/40">Sen</th>
+                            <th class="p-0.5 sm:p-2 border border-slate-900/40">Sel</th>
+                            <th class="p-0.5 sm:p-2 border border-slate-900/40">Rab</th>
+                            <th class="p-0.5 sm:p-2 border border-slate-900/40">Kam</th>
+                            <th class="p-0.5 sm:p-2 border border-slate-900/40">Jum</th>
+                            <th class="p-0.5 sm:p-2 border border-slate-900/40">Sab</th>
+                            <th class="p-0.5 sm:p-2 border border-slate-900/40">Min</th>
                         </tr>
                     </thead>
-                    <tbody id="grid-jadwal-gabung"></tbody>
+                    <tbody id="grid-jadwal-gabung" class="font-bold text-slate-900"></tbody>
                 </table>
             </div>
         </div>
 
         <!-- HALAMAN DAILY RECAP -->
         <div id="page-daily-recap" class="glass-panel p-3 sm:p-6 rounded-2xl hidden">
-            <div class="flex justify-between items-center mb-4 border-b border-white/20 pb-3">
-                <h2 class="font-bold text-base sm:text-lg text-white drop-shadow">📊 REKAP KEUANGAN HARIAN</h2>
-                <button type="button" onclick="showPage('home')" class="bg-white/25 hover:bg-white/35 text-white px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur border border-white/30">Kembali</button>
+            <div class="flex justify-between items-center mb-4 border-b border-slate-900/20 pb-3">
+                <h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm">📊 REKAP KEUANGAN HARIAN</h2>
+                <button type="button" onclick="showPage('home')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
             </div>
 
-            <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-6 glass-panel-sub p-3 rounded-xl border border-white/20">
-                <span class="text-xs text-white/90 font-bold uppercase tracking-wide">Pilih Tanggal Rekap:</span>
-                <input type="date" id="filter-tanggal" onchange="renderRekapHarian()" class="p-2 rounded-xl text-xs glass-input w-full sm:w-auto font-semibold text-center">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-6 p-3 rounded-xl border border-white/20">
+                <span class="text-xs text-slate-900 font-black uppercase tracking-wide">Pilih Tanggal Rekap:</span>
+                <input type="date" id="filter-tanggal" onchange="renderRekapHarian()" class="p-2 rounded-xl text-xs glass-input w-full sm:w-auto font-bold text-center">
             </div>
 
             <div class="space-y-6">
                 <!-- UANG LAPANGAN -->
-                <section class="glass-panel-sub p-3 sm:p-5 rounded-2xl border border-blue-400/30 space-y-3 shadow-lg">
-                    <div class="flex flex-col items-center justify-center text-center border-b border-blue-400/20 pb-3 gap-1">
-                        <h3 id="title-lapangan" class="font-bold text-sm sm:text-base text-blue-200 flex items-center justify-center gap-2">⚽ UANG LAPANGAN</h3>
-                        <div id="subtotal-lapangan" class="flex flex-wrap justify-center gap-2 text-xs font-bold text-blue-300 mt-1">
-                            <span class="bg-slate-900/90 border border-blue-400/30 px-2.5 py-1 rounded-lg shadow">Total: Rp 0</span>
-                            <span class="bg-slate-900/90 border border-emerald-400/30 px-2.5 py-1 rounded-lg text-emerald-300 shadow">Cash: Rp 0</span>
-                            <span class="bg-slate-900/90 border border-sky-400/30 px-2.5 py-1 rounded-lg text-sky-300 shadow">QRIS/TF: Rp 0</span>
+                <section class="p-3 sm:p-5 rounded-2xl border border-blue-500/40 space-y-3 shadow-lg">
+                    <div class="flex flex-col items-center justify-center text-center border-b border-blue-500/20 pb-3 gap-1">
+                        <h3 id="title-lapangan" class="font-black text-sm sm:text-base text-blue-950 flex items-center justify-center gap-2">⚽ UANG LAPANGAN</h3>
+                        <div id="subtotal-lapangan" class="flex flex-wrap justify-center gap-2 text-xs font-bold text-blue-900 mt-1">
+                            <span class="bg-white/60 border border-blue-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp 0</span>
+                            <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp 0</span>
+                            <span class="bg-white/60 border border-sky-500/40 px-2.5 py-1 rounded-lg text-sky-800 shadow font-black">QRIS/TF: Rp 0</span>
                         </div>
                     </div>
-                    <div class="shadow rounded-xl border border-white/10 bg-black/30 backdrop-blur-md overflow-hidden">
-                        <table class="w-full text-left text-[10px] sm:text-xs border-collapse table-auto">
+                    <div class="shadow rounded-xl border border-white/30 bg-white/20 backdrop-blur-md overflow-hidden">
+                        <table class="w-full text-left text-[10px] sm:text-xs border-collapse table-auto font-bold text-slate-900 border-slate-900/40">
                             <thead>
-                                <tr class="bg-slate-900/80 text-white border-b border-white/10">
-                                    <th class="p-2 border border-white/10 w-[45%]">Tim / Ket</th>
-                                    <th class="p-2 border border-white/10 w-[25%]">Detail</th>
-                                    <th class="p-2 border border-white/10 w-[20%]">Jumlah</th>
-                                    <th class="p-2 border border-white/10 text-center w-[10%]">Aksi</th>
+                                <tr class="bg-slate-900 text-white border-b border-slate-900/40">
+                                    <th class="p-2 border border-slate-900/40 w-[45%]">Tim / Ket</th>
+                                    <th class="p-2 border border-slate-900/40 w-[25%]">Detail</th>
+                                    <th class="p-2 border border-slate-900/40 w-[20%]">Jumlah</th>
+                                    <th class="p-2 border border-slate-900/40 text-center w-[10%]">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="tabel-lapangan"></tbody>
@@ -200,27 +202,27 @@
                 </section>
 
                 <!-- PENJUALAN MINUMAN -->
-                <section class="glass-panel-sub p-3 sm:p-5 rounded-2xl border border-amber-400/30 space-y-3 shadow-lg">
-                    <div class="flex flex-col items-center justify-center text-center border-b border-amber-400/20 pb-3 gap-1">
-                        <h3 id="title-minuman" class="font-bold text-sm sm:text-base text-amber-200 flex items-center justify-center gap-2">🥤 PENJUALAN MINUMAN</h3>
-                        <div id="subtotal-minuman" class="flex flex-wrap justify-center gap-2 text-xs font-bold text-amber-300 mt-1">
-                            <span class="bg-slate-900/90 border border-amber-400/30 px-2.5 py-1 rounded-lg shadow">Total: Rp 0</span>
-                            <span class="bg-slate-900/90 border border-emerald-400/30 px-2.5 py-1 rounded-lg text-emerald-300 shadow">Cash: Rp 0</span>
-                            <span class="bg-slate-900/90 border border-sky-400/30 px-2.5 py-1 rounded-lg text-sky-300 shadow">QRIS/TF: Rp 0</span>
+                <section class="p-3 sm:p-5 rounded-2xl border border-amber-500/40 space-y-3 shadow-lg">
+                    <div class="flex flex-col items-center justify-center text-center border-b border-amber-500/20 pb-3 gap-1">
+                        <h3 id="title-minuman" class="font-black text-sm sm:text-base text-amber-950 flex items-center justify-center gap-2">🥤 PENJUALAN MINUMAN</h3>
+                        <div id="subtotal-minuman" class="flex flex-wrap justify-center gap-2 text-xs font-bold text-amber-900 mt-1">
+                            <span class="bg-white/60 border border-amber-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp 0</span>
+                            <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp 0</span>
+                            <span class="bg-white/60 border border-sky-500/40 px-2.5 py-1 rounded-lg text-sky-800 shadow font-black">QRIS/TF: Rp 0</span>
                         </div>
                     </div>
-                    <div id="ringkasan-minuman-box" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2"></div>
+                    <div id="ringkasan-minuman-box" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 font-bold"></div>
                     <div class="text-center pt-2">
-                        <button type="button" onclick="toggleRincianMinuman()" id="btn-toggle-rincian" class="bg-amber-600/70 hover:bg-amber-600 text-white px-4 py-2 rounded-xl text-xs font-semibold backdrop-blur border border-amber-400/40 shadow transition">▼ Lihat Rincian Transaksi Minuman</button>
+                        <button type="button" onclick="toggleRincianMinuman()" id="btn-toggle-rincian" class="bg-amber-700 hover:bg-amber-800 text-white px-4 py-2 rounded-xl text-xs font-bold backdrop-blur border border-amber-500/50 shadow transition">▼ Lihat Rincian Transaksi Minuman</button>
                     </div>
-                    <div id="container-tabel-minuman" class="shadow rounded-xl border border-white/10 bg-black/30 backdrop-blur-md overflow-hidden hidden mt-2">
-                        <table class="w-full text-left text-[10px] sm:text-xs border-collapse table-auto">
+                    <div id="container-tabel-minuman" class="shadow rounded-xl border border-white/30 bg-white/20 backdrop-blur-md overflow-hidden hidden mt-2">
+                        <table class="w-full text-left text-[10px] sm:text-xs border-collapse table-auto font-bold text-slate-900 border-slate-900/40">
                             <thead>
-                                <tr class="bg-slate-900/80 text-white border-b border-white/10">
-                                    <th class="p-2 border border-white/10 w-[45%]">Produk</th>
-                                    <th class="p-2 border border-white/10 w-[20%]">Pcs</th>
-                                    <th class="p-2 border border-white/10 w-[25%]">Total</th>
-                                    <th class="p-2 border border-white/10 text-center w-[10%]">Aksi</th>
+                                <tr class="bg-slate-900 text-white border-b border-slate-900/40">
+                                    <th class="p-2 border border-slate-900/40 w-[45%]">Produk</th>
+                                    <th class="p-2 border border-slate-900/40 w-[20%]">Pcs</th>
+                                    <th class="p-2 border border-slate-900/40 w-[25%]">Total</th>
+                                    <th class="p-2 border border-slate-900/40 text-center w-[10%]">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="tabel-minuman"></tbody>
@@ -229,21 +231,21 @@
                 </section>
 
                 <!-- UANG KELUAR -->
-                <section class="glass-panel-sub p-3 sm:p-5 rounded-2xl border border-rose-400/30 space-y-3 shadow-lg">
-                    <div class="flex flex-col items-center justify-center text-center border-b border-rose-400/20 pb-3 gap-1">
-                        <h3 id="title-keluar" class="font-bold text-sm sm:text-base text-rose-200 flex items-center justify-center gap-2">💸 PENGELUARAN</h3>
-                        <div id="subtotal-keluar" class="flex flex-wrap justify-center gap-2 text-xs font-bold text-rose-300 mt-1">
-                            <span class="bg-slate-900/90 border border-rose-400/30 px-2.5 py-1 rounded-lg shadow">Total: Rp 0</span>
+                <section class="p-3 sm:p-5 rounded-2xl border border-rose-500/40 space-y-3 shadow-lg">
+                    <div class="flex flex-col items-center justify-center text-center border-b border-rose-500/20 pb-3 gap-1">
+                        <h3 id="title-keluar" class="font-black text-sm sm:text-base text-rose-950 flex items-center justify-center gap-2">💸 PENGELUARAN</h3>
+                        <div id="subtotal-keluar" class="flex flex-wrap justify-center gap-2 text-xs font-bold text-rose-900 mt-1">
+                            <span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp 0</span>
                         </div>
                     </div>
-                    <div class="shadow rounded-xl border border-white/10 bg-black/30 backdrop-blur-md overflow-hidden">
-                        <table class="w-full text-left text-[10px] sm:text-xs border-collapse table-auto">
+                    <div class="shadow rounded-xl border border-white/30 bg-white/20 backdrop-blur-md overflow-hidden">
+                        <table class="w-full text-left text-[10px] sm:text-xs border-collapse table-auto font-bold text-slate-900 border-slate-900/40">
                             <thead>
-                                <tr class="bg-slate-900/80 text-white border-b border-white/10">
-                                    <th class="p-2 border border-white/10 w-[45%]">Keterangan</th>
-                                    <th class="p-2 border border-white/10 w-[25%]">Sumber Dana</th>
-                                    <th class="p-2 border border-white/10 w-[20%]">Nominal</th>
-                                    <th class="p-2 border border-white/10 text-center w-[10%]">Aksi</th>
+                                <tr class="bg-slate-900 text-white border-b border-slate-900/40">
+                                    <th class="p-2 border border-slate-900/40 w-[45%]">Keterangan</th>
+                                    <th class="p-2 border border-slate-900/40 w-[25%]">Sumber Dana</th>
+                                    <th class="p-2 border border-slate-900/40 w-[20%]">Nominal</th>
+                                    <th class="p-2 border border-slate-900/40 text-center w-[10%]">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="tabel-keluar"></tbody>
@@ -252,26 +254,26 @@
                 </section>
 
                 <!-- RINGKASAN AKHIR -->
-                <section class="glass-panel-sub p-3 sm:p-5 rounded-2xl border border-emerald-400/30 space-y-4 shadow-lg">
-                    <div class="flex flex-col items-center justify-center text-center border-b border-emerald-400/20 pb-3 gap-1">
-                        <h3 id="title-ringkasan-total" class="font-bold text-sm sm:text-base text-emerald-200 flex items-center justify-center gap-2">📌 RINGKASAN TOTAL KEUANGAN</h3>
+                <section class="p-3 sm:p-5 rounded-2xl border border-emerald-500/40 space-y-4 shadow-lg">
+                    <div class="flex flex-col items-center justify-center text-center border-b border-emerald-500/20 pb-3 gap-1">
+                        <h3 id="title-ringkasan-total" class="font-black text-sm sm:text-base text-emerald-950 flex items-center justify-center gap-2">📌 RINGKASAN TOTAL KEUANGAN</h3>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 sm:gap-4">
-                        <div class="glass-panel-sub p-3 sm:p-4 rounded-xl border border-emerald-500/40 text-center shadow">
-                            <p class="text-xs text-white/80 font-semibold mb-1">Total Masuk (Cash)</p>
-                            <p id="rekap-masuk-cash" class="text-base sm:text-lg font-black text-emerald-400">Rp 0</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 sm:gap-4 font-bold">
+                        <div class="p-3 sm:p-4 rounded-xl border border-emerald-600/50 text-center shadow bg-white/30">
+                            <p class="text-xs text-slate-900 font-bold mb-1">Total Masuk (Cash)</p>
+                            <p id="rekap-masuk-cash" class="text-base sm:text-lg font-black text-emerald-700">Rp 0</p>
                         </div>
-                        <div class="glass-panel-sub p-3 sm:p-4 rounded-xl border border-sky-500/40 text-center shadow">
-                            <p class="text-xs text-white/80 font-semibold mb-1">Total Masuk (QRIS / TF)</p>
-                            <p id="rekap-masuk-qrif" class="text-base sm:text-lg font-black text-sky-300">Rp 0</p>
+                        <div class="p-3 sm:p-4 rounded-xl border border-sky-600/50 text-center shadow bg-white/30">
+                            <p class="text-xs text-slate-900 font-bold mb-1">Total Masuk (QRIS / TF)</p>
+                            <p id="rekap-masuk-qrif" class="text-base sm:text-lg font-black text-sky-800">Rp 0</p>
                         </div>
-                        <div class="glass-panel-sub p-3 sm:p-4 rounded-xl border border-rose-500/40 text-center shadow">
-                            <p class="text-xs text-white/80 font-semibold mb-1">Total Keluar</p>
-                            <p id="rekap-keluar" class="text-base sm:text-lg font-black text-rose-400">Rp 0</p>
+                        <div class="p-3 sm:p-4 rounded-xl border border-rose-600/50 text-center shadow bg-white/30">
+                            <p class="text-xs text-slate-900 font-bold mb-1">Total Keluar</p>
+                            <p id="rekap-keluar" class="text-base sm:text-lg font-black text-rose-700">Rp 0</p>
                         </div>
-                        <div class="glass-panel-sub p-3 sm:p-4 rounded-xl border border-indigo-500/40 text-center shadow">
-                            <p class="text-xs text-white/80 font-semibold mb-1">Saldo Bersih (Cash - Keluar)</p>
-                            <p id="rekap-saldo-cash" class="text-base sm:text-lg font-black text-indigo-300">Rp 0</p>
+                        <div class="p-3 sm:p-4 rounded-xl border border-indigo-600/50 text-center shadow bg-white/30">
+                            <p class="text-xs text-slate-900 font-bold mb-1">Saldo Bersih (Cash - Keluar)</p>
+                            <p id="rekap-saldo-cash" class="text-base sm:text-lg font-black text-indigo-800">Rp 0</p>
                         </div>
                     </div>
                 </section>
@@ -280,30 +282,30 @@
 
         <!-- HALAMAN MONTHLY RECAP -->
         <div id="page-monthly-recap" class="glass-panel p-3 sm:p-6 rounded-2xl hidden">
-            <div class="flex justify-between items-center mb-4 border-b border-white/20 pb-3">
-                <h2 class="font-bold text-base sm:text-lg text-white drop-shadow">📅 REKAP BULANAN LAPANGAN</h2>
-                <button type="button" onclick="showPage('home')" class="bg-white/25 hover:bg-white/35 text-white px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur border border-white/30">Kembali</button>
+            <div class="flex justify-between items-center mb-4 border-b border-slate-900/20 pb-3">
+                <h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm">📅 REKAP BULANAN LAPANGAN</h2>
+                <button type="button" onclick="showPage('home')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
             </div>
 
-            <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4 glass-panel-sub p-3 rounded-xl border border-white/20">
-                <span class="text-xs text-white/90 font-bold uppercase tracking-wide">Pilih Bulan & Tahun:</span>
-                <input type="month" id="filter-bulan" onchange="renderMonthlyRecap()" class="p-2 rounded-xl text-xs glass-input w-full sm:w-auto font-semibold text-center">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4 p-3 rounded-xl border border-white/20">
+                <span class="text-xs text-slate-900 font-black uppercase tracking-wide">Pilih Bulan & Tahun:</span>
+                <input type="month" id="filter-bulan" onchange="renderMonthlyRecap()" class="p-2 rounded-xl text-xs glass-input w-full sm:w-auto font-bold text-center">
             </div>
 
             <!-- TOMBOL DOWNLOAD TABEL -->
-            <div class="flex justify-end mb-3">
-                <button type="button" onclick="downloadMonthlyRecapCSV()" class="bg-emerald-600/80 hover:bg-emerald-600 backdrop-blur text-white px-4 py-2 rounded-xl text-xs font-semibold border border-emerald-400/40 shadow flex items-center gap-2">📥 Download Tabel (CSV)</button>
+            <div class="flex justify-center mb-3">
+                <button type="button" onclick="downloadMonthlyRecapCSV()" class="bg-emerald-700 hover:bg-emerald-800 backdrop-blur text-white px-4 py-2 rounded-xl text-xs font-bold border border-emerald-500/50 shadow flex items-center gap-2">📥 Download Tabel (CSV)</button>
             </div>
 
             <!-- TABEL 1: DIJADIKAN 3 BAGIAN (PARUH) AGAR FIT DI HP TANPA PERLU SCROLL KANAN KIRI -->
-            <div class="space-y-4 mb-6">
+            <div class="space-y-4 mb-6 font-bold text-slate-900">
                 <!-- BAGIAN 1 (Tgl 1 - 11) -->
-                <div class="shadow-2xl rounded-xl border border-white/25 overflow-x-auto">
-                    <div id="monthly-title-1" class="p-2 bg-slate-900/85 text-cyan-200 text-xs font-bold border-b border-white/10">REKAP BULAN AGUSTUS 2026 (Tgl 1 - 11)</div>
-                    <table class="w-full text-center border-collapse text-[9px] sm:text-xs bg-black/40 backdrop-blur-md">
+                <div class="shadow-2xl rounded-xl border border-white/40 overflow-x-auto">
+                    <div id="monthly-title-1" class="p-2 bg-slate-900 text-cyan-300 text-xs font-bold border-b border-white/25">REKAP BULAN AGUSTUS 2026 (Tgl 1 - 11)</div>
+                    <table class="w-full text-center border-collapse text-[9px] sm:text-xs bg-white/25 backdrop-blur-md border-slate-900/40">
                         <thead>
-                            <tr id="monthly-header-row-1" class="bg-cyan-900/90 text-white">
-                                <th class="p-1.5 border border-white/20 text-left font-bold w-[120px]">Tanggal</th>
+                            <tr id="monthly-header-row-1" class="bg-cyan-900 text-white font-bold">
+                                <th class="p-1.5 border border-slate-900/40 text-left font-bold w-[120px]">Tanggal</th>
                             </tr>
                         </thead>
                         <tbody id="monthly-tbody-1"></tbody>
@@ -311,12 +313,12 @@
                 </div>
 
                 <!-- BAGIAN 2 (Tgl 12 - 22) -->
-                <div class="shadow-2xl rounded-xl border border-white/25 overflow-x-auto">
-                    <div id="monthly-title-2" class="p-2 bg-slate-900/85 text-cyan-200 text-xs font-bold border-b border-white/10">REKAP BULAN AGUSTUS 2026 (Tgl 12 - 22)</div>
-                    <table class="w-full text-center border-collapse text-[9px] sm:text-xs bg-black/40 backdrop-blur-md">
+                <div class="shadow-2xl rounded-xl border border-white/40 overflow-x-auto">
+                    <div id="monthly-title-2" class="p-2 bg-slate-900 text-cyan-300 text-xs font-bold border-b border-white/25">REKAP BULAN AGUSTUS 2026 (Tgl 12 - 22)</div>
+                    <table class="w-full text-center border-collapse text-[9px] sm:text-xs bg-white/25 backdrop-blur-md border-slate-900/40">
                         <thead>
-                            <tr id="monthly-header-row-2" class="bg-cyan-900/90 text-white">
-                                <th class="p-1.5 border border-white/20 text-left font-bold w-[120px]">Tanggal</th>
+                            <tr id="monthly-header-row-2" class="bg-cyan-900 text-white font-bold">
+                                <th class="p-1.5 border border-slate-900/40 text-left font-bold w-[120px]">Tanggal</th>
                             </tr>
                         </thead>
                         <tbody id="monthly-tbody-2"></tbody>
@@ -324,12 +326,12 @@
                 </div>
 
                 <!-- BAGIAN 3 (Tgl 23 - Akhir) -->
-                <div class="shadow-2xl rounded-xl border border-white/25 overflow-x-auto">
-                    <div id="monthly-title-3" class="p-2 bg-slate-900/85 text-cyan-200 text-xs font-bold border-b border-white/10">REKAP BULAN AGUSTUS 2026 (Tgl 23 - Selesai)</div>
-                    <table class="w-full text-center border-collapse text-[9px] sm:text-xs bg-black/40 backdrop-blur-md">
+                <div class="shadow-2xl rounded-xl border border-white/40 overflow-x-auto">
+                    <div id="monthly-title-3" class="p-2 bg-slate-900 text-cyan-300 text-xs font-bold border-b border-white/25">REKAP BULAN AGUSTUS 2026 (Tgl 23 - Selesai)</div>
+                    <table class="w-full text-center border-collapse text-[9px] sm:text-xs bg-white/25 backdrop-blur-md border-slate-900/40">
                         <thead>
-                            <tr id="monthly-header-row-3" class="bg-cyan-900/90 text-white">
-                                <th class="p-1.5 border border-white/20 text-left font-bold w-[120px]">Tanggal</th>
+                            <tr id="monthly-header-row-3" class="bg-cyan-900 text-white font-bold">
+                                <th class="p-1.5 border border-slate-900/40 text-left font-bold w-[120px]">Tanggal</th>
                             </tr>
                         </thead>
                         <tbody id="monthly-tbody-3"></tbody>
@@ -338,13 +340,13 @@
             </div>
 
             <!-- TABEL 2: FORMAT TABEL RINGKASAN REKAP BULANAN -->
-            <div class="shadow-2xl rounded-xl border border-white/20 mb-4 overflow-x-auto">
-                <div class="p-2 bg-slate-900/70 text-amber-200 text-xs font-bold border-b border-white/10">Format Tabel Rangkuman Aktivitas Bulanan</div>
-                <table class="w-full text-center border-collapse text-[10px] sm:text-xs bg-black/40 backdrop-blur-md">
+            <div class="shadow-2xl rounded-xl border border-white/30 mb-4 overflow-x-auto font-bold text-slate-900">
+                <div class="p-2 bg-slate-900 text-amber-300 text-xs font-bold border-b border-white/25">Format Tabel Rangkuman Aktivitas Bulanan</div>
+                <table class="w-full text-center border-collapse text-[10px] sm:text-xs bg-white/25 backdrop-blur-md border-slate-900/40">
                     <thead>
-                        <tr class="bg-amber-900/90 text-white">
-                            <th class="p-2 border border-white/20 text-left">Keterangan Aktivitas / Status</th>
-                            <th class="p-2 border border-white/20">Jumlah Total dalam 1 Bulan</th>
+                        <tr class="bg-amber-900 text-white font-bold">
+                            <th class="p-2 border border-slate-900/40 text-left">Keterangan Aktivitas / Status</th>
+                            <th class="p-2 border border-slate-900/40">Jumlah Total dalam 1 Bulan</th>
                         </tr>
                     </thead>
                     <tbody id="monthly-summary-tbody">
@@ -354,11 +356,11 @@
             </div>
 
             <!-- Footer Total Jam 1 Bulan -->
-            <div class="glass-panel-sub p-4 rounded-xl border border-cyan-400/40 flex justify-between items-center shadow-lg">
-                <span class="font-bold text-sm text-cyan-200">Total Jam ( 1 Bulan )</span>
-                <div class="flex items-center gap-2 bg-slate-900/90 border border-cyan-400/40 px-4 py-2 rounded-lg shadow">
+            <div class="p-4 rounded-xl border border-cyan-600/50 flex justify-between items-center shadow-lg bg-white/30 font-bold">
+                <span class="font-black text-sm text-cyan-950">Jumlah Aktual Jam Main ( 1 Bulan )</span>
+                <div class="flex items-center gap-2 bg-slate-900 border border-cyan-400/50 px-4 py-2 rounded-lg shadow text-white">
                     <span id="monthly-total-jam" class="font-black text-cyan-300 text-base">0</span>
-                    <span class="text-xs text-white/80 font-bold">Jam</span>
+                    <span class="text-xs text-white font-bold">Jam</span>
                 </div>
             </div>
         </div>
@@ -366,19 +368,19 @@
         <!-- HALAMAN BOOKING HISTORY -->
         <div id="page-booking-history" class="glass-panel p-3 sm:p-6 rounded-2xl hidden">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="font-bold text-base sm:text-lg text-white drop-shadow">📋 Daftar Riwayat Booking</h2>
-                <button type="button" onclick="showPage('home')" class="bg-white/25 hover:bg-white/35 text-white px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur border border-white/30">Kembali</button>
+                <h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm">📋 Daftar Riwayat Booking</h2>
+                <button type="button" onclick="showPage('home')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
             </div>
-            <div class="shadow-2xl rounded-xl border border-white/20 mb-4 overflow-hidden">
-                <table class="w-full text-center border-collapse text-[10px] sm:text-xs bg-black/30 backdrop-blur-md table-auto">
+            <div class="shadow-2xl rounded-xl border border-white/30 mb-4 overflow-hidden">
+                <table class="w-full text-center border-collapse text-[10px] sm:text-xs bg-white/20 backdrop-blur-md table-auto font-bold text-slate-900 border-slate-900/40">
                     <thead>
-                        <tr class="bg-slate-900/80 text-white">
-                            <th class="p-2 border border-white/10">Waktu</th>
-                            <th class="p-2 border border-white/10">Tim</th>
-                            <th class="p-2 border border-white/10">Status</th>
-                            <th class="p-2 border border-white/10">DP</th>
-                            <th class="p-2 border border-white/10">Metode</th>
-                            <th class="p-2 border border-white/10">Aksi</th>
+                        <tr class="bg-slate-900 text-white font-bold">
+                            <th class="p-2 border border-slate-900/40">Waktu</th>
+                            <th class="p-2 border border-slate-900/40">Tim</th>
+                            <th class="p-2 border border-slate-900/40">Status</th>
+                            <th class="p-2 border border-slate-900/40">DP</th>
+                            <th class="p-2 border border-slate-900/40">Metode</th>
+                            <th class="p-2 border border-slate-900/40">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="tabel-booking"></tbody>
@@ -387,14 +389,14 @@
         </div>
 
         <!-- FORM KELOLA / TAMBAH MEMBER -->
-        <div id="page-atur-member" class="glass-panel p-4 sm:p-6 rounded-2xl hidden">
+        <div id="page-atur-member" class="glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-base sm:text-lg font-bold text-indigo-300">⚙️ Kelola Jadwal Member</h2>
-                <button type="button" onclick="showPage('booking-schedule')" class="bg-white/25 hover:bg-white/35 text-white px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur border border-white/30">Kembali</button>
+                <h2 class="text-base sm:text-lg font-black text-indigo-950">⚙️ Kelola Jadwal Member</h2>
+                <button type="button" onclick="showPage('booking-schedule')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
             </div>
             
-            <form id="form-member" onsubmit="tambahMember(event)" class="glass-panel-sub p-4 rounded-xl border border-indigo-400/30 mb-6 space-y-3">
-                <h3 class="font-bold text-sm text-indigo-200">Tambah Jadwal Member / Status Baru</h3>
+            <form id="form-member" onsubmit="tambahMember(event)" class="p-4 rounded-xl border border-indigo-500/40 mb-6 space-y-3 bg-white/30">
+                <h3 class="font-black text-sm text-indigo-950">Tambah Jadwal Member / Status Baru</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <input type="text" id="m-nama" placeholder="Nama Tim / OFF (Contoh: OFF atau FHS FC)" class="p-2 rounded text-sm glass-input" required>
                     <select id="m-hari" class="p-2 rounded text-sm glass-input" required>
@@ -410,18 +412,18 @@
                         <option value="21:00">21:00</option><option value="22:00">22:00</option><option value="23:00">23:00</option><option value="24:00">24:00</option>
                     </select>
                 </div>
-                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded text-xs font-semibold shadow border border-indigo-400/40">Simpan Jadwal</button>
+                <button type="submit" class="bg-indigo-700 hover:bg-indigo-800 text-white px-4 py-2 rounded text-xs font-bold shadow border border-indigo-500/50">Simpan Jadwal</button>
             </form>
 
-            <h3 class="font-bold text-sm text-white/90 mb-2">Daftar Jadwal / Member Aktif</h3>
-            <div class="shadow rounded-xl border border-white/10 bg-black/20 backdrop-blur overflow-hidden">
-                <table class="w-full text-left text-xs table-auto">
-                    <thead class="bg-slate-900/70 text-white border-b border-white/10">
+            <h3 class="font-black text-sm text-slate-900 mb-2">Daftar Jadwal / Member Aktif</h3>
+            <div class="shadow rounded-xl border border-white/30 bg-white/20 backdrop-blur overflow-hidden">
+                <table class="w-full text-left text-xs table-auto font-bold text-slate-900 border-slate-900/40">
+                    <thead class="bg-slate-900 text-white border-b border-slate-900/40">
                         <tr>
-                            <th class="p-2 border border-white/10 w-[45%]">Tim / Keterangan</th>
-                            <th class="p-2 border border-white/10 w-[20%]">Hari</th>
-                            <th class="p-2 border border-white/10 w-[20%]">Jam</th>
-                            <th class="p-2 border border-white/10 text-center w-[15%]">Aksi</th>
+                            <th class="p-2 border border-slate-900/40 w-[45%]">Tim / Keterangan</th>
+                            <th class="p-2 border border-slate-900/40 w-[20%]">Hari</th>
+                            <th class="p-2 border border-slate-900/40 w-[20%]">Jam</th>
+                            <th class="p-2 border border-slate-900/40 text-center w-[15%]">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="tabel-list-member"></tbody>
@@ -430,22 +432,22 @@
         </div>
 
         <!-- FORM BOOKING -->
-        <div id="page-booking" class="glass-panel p-4 sm:p-6 rounded-2xl hidden">
-            <h2 class="text-base sm:text-lg font-bold mb-4 text-blue-300">Form Booking / Jadwal Lapangan</h2>
+        <div id="page-booking" class="glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900">
+            <h2 class="text-base sm:text-lg font-black mb-4 text-blue-950">Form Booking / Jadwal Lapangan</h2>
             <form onsubmit="submitData(event, 'booking')">
-                <label class="block text-xs font-medium mb-1 text-white/90">Status Tim</label>
-                <select id="b-status" class="w-full p-2 rounded mb-3 text-sm glass-input">
+                <label class="block text-xs font-bold mb-1 text-slate-900">Status Tim</label>
+                <select id="b-status" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold">
                     <option value="Non-Member">Non-Member / Booking Insidental (Merah)</option>
                     <option value="Member">Member (Biru)</option>
                 </select>
 
-                <input type="text" id="b-nama" placeholder="Nama Tim" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
+                <input type="text" id="b-nama" placeholder="Nama Tim" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
                 
-                <label class="block text-xs font-medium mb-1 text-white/90">Tanggal Main</label>
-                <input type="date" id="b-tanggal" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
+                <label class="block text-xs font-bold mb-1 text-slate-900">Tanggal Main</label>
+                <input type="date" id="b-tanggal" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
 
-                <label class="block text-xs font-medium mb-1 text-white/90">Jam Main (Pilih Jam)</label>
-                <select id="b-jam" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
+                <label class="block text-xs font-bold mb-1 text-slate-900">Jam Main (Pilih Jam)</label>
+                <select id="b-jam" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
                     <option value="01:00">01:00</option><option value="02:00">02:00</option><option value="03:00">03:00</option><option value="04:00">04:00</option>
                     <option value="05:00">05:00</option><option value="06:00">06:00</option><option value="07:00">07:00</option><option value="08:00">08:00</option>
                     <option value="09:00">09:00</option><option value="10:00">10:00</option><option value="11:00">11:00</option><option value="12:00">12:00</option>
@@ -454,82 +456,82 @@
                     <option value="21:00">21:00</option><option value="22:00">22:00</option><option value="23:00">23:00</option><option value="24:00">24:00</option>
                 </select>
                 
-                <input type="number" id="b-dp" placeholder="Jumlah DP / Bayar (Rp)" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
+                <input type="number" id="b-dp" placeholder="Jumlah DP / Bayar (Rp)" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
                 
-                <label class="block text-xs font-medium mb-1 text-white/90">Metode Pembayaran</label>
-                <select id="b-metode" class="w-full p-2 rounded mb-3 text-sm glass-input">
+                <label class="block text-xs font-bold mb-1 text-slate-900">Metode Pembayaran</label>
+                <select id="b-metode" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold">
                     <option value="Cash">Cash</option>
                     <option value="QRIS">QRIS</option>
                     <option value="Transfer">Transfer</option>
                 </select>
                 
                 <div class="flex gap-2">
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded text-sm font-semibold border border-blue-400/40 shadow">Simpan</button>
-                    <button type="button" onclick="showPage('home')" class="bg-white/25 hover:bg-white/35 text-white px-4 py-2 rounded text-sm font-semibold backdrop-blur border border-white/30">Kembali</button>
+                    <button type="submit" class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded text-sm font-bold border border-blue-500/50 shadow">Simpan</button>
+                    <button type="button" onclick="showPage('home')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-4 py-2 rounded text-sm font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
                 </div>
             </form>
         </div>
 
         <!-- FORM UANG MASUK -->
-        <div id="page-masuk" class="glass-panel p-4 sm:p-6 rounded-2xl hidden">
-            <h2 class="text-base sm:text-lg font-bold mb-4 text-emerald-300">Uang Masuk / Pelunasan Lapangan</h2>
+        <div id="page-masuk" class="glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900">
+            <h2 class="text-base sm:text-lg font-black mb-4 text-emerald-950">Uang Masuk / Pelunasan Lapangan</h2>
             <form onsubmit="submitData(event, 'pemasukan')">
-                <label class="block text-xs font-medium mb-1 text-white/90">Pilih Tanggal Main / Pelunasan</label>
-                <input type="date" id="in-tgl" onchange="updateDropdownTimMasuk()" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
+                <label class="block text-xs font-bold mb-1 text-slate-900">Pilih Tanggal Main / Pelunasan</label>
+                <input type="date" id="in-tgl" onchange="updateDropdownTimMasuk()" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
 
-                <label class="block text-xs font-medium mb-1 text-white/90">Pilih Tim / Keterangan</label>
-                <select id="in-tim" onchange="updateJamMainMasuk()" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
+                <label class="block text-xs font-bold mb-1 text-slate-900">Pilih Tim / Keterangan</label>
+                <select id="in-tim" onchange="updateJamMainMasuk()" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
                     <option value="">-- Pilih Tanggal Terlebih Dahulu --</option>
                 </select>
 
-                <label class="block text-xs font-medium mb-1 text-white/90">Jam Main (Otomatis)</label>
-                <input type="text" id="in-jam-main" placeholder="Jam main akan otomatis terisi" class="w-full p-2 rounded mb-3 text-sm glass-input bg-black/20" readonly>
+                <label class="block text-xs font-bold mb-1 text-slate-900">Jam Main (Otomatis)</label>
+                <input type="text" id="in-jam-main" placeholder="Jam main akan otomatis terisi" class="w-full p-2 rounded mb-3 text-sm glass-input bg-white/40 font-bold" readonly>
 
-                <div class="glass-panel-sub p-3 rounded-xl border border-emerald-400/30 mb-3 space-y-3">
-                    <label class="block text-xs font-bold text-emerald-200">⚽ Opsi Tambahan Sewa (Opsional)</label>
+                <div class="p-3 rounded-xl border border-emerald-500/40 mb-3 space-y-3 bg-white/30">
+                    <label class="block text-xs font-black text-emerald-950">⚽ Opsi Tambahan Sewa (Opsional)</label>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <label class="flex items-center gap-2 cursor-pointer bg-black/20 p-2 rounded-lg border border-white/10">
-                            <input type="checkbox" id="in-sewa-bola" onchange="hitungOtomatisBiaya()" class="w-4 h-4 rounded accent-emerald-500">
-                            <span class="text-xs text-white">Sewa Bola (Rp 25.000/jam)</span>
+                        <label class="flex items-center gap-2 cursor-pointer bg-white/40 p-2 rounded-lg border border-white/30">
+                            <input type="checkbox" id="in-sewa-bola" onchange="hitungOtomatisBiaya()" class="w-4 h-4 rounded accent-emerald-600">
+                            <span class="text-xs text-slate-900 font-bold">Sewa Bola (Rp 25.000/jam)</span>
                         </label>
-                        <label class="flex items-center gap-2 cursor-pointer bg-black/20 p-2 rounded-lg border border-white/10">
-                            <input type="checkbox" id="in-sewa-rompi" onchange="hitungOtomatisBiaya()" class="w-4 h-4 rounded accent-emerald-500">
-                            <span class="text-xs text-white">Sewa Rompi (Rp 30.000/jam)</span>
+                        <label class="flex items-center gap-2 cursor-pointer bg-white/40 p-2 rounded-lg border border-white/30">
+                            <input type="checkbox" id="in-sewa-rompi" onchange="hitungOtomatisBiaya()" class="w-4 h-4 rounded accent-emerald-600">
+                            <span class="text-xs text-slate-900 font-bold">Sewa Rompi (Rp 30.000/jam)</span>
                         </label>
                     </div>
-                    <p id="info-biaya-tambahan" class="text-[10px] text-amber-300 font-semibold italic">Biaya tambahan sewa: Rp 0</p>
+                    <p id="info-biaya-tambahan" class="text-[10px] text-amber-950 font-extrabold italic">Biaya tambahan sewa: Rp 0</p>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-                    <div class="glass-panel-sub p-3 rounded-xl border border-emerald-400/30 space-y-2">
-                        <label class="block text-xs font-bold text-emerald-200">Pembayaran Tim 1</label>
-                        <input type="number" id="in-jumlah-1" placeholder="Nominal (Rp)" class="w-full p-2 rounded text-sm glass-input">
-                        <select id="in-metode-1" class="w-full p-2 rounded text-sm glass-input">
+                    <div class="p-3 rounded-xl border border-emerald-500/40 space-y-2 bg-white/30">
+                        <label class="block text-xs font-black text-emerald-950">Pembayaran Tim 1</label>
+                        <input type="number" id="in-jumlah-1" placeholder="Nominal (Rp)" class="w-full p-2 rounded text-sm glass-input font-bold">
+                        <select id="in-metode-1" class="w-full p-2 rounded text-sm glass-input font-bold">
                             <option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option>
                         </select>
                     </div>
-                    <div class="glass-panel-sub p-3 rounded-xl border border-emerald-400/30 space-y-2">
-                        <label class="block text-xs font-bold text-emerald-200">Pembayaran Tim 2 (Opsional / Sparring)</label>
-                        <input type="number" id="in-jumlah-2" placeholder="Nominal (Rp)" class="w-full p-2 rounded text-sm glass-input">
-                        <select id="in-metode-2" class="w-full p-2 rounded text-sm glass-input">
+                    <div class="p-3 rounded-xl border border-emerald-500/40 space-y-2 bg-white/30">
+                        <label class="block text-xs font-black text-emerald-950">Pembayaran Tim 2 (Opsional / Sparring)</label>
+                        <input type="number" id="in-jumlah-2" placeholder="Nominal (Rp)" class="w-full p-2 rounded text-sm glass-input font-bold">
+                        <select id="in-metode-2" class="w-full p-2 rounded text-sm glass-input font-bold">
                             <option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="flex gap-2">
-                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded text-sm font-semibold border border-emerald-400/40 shadow">Simpan</button>
-                    <button type="button" onclick="showPage('home')" class="bg-white/25 hover:bg-white/35 text-white px-4 py-2 rounded text-sm font-semibold backdrop-blur border border-white/30">Kembali</button>
+                    <button type="submit" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded text-sm font-bold border border-emerald-500/50 shadow">Simpan</button>
+                    <button type="button" onclick="showPage('home')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-4 py-2 rounded text-sm font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
                 </div>
             </form>
         </div>
 
         <!-- FORM MINUMAN -->
-        <div id="page-minuman" class="glass-panel p-4 sm:p-6 rounded-2xl hidden">
-            <h2 class="text-base sm:text-lg font-bold mb-4 text-amber-300">Penjualan Minuman</h2>
+        <div id="page-minuman" class="glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900">
+            <h2 class="text-base sm:text-lg font-black mb-4 text-amber-950">Penjualan Minuman</h2>
             <form onsubmit="submitData(event, 'minuman')">
-                <label class="block text-xs font-medium mb-1 text-white/90">Pilih Jenis Minuman Cepat</label>
-                <select id="m-select-pilihan" onchange="pilihMinuman(this)" class="w-full p-2 rounded mb-3 text-sm glass-input">
+                <label class="block text-xs font-bold mb-1 text-slate-900">Pilih Jenis Minuman Cepat</label>
+                <select id="m-select-pilihan" onchange="pilihMinuman(this)" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold">
                     <option value="" data-harga="0">-- Pilih Minuman --</option>
                     <option value="Air Mineral" data-harga="4000">Air Mineral (Rp 4.000)</option>
                     <option value="Air Mineral + 3 Permen" data-harga="5000">Air Mineral + 3 Permen (Rp 5.000)</option>
@@ -541,42 +543,42 @@
                     <option value="Milo" data-harga="5000">Milo (Rp 5.000)</option>
                 </select>
 
-                <input type="text" id="m-produk" placeholder="Nama Minuman (Bisa diketik manual)" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
-                <input type="number" id="m-jumlah-pcs" placeholder="Jumlah (Pcs)" oninput="hitungTotalMinuman()" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
-                <input type="number" id="m-total" placeholder="Total Harga (Rp)" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
-                <label class="block text-xs font-medium mb-1 text-white/90">Metode Pembayaran</label>
-                <select id="m-metode" class="w-full p-2 rounded mb-3 text-sm glass-input">
+                <input type="text" id="m-produk" placeholder="Nama Minuman (Bisa diketik manual)" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
+                <input type="number" id="m-jumlah-pcs" placeholder="Jumlah (Pcs)" oninput="hitungTotalMinuman()" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
+                <input type="number" id="m-total" placeholder="Total Harga (Rp)" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
+                <label class="block text-xs font-bold mb-1 text-slate-900">Metode Pembayaran</label>
+                <select id="m-metode" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold">
                     <option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option>
                 </select>
-                <input type="date" id="m-tgl" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
+                <input type="date" id="m-tgl" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
                 <div class="flex gap-2">
-                    <button type="submit" class="bg-amber-600 hover:bg-amber-500 text-white px-4 py-2 rounded text-sm font-semibold border border-amber-400/40 shadow">Simpan</button>
-                    <button type="button" onclick="showPage('home')" class="bg-white/25 hover:bg-white/35 text-white px-4 py-2 rounded text-sm font-semibold backdrop-blur border border-white/30">Kembali</button>
+                    <button type="submit" class="bg-amber-700 hover:bg-amber-800 text-white px-4 py-2 rounded text-sm font-bold border border-amber-500/50 shadow">Simpan</button>
+                    <button type="button" onclick="showPage('home')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-4 py-2 rounded text-sm font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
                 </div>
             </form>
         </div>
 
         <!-- FORM UANG KELUAR -->
-        <div id="page-keluar" class="glass-panel p-4 sm:p-6 rounded-2xl hidden">
-            <h2 class="text-base sm:text-lg font-bold mb-4 text-rose-300">Uang Keluar</h2>
+        <div id="page-keluar" class="glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900">
+            <h2 class="text-base sm:text-lg font-black mb-4 text-rose-950">Uang Keluar</h2>
             <form onsubmit="submitData(event, 'pengeluaran')">
-                <input type="text" id="k-ket" placeholder="Keterangan Pengeluaran" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
-                <input type="number" id="k-jumlah" placeholder="Nominal (Rp)" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
+                <input type="text" id="k-ket" placeholder="Keterangan Pengeluaran" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
+                <input type="number" id="k-jumlah" placeholder="Nominal (Rp)" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
                 
-                <label class="block text-xs font-medium mb-1 text-white/90">Tanggal Catat Pengeluaran</label>
-                <input type="date" id="k-tgl" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
+                <label class="block text-xs font-bold mb-1 text-slate-900">Tanggal Catat Pengeluaran</label>
+                <input type="date" id="k-tgl" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
 
-                <div class="glass-panel-sub p-3 rounded-xl border border-rose-400/30 mb-3 space-y-2">
-                    <label class="block text-xs font-bold text-rose-200">Sumber Dana (Ambil dari Cash Tanggal Lain):</label>
+                <div class="p-3 rounded-xl border border-rose-500/40 mb-3 space-y-2 bg-white/30">
+                    <label class="block text-xs font-black text-rose-950">Sumber Dana (Ambil dari Cash Tanggal Lain):</label>
                     <div class="flex items-center gap-2">
-                        <input type="date" id="k-sumber-tgl" onchange="cekSaldoSumberCash()" class="w-full p-2 rounded text-sm glass-input" required>
+                        <input type="date" id="k-sumber-tgl" onchange="cekSaldoSumberCash()" class="w-full p-2 rounded text-sm glass-input font-bold" required>
                     </div>
-                    <p id="info-saldo-sumber" class="text-xs text-amber-300 font-semibold">Sisa Cash Tanggal Terpilih: Menghitung...</p>
+                    <p id="info-saldo-sumber" class="text-xs text-amber-950 font-extrabold">Sisa Cash Tanggal Terpilih: Menghitung...</p>
                 </div>
 
                 <div class="flex gap-2">
-                    <button type="submit" class="bg-rose-600 hover:bg-rose-500 text-white px-4 py-2 rounded text-sm font-semibold border border-rose-400/40 shadow">Simpan</button>
-                    <button type="button" onclick="showPage('home')" class="bg-white/25 hover:bg-white/35 text-white px-4 py-2 rounded text-sm font-semibold backdrop-blur border border-white/30">Kembali</button>
+                    <button type="submit" class="bg-rose-700 hover:bg-rose-800 text-white px-4 py-2 rounded text-sm font-bold border border-rose-500/50 shadow">Simpan</button>
+                    <button type="button" onclick="showPage('home')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-4 py-2 rounded text-sm font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
                 </div>
             </form>
         </div>
@@ -1012,11 +1014,11 @@
                 snapshot.forEach((child) => {
                     let m = child.val();
                     let key = child.key;
-                    listTbody.innerHTML += `<tr class="border-b border-white/10">
-                        <td class="p-2 border border-white/10 font-medium">${m.nama}</td>
-                        <td class="p-2 border border-white/10">${m.hari}</td>
-                        <td class="p-2 border border-white/10">${m.jam}</td>
-                        <td class="p-2 border border-white/10 text-center"><button type="button" onclick="hapusMember('${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
+                    listTbody.innerHTML += `<tr class="border-b border-slate-900/40">
+                        <td class="p-2 border border-slate-900/40 font-bold">${m.nama}</td>
+                        <td class="p-2 border border-slate-900/40">${m.hari}</td>
+                        <td class="p-2 border border-slate-900/40">${m.jam}</td>
+                        <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusMember('${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
                     </tr>`;
                     if(!globalCache.member[m.jam]) globalCache.member[m.jam] = {};
                     let isOff = (m.nama.toUpperCase() === 'OFF');
@@ -1047,7 +1049,7 @@
             let monday = mondayStrVal ? new Date(mondayStrVal) : new Date();
 
             let currentWeekDates = {};
-            let headerHtml = `<th class="p-0.5 sm:p-2 border border-white/10 w-7 sm:w-20">Jam</th>`;
+            let headerHtml = `<th class="p-0.5 sm:p-2 border border-slate-900/40 w-7 sm:w-20">Jam</th>`;
 
             let optDateFormat = { day: 'numeric', month: 'short', year: 'numeric' };
             let formatDateShort = { day: 'numeric', month: 'numeric' };
@@ -1075,11 +1077,11 @@
                 let tempDate = new Date(d);
                 tempDate.setHours(0,0,0,0);
                 let isFullDayPassed = tempDate < nowTime;
-                let badgeDone = isFullDayPassed ? `<div class="mt-0.5"><span class="px-1 py-0.2 bg-slate-700/90 text-amber-300 font-bold rounded text-[6px] sm:text-[9px] uppercase border border-slate-600">DONE</span></div>` : "";
+                let badgeDone = isFullDayPassed ? `<div class="mt-0.5"><span class="px-1 py-0.2 bg-slate-900 text-amber-300 font-black rounded text-[6px] sm:text-[9px] uppercase border border-slate-700">DONE</span></div>` : "";
 
-                headerHtml += `<th class="p-0.5 sm:p-2 border border-white/10 align-middle">
+                headerHtml += `<th class="p-0.5 sm:p-2 border border-slate-900/40 align-middle">
                     <div>${h.nama.substring(0,3)}</div>
-                    <div class="text-[6px] sm:text-[10px] text-amber-300/90 font-normal">${labelTgl}</div>
+                    <div class="text-[6px] sm:text-[10px] text-amber-950 font-extrabold">${labelTgl}</div>
                     ${badgeDone}
                 </th>`;
             });
@@ -1110,28 +1112,28 @@
             });
 
             listJam.forEach(jam => {
-                let tr = `<tr class="border-b border-white/10 h-7 sm:h-14">`;
-                tr += `<td class="p-0.5 sm:p-2 border border-white/10 font-bold bg-black/40 text-white text-[6px] sm:text-xs">${jam}</td>`;
+                let tr = `<tr class="border-b border-slate-900/40 h-7 sm:h-14">`;
+                tr += `<td class="p-0.5 sm:p-2 border border-slate-900/40 font-black bg-slate-900 text-white text-[6px] sm:text-xs">${jam}</td>`;
                 
                 listHariKey.forEach(hari => {
                     let cellData = (matrix[jam] && matrix[jam][hari]) ? matrix[jam][hari] : null;
-                    let bgClass = "border border-white/10 text-white/40";
+                    let bgClass = "border border-slate-900/40 text-slate-900/60";
                     let textVal = "";
 
                     if(cellData) {
                         textVal = cellData.nama;
                         if(cellData.type === 'member') {
-                            bgClass = "bg-blue-600/55 backdrop-blur text-blue-100 font-bold border border-blue-400/50 shadow-inner";
+                            bgClass = "bg-blue-700/85 backdrop-blur text-white font-black border border-slate-900/40 shadow-inner";
                         } else if(cellData.type === 'off') {
-                            bgClass = "bg-red-500/10 border border-dashed border-red-600 text-red-600 font-black shadow-lg";
+                            bgClass = "bg-red-500/20 border border-slate-900/40 border-dashed text-red-900 font-black shadow-lg";
                             textVal = "OFF";
                         } else {
-                            bgClass = "bg-rose-600/70 backdrop-blur text-white font-bold border border-rose-400/50 shadow-inner";
+                            bgClass = "bg-rose-700/85 backdrop-blur text-white font-black border border-slate-900/40 shadow-inner";
                         }
                     }
 
                     tr += `<td class="p-0.5 sm:p-1 ${bgClass} align-middle h-7 sm:h-14 overflow-hidden">
-                        <div class="flex items-center justify-center h-full text-[6px] sm:text-[10px] text-center leading-tight line-clamp-2">${textVal}</div>
+                        <div class="flex items-center justify-center h-full text-[6px] sm:text-[10px] text-center leading-tight line-clamp-2 font-black">${textVal}</div>
                     </td>`;
                 });
                 tr += `</tr>`;
@@ -1162,13 +1164,12 @@
             document.getElementById('monthly-title-3').innerText = `${judulJudulRekap} (Tgl 23 - Selesai)`;
 
             let daysInMonth = new Date(year, month, 0).getDate(); // Jumlah hari dalam bulan tsb
-            let todayStr = getLocalDateString();
 
             // Setup Header untuk 3 tabel terpisah
             let createHeader = (startD, endD) => {
-                let html = `<th class="p-1.5 border border-white/20 text-left font-bold w-[120px] bg-cyan-950">Tanggal</th>`;
+                let html = `<th class="p-1.5 border border-slate-900/40 text-left font-black w-[120px] bg-cyan-950 text-white">Tanggal</th>`;
                 for(let d = startD; d <= endD; d++) {
-                    html += `<th class="p-1 border border-white/20 min-w-[25px]">${d}</th>`;
+                    html += `<th class="p-1 border border-slate-900/40 min-w-[25px] font-black">${d}</th>`;
                 }
                 return html;
             };
@@ -1220,12 +1221,15 @@
                 });
             }
 
-            // B. Ambil Pelunasan Pembayaran
+            // B. Ambil Pelunasan Pembayaran (Sumber data jam berdasarkan pelunasan)
             let paidTeamsMap = {}; 
+            let paidTeamsJamMap = {}; // Menyimpan durasi jam berdasarkan pelunasan/pemasukan
+            
             Object.values(globalCache.pemasukan).forEach(p => {
                 if(p.tgl && p.tgl.startsWith(selectedYearMonth)) {
                     let dNum = parseInt(p.tgl.split('-')[2]);
                     if(!paidTeamsMap[dNum]) paidTeamsMap[dNum] = new Set();
+                    if(!paidTeamsJamMap[dNum]) paidTeamsJamMap[dNum] = {};
                     
                     let tName = "";
                     if(p.timNamaBersih) {
@@ -1233,7 +1237,26 @@
                     } else if(p.ket) {
                         tName = p.ket.toUpperCase().trim();
                     }
-                    if(tName) paidTeamsMap[dNum].add(tName);
+                    if(tName) {
+                        paidTeamsMap[dNum].add(tName);
+                        
+                        // Hitung jam dari keterangan jam main (misal: "07:00-09:00" -> 2 jam, atau default 1 jam)
+                        let jamDurasi = 1;
+                        if(p.ket && p.ket.includes('(') && p.ket.includes(')')) {
+                            let matchJam = p.ket.match(/\((.*?)\)/);
+                            if(matchJam && matchJam[1].includes('-')) {
+                                let parts = matchJam[1].split('-');
+                                if(parts.length === 2) {
+                                    let startH = parseInt(parts[0].split(':')[0]);
+                                    let endH = parseInt(parts[1].split(':')[0]);
+                                    if(!isNaN(startH) && !isNaN(endH) && endH > startH) {
+                                        jamDurasi = endH - startH;
+                                    }
+                                }
+                            }
+                        }
+                        paidTeamsJamMap[dNum][tName] = jamDurasi;
+                    }
                 }
             });
 
@@ -1241,8 +1264,25 @@
                 if(b.tgl && b.tgl.startsWith(selectedYearMonth)) {
                     let dNum = parseInt(b.tgl.split('T')[0].split('-')[2]);
                     if(!paidTeamsMap[dNum]) paidTeamsMap[dNum] = new Set();
+                    if(!paidTeamsJamMap[dNum]) paidTeamsJamMap[dNum] = {};
+                    
                     let tName = (b.nama || "").toUpperCase().trim();
-                    if(tName) paidTeamsMap[dNum].add(tName);
+                    if(tName) {
+                        paidTeamsMap[dNum].add(tName);
+                        let jamDurasi = 1;
+                        let timePart = b.tgl.split('T')[1];
+                        if(timePart && timePart.includes('-')) {
+                            let parts = timePart.split('-');
+                            if(parts.length === 2) {
+                                let startH = parseInt(parts[0].split(':')[0]);
+                                let endH = parseInt(parts[1].split(':')[0]);
+                                if(!isNaN(startH) && !isNaN(endH) && endH > startH) {
+                                    jamDurasi = endH - startH;
+                                }
+                            }
+                        }
+                        paidTeamsJamMap[dNum][tName] = jamDurasi;
+                    }
                 }
             });
 
@@ -1253,12 +1293,13 @@
             let totalJamMainBulan = 0;
             let totalJam1Bulan = 0;
 
-            // Arrays untuk menampung data baris tiap tanggal
             let rTimBooking = { 1: "Jumlah Tim Booking", 2: "Jumlah Tim Booking", 3: "Jumlah Tim Booking" };
             let rTimMain = { 1: "Jumlah Tim Main", 2: "Jumlah Tim Main", 3: "Jumlah Tim Main" };
-            let rJmlJam = { 1: "Jumlah Jam", 2: "Jumlah Jam", 3: "Jumlah Jam" };
+            let rJmlJam = { 1: "Jumlah Jam Booking", 2: "Jumlah Jam Booking", 3: "Jumlah Jam Booking" };
             let rJmlCancel = { 1: "Jumlah Cancel", 2: "Jumlah Cancel", 3: "Jumlah Cancel" };
-            let rTotalJamMain = { 1: "Total Jam Main", 2: "Total Jam Main", 3: "Total Jam Main" };
+            let rTotalJamMain = { 1: "Jumlah Aktual Jam Main", 2: "Jumlah Aktual Jam Main", 3: "Jumlah Aktual Jam Main" };
+
+            let todayStr = getLocalDateString();
 
             for(let d = 1; d <= daysInMonth; d++) {
                 let info = recapData[d];
@@ -1270,17 +1311,23 @@
                 let cancelCount = 0;
                 let isFutureDate = info.dateStr > todayStr;
                 let paidSet = paidTeamsMap[d] || new Set();
+                let paidJamMap = paidTeamsJamMap[d] || {};
 
+                // Hitung jam berdasarkan pelunasan (sudah lunas artinya sudah bermain, baru jamnya dihitung)
                 if(numTimBooking > 0) {
                     info.scheduledTeamsList.forEach(t => {
                         let isPaid = false;
+                        let matchedPaidName = "";
                         paidSet.forEach(pName => {
-                            if(pName.includes(t.nama) || t.nama.includes(pName)) isPaid = true;
+                            if(pName.includes(t.nama) || t.nama.includes(pName)) {
+                                isPaid = true;
+                                matchedPaidName = pName;
+                            }
                         });
 
                         if(isPaid) {
                             actualTimMainSet.add(t.nama);
-                            actualJamMain += 1; 
+                            actualJamMain += (paidJamMap[matchedPaidName] || 1); 
                         } else {
                             if(!isFutureDate) cancelCount += 1;
                         }
@@ -1295,7 +1342,7 @@
                         });
                         if(!matched) {
                             actualTimMainSet.add(pName);
-                            actualJamMain += 1;
+                            actualJamMain += (paidJamMap[pName] || 1);
                             if(numTimBooking === 0) numTimBooking = 1;
                             if(numJamBooking === 0) numJamBooking = 1;
                         }
@@ -1311,45 +1358,40 @@
 
                 let targetBagian = (d <= 11) ? 1 : (d <= 22 ? 2 : 3);
 
-                rTimBooking[targetBagian] += `<td class="p-1 border border-white/20">${numTimBooking > 0 ? numTimBooking : 0}</td>`;
-                rTimMain[targetBagian] += `<td class="p-1 border border-white/20">${actualTimMainSet.size > 0 ? actualTimMainSet.size : 0}</td>`;
-                rJmlJam[targetBagian] += `<td class="p-1 border border-white/20">${numJamBooking > 0 ? numJamBooking : 0}</td>`;
-                rJmlCancel[targetBagian] += `<td class="p-1 border border-white/20 text-rose-400 font-bold">${cancelCount > 0 ? cancelCount : 0}</td>`;
-                rTotalJamMain[targetBagian] += `<td class="p-1 border border-white/20 text-cyan-300 font-bold">${actualJamMain > 0 ? actualJamMain : 0}</td>`;
+                rTimBooking[targetBagian] += `<td class="p-1 border border-slate-900/40 font-bold">${numTimBooking > 0 ? numTimBooking : 0}</td>`;
+                rTimMain[targetBagian] += `<td class="p-1 border border-slate-900/40 font-bold">${actualTimMainSet.size > 0 ? actualTimMainSet.size : 0}</td>`;
+                rJmlJam[targetBagian] += `<td class="p-1 border border-slate-900/40 font-bold">${numJamBooking > 0 ? numJamBooking : 0}</td>`;
+                rJmlCancel[targetBagian] += `<td class="p-1 border border-slate-900/40 text-rose-700 font-black">${cancelCount > 0 ? cancelCount : 0}</td>`;
+                rTotalJamMain[targetBagian] += `<td class="p-1 border border-slate-900/40 text-cyan-950 font-black">${actualJamMain > 0 ? actualJamMain : 0}</td>`;
             }
 
-            // Fungsi helper render section tabel 1-3
-            let renderTableSection = (partNum, maxD) => {
+            let renderTableSection = (partNum) => {
                 let tbodyEl = document.getElementById(`monthly-tbody-${partNum}`);
                 if(!tbodyEl) return;
 
-                let c1 = `<tr><td class="p-1.5 border border-white/20 text-left font-medium bg-slate-900/90">${rTimBooking[partNum].match(/Jumlah Tim Booking(.*)/)[1] || ''}</td></tr>`; // placeholder
-                
-                // Construct HTML baris dengan benar
-                let makeRow = (title, htmlContent) => `<tr class="border-b border-white/10"><td class="p-1.5 border border-white/20 text-left font-medium bg-slate-900/90">${title}</td>${htmlContent}</tr>`;
+                let makeRow = (title, htmlContent) => `<tr class="border-b border-slate-900/40"><td class="p-1.5 border border-slate-900/40 text-left font-black bg-slate-900 text-white">${title}</td>${htmlContent}</tr>`;
                 
                 tbodyEl.innerHTML = 
                     makeRow("Jumlah Tim Booking", rTimBooking[partNum].replace("Jumlah Tim Booking", "")) +
                     makeRow("Jumlah Tim Main", rTimMain[partNum].replace("Jumlah Tim Main", "")) +
-                    makeRow("Jumlah Jam", rJmlJam[partNum].replace("Jumlah Jam", "")) +
+                    makeRow("Jumlah Jam Booking", rJmlJam[partNum].replace("Jumlah Jam Booking", "")) +
                     makeRow("Jumlah Cancel", rJmlCancel[partNum].replace("Jumlah Cancel", "")) +
-                    `<tr class="bg-cyan-950/40 font-bold"><td class="p-1.5 border border-white/20 text-left bg-cyan-950">Total Jam Main</td>` + rTotalJamMain[partNum].replace("Total Jam Main", "") + `</tr>`;
+                    `<tr class="bg-cyan-950/60 font-black"><td class="p-1.5 border border-slate-900/40 text-left bg-cyan-900 text-white font-black">Jumlah Aktual Jam Main</td>` + rTotalJamMain[partNum].replace("Jumlah Aktual Jam Main", "") + `</tr>`;
             };
 
-            renderTableSection(1, Math.min(11, daysInMonth));
-            renderTableSection(2, Math.min(22, daysInMonth));
-            renderTableSection(3, daysInMonth);
+            renderTableSection(1);
+            renderTableSection(2);
+            renderTableSection(3);
 
             totalJamBulanEl.innerText = totalJam1Bulan;
 
-            // Render Tabel 2 (Ringkasan Total Bulanan)
             if(summaryTbody) {
                 summaryTbody.innerHTML = `
-                    <tr class="border-b border-white/10"><td class="p-2 border border-white/20 text-left font-medium">Akumulasi Jumlah Tim Booking (1 Bulan)</td><td class="p-2 border border-white/20 font-bold text-amber-300">${totalTimBookingBulan} Tim</td></tr>
-                    <tr class="border-b border-white/10"><td class="p-2 border border-white/20 text-left font-medium">Akumulasi Jumlah Tim Main (1 Bulan)</td><td class="p-2 border border-white/20 font-bold text-emerald-300">${totalTimMainBulan} Tim</td></tr>
-                    <tr class="border-b border-white/10"><td class="p-2 border border-white/20 text-left font-medium">Akumulasi Jumlah Jam Booking (1 Bulan)</td><td class="p-2 border border-white/20 font-bold text-cyan-300">${totalJamBookingBulan} Jam</td></tr>
-                    <tr class="border-b border-white/10"><td class="p-2 border border-white/20 text-left font-medium">Akumulasi Jumlah Cancel (1 Bulan)</td><td class="p-2 border border-white/20 font-bold text-rose-400">${totalCancelBulan} Jadwal</td></tr>
-                    <tr class="bg-amber-950/40 font-bold"><td class="p-2 border border-white/20 text-left">Akumulasi Total Jam Main (1 Bulan)</td><td class="p-2 border border-white/20 text-amber-300 text-base">${totalJamMainBulan} Jam</td></tr>
+                    <tr class="border-b border-slate-900/40"><td class="p-2 border border-slate-900/40 text-left font-black">Akumulasi Jumlah Tim Booking (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black text-amber-950">${totalTimBookingBulan} Tim</td></tr>
+                    <tr class="border-b border-slate-900/40"><td class="p-2 border border-slate-900/40 text-left font-black">Akumulasi Jumlah Tim Main (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black text-emerald-950">${totalTimMainBulan} Tim</td></tr>
+                    <tr class="border-b border-slate-900/40"><td class="p-2 border border-slate-900/40 text-left font-black">Akumulasi Jumlah Jam Booking (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black text-cyan-950">${totalJamBookingBulan} Jam</td></tr>
+                    <tr class="border-b border-slate-900/40"><td class="p-2 border border-slate-900/40 text-left font-black">Akumulasi Jumlah Cancel (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black text-rose-700">${totalCancelBulan} Jadwal</td></tr>
+                    <tr class="bg-amber-950/25 font-black"><td class="p-2 border border-slate-900/40 text-left font-black">Akumulasi Jumlah Aktual Jam Main (1 Bulan)</td><td class="p-2 border border-slate-900/40 text-amber-950 text-base font-black">${totalJamMainBulan} Jam</td></tr>
                 `;
             }
         }
@@ -1412,12 +1454,30 @@
             }
 
             let paidTeamsMap = {}; 
+            let paidTeamsJamMap = {};
+            
             Object.values(globalCache.pemasukan).forEach(p => {
                 if(p.tgl && p.tgl.startsWith(selectedYearMonth)) {
                     let dNum = parseInt(p.tgl.split('-')[2]);
                     if(!paidTeamsMap[dNum]) paidTeamsMap[dNum] = new Set();
+                    if(!paidTeamsJamMap[dNum]) paidTeamsJamMap[dNum] = {};
                     let tName = p.timNamaBersih ? p.timNamaBersih.toUpperCase().trim() : (p.ket ? p.ket.toUpperCase().trim() : "");
-                    if(tName) paidTeamsMap[dNum].add(tName);
+                    if(tName) {
+                        paidTeamsMap[dNum].add(tName);
+                        let jamDurasi = 1;
+                        if(p.ket && p.ket.includes('(') && p.ket.includes(')')) {
+                            let matchJam = p.ket.match(/\((.*?)\)/);
+                            if(matchJam && matchJam[1].includes('-')) {
+                                let parts = matchJam[1].split('-');
+                                if(parts.length === 2) {
+                                    let startH = parseInt(parts[0].split(':')[0]);
+                                    let endH = parseInt(parts[1].split(':')[0]);
+                                    if(!isNaN(startH) && !isNaN(endH) && endH > startH) jamDurasi = endH - startH;
+                                }
+                            }
+                        }
+                        paidTeamsJamMap[dNum][tName] = jamDurasi;
+                    }
                 }
             });
 
@@ -1425,8 +1485,22 @@
                 if(b.tgl && b.tgl.startsWith(selectedYearMonth)) {
                     let dNum = parseInt(b.tgl.split('T')[0].split('-')[2]);
                     if(!paidTeamsMap[dNum]) paidTeamsMap[dNum] = new Set();
+                    if(!paidTeamsJamMap[dNum]) paidTeamsJamMap[dNum] = {};
                     let tName = (b.nama || "").toUpperCase().trim();
-                    if(tName) paidTeamsMap[dNum].add(tName);
+                    if(tName) {
+                        paidTeamsMap[dNum].add(tName);
+                        let jamDurasi = 1;
+                        let timePart = b.tgl.split('T')[1];
+                        if(timePart && timePart.includes('-')) {
+                            let parts = timePart.split('-');
+                            if(parts.length === 2) {
+                                let startH = parseInt(parts[0].split(':')[0]);
+                                let endH = parseInt(parts[1].split(':')[0]);
+                                if(!isNaN(startH) && !isNaN(endH) && endH > startH) jamDurasi = endH - startH;
+                            }
+                        }
+                        paidTeamsJamMap[dNum][tName] = jamDurasi;
+                    }
                 }
             });
 
@@ -1445,9 +1519,9 @@
 
             let rowTimBookingArr = ["Jumlah Tim Booking"];
             let rowTimMainArr = ["Jumlah Tim Main"];
-            let rowJumlahJamArr = ["Jumlah Jam"];
+            let rowJumlahJamArr = ["Jumlah Jam Booking"];
             let rowJumlahCancelArr = ["Jumlah Cancel"];
-            let rowTotalJamMainArr = ["Total Jam Main"];
+            let rowTotalJamMainArr = ["Jumlah Aktual Jam Main"];
 
             for(let d = 1; d <= daysInMonth; d++) {
                 let info = recapData[d];
@@ -1458,16 +1532,21 @@
                 let cancelCount = 0;
                 let isFutureDate = info.dateStr > todayStr;
                 let paidSet = paidTeamsMap[d] || new Set();
+                let paidJamMap = paidTeamsJamMap[d] || {};
 
                 if(numTimBooking > 0) {
                     info.scheduledTeamsList.forEach(t => {
                         let isPaid = false;
+                        let matchedPaidName = "";
                         paidSet.forEach(pName => {
-                            if(pName.includes(t.nama) || t.nama.includes(pName)) isPaid = true;
+                            if(pName.includes(t.nama) || t.nama.includes(pName)) {
+                                isPaid = true;
+                                matchedPaidName = pName;
+                            }
                         });
                         if(isPaid) {
                             actualTimMainSet.add(t.nama);
-                            actualJamMain += 1; 
+                            actualJamMain += (paidJamMap[matchedPaidName] || 1); 
                         } else {
                             if(!isFutureDate) cancelCount += 1;
                         }
@@ -1482,7 +1561,7 @@
                         });
                         if(!matched) {
                             actualTimMainSet.add(pName);
-                            actualJamMain += 1;
+                            actualJamMain += (paidJamMap[pName] || 1);
                             if(numTimBooking === 0) numTimBooking = 1;
                             if(numJamBooking === 0) numJamBooking = 1;
                         }
@@ -1521,22 +1600,22 @@
             if (Object.keys(data).length > 0) {
                 Object.entries(data).forEach(([key, item]) => {
                     let badgeStatus = item.status === 'Member' 
-                        ? '<span class="px-1 py-0.5 bg-blue-500/30 text-blue-200 border border-blue-400/40 rounded text-[6px] sm:text-xs font-bold">M</span>' 
-                        : '<span class="px-1 py-0.5 bg-rose-500/30 text-rose-200 border border-rose-400/40 rounded text-[6px] sm:text-xs font-bold">Non</span>';
+                        ? '<span class="px-1 py-0.5 bg-blue-700 text-white border border-blue-400 rounded text-[6px] sm:text-xs font-black">M</span>' 
+                        : '<span class="px-1 py-0.5 bg-rose-700 text-white border border-rose-400 rounded text-[6px] sm:text-xs font-black">Non</span>';
 
                     let formattedTglJam = item.tgl ? item.tgl.replace('T', ' ') : '-';
 
-                    tbody.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5">
-                        <td class="p-2 border border-white/10 text-[10px] sm:text-xs leading-tight">${formattedTglJam}</td>
-                        <td class="p-2 border border-white/10 font-medium text-[10px] sm:text-xs">${item.nama}</td>
-                        <td class="p-2 border border-white/10">${badgeStatus}</td>
-                        <td class="p-2 border border-white/10 text-[10px] sm:text-xs">Rp ${Number(item.dp).toLocaleString('id-ID')}</td>
-                        <td class="p-2 border border-white/10 text-[10px] sm:text-xs">${item.metode}</td>
-                        <td class="p-2 border border-white/10 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1.5 py-1 rounded text-[10px] sm:text-xs">Hapus</button></td>
+                    tbody.innerHTML += `<tr class="border-b border-slate-900/40 hover:bg-white/10 font-bold">
+                        <td class="p-2 border border-slate-900/40 text-[10px] sm:text-xs leading-tight">${formattedTglJam}</td>
+                        <td class="p-2 border border-slate-900/40 font-black text-[10px] sm:text-xs">${item.nama}</td>
+                        <td class="p-2 border border-slate-900/40">${badgeStatus}</td>
+                        <td class="p-2 border border-slate-900/40 text-[10px] sm:text-xs">Rp ${Number(item.dp).toLocaleString('id-ID')}</td>
+                        <td class="p-2 border border-slate-900/40 text-[10px] sm:text-xs">${item.metode}</td>
+                        <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-1.5 py-1 rounded text-[10px] sm:text-xs font-bold">Hapus</button></td>
                     </tr>`;
                 });
             } else {
-                tbody.innerHTML = `<tr><td colspan="6" class="text-center p-4 text-white/50 text-xs">Belum ada data booking.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center p-4 text-slate-700 text-xs font-bold">Belum ada data booking.</td></tr>`;
             }
         }
 
@@ -1582,134 +1661,130 @@
 
                     if(jml1 > 0) {
                         totalLapangan += jml1;
-                        if(met1 === 'Cash') { totalMasukCash += jml1; totalLapanganCash += jml1; }
-                        else { totalMasukQrif += jml1; totalLapanganQrisTf += jml1; }
+                        if(met1 === 'Cash') totalLapanganCash += jml1; else totalLapanganQrisTf += jml1;
                     }
                     if(jml2 > 0) {
                         totalLapangan += jml2;
-                        if(met2 === 'Cash') { totalMasukCash += jml2; totalLapanganCash += jml2; }
-                        else { totalMasukQrif += jml2; totalLapanganQrisTf += jml2; }
+                        if(met2 === 'Cash') totalLapanganCash += jml2; else totalLapanganQrisTf += jml2;
                     }
 
-                    let rincianMetodeText = jml2 > 0 ? `Tim1(${met1}), Tim2(${met2})` : `${met1}`;
-                    tLap.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5">
-                        <td class="p-2 border border-white/10 font-medium">${item.ket}</td>
-                        <td class="p-2 border border-white/10 text-white/70">${rincianMetodeText}</td>
-                        <td class="p-2 border border-white/10 font-bold text-emerald-300">Rp ${(jml1 + jml2).toLocaleString('id-ID')}</td>
-                        <td class="p-2 border border-white/10 text-center"><button type="button" onclick="hapusDataKeuangan('pemasukan', '${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-2 py-1 rounded text-[10px] sm:text-xs">Hapus</button></td>
+                    let detailStr1 = jml1 > 0 ? `${jml1.toLocaleString('id-ID')} (${met1})` : "";
+                    let detailStr2 = jml2 > 0 ? `<br>${jml2.toLocaleString('id-ID')} (${met2})` : "";
+
+                    tLap.innerHTML += `<tr class="border-b border-slate-900/40 font-bold">
+                        <td class="p-2 border border-slate-900/40">${item.ket || '-'}</td>
+                        <td class="p-2 border border-slate-900/40">${detailStr1}${detailStr2}</td>
+                        <td class="p-2 border border-slate-900/40 font-black">Rp ${(jml1 + jml2).toLocaleString('id-ID')}</td>
+                        <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusDataKeuangan('pemasukan', '${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-1.5 py-0.5 rounded text-[10px]">Hapus</button></td>
                     </tr>`;
                 }
             });
 
-            Object.entries(globalCache.booking).forEach(([key, item]) => {
+            Object.values(globalCache.booking).forEach(item => {
                 if(item.tgl && item.tgl.split('T')[0] === selectedDate) {
+                    let dpVal = Number(item.dp || 0);
+                    let metVal = item.metode || 'Cash';
+                    totalLapangan += dpVal;
+                    if(metVal === 'Cash') totalLapanganCash += dpVal; else totalLapanganQrisTf += dpVal;
                     hasLap = true;
-                    let nominal = Number(item.dp || 0);
-                    let metode = item.metode || 'Cash';
-                    totalLapangan += nominal;
 
-                    if (metode === 'Cash') { totalMasukCash += nominal; totalLapanganCash += nominal; }
-                    else { totalMasukQrif += nominal; totalLapanganQrisTf += nominal; }
-
-                    let labelStatus = item.status === 'Member' ? 'Member' : 'DP';
-                    tLap.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5">
-                        <td class="p-2 border border-white/10 font-medium">${item.nama}</td>
-                        <td class="p-2 border border-white/10 text-white/70">${labelStatus} (${metode})</td>
-                        <td class="p-2 border border-white/10 font-bold text-emerald-300">Rp ${nominal.toLocaleString('id-ID')}</td>
-                        <td class="p-2 border border-white/10 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-2 py-1 rounded text-[10px] sm:text-xs">Hapus</button></td>
+                    tLap.innerHTML += `<tr class="border-b border-slate-900/40 font-bold">
+                        <td class="p-2 border border-slate-900/40">${item.nama} (DP Booking)</td>
+                        <td class="p-2 border border-slate-900/40">${dpVal.toLocaleString('id-ID')} (${metVal})</td>
+                        <td class="p-2 border border-slate-900/40 font-black">Rp ${dpVal.toLocaleString('id-ID')}</td>
+                        <td class="p-2 border border-slate-900/40 text-center">-</td>
                     </tr>`;
                 }
             });
+
+            if(!hasLap) {
+                tLap.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-slate-700 text-xs font-bold">Tidak ada pemasukan lapangan pada tanggal ini.</td></tr>`;
+            }
 
             Object.entries(globalCache.minuman).forEach(([key, item]) => {
                 if(item.tgl === selectedDate) {
                     hasMin = true;
-                    let nominal = Number(item.total || 0);
-                    let metode = item.metode || 'Cash';
-                    totalMinuman += nominal;
+                    let totMin = Number(item.total || 0);
+                    let pcsMin = Number(item.jumlahPcs || 0);
+                    let metMin = item.metode || 'Cash';
+                    totalMinuman += totMin;
+                    if(metMin === 'Cash') totalMinumanCash += totMin; else totalMinumanQrisTf += totMin;
 
-                    if (metode === 'Cash') { totalMasukCash += nominal; totalMinumanCash += nominal; }
-                    else { totalMasukQrif += nominal; totalMinumanQrisTf += nominal; }
+                    let prodName = item.produk || 'Lainnya';
+                    if(!rekapMinumanPerProduk[prodName]) {
+                        rekapMinumanPerProduk[prodName] = { pcs: 0, total: 0 };
+                    }
+                    rekapMinumanPerProduk[prodName].pcs += pcsMin;
+                    rekapMinumanPerProduk[prodName].total += totMin;
 
-                    let prod = item.produk || 'Lainnya';
-                    let pcs = Number(item.jumlahPcs || 0);
-
-                    if(!rekapMinumanPerProduk[prod]) rekapMinumanPerProduk[prod] = { pcs: 0, total: 0 };
-                    rekapMinumanPerProduk[prod].pcs += pcs;
-                    rekapMinumanPerProduk[prod].total += nominal;
-
-                    tMin.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5">
-                        <td class="p-2 border border-white/10 font-medium">${prod} (${metode})</td>
-                        <td class="p-2 border border-white/10 text-white/70">${pcs}</td>
-                        <td class="p-2 border border-white/10 font-bold text-amber-300">Rp ${nominal.toLocaleString('id-ID')}</td>
-                        <td class="p-2 border border-white/10 text-center"><button type="button" onclick="hapusDataKeuangan('minuman', '${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-2 py-1 rounded text-[10px] sm:text-xs">Hapus</button></td>
+                    tMin.innerHTML += `<tr class="border-b border-slate-900/40 font-bold">
+                        <td class="p-2 border border-slate-900/40">${prodName}</td>
+                        <td class="p-2 border border-slate-900/40">${pcsMin} pcs (${metMin})</td>
+                        <td class="p-2 border border-slate-900/40 font-black">Rp ${totMin.toLocaleString('id-ID')}</td>
+                        <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusDataKeuangan('minuman', '${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-1.5 py-0.5 rounded text-[10px]">Hapus</button></td>
                     </tr>`;
                 }
             });
 
-            if(Object.keys(rekapMinumanPerProduk).length > 0) {
-                Object.entries(rekapMinumanPerProduk).forEach(([namaProduk, dataVal]) => {
+            if(!hasMin) {
+                tMin.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-slate-700 text-xs font-bold">Tidak ada penjualan minuman pada tanggal ini.</td></tr>`;
+                ringkasanMinumanBox.innerHTML = `<p class="text-xs text-slate-700 text-center col-span-full font-bold">Belum ada rekap produk minuman.</p>`;
+            } else {
+                Object.entries(rekapMinumanPerProduk).forEach(([prod, data]) => {
                     ringkasanMinumanBox.innerHTML += `
-                        <div class="glass-panel-sub p-2.5 rounded-xl border border-amber-400/20 flex justify-between items-center text-xs shadow-sm">
-                            <span class="font-bold text-white">${namaProduk}</span>
-                            <div class="text-right">
-                                <span class="bg-amber-500/30 text-amber-200 px-1.5 py-0.5 rounded font-bold mr-1">${dataVal.pcs} Pcs</span>
-                                <span class="font-bold text-amber-300">Rp ${dataVal.total.toLocaleString('id-ID')}</span>
-                            </div>
+                        <div class="p-2 rounded-lg border border-amber-500/40 text-center shadow bg-white/30">
+                            <p class="text-xs text-slate-900 font-bold">${prod}</p>
+                            <p class="text-xs font-black text-amber-950">${data.pcs} Pcs (Rp ${data.total.toLocaleString('id-ID')})</p>
                         </div>
                     `;
                 });
-            } else {
-                ringkasanMinumanBox.innerHTML = `<div class="col-span-full text-center p-3 text-white/50 italic text-xs">Belum ada penjualan minuman pada tanggal ini.</div>`;
             }
 
             Object.entries(globalCache.pengeluaran).forEach(([key, item]) => {
-                if(item.tgl === selectedDate) {
+                let tanggalCatat = item.tgl;
+                if(tanggalCatat === selectedDate) {
                     hasKel = true;
-                    let nominal = Number(item.jumlah || 0);
-                    totalKeluar += nominal;
-                    let sumberTgl = item.sumberTgl || item.tgl;
+                    let nominalKeluar = Number(item.jumlah || 0);
+                    totalKeluar += nominalKeluar;
+                    let sumberDanaStr = item.sumberTgl ? `Cash Tgl ${item.sumberTgl}` : 'Cash';
 
-                    tKel.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5">
-                        <td class="p-2 border border-white/10 font-medium">${item.ket}</td>
-                        <td class="p-2 border border-white/10 text-white/70 text-[10px] sm:text-xs">Cash tgl: ${sumberTgl}</td>
-                        <td class="p-2 border border-white/10 font-bold text-rose-300">Rp ${nominal.toLocaleString('id-ID')}</td>
-                        <td class="p-2 border border-white/10 text-center"><button type="button" onclick="hapusDataKeuangan('pengeluaran', '${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-2 py-1 rounded text-[10px] sm:text-xs">Hapus</button></td>
+                    tKel.innerHTML += `<tr class="border-b border-slate-900/40 font-bold">
+                        <td class="p-2 border border-slate-900/40">${item.ket || '-'}</td>
+                        <td class="p-2 border border-slate-900/40">${sumberDanaStr}</td>
+                        <td class="p-2 border border-slate-900/40 font-black text-rose-700">Rp ${nominalKeluar.toLocaleString('id-ID')}</td>
+                        <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusDataKeuangan('pengeluaran', '${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-1.5 py-0.5 rounded text-[10px]">Hapus</button></td>
                     </tr>`;
                 }
             });
 
-            if(!hasLap) tLap.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-white/50 italic text-xs">Belum ada data uang lapangan.</td></tr>`;
-            if(!hasMin) tMin.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-white/50 italic text-xs">Belum ada penjualan minuman.</td></tr>`;
-            if(!hasKel) tKel.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-white/50 italic text-xs">Belum ada pengeluaran.</td></tr>`;
+            if(!hasKel) {
+                tKel.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-slate-700 text-xs font-bold">Tidak ada pengeluaran pada tanggal ini.</td></tr>`;
+            }
+
+            totalMasukCash = totalLapanganCash + totalMinumanCash;
+            totalMasukQrif = totalLapanganQrisTf + totalMinumanQrisTf;
+            let saldoBersihCash = totalMasukCash - totalKeluar;
 
             document.getElementById('subtotal-lapangan').innerHTML = `
-                <span class="bg-slate-900/90 border border-blue-400/30 px-2.5 py-1 rounded-lg shadow">Total: Rp ${totalLapangan.toLocaleString('id-ID')}</span>
-                <span class="bg-slate-900/90 border border-emerald-400/30 px-2.5 py-1 rounded-lg text-emerald-300 shadow">Cash: Rp ${totalLapanganCash.toLocaleString('id-ID')}</span>
-                <span class="bg-slate-900/90 border border-sky-400/30 px-2.5 py-1 rounded-lg text-sky-300 shadow">QRIS/TF: Rp ${totalLapanganQrisTf.toLocaleString('id-ID')}</span>
+                <span class="bg-white/60 border border-blue-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalLapangan.toLocaleString('id-ID')}</span>
+                <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp ${totalLapanganCash.toLocaleString('id-ID')}</span>
+                <span class="bg-white/60 border border-sky-500/40 px-2.5 py-1 rounded-lg text-sky-800 shadow font-black">QRIS/TF: Rp ${totalLapanganQrisTf.toLocaleString('id-ID')}</span>
             `;
 
             document.getElementById('subtotal-minuman').innerHTML = `
-                <span class="bg-slate-900/90 border border-amber-400/30 px-2.5 py-1 rounded-lg shadow">Total: Rp ${totalMinuman.toLocaleString('id-ID')}</span>
-                <span class="bg-slate-900/90 border border-emerald-400/30 px-2.5 py-1 rounded-lg text-emerald-300 shadow">Cash: Rp ${totalMinumanCash.toLocaleString('id-ID')}</span>
-                <span class="bg-slate-900/90 border border-sky-400/30 px-2.5 py-1 rounded-lg text-sky-300 shadow">QRIS/TF: Rp ${totalMinumanQrisTf.toLocaleString('id-ID')}</span>
+                <span class="bg-white/60 border border-amber-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalMinuman.toLocaleString('id-ID')}</span>
+                <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp ${totalMinumanCash.toLocaleString('id-ID')}</span>
+                <span class="bg-white/60 border border-sky-500/40 px-2.5 py-1 rounded-lg text-sky-800 shadow font-black">QRIS/TF: Rp ${totalMinumanQrisTf.toLocaleString('id-ID')}</span>
             `;
 
             document.getElementById('subtotal-keluar').innerHTML = `
-                <span class="bg-slate-900/90 border border-rose-400/30 px-2.5 py-1 rounded-lg shadow">Total: Rp ${totalKeluar.toLocaleString('id-ID')}</span>
+                <span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalKeluar.toLocaleString('id-ID')}</span>
             `;
 
-            let totalKeluarDariCashHariIni = 0;
-            Object.values(globalCache.pengeluaran).forEach(item => {
-                let sumberTgl = item.sumberTgl || item.tgl;
-                if(sumberTgl === selectedDate) totalKeluarDariCashHariIni += Number(item.jumlah || 0);
-            });
-            let saldoBersihCash = totalMasukCash - totalKeluarDariCashHariIni;
-
-            document.getElementById('rekap-masuk-cash').innerText = "Rp " + totalMasukCash.toLocaleString('id-ID');
-            document.getElementById('rekap-masuk-qrif').innerText = "Rp " + totalMasukQrif.toLocaleString('id-ID');
-            document.getElementById('rekap-keluar').innerText = "Rp " + totalKeluar.toLocaleString('id-ID');
-            document.getElementById('rekap-saldo-cash').innerText = "Rp " + saldoBersihCash.toLocaleString('id-ID');
+            document.getElementById('rekap-masuk-cash').innerText = `Rp ${totalMasukCash.toLocaleString('id-ID')}`;
+            document.getElementById('rekap-masuk-qrif').innerText = `Rp ${totalMasukQrif.toLocaleString('id-ID')}`;
+            document.getElementById('rekap-keluar').innerText = `Rp ${totalKeluar.toLocaleString('id-ID')}`;
+            document.getElementById('rekap-saldo-cash').innerText = `Rp ${saldoBersihCash.toLocaleString('id-ID')}`;
         }
     </script>
 </body>
