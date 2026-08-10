@@ -217,6 +217,7 @@
                 <section class="p-3 sm:p-5 rounded-2xl border border-blue-500/40 space-y-3 shadow-lg">
                     <div class="flex flex-col items-center justify-center text-center border-b border-blue-500/20 pb-3 gap-1">
                         <h3 id="title-lapangan" class="font-black text-sm sm:text-base text-blue-950 flex items-center justify-center gap-2 text-center w-full">⚽ UANG LAPANGAN</h3>
+                        <p id="label-tanggal-lapangan" class="text-xs font-bold text-blue-900"></p>
                         <div id="subtotal-lapangan" class="flex flex-wrap justify-center gap-2 text-xs font-bold text-blue-900 mt-1">
                             <span class="bg-white/60 border border-blue-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp 0</span>
                             <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp 0</span>
@@ -244,6 +245,7 @@
                 <section class="p-3 sm:p-5 rounded-2xl border border-amber-500/40 space-y-3 shadow-lg">
                     <div class="flex flex-col items-center justify-center text-center border-b border-amber-500/20 pb-3 gap-1">
                         <h3 id="title-minuman" class="font-black text-sm sm:text-base text-amber-950 flex items-center justify-center gap-2 text-center w-full">🥤 PENJUALAN MINUMAN</h3>
+                        <p id="label-tanggal-minuman" class="text-xs font-bold text-amber-900"></p>
                         <div id="subtotal-minuman" class="flex flex-wrap justify-center gap-2 text-xs font-bold text-amber-900 mt-1">
                             <span class="bg-white/60 border border-amber-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp 0</span>
                             <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp 0</span>
@@ -273,6 +275,7 @@
                 <section class="p-3 sm:p-5 rounded-2xl border border-rose-500/40 space-y-3 shadow-lg">
                     <div class="flex flex-col items-center justify-center text-center border-b border-rose-500/20 pb-3 gap-1">
                         <h3 id="title-keluar" class="font-black text-sm sm:text-base text-rose-950 flex items-center justify-center gap-2 text-center w-full">💸 PENGELUARAN</h3>
+                        <p id="label-tanggal-keluar" class="text-xs font-bold text-rose-900"></p>
                         <div id="subtotal-keluar" class="flex flex-wrap justify-center gap-2 text-xs font-bold text-rose-900 mt-1">
                             <span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp 0</span>
                         </div>
@@ -296,6 +299,7 @@
                 <section class="p-3 sm:p-5 rounded-2xl border border-emerald-500/40 space-y-4 shadow-lg">
                     <div class="flex flex-col items-center justify-center text-center border-b border-emerald-500/20 pb-3 gap-1">
                         <h3 id="title-ringkasan-total" class="font-black text-sm sm:text-base text-emerald-950 flex items-center justify-center gap-2 text-center w-full">📌 RINGKASAN TOTAL KEUANGAN</h3>
+                        <p id="label-tanggal-ringkasan" class="text-xs font-bold text-emerald-900"></p>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 font-bold text-center">
                         <div class="p-3 sm:p-4 rounded-xl border border-blue-600/50 text-center shadow bg-white/30">
@@ -1223,6 +1227,165 @@
             });
         }
 
+        window.renderRekapHarian = () => {
+            let filterTgl = document.getElementById('filter-tanggal').value;
+            if(!filterTgl) return;
+
+            let formattedFullDate = formatTanggalFull(filterTgl);
+
+            // Update label hari dan tanggal di setiap bagian rekap harian
+            let labelLapangan = document.getElementById('label-tanggal-lapangan');
+            let labelMinuman = document.getElementById('label-tanggal-minuman');
+            let labelKeluar = document.getElementById('label-tanggal-keluar');
+            let labelRingkasan = document.getElementById('label-tanggal-ringkasan');
+
+            if(labelLapangan) labelLapangan.innerText = formattedFullDate;
+            if(labelMinuman) labelMinuman.innerText = formattedFullDate;
+            if(labelKeluar) labelKeluar.innerText = formattedFullDate;
+            if(labelRingkasan) labelRingkasan.innerText = formattedFullDate;
+
+            // --- TABEL UANG LAPANGAN ---
+            let tbodyLapangan = document.getElementById('tabel-lapangan');
+            tbodyLapangan.innerHTML = "";
+            let totalLapangan = 0, totalLapanganCash = 0, totalLapanganQrif = 0;
+
+            Object.entries(globalCache.pemasukan).forEach(([key, item]) => {
+                if(item.tgl === filterTgl) {
+                    let jml1 = Number(item.jumlah1 || item.jumlah || 0);
+                    let met1 = item.metode1 || item.metode || 'Cash';
+                    let jml2 = Number(item.jumlah2 || 0);
+                    let met2 = item.metode2 || 'Cash';
+
+                    let subTotalItem = jml1 + jml2;
+                    totalLapangan += subTotalItem;
+
+                    if(met1 === 'Cash') totalLapanganCash += jml1; else totalLapanganQrif += jml1;
+                    if(jml2 > 0) {
+                        if(met2 === 'Cash') totalLapanganCash += jml2; else totalLapanganQrif += jml2;
+                    }
+
+                    let detailTxt = `Tim 1: Rp ${jml1.toLocaleString('id-ID')} (${met1})`;
+                    if(jml2 > 0) {
+                        detailTxt += `<br>Tim 2: Rp ${jml2.toLocaleString('id-ID')} (${met2})`;
+                    }
+
+                    tbodyLapangan.innerHTML += `<tr class="border-b border-slate-900/40 text-center font-bold">
+                        <td class="p-2 border border-slate-900/40 text-left">${item.ket}</td>
+                        <td class="p-2 border border-slate-900/40 text-xs">${detailTxt}</td>
+                        <td class="p-2 border border-slate-900/40 text-emerald-900 font-black">Rp ${subTotalItem.toLocaleString('id-ID')}</td>
+                        <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusDataKeuangan('pemasukan', '${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
+                    </tr>`;
+                }
+            });
+
+            Object.entries(globalCache.booking).forEach(([key, item]) => {
+                if(item.tgl && item.tgl.split('T')[0] === filterTgl) {
+                    let dpVal = Number(item.dp || 0);
+                    let metode = item.metode || 'Cash';
+                    totalLapangan += dpVal;
+                    if(metode === 'Cash') totalLapanganCash += dpVal; else totalLapanganQrif += dpVal;
+
+                    tbodyLapangan.innerHTML += `<tr class="border-b border-slate-900/40 text-center font-bold">
+                        <td class="p-2 border border-slate-900/40 text-left">DP Booking: ${item.nama} (${item.status})</td>
+                        <td class="p-2 border border-slate-900/40 text-xs">Metode: ${metode}</td>
+                        <td class="p-2 border border-slate-900/40 text-emerald-900 font-black">Rp ${dpVal.toLocaleString('id-ID')}</td>
+                        <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
+                    </tr>`;
+                }
+            });
+
+            // --- TABEL PENJUALAN MINUMAN ---
+            let tbodyMinuman = document.getElementById('tabel-minuman');
+            let ringkasanMinumanBox = document.getElementById('ringkasan-minuman-box');
+            tbodyMinuman.innerHTML = "";
+            ringkasanMinumanBox.innerHTML = "";
+            let totalMinuman = 0, totalMinumanCash = 0, totalMinumanQrif = 0;
+            let rekapProdukQty = {};
+
+            Object.entries(globalCache.minuman).forEach(([key, item]) => {
+                if(item.tgl === filterTgl) {
+                    let tot = Number(item.total || 0);
+                    let pcs = Number(item.jumlahPcs || 0);
+                    let met = item.metode || 'Cash';
+                    totalMinuman += tot;
+                    if(met === 'Cash') totalMinumanCash += tot; else totalMinumanQrif += tot;
+
+                    if(!rekapProdukQty[item.produk]) rekapProdukQty[item.produk] = 0;
+                    rekapProdukQty[item.produk] += pcs;
+
+                    tbodyMinuman.innerHTML += `<tr class="border-b border-slate-900/40 text-center font-bold">
+                        <td class="p-2 border border-slate-900/40 text-left">${item.produk}</td>
+                        <td class="p-2 border border-slate-900/40">${pcs} Pcs</td>
+                        <td class="p-2 border border-slate-900/40 text-amber-900 font-black">Rp ${tot.toLocaleString('id-ID')} (${met})</td>
+                        <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusDataKeuangan('minuman', '${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
+                    </tr>`;
+                }
+            });
+
+            Object.entries(rekapProdukQty).forEach(([prodName, qty]) => {
+                ringkasanMinumanBox.innerHTML += `
+                    <div class="p-2.5 rounded-xl border border-amber-600/40 bg-white/30 text-center shadow">
+                        <p class="text-xs text-slate-900 font-bold">${prodName}</p>
+                        <p class="text-sm font-black text-amber-950">${qty} Pcs Terjual</p>
+                    </div>
+                `;
+            });
+
+            // --- TABEL UANG KELUAR / PENGELUARAN ---
+            let tbodyKeluar = document.getElementById('tabel-keluar');
+            tbodyKeluar.innerHTML = "";
+            let totalKeluar = 0;
+
+            Object.entries(globalCache.pengeluaran).forEach(([key, item]) => {
+                let sumberTanggal = item.sumberTgl || item.tgl;
+                if(item.tgl === filterTgl || sumberTanggal === filterTgl) {
+                    let nominal = Number(item.jumlah || 0);
+                    if(sumberTanggal === filterTgl) {
+                        totalKeluar += nominal;
+                    }
+
+                    tbodyKeluar.innerHTML += `<tr class="border-b border-slate-900/40 text-center font-bold">
+                        <td class="p-2 border border-slate-900/40 text-left">${item.ket} (Catat: ${item.tgl})</td>
+                        <td class="p-2 border border-slate-900/40 text-xs">Dari Cash: ${sumberTanggal}</td>
+                        <td class="p-2 border border-slate-900/40 text-rose-800 font-black">Rp ${nominal.toLocaleString('id-ID')}</td>
+                        <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusDataKeuangan('pengeluaran', '${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
+                    </tr>`;
+                }
+            });
+
+            let sisaCashLapangan = totalLapanganCash - totalKeluar;
+            let totalSisaCash = sisaCashLapangan + totalMinumanCash;
+
+            // Render Subtotals
+            document.getElementById('subtotal-lapangan').innerHTML = `
+                <span class="bg-white/60 border border-blue-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalLapangan.toLocaleString('id-ID')}</span>
+                <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp ${totalLapanganCash.toLocaleString('id-ID')}</span>
+                <span class="bg-white/60 border border-sky-500/40 px-2.5 py-1 rounded-lg text-sky-800 shadow font-black">QRIS/TF: Rp ${totalLapanganQrif.toLocaleString('id-ID')}</span>
+                <span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg text-rose-800 shadow font-black">Pengeluaran: Rp ${totalKeluar.toLocaleString('id-ID')}</span>
+                <span class="bg-white/60 border border-indigo-500/40 px-2.5 py-1 rounded-lg text-indigo-800 shadow font-black">Sisa Cash: Rp ${sisaCashLapangan.toLocaleString('id-ID')}</span>
+            `;
+
+            document.getElementById('subtotal-minuman').innerHTML = `
+                <span class="bg-white/60 border border-amber-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalMinuman.toLocaleString('id-ID')}</span>
+                <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp ${totalMinumanCash.toLocaleString('id-ID')}</span>
+                <span class="bg-white/60 border border-sky-500/40 px-2.5 py-1 rounded-lg text-sky-800 shadow font-black">QRIS/TF: Rp ${totalMinumanQrif.toLocaleString('id-ID')}</span>
+            `;
+
+            document.getElementById('subtotal-keluar').innerHTML = `
+                <span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalKeluar.toLocaleString('id-ID')}</span>
+            `;
+
+            // Render Ringkasan Akhir Keuangan
+            document.getElementById('rekap-lapangan-cash').innerText = `Rp ${totalLapanganCash.toLocaleString('id-ID')}`;
+            document.getElementById('rekap-lapangan-qrif').innerText = `Rp ${totalLapanganQrif.toLocaleString('id-ID')}`;
+            document.getElementById('rekap-minuman-cash').innerText = `Rp ${totalMinumanCash.toLocaleString('id-ID')}`;
+            document.getElementById('rekap-minuman-qrif').innerText = `Rp ${totalMinumanQrif.toLocaleString('id-ID')}`;
+            document.getElementById('rekap-keluar').innerText = `Rp ${totalKeluar.toLocaleString('id-ID')}`;
+            document.getElementById('rekap-sisa-cash-lapangan').innerText = `Rp ${sisaCashLapangan.toLocaleString('id-ID')}`;
+            document.getElementById('rekap-sisa-cash-minuman').innerText = `Rp ${totalMinumanCash.toLocaleString('id-ID')}`;
+            document.getElementById('rekap-total-sisa-cash').innerText = `Rp ${totalSisaCash.toLocaleString('id-ID')}`;
+        }
+
         window.renderMonthlyRecap = () => {
             let filterBulanEl = document.getElementById('filter-bulan');
             let summaryTbody = document.getElementById('monthly-summary-tbody');
@@ -1601,197 +1764,10 @@
                         <td class="p-2 border border-slate-900/40 text-center">${badgeStatus}</td>
                         <td class="p-2 border border-slate-900/40 text-[10px] sm:text-xs text-center">Rp ${Number(item.dp).toLocaleString('id-ID')}</td>
                         <td class="p-2 border border-slate-900/40 text-[10px] sm:text-xs text-center">${item.metode}</td>
-                        <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-1.5 py-1 rounded text-[10px] sm:text-xs font-bold">Hapus</button></td>
+                        <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
                     </tr>`;
                 });
-            } else {
-                tbody.innerHTML = `<tr><td colspan="6" class="text-center p-4 text-xs font-bold text-slate-900">Belum ada riwayat booking.</td></tr>`;
             }
-        }
-
-        function renderRekapHarian() {
-            let filterTgl = document.getElementById('filter-tanggal');
-            if(!filterTgl) return;
-            let selectedTgl = filterTgl.value;
-            if(!selectedTgl) return;
-
-            let tabelLapangan = document.getElementById('tabel-lapangan');
-            let tabelMinuman = document.getElementById('tabel-minuman');
-            let tabelKeluar = document.getElementById('tabel-keluar');
-            let ringkasanMinumanBox = document.getElementById('ringkasan-minuman-box');
-
-            if(tabelLapangan) tabelLapangan.innerHTML = "";
-            if(tabelMinuman) tabelMinuman.innerHTML = "";
-            if(tabelKeluar) tabelKeluar.innerHTML = "";
-            if(ringkasanMinumanBox) ringkasanMinumanBox.innerHTML = "";
-
-            let totalLapangan = 0, lapanganCash = 0, lapanganQrif = 0;
-            let totalMinuman = 0, minumanCash = 0, minumanQrif = 0;
-            let totalPengeluaran = 0;
-
-            let produkTerjualCount = {};
-
-            // 1. Render Pemasukan Lapangan
-            Object.entries(globalCache.pemasukan).forEach(([key, item]) => {
-                if(item.tgl === selectedTgl) {
-                    let jml = Number(item.jumlah || 0);
-                    let met1 = item.metode1 || 'Cash';
-                    let met2 = item.metode2 || 'Cash';
-                    let jml1 = Number(item.jumlah1 || 0);
-                    let jml2 = Number(item.jumlah2 || 0);
-
-                    if(!item.jumlah1 && item.jumlah) {
-                        let singleMet = item.metode || 'Cash';
-                        totalLapangan += jml;
-                        if(singleMet === 'Cash') lapanganCash += jml; else lapanganQrif += jml;
-                    } else {
-                        totalLapangan += jml;
-                        if(met1 === 'Cash') lapanganCash += jml1; else lapanganQrif += jml1;
-                        if(met2 === 'Cash') lapanganCash += jml2; else lapanganQrif += jml2;
-                    }
-
-                    let detailMetode = `1: ${met1} (Rp ${jml1.toLocaleString('id-ID')})`;
-                    if(jml2 > 0) {
-                        detailMetode += `<br>2: ${met2} (Rp ${jml2.toLocaleString('id-ID')})`;
-                    }
-
-                    if(tabelLapangan) {
-                        tabelLapangan.innerHTML += `<tr class="border-b border-slate-900/40 text-center">
-                            <td class="p-2 border border-slate-900/40 font-bold text-center">${item.ket}</td>
-                            <td class="p-2 border border-slate-900/40 text-[10px] text-center">${detailMetode}</td>
-                            <td class="p-2 border border-slate-900/40 font-black text-center">Rp ${jml.toLocaleString('id-ID')}</td>
-                            <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusDataKeuangan('pemasukan', '${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-1.5 py-1 rounded text-[10px]">Hapus</button></td>
-                        </tr>`;
-                    }
-                }
-            });
-
-            // Tambahan dari Booking (DP) jika tanggal main / DP di tanggal tersebut
-            Object.entries(globalCache.booking).forEach(([key, item]) => {
-                if(item.tgl && item.tgl.split('T')[0] === selectedTgl) {
-                    let dpVal = Number(item.dp || 0);
-                    let metodeDp = item.metode || 'Cash';
-                    totalLapangan += dpVal;
-                    if(metodeDp === 'Cash') lapanganCash += dpVal; else lapanganQrif += dpVal;
-
-                    if(tabelLapangan) {
-                        tabelLapangan.innerHTML += `<tr class="border-b border-slate-900/40 text-center bg-blue-500/10">
-                            <td class="p-2 border border-slate-900/40 font-bold text-center">${item.nama} (DP Booking)</td>
-                            <td class="p-2 border border-slate-900/40 text-[10px] text-center">DP (${metodeDp})</td>
-                            <td class="p-2 border border-slate-900/40 font-black text-center">Rp ${dpVal.toLocaleString('id-ID')}</td>
-                            <td class="p-2 border border-slate-900/40 text-center"><span class="text-[9px] text-slate-500">Booking</span></td>
-                        </tr>`;
-                    }
-                }
-            });
-
-            if(tabelLapangan && tabelLapangan.innerHTML === "") {
-                tabelLapangan.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-xs font-bold text-slate-900">Tidak ada pemasukan lapangan pada tanggal ini.</td></tr>`;
-            }
-
-            // 2. Render Penjualan Minuman
-            Object.entries(globalCache.minuman).forEach(([key, item]) => {
-                if(item.tgl === selectedTgl) {
-                    let tot = Number(item.total || 0);
-                    let pcs = Number(item.jumlahPcs || 0);
-                    let met = item.metode || 'Cash';
-                    totalMinuman += tot;
-                    if(met === 'Cash') minumanCash += tot; else minumanQrif += tot;
-
-                    let pName = item.produk || 'Minuman';
-                    produkTerjualCount[pName] = (produkTerjualCount[pName] || 0) + pcs;
-
-                    if(tabelMinuman) {
-                        tabelMinuman.innerHTML += `<tr class="border-b border-slate-900/40 text-center">
-                            <td class="p-2 border border-slate-900/40 font-bold text-center">${pName} (${met})</td>
-                            <td class="p-2 border border-slate-900/40 text-center">${pcs}</td>
-                            <td class="p-2 border border-slate-900/40 font-black text-center">Rp ${tot.toLocaleString('id-ID')}</td>
-                            <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusDataKeuangan('minuman', '${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-1.5 py-1 rounded text-[10px]">Hapus</button></td>
-                        </tr>`;
-                    }
-                }
-            });
-
-            if(tabelMinuman && tabelMinuman.innerHTML === "") {
-                tabelMinuman.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-xs font-bold text-slate-900">Tidak ada penjualan minuman pada tanggal ini.</td></tr>`;
-            }
-
-            // Ringkasan Minuman Box
-            if(ringkasanMinumanBox) {
-                if(Object.keys(produkTerjualCount).length > 0) {
-                    Object.entries(produkTerjualCount).forEach(([prod, qty]) => {
-                        ringkasanMinumanBox.innerHTML += `<div class="p-2 rounded-xl border border-amber-500/30 bg-white/30 text-center text-xs"><span class="font-bold text-slate-900">${prod}</span>: <span class="font-black text-amber-950">${qty} Pcs</span></div>`;
-                    });
-                } else {
-                    ringkasanMinumanBox.innerHTML = `<div class="col-span-full text-center text-xs font-bold text-slate-900 italic">Belum ada rincian minuman terjual.</div>`;
-                }
-            }
-
-            // 3. Render Pengeluaran
-            Object.entries(globalCache.pengeluaran).forEach(([key, item]) => {
-                let sumberTgl = item.sumberTgl || item.tgl;
-                if(item.tgl === selectedTgl || sumberTgl === selectedTgl) {
-                    let jml = Number(item.jumlah || 0);
-                    if(sumberTgl === selectedTgl) {
-                        totalPengeluaran += jml;
-                    }
-
-                    if(tabelKeluar) {
-                        tabelKeluar.innerHTML += `<tr class="border-b border-slate-900/40 text-center">
-                            <td class="p-2 border border-slate-900/40 font-bold text-center">${item.ket}</td>
-                            <td class="p-2 border border-slate-900/40 text-[10px] text-center">Cash Tgl: ${sumberTgl}</td>
-                            <td class="p-2 border border-slate-900/40 font-black text-center text-rose-700">Rp ${jml.toLocaleString('id-ID')}</td>
-                            <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusDataKeuangan('pengeluaran', '${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-1.5 py-1 rounded text-[10px]">Hapus</button></td>
-                        </tr>`;
-                    }
-                }
-            });
-
-            if(tabelKeluar && tabelKeluar.innerHTML === "") {
-                tabelKeluar.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-xs font-bold text-slate-900">Tidak ada pengeluaran pada tanggal ini.</td></tr>`;
-            }
-
-            // Kalkulasi Akhir
-            let sisaCashLapangan = lapanganCash - totalPengeluaran;
-            let totalSisaCash = sisaCashLapangan + minumanCash;
-
-            // Update Subtotal Header Section
-            let subtotalLapanganEl = document.getElementById('subtotal-lapangan');
-            if(subtotalLapanganEl) {
-                subtotalLapanganEl.innerHTML = `
-                    <span class="bg-white/60 border border-blue-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalLapangan.toLocaleString('id-ID')}</span>
-                    <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp ${lapanganCash.toLocaleString('id-ID')}</span>
-                    <span class="bg-white/60 border border-sky-500/40 px-2.5 py-1 rounded-lg text-sky-800 shadow font-black">QRIS/TF: Rp ${lapanganQrif.toLocaleString('id-ID')}</span>
-                    <span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg text-rose-800 shadow font-black">Pengeluaran: Rp ${totalPengeluaran.toLocaleString('id-ID')}</span>
-                    <span class="bg-white/60 border border-indigo-500/40 px-2.5 py-1 rounded-lg text-indigo-800 shadow font-black">Sisa Cash: Rp ${sisaCashLapangan.toLocaleString('id-ID')}</span>
-                `;
-            }
-
-            let subtotalMinumanEl = document.getElementById('subtotal-minuman');
-            if(subtotalMinumanEl) {
-                subtotalMinumanEl.innerHTML = `
-                    <span class="bg-white/60 border border-amber-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalMinuman.toLocaleString('id-ID')}</span>
-                    <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp ${minumanCash.toLocaleString('id-ID')}</span>
-                    <span class="bg-white/60 border border-sky-500/40 px-2.5 py-1 rounded-lg text-sky-800 shadow font-black">QRIS/TF: Rp ${minumanQrif.toLocaleString('id-ID')}</span>
-                `;
-            }
-
-            let subtotalKeluarEl = document.getElementById('subtotal-keluar');
-            if(subtotalKeluarEl) {
-                subtotalKeluarEl.innerHTML = `
-                    <span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalPengeluaran.toLocaleString('id-ID')}</span>
-                `;
-            }
-
-            // Update Ringkasan Total Kotak
-            if(document.getElementById('rekap-lapangan-cash')) document.getElementById('rekap-lapangan-cash').innerText = `Rp ${lapanganCash.toLocaleString('id-ID')}`;
-            if(document.getElementById('rekap-lapangan-qrif')) document.getElementById('rekap-lapangan-qrif').innerText = `Rp ${lapanganQrif.toLocaleString('id-ID')}`;
-            if(document.getElementById('rekap-minuman-cash')) document.getElementById('rekap-minuman-cash').innerText = `Rp ${minumanCash.toLocaleString('id-ID')}`;
-            if(document.getElementById('rekap-minuman-qrif')) document.getElementById('rekap-minuman-qrif').innerText = `Rp ${minumanQrif.toLocaleString('id-ID')}`;
-            if(document.getElementById('rekap-keluar')) document.getElementById('rekap-keluar').innerText = `Rp ${totalPengeluaran.toLocaleString('id-ID')}`;
-            if(document.getElementById('rekap-sisa-cash-lapangan')) document.getElementById('rekap-sisa-cash-lapangan').innerText = `Rp ${sisaCashLapangan.toLocaleString('id-ID')}`;
-            if(document.getElementById('rekap-sisa-cash-minuman')) document.getElementById('rekap-sisa-cash-minuman').innerText = `Rp ${minumanCash.toLocaleString('id-ID')}`;
-            if(document.getElementById('rekap-total-sisa-cash')) document.getElementById('rekap-total-sisa-cash').innerText = `Rp ${totalSisaCash.toLocaleString('id-ID')}`;
         }
     </script>
 </body>
