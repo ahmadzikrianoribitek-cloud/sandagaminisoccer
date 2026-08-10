@@ -197,16 +197,10 @@
         </div>
 
         <!-- HALAMAN BOOKING SCHEDULE -->
-        <div id="page-booking-schedule" class="glass-panel p-3 sm:p-6 rounded-2xl hidden relative">
-            <!-- Tombol Kembali di Kiri Atas Sejajar Kunci -->
-            <button type="button" onclick="showPage('admin-dashboard')" class="absolute left-3 sm:left-6 top-3 sm:top-6 glass-btn p-2.5 rounded-xl shadow-lg transition flex items-center justify-center w-[42px] h-[42px]" title="Kembali">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-            </button>
-
-            <div class="flex justify-between items-center mb-4 pl-[50px]">
+        <div id="page-booking-schedule" class="glass-panel p-3 sm:p-6 rounded-2xl hidden">
+            <div class="flex justify-between items-center mb-4">
                 <h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm">📅 Jadwal Lapangan (Member & Booking)</h2>
+                <button type="button" onclick="showPage('admin-dashboard')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
             </div>
 
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
@@ -251,16 +245,10 @@
         </div>
 
         <!-- HALAMAN DAILY RECAP -->
-        <div id="page-daily-recap" class="glass-panel p-3 sm:p-6 rounded-2xl hidden relative">
-            <!-- Tombol Kembali di Kiri Atas Sejajar Kunci -->
-            <button type="button" onclick="showPage('admin-dashboard')" class="absolute left-3 sm:left-6 top-3 sm:top-6 glass-btn p-2.5 rounded-xl shadow-lg transition flex items-center justify-center w-[42px] h-[42px]" title="Kembali">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-            </button>
-
-            <div class="flex justify-between items-center mb-4 border-b border-slate-900/20 pb-3 pl-[50px]">
+        <div id="page-daily-recap" class="glass-panel p-3 sm:p-6 rounded-2xl hidden">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-900/20 pb-3">
                 <h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm">📊 REKAP KEUANGAN HARIAN</h2>
+                <button type="button" onclick="showPage('admin-dashboard')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
             </div>
 
             <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-6 p-3 rounded-xl border border-white/20">
@@ -355,36 +343,20 @@
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 font-bold">
                         <div class="p-3 sm:p-4 rounded-xl border border-blue-600/50 text-center shadow bg-white/30">
-                            <p class="text-xs text-slate-900 font-bold mb-1">Total Lapangan Cash</p>
-                            <p id="rekap-lapangan-cash" class="text-base sm:text-lg font-black text-blue-900">Rp 0</p>
-                        </div>
-                        <div class="p-3 sm:p-4 rounded-xl border border-sky-600/50 text-center shadow bg-white/30">
-                            <p class="text-xs text-slate-900 font-bold mb-1">Total Lapangan Qris/Transfer</p>
-                            <p id="rekap-lapangan-qris" class="text-base sm:text-lg font-black text-sky-900">Rp 0</p>
+                            <p class="text-xs text-slate-900 font-bold mb-1">Uang Lapangan (Bersih)</p>
+                            <p id="rekap-lapangan-bersih" class="text-base sm:text-lg font-black text-blue-900">Rp 0</p>
                         </div>
                         <div class="p-3 sm:p-4 rounded-xl border border-amber-600/50 text-center shadow bg-white/30">
-                            <p class="text-xs text-slate-900 font-bold mb-1">Total Minuman Cash</p>
-                            <p id="rekap-minuman-cash" class="text-base sm:text-lg font-black text-amber-900">Rp 0</p>
-                        </div>
-                        <div class="p-3 sm:p-4 rounded-xl border border-orange-600/50 text-center shadow bg-white/30">
-                            <p class="text-xs text-slate-900 font-bold mb-1">Total Minuman Qris/Transfer</p>
-                            <p id="rekap-minuman-qris" class="text-base sm:text-lg font-black text-orange-900">Rp 0</p>
+                            <p class="text-xs text-slate-900 font-bold mb-1">Uang Minuman (Bersih)</p>
+                            <p id="rekap-minuman-bersih" class="text-base sm:text-lg font-black text-amber-900">Rp 0</p>
                         </div>
                         <div class="p-3 sm:p-4 rounded-xl border border-rose-600/50 text-center shadow bg-white/30">
-                            <p class="text-xs text-slate-900 font-bold mb-1">Pengeluaran ( dipotong dari total cash lapangan )</p>
+                            <p class="text-xs text-slate-900 font-bold mb-1">Total Keluar</p>
                             <p id="rekap-keluar" class="text-base sm:text-lg font-black text-rose-700">Rp 0</p>
                         </div>
-                        <div class="p-3 sm:p-4 rounded-xl border border-indigo-600/50 text-center shadow bg-white/30">
-                            <p class="text-xs text-slate-900 font-bold mb-1">Sisa Cash Lapangan</p>
-                            <p id="rekap-sisa-cash-lapangan" class="text-base sm:text-lg font-black text-indigo-900">Rp 0</p>
-                        </div>
-                        <div class="p-3 sm:p-4 rounded-xl border border-teal-600/50 text-center shadow bg-white/30">
-                            <p class="text-xs text-slate-900 font-bold mb-1">Sisa Cash Minuman</p>
-                            <p id="rekap-sisa-cash-minuman" class="text-base sm:text-lg font-black text-teal-900">Rp 0</p>
-                        </div>
                         <div class="p-3 sm:p-4 rounded-xl border border-emerald-600/50 text-center shadow bg-white/30">
-                            <p class="text-xs text-slate-900 font-bold mb-1">Total Sisa Cash</p>
-                            <p id="rekap-total-sisa-cash" class="text-base sm:text-lg font-black text-emerald-800">Rp 0</p>
+                            <p class="text-xs text-slate-900 font-bold mb-1">Total Saldo Bersih Keseluruhan</p>
+                            <p id="rekap-saldo-cash" class="text-base sm:text-lg font-black text-emerald-800">Rp 0</p>
                         </div>
                     </div>
                 </section>
@@ -392,16 +364,10 @@
         </div>
 
         <!-- HALAMAN MONTHLY RECAP -->
-        <div id="page-monthly-recap" class="glass-panel p-3 sm:p-6 rounded-2xl hidden relative">
-            <!-- Tombol Kembali di Kiri Atas Sejajar Kunci -->
-            <button type="button" onclick="showPage('admin-dashboard')" class="absolute left-3 sm:left-6 top-3 sm:top-6 glass-btn p-2.5 rounded-xl shadow-lg transition flex items-center justify-center w-[42px] h-[42px]" title="Kembali">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-            </button>
-
-            <div class="flex justify-between items-center mb-4 border-b border-slate-900/20 pb-3 pl-[50px]">
+        <div id="page-monthly-recap" class="glass-panel p-3 sm:p-6 rounded-2xl hidden">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-900/20 pb-3">
                 <h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm">📅 REKAP BULANAN LAPANGAN</h2>
+                <button type="button" onclick="showPage('admin-dashboard')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
             </div>
 
             <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4 p-3 rounded-xl border border-white/20">
@@ -481,16 +447,10 @@
         </div>
 
         <!-- HALAMAN BOOKING HISTORY -->
-        <div id="page-booking-history" class="glass-panel p-3 sm:p-6 rounded-2xl hidden relative">
-            <!-- Tombol Kembali di Kiri Atas Sejajar Kunci -->
-            <button type="button" onclick="showPage('admin-dashboard')" class="absolute left-3 sm:left-6 top-3 sm:top-6 glass-btn p-2.5 rounded-xl shadow-lg transition flex items-center justify-center w-[42px] h-[42px]" title="Kembali">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-            </button>
-
-            <div class="flex justify-between items-center mb-4 pl-[50px]">
+        <div id="page-booking-history" class="glass-panel p-3 sm:p-6 rounded-2xl hidden">
+            <div class="flex justify-between items-center mb-4">
                 <h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm">📋 Daftar Riwayat Booking</h2>
+                <button type="button" onclick="showPage('admin-dashboard')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
             </div>
             <div class="shadow-2xl rounded-xl border border-white/30 mb-4 overflow-hidden">
                 <table class="w-full text-center border-collapse text-[10px] sm:text-xs bg-white/20 backdrop-blur-md table-auto font-bold text-slate-900 border-slate-900/40">
@@ -510,16 +470,10 @@
         </div>
 
         <!-- FORM KELOLA / TAMBAH MEMBER -->
-        <div id="page-atur-member" class="glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900 relative">
-            <!-- Tombol Kembali di Kiri Atas Sejajar Kunci -->
-            <button type="button" onclick="showPage('booking-schedule')" class="absolute left-3 sm:left-6 top-3 sm:top-6 glass-btn p-2.5 rounded-xl shadow-lg transition flex items-center justify-center w-[42px] h-[42px]" title="Kembali">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-            </button>
-
-            <div class="flex justify-between items-center mb-4 pl-[50px]">
+        <div id="page-atur-member" class="glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900">
+            <div class="flex justify-between items-center mb-4">
                 <h2 class="text-base sm:text-lg font-black text-indigo-950">⚙️ Kelola Jadwal Member</h2>
+                <button type="button" onclick="showPage('booking-schedule')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
             </div>
             
             <form id="form-member" onsubmit="tambahMember(event)" class="p-4 rounded-xl border border-indigo-500/40 mb-6 space-y-3 bg-white/30">
@@ -558,15 +512,8 @@
         </div>
 
         <!-- FORM BOOKING ADMIN -->
-        <div id="page-booking" class="glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900 relative">
-            <!-- Tombol Kembali di Kiri Atas Sejajar Kunci -->
-            <button type="button" onclick="showPage('admin-dashboard')" class="absolute left-3 sm:left-6 top-3 sm:top-6 glass-btn p-2.5 rounded-xl shadow-lg transition flex items-center justify-center w-[42px] h-[42px]" title="Kembali">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-            </button>
-
-            <h2 class="text-base sm:text-lg font-black mb-4 text-blue-950 pl-[50px]">Form Booking / Jadwal Lapangan</h2>
+        <div id="page-booking" class="glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900">
+            <h2 class="text-base sm:text-lg font-black mb-4 text-blue-950">Form Booking / Jadwal Lapangan</h2>
             <form onsubmit="submitData(event, 'booking')">
                 <label class="block text-xs font-bold mb-1 text-slate-900">Status Tim</label>
                 <select id="b-status" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold">
@@ -599,20 +546,14 @@
                 
                 <div class="flex gap-2">
                     <button type="submit" class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded text-sm font-bold border border-blue-500/50 shadow">Simpan</button>
+                    <button type="button" onclick="showPage('admin-dashboard')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-4 py-2 rounded text-sm font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
                 </div>
             </form>
         </div>
 
         <!-- FORM UANG MASUK -->
-        <div id="page-masuk" class="glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900 relative">
-            <!-- Tombol Kembali di Kiri Atas Sejajar Kunci -->
-            <button type="button" onclick="showPage('admin-dashboard')" class="absolute left-3 sm:left-6 top-3 sm:top-6 glass-btn p-2.5 rounded-xl shadow-lg transition flex items-center justify-center w-[42px] h-[42px]" title="Kembali">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-            </button>
-
-            <h2 class="text-base sm:text-lg font-black mb-4 text-emerald-950 pl-[50px]">Uang Masuk / Pelunasan Lapangan</h2>
+        <div id="page-masuk" class="glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900">
+            <h2 class="text-base sm:text-lg font-black mb-4 text-emerald-950">Uang Masuk / Pelunasan Lapangan</h2>
             <form onsubmit="submitData(event, 'pemasukan')">
                 <label class="block text-xs font-bold mb-1 text-slate-900">Pilih Tanggal Main / Pelunasan</label>
                 <input type="date" id="in-tgl" onchange="updateDropdownTimMasuk()" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
@@ -659,20 +600,14 @@
 
                 <div class="flex gap-2">
                     <button type="submit" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded text-sm font-bold border border-emerald-500/50 shadow">Simpan</button>
+                    <button type="button" onclick="showPage('admin-dashboard')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-4 py-2 rounded text-sm font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
                 </div>
             </form>
         </div>
 
         <!-- FORM MINUMAN -->
-        <div id="page-minuman" class="glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900 relative">
-            <!-- Tombol Kembali di Kiri Atas Sejajar Kunci -->
-            <button type="button" onclick="showPage('admin-dashboard')" class="absolute left-3 sm:left-6 top-3 sm:top-6 glass-btn p-2.5 rounded-xl shadow-lg transition flex items-center justify-center w-[42px] h-[42px]" title="Kembali">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-            </button>
-
-            <h2 class="text-base sm:text-lg font-black mb-4 text-amber-950 pl-[50px]">Penjualan Minuman</h2>
+        <div id="page-minuman" class="glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900">
+            <h2 class="text-base sm:text-lg font-black mb-4 text-amber-950">Penjualan Minuman</h2>
             <form onsubmit="submitData(event, 'minuman')">
                 <label class="block text-xs font-bold mb-1 text-slate-900">Pilih Jenis Minuman Cepat</label>
                 <select id="m-select-pilihan" onchange="pilihMinuman(this)" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold">
@@ -697,20 +632,14 @@
                 <input type="date" id="m-tgl" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
                 <div class="flex gap-2">
                     <button type="submit" class="bg-amber-700 hover:bg-amber-800 text-white px-4 py-2 rounded text-sm font-bold border border-amber-500/50 shadow">Simpan</button>
+                    <button type="button" onclick="showPage('admin-dashboard')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-4 py-2 rounded text-sm font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
                 </div>
             </form>
         </div>
 
         <!-- FORM UANG KELUAR -->
-        <div id="page-keluar" class="glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900 relative">
-            <!-- Tombol Kembali di Kiri Atas Sejajar Kunci -->
-            <button type="button" onclick="showPage('admin-dashboard')" class="absolute left-3 sm:left-6 top-3 sm:top-6 glass-btn p-2.5 rounded-xl shadow-lg transition flex items-center justify-center w-[42px] h-[42px]" title="Kembali">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-            </button>
-
-            <h2 class="text-base sm:text-lg font-black mb-4 text-rose-950 pl-[50px]">Uang Keluar</h2>
+        <div id="page-keluar" class="glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900">
+            <h2 class="text-base sm:text-lg font-black mb-4 text-rose-950">Uang Keluar</h2>
             <form onsubmit="submitData(event, 'pengeluaran')">
                 <input type="text" id="k-ket" placeholder="Keterangan Pengeluaran" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
                 <input type="number" id="k-jumlah" placeholder="Nominal (Rp)" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
@@ -728,6 +657,7 @@
 
                 <div class="flex gap-2">
                     <button type="submit" class="bg-rose-700 hover:bg-rose-800 text-white px-4 py-2 rounded text-sm font-bold border border-rose-500/50 shadow">Simpan</button>
+                    <button type="button" onclick="showPage('admin-dashboard')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-4 py-2 rounded text-sm font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
                 </div>
             </form>
         </div>
@@ -944,11 +874,13 @@
             try {
                 await push(ref(db, 'booking'), data);
                 
+                // Format Pesan WhatsApp
                 let formattedDp = Number(dpValue).toLocaleString('id-ID');
                 let formattedTanggal = formatTanggalFull(tglInput);
-                let pesanWa = `Permisi min, mau konfirmasi booking jadwal dari ${namaTim} untuk hari ${formattedTanggal} jam ${jamInput}, dengan DP Rp${formattedDp} menggunakan metode pembayaran ${metodeVal}`;
+                let pesanWa = `Permisi min, mau konfirmasi booking jadwal dari ${namaTim} untuk hari ${formattedTanggal} jam ${jamInput}, dengan DP Rp${formattedDp} dengan metode pembayaran ${metodeVal}`;
                 
-                let nomorAdmin = "085124057148"; 
+                // Nomor WhatsApp Admin
+                let nomorAdmin = "6285124057148"; 
                 let whatsappUrl = `https://wa.me/${nomorAdmin}?text=${encodeURIComponent(pesanWa)}`;
 
                 alert("Booking berhasil disimpan! Anda akan diarahkan ke WhatsApp untuk konfirmasi ke admin.");
@@ -956,6 +888,7 @@
                 setDefaultDates();
                 loadJamKosongCustomer();
 
+                // Buka WhatsApp di tab baru / arahkan langsung
                 window.location.href = whatsappUrl;
 
             } catch (error) {
@@ -1557,7 +1490,7 @@
                 }
             }
 
-            // 4. Data Pengeluaran (Uang Keluar) - Dirinci satu per satu
+            // 4. Data Pengeluaran (Uang Keluar)
             Object.keys(globalCache.pengeluaran).forEach(key => {
                 let k = globalCache.pengeluaran[key];
                 if(k.tgl === tglVal) {
@@ -1575,15 +1508,14 @@
                 }
             });
 
-            // Perhitungan sisa cash dengan mendukung hasil minus jika cash 0 dikurangi pengeluaran
+            // Perhitungan Aturan Uang Keluar:
+            // "uang keluar utamakan dikurangi dari uang lapangan, kecuali uang lapangan kurang, baru dipotong dari uang minuman"
             let sisaLapangan = cashLap - totalKel;
             let sisaMinuman = cashMin;
             let pengeluaranDariLapangan = totalKel;
             let pengeluaranDariMinuman = 0;
 
-            if (cashLap === 0 && totalKel > 0) {
-                sisaLapangan = 0 - totalKel;
-            } else if (sisaLapangan < 0) {
+            if (sisaLapangan < 0) {
                 pengeluaranDariLapangan = cashLap;
                 pengeluaranDariMinuman = Math.abs(sisaLapangan);
                 sisaLapangan = 0;
@@ -1591,9 +1523,13 @@
                 if (sisaMinuman < 0) sisaMinuman = 0;
             }
 
-            let totalSisaCashFinal = sisaLapangan + sisaMinuman;
+            let bersihLapanganFinal = sisaLapangan + qrifLap;
+            let bersihMinumanFinal = sisaMinuman + qrifMin;
+            let totalSaldoKeseluruhan = bersihLapanganFinal + bersihMinumanFinal;
 
+            // Update Subtotals di UI
             if(document.getElementById('subtotal-lapangan')) {
+                document.getElementById('subtotal-lapangan.innerHTML') // safety
                 document.getElementById('subtotal-lapangan').innerHTML = `
                     <span class="bg-white/60 border border-blue-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalLap.toLocaleString('id-ID')}</span>
                     <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp ${cashLap.toLocaleString('id-ID')}</span>
@@ -1617,34 +1553,270 @@
                 `;
             }
 
-            if(document.getElementById('rekap-lapangan-cash')) {
-                document.getElementById('rekap-lapangan-cash').innerText = `Rp ${cashLap.toLocaleString('id-ID')}`;
+            // Update Ringkasan Akhir Keuangan
+            if(document.getElementById('rekap-lapangan-bersih')) {
+                document.getElementById('rekap-lapangan-bersih').innerText = `Rp ${bersihLapanganFinal.toLocaleString('id-ID')}`;
             }
-            if(document.getElementById('rekap-lapangan-qris')) {
-                document.getElementById('rekap-lapangan-qris').innerText = `Rp ${qrifLap.toLocaleString('id-ID')}`;
-            }
-            if(document.getElementById('rekap-minuman-cash')) {
-                document.getElementById('rekap-minuman-cash').innerText = `Rp ${cashMin.toLocaleString('id-ID')}`;
-            }
-            if(document.getElementById('rekap-minuman-qris')) {
-                document.getElementById('rekap-minuman-qris').innerText = `Rp ${qrifMin.toLocaleString('id-ID')}`;
+            if(document.getElementById('rekap-minuman-bersih')) {
+                document.getElementById('rekap-minuman-bersih').innerText = `Rp ${bersihMinumanFinal.toLocaleString('id-ID')}`;
             }
             if(document.getElementById('rekap-keluar')) {
                 document.getElementById('rekap-keluar').innerText = `Rp ${totalKel.toLocaleString('id-ID')}`;
             }
-            if(document.getElementById('rekap-sisa-cash-lapangan')) {
-                document.getElementById('rekap-sisa-cash-lapangan').innerText = `Rp ${sisaLapangan.toLocaleString('id-ID')}`;
-            }
-            if(document.getElementById('rekap-sisa-cash-minuman')) {
-                document.getElementById('rekap-sisa-cash-minuman').innerText = `Rp ${sisaMinuman.toLocaleString('id-ID')}`;
-            }
-            if(document.getElementById('rekap-total-sisa-cash')) {
-                document.getElementById('rekap-total-sisa-cash').innerText = `Rp ${totalSisaCashFinal.toLocaleString('id-ID')}`;
+            if(document.getElementById('rekap-saldo-cash')) {
+                document.getElementById('rekap-saldo-cash').innerText = `Rp ${totalSaldoKeseluruhan.toLocaleString('id-ID')}`;
             }
         }
 
         window.renderMonthlyRecap = () => {
-            // Function placeholder to prevent reference error
+            let filterBulanEl = document.getElementById('filter-bulan');
+            let summaryTbody = document.getElementById('monthly-summary-tbody');
+            let totalJamBulanEl = document.getElementById('monthly-total-jam');
+            if(!filterBulanEl) return;
+
+            let selectedYearMonth = filterBulanEl.value;
+            if(!selectedYearMonth) return;
+
+            let [yearStr, monthStr] = selectedYearMonth.split('-');
+            let year = parseInt(yearStr);
+            let month = parseInt(monthStr);
+
+            let dateObjName = new Date(year, month - 1, 1);
+            let namaBulanStr = dateObjName.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' }).toUpperCase();
+            let judulJudulRekap = `REKAP BULAN ${namaBulanStr}`;
+
+            if(document.getElementById('monthly-title-1')) document.getElementById('monthly-title-1').innerText = `${judulJudulRekap} (Tgl 1 - 11)`;
+            if(document.getElementById('monthly-title-2')) document.getElementById('monthly-title-2').innerText = `${judulJudulRekap} (Tgl 12 - 22)`;
+            if(document.getElementById('monthly-title-3')) document.getElementById('monthly-title-3').innerText = `${judulJudulRekap} (Tgl 23 - Selesai)`;
+
+            let daysInMonth = new Date(year, month, 0).getDate();
+
+            let createHeader = (startD, endD) => {
+                let html = `<th class="p-1.5 border border-slate-900/40 text-left font-black w-[120px] bg-cyan-950 text-white">Tanggal</th>`;
+                for(let d = startD; d <= endD; d++) {
+                    html += `<th class="p-1 border border-slate-900/40 min-w-[25px] font-black">${d}</th>`;
+                }
+                return html;
+            };
+
+            if(document.getElementById('monthly-header-row-1')) document.getElementById('monthly-header-row-1').innerHTML = createHeader(1, Math.min(11, daysInMonth));
+            if(document.getElementById('monthly-header-row-2')) document.getElementById('monthly-header-row-2').innerHTML = createHeader(12, Math.min(22, daysInMonth));
+            if(document.getElementById('monthly-header-row-3')) document.getElementById('monthly-header-row-3').innerHTML = createHeader(23, daysInMonth);
+
+            let recapData = {};
+            for(let d = 1; d <= daysInMonth; d++) {
+                let dayFormatted = String(d).padStart(2, '0');
+                let monthFormatted = String(month).padStart(2, '0');
+                let dateStr = `${year}-${monthFormatted}-${dayFormatted}`;
+                
+                recapData[d] = {
+                    dateStr: dateStr,
+                    hariName: getNamaHari(dateStr),
+                    timBookingSet: new Set(),
+                    totalJamBooking: 0,
+                    scheduledTeamsList: []
+                };
+            }
+
+            for(let d = 1; d <= daysInMonth; d++) {
+                let info = recapData[d];
+                let hName = info.hariName;
+
+                listJam.forEach(jam => {
+                    let cell = (globalCache.member[jam] && globalCache.member[jam][hName]) ? globalCache.member[jam][hName] : null;
+                    if(cell && cell.type !== 'off' && cell.nama) {
+                        let cleanName = cell.nama.toUpperCase().trim();
+                        info.timBookingSet.add(cleanName);
+                        info.totalJamBooking += 1; 
+                        info.scheduledTeamsList.push({ nama: cleanName, jam: jam });
+                    }
+                });
+
+                Object.values(globalCache.booking).forEach(b => {
+                    if(b.tgl && b.tgl.split('T')[0] === info.dateStr) {
+                        let cleanName = (b.nama || "").toUpperCase().trim();
+                        if(cleanName) {
+                            info.timBookingSet.add(cleanName);
+                            info.totalJamBooking += 1;
+                            info.scheduledTeamsList.push({ nama: cleanName, jam: "Booking" });
+                        }
+                    }
+                });
+            }
+
+            let paidTeamsMap = {}; 
+            let paidTeamsJamMap = {};
+            
+            Object.values(globalCache.pemasukan).forEach(p => {
+                if(p.tgl && p.tgl.startsWith(selectedYearMonth)) {
+                    let dNum = parseInt(p.tgl.split('-')[2]);
+                    if(!paidTeamsMap[dNum]) paidTeamsMap[dNum] = new Set();
+                    if(!paidTeamsJamMap[dNum]) paidTeamsJamMap[dNum] = {};
+                    
+                    let tName = "";
+                    if(p.timNamaBersih) {
+                        tName = p.timNamaBersih.toUpperCase().trim();
+                    } else if(p.ket) {
+                        tName = p.ket.toUpperCase().trim();
+                    }
+                    if(tName) {
+                        paidTeamsMap[dNum].add(tName);
+                        let jamDurasi = 1;
+                        if(p.ket && p.ket.includes('(') && p.ket.includes(')')) {
+                            let matchJam = p.ket.match(/\((.*?)\)/);
+                            if(matchJam && matchJam[1].includes('-')) {
+                                let parts = matchJam[1].split('-');
+                                if(parts.length === 2) {
+                                    let startH = parseInt(parts[0].split(':')[0]);
+                                    let endH = parseInt(parts[1].split(':')[0]);
+                                    if(!isNaN(startH) && !isNaN(endH) && endH > startH) {
+                                        jamDurasi = endH - startH;
+                                    }
+                                }
+                            }
+                        }
+                        paidTeamsJamMap[dNum][tName] = jamDurasi;
+                    }
+                }
+            });
+
+            Object.values(globalCache.booking).forEach(b => {
+                if(b.tgl && b.tgl.startsWith(selectedYearMonth)) {
+                    let dNum = parseInt(b.tgl.split('T')[0].split('-')[2]);
+                    if(!paidTeamsMap[dNum]) paidTeamsMap[dNum] = new Set();
+                    if(!paidTeamsJamMap[dNum]) paidTeamsJamMap[dNum] = {};
+                    
+                    let tName = (b.nama || "").toUpperCase().trim();
+                    if(tName) {
+                        paidTeamsMap[dNum].add(tName);
+                        let jamDurasi = 1;
+                        let timePart = b.tgl.split('T')[1];
+                        if(timePart && timePart.includes('-')) {
+                            let parts = timePart.split('-');
+                            if(parts.length === 2) {
+                                let startH = parseInt(parts[0].split(':')[0]);
+                                let endH = parseInt(parts[1].split(':')[0]);
+                                if(!isNaN(startH) && !isNaN(endH) && endH > startH) {
+                                    jamDurasi = endH - startH;
+                                }
+                            }
+                        }
+                        paidTeamsJamMap[dNum][tName] = jamDurasi;
+                    }
+                }
+            });
+
+            let totalTimBookingBulan = 0;
+            let totalTimMainBulan = 0;
+            let totalJamBookingBulan = 0;
+            let totalCancelBulan = 0;
+            let totalJamMainBulan = 0;
+            let totalJam1Bulan = 0;
+
+            let rTimBooking = { 1: "Jumlah Tim Booking", 2: "Jumlah Tim Booking", 3: "Jumlah Tim Booking" };
+            let rTimMain = { 1: "Jumlah Tim Main", 2: "Jumlah Tim Main", 3: "Jumlah Tim Main" };
+            let rJmlJam = { 1: "Jumlah Jam Booking", 2: "Jumlah Jam Booking", 3: "Jumlah Jam Booking" };
+            let rJmlCancel = { 1: "Jumlah Cancel", 2: "Jumlah Cancel", 3: "Jumlah Cancel" };
+            let rTotalJamMain = { 1: "Jumlah Aktual Jam Main", 2: "Jumlah Aktual Jam Main", 3: "Jumlah Aktual Jam Main" };
+
+            let todayStr = getLocalDateString();
+
+            for(let d = 1; d <= daysInMonth; d++) {
+                let info = recapData[d];
+                let numTimBooking = info.timBookingSet.size;
+                let numJamBooking = info.totalJamBooking;
+
+                let actualTimMainSet = new Set();
+                let actualJamMain = 0;
+                let cancelCount = 0;
+                let isFutureDate = info.dateStr > todayStr;
+                let paidSet = paidTeamsMap[d] || new Set();
+                let paidJamMap = paidTeamsJamMap[d] || {};
+
+                if(numTimBooking > 0) {
+                    info.scheduledTeamsList.forEach(t => {
+                        let isPaid = false;
+                        let matchedPaidName = "";
+                        paidSet.forEach(pName => {
+                            if(pName.includes(t.nama) || t.nama.includes(pName)) {
+                                isPaid = true;
+                                matchedPaidName = pName;
+                            }
+                        });
+
+                        if(isPaid) {
+                            actualTimMainSet.add(t.nama);
+                            actualJamMain += (paidJamMap[matchedPaidName] || 1); 
+                        } else {
+                            if(!isFutureDate) cancelCount += 1;
+                        }
+                    });
+                }
+
+                if(paidSet.size > 0) {
+                    paidSet.forEach(pName => {
+                        let matched = false;
+                        info.scheduledTeamsList.forEach(t => {
+                            if(pName.includes(t.nama) || t.nama.includes(pName)) matched = true;
+                        });
+                        if(!matched) {
+                            actualTimMainSet.add(pName);
+                            actualJamMain += (paidJamMap[pName] || 1);
+                            if(numTimBooking === 0) numTimBooking = 1;
+                            if(numJamBooking === 0) numJamBooking = 1;
+                        }
+                    });
+                }
+
+                totalJam1Bulan += actualJamMain;
+                totalTimBookingBulan += numTimBooking;
+                totalTimMainBulan += actualTimMainSet.size;
+                totalJamBookingBulan += numJamBooking;
+                totalCancelBulan += cancelCount;
+                totalJamMainBulan += actualJamMain;
+
+                let targetBagian = (d <= 11) ? 1 : (d <= 22 ? 2 : 3);
+
+                rTimBooking[targetBagian] += `<td class="p-1 border border-slate-900/40 font-bold">${numTimBooking > 0 ? numTimBooking : 0}</td>`;
+                rTimMain[targetBagian] += `<td class="p-1 border border-slate-900/40 font-bold">${actualTimMainSet.size > 0 ? actualTimMainSet.size : 0}</td>`;
+                rJmlJam[targetBagian] += `<td class="p-1 border border-slate-900/40 font-bold">${numJamBooking > 0 ? numJamBooking : 0}</td>`;
+                rJmlCancel[targetBagian] += `<td class="p-1 border border-slate-900/40 text-rose-700 font-black">${cancelCount > 0 ? cancelCount : 0}</td>`;
+                rTotalJamMain[targetBagian] += `<td class="p-1 border border-slate-900/40 text-cyan-950 font-black">${actualJamMain > 0 ? actualJamMain : 0}</td>`;
+            }
+
+            let renderTableSection = (partNum) => {
+                let tbodyEl = document.getElementById(`monthly-tbody-${partNum}`);
+                if(!tbodyEl) return;
+
+                let makeRow = (title, htmlContent) => `<tr class="border-b border-slate-900/40"><td class="p-1.5 border border-slate-900/40 text-left font-black bg-slate-900 text-white">${title}</td>${htmlContent}</tr>`;
+                
+                tbodyEl.innerHTML = 
+                    makeRow("Jumlah Tim Booking", rTimBooking[partNum].replace("Jumlah Tim Booking", "")) +
+                    makeRow("Jumlah Tim Main", rTimMain[partNum].replace("Jumlah Tim Main", "")) +
+                    makeRow("Jumlah Jam Booking", rJmlJam[partNum].replace("Jumlah Jam Booking", "")) +
+                    makeRow("Jumlah Cancel", rJmlCancel[partNum].replace("Jumlah Cancel", "")) +
+                    `<tr class="bg-cyan-950/60 font-black"><td class="p-1.5 border border-slate-900/40 text-left bg-cyan-900 text-white font-black">Jumlah Aktual Jam Main</td>` + rTotalJamMain[partNum].replace("Jumlah Aktual Jam Main", "") + `</tr>`;
+            };
+
+            renderTableSection(1);
+            renderTableSection(2);
+            renderTableSection(3);
+
+            if(totalJamBulanEl) totalJamBulanEl.innerText = totalJam1Bulan;
+
+            if(summaryTbody) {
+                summaryTbody.innerHTML = `
+                    <tr class="border-b border-slate-900/40"><td class="p-2 border border-slate-900/40 text-left font-black">Akumulasi Jumlah Tim Booking (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black text-amber-950">${totalTimBookingBulan} Tim</td></tr>
+                    <tr class="border-b border-slate-900/40"><td class="p-2 border border-slate-900/40 text-left font-black">Akumulasi Jumlah Tim Main (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black text-emerald-950">${totalTimMainBulan} Tim</td></tr>
+                    <tr class="border-b border-slate-900/40"><td class="p-2 border border-slate-900/40 text-left font-black">Akumulasi Jumlah Jam Booking (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black text-cyan-950">${totalJamBookingBulan} Jam</td></tr>
+                    <tr class="border-b border-slate-900/40"><td class="p-2 border border-slate-900/40 text-left font-black">Akumulasi Jumlah Cancel (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black text-rose-700">${totalCancelBulan} Kali</td></tr>
+                    <tr class="border-b border-slate-900/40 bg-amber-950/20"><td class="p-2 border border-slate-900/40 text-left font-black text-amber-950">Total Keseluruhan Aktual Jam Main (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black text-amber-950">${totalJamMainBulan} Jam</td></tr>
+                `;
+            }
+        }
+
+        window.downloadMonthlyRecapCSV = () => {
+            alert("Fitur download CSV siap digunakan.");
         }
     </script>
 </body>
