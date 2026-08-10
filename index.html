@@ -81,7 +81,7 @@
 </head>
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-white">
 
-    <!-- Header (Dipastikan tidak menggunakan sticky/fixed, sehingga ikut bergeser ke atas saat discroll) -->
+    <!-- Header -->
     <header class="w-full max-w-6xl flex flex-col items-center justify-center gap-2 mb-6 text-center">
         <img src="logo.png" class="w-30 h-24 sm:w-30 sm:h-28 object-contain rounded-xl">
         <h1 class="text-lg sm:text-2xl font-bold text-white drop-shadow">SANDAGA MINISOCCER 2</h1>
@@ -93,7 +93,6 @@
         <div id="page-home" class="glass-panel p-3 sm:p-6 rounded-2xl">
             <h2 class="text-center font-bold mb-4 text-lg sm:text-xl text-cyan-300 drop-shadow tracking-wider">MAIN MENU</h2>
             
-            <!-- 4 TOMBOL UTAMA BERJEJER SATU-SATU KE BAWAH -->
             <div class="flex flex-col gap-3 mb-6">
                 <button onclick="showPage('booking')" class="glass-btn p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm w-full">BOOKING</button>
                 <button onclick="showPage('masuk')" class="glass-btn p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm w-full">UANG MASUK</button>
@@ -101,10 +100,8 @@
                 <button onclick="showPage('keluar')" class="glass-btn p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm w-full">UANG KELUAR</button>
             </div>
 
-            <!-- GARIS PEMISAH -->
             <hr class="border-t border-white/20 my-6">
 
-            <!-- HEADER RESULT & 3 TOMBOL TAMBAHAN -->
             <div class="space-y-3">
                 <h3 class="text-center font-bold text-lg sm:text-xl tracking-wider text-amber-300 drop-shadow uppercase">RESULT</h3>
                 <div class="flex flex-col gap-3">
@@ -115,7 +112,7 @@
             </div>
         </div>
 
-        <!-- HALAMAN BOOKING SCHEDULE (JADWAL LAPANGAN) -->
+        <!-- HALAMAN BOOKING SCHEDULE -->
         <div id="page-booking-schedule" class="glass-panel p-3 sm:p-6 rounded-2xl hidden">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="font-bold text-base sm:text-lg text-white drop-shadow">📅 Jadwal Lapangan (Member & Booking)</h2>
@@ -130,7 +127,6 @@
                     <div class="flex items-center gap-2 glass-panel-sub p-1.5 rounded-xl">
                         <label for="filter-periode-jadwal" class="text-xs font-medium text-white/90 pl-1">Pilih Periode:</label>
                         <select id="filter-periode-jadwal" onchange="renderGridJadwal()" class="p-1.5 rounded-lg text-xs glass-input">
-                            <!-- Diisi otomatis oleh JavaScript -->
                         </select>
                     </div>
                     <button onclick="showPage('atur-member')" class="bg-indigo-600/80 hover:bg-indigo-600 backdrop-blur text-white px-3 py-2 rounded-xl text-xs font-semibold border border-indigo-400/40 shadow">⚙️ Atur Member</button>
@@ -145,7 +141,6 @@
                 <span class="flex items-center gap-1.5"><span class="px-1.5 py-0.5 bg-slate-700 text-slate-300 rounded text-[10px] font-bold">DONE</span> Selesai</span>
             </div>
             
-            <!-- TABEL JADWAL MATRIX -->
             <div class="shadow-2xl rounded-xl border border-white/20 mb-4 overflow-hidden">
                 <table class="w-full text-center border-collapse text-[6px] sm:text-[10px] bg-black/30 backdrop-blur-md table-fixed">
                     <thead>
@@ -160,14 +155,12 @@
                             <th class="p-0.5 sm:p-2 border border-white/10">Min</th>
                         </tr>
                     </thead>
-                    <tbody id="grid-jadwal-gabung">
-                        <!-- Diisi otomatis oleh JavaScript -->
-                    </tbody>
+                    <tbody id="grid-jadwal-gabung"></tbody>
                 </table>
             </div>
         </div>
 
-        <!-- HALAMAN DAILY RECAP (REKAP KEUANGAN HARIAN) -->
+        <!-- HALAMAN DAILY RECAP -->
         <div id="page-daily-recap" class="glass-panel p-3 sm:p-6 rounded-2xl hidden">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="font-bold text-base sm:text-lg text-white drop-shadow">📊 REKAP KEUANGAN HARIAN</h2>
@@ -180,7 +173,7 @@
             </div>
 
             <div class="space-y-6">
-                <!-- 1. TABEL KHUSUS UANG LAPANGAN -->
+                <!-- 1. UANG LAPANGAN -->
                 <div class="space-y-2">
                     <div class="flex justify-between items-center">
                         <h3 class="font-bold text-xs sm:text-sm text-blue-200 flex items-center gap-1.5">⚽ 1. Uang Lapangan</h3>
@@ -208,19 +201,14 @@
                         <span id="subtotal-minuman" class="text-[10px] sm:text-xs font-bold text-amber-200 bg-slate-900/80 border border-white/10 px-2 py-1 rounded-lg">Total: Rp 0</span>
                     </div>
                     
-                    <!-- Box Ringkasan Minuman Per Jenis -->
-                    <div id="ringkasan-minuman-box" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                        <!-- Diisi otomatis oleh JS -->
-                    </div>
+                    <div id="ringkasan-minuman-box" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2"></div>
 
-                    <!-- Tombol Toggle Rincian Minuman -->
                     <div class="text-right pt-1">
                         <button type="button" onclick="toggleRincianMinuman()" id="btn-toggle-rincian" class="bg-amber-600/70 hover:bg-amber-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur border border-amber-400/40 shadow transition">
                             ▼ Lihat Rincian Transaksi Minuman
                         </button>
                     </div>
 
-                    <!-- TABEL RINCIAN MINUMAN (Hidden secara default) -->
                     <div id="container-tabel-minuman" class="shadow rounded-xl border border-white/10 bg-black/30 backdrop-blur-md overflow-hidden hidden mt-2">
                         <table class="w-full text-left text-[8px] sm:text-xs border-collapse table-fixed">
                             <thead>
@@ -236,7 +224,7 @@
                     </div>
                 </div>
 
-                <!-- 3. TABEL KHUSUS PENGELUARAN -->
+                <!-- 3. UANG KELUAR -->
                 <div class="space-y-2">
                     <div class="flex justify-between items-center">
                         <h3 class="font-bold text-xs sm:text-sm text-rose-200 flex items-center gap-1.5">💸 3. Uang Keluar / Pengeluaran</h3>
@@ -257,7 +245,6 @@
                     </div>
                 </div>
 
-                <!-- RINGKASAN UTAMA DI BAWAH -->
                 <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 sm:gap-4 pt-2">
                     <div class="glass-panel-sub p-3 sm:p-4 rounded-xl border border-emerald-500/30">
                         <p class="text-xs text-white/70 font-medium">Total Masuk (Cash)</p>
@@ -279,14 +266,13 @@
             </div>
         </div>
 
-        <!-- HALAMAN BOOKING HISTORY (DAFTAR RIWAYAT BOOKING) -->
+        <!-- HALAMAN BOOKING HISTORY -->
         <div id="page-booking-history" class="glass-panel p-3 sm:p-6 rounded-2xl hidden">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="font-bold text-base sm:text-lg text-white drop-shadow">📋 Daftar Riwayat Booking</h2>
                 <button type="button" onclick="showPage('home')" class="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur border border-white/30">Kembali</button>
             </div>
             
-            <!-- TABEL DAFTAR BOOKING HARIAN -->
             <div class="shadow-2xl rounded-xl border border-white/20 mb-4 overflow-hidden">
                 <table class="w-full text-center border-collapse text-[6px] sm:text-xs bg-black/30 backdrop-blur-md table-fixed">
                     <thead>
@@ -393,19 +379,47 @@
             </form>
         </div>
 
-        <!-- FORM UANG MASUK -->
+        <!-- FORM UANG MASUK (REVISI SESUAI PERMINTAAN) -->
         <div id="page-masuk" class="glass-panel p-4 sm:p-6 rounded-2xl hidden">
             <h2 class="text-base sm:text-lg font-bold mb-4 text-emerald-300">Uang Masuk / Pelunasan Lapangan</h2>
             <form onsubmit="submitData(event, 'pemasukan')">
-                <input type="text" id="in-ket" placeholder="Keterangan (Contoh: Pelunasan Tim A)" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
-                <input type="number" id="in-jumlah" placeholder="Nominal (Rp)" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
-                <label class="block text-xs font-medium mb-1 text-white/90">Metode Pembayaran</label>
-                <select id="in-metode" class="w-full p-2 rounded mb-3 text-sm glass-input">
-                    <option value="Cash">Cash</option>
-                    <option value="QRIS">QRIS</option>
-                    <option value="Transfer">Transfer</option>
+                
+                <label class="block text-xs font-medium mb-1 text-white/90">Pilih Tanggal Main / Pelunasan</label>
+                <input type="date" id="in-tgl" onchange="updateDropdownTimMasuk()" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
+
+                <!-- 1. Dropdown Nama Tim Sesuai Jadwal -->
+                <label class="block text-xs font-medium mb-1 text-white/90">Pilih Tim / Keterangan</label>
+                <select id="in-tim" onchange="updateJamMainMasuk()" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
+                    <option value="">-- Pilih Tanggal Terlebih Dahulu --</option>
                 </select>
-                <input type="date" id="in-tgl" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
+
+                <!-- 3. Jam Main Menyesuaikan Langsung dengan Jadwal -->
+                <label class="block text-xs font-medium mb-1 text-white/90">Jam Main (Otomatis)</label>
+                <input type="text" id="in-jam-main" placeholder="Jam main akan otomatis terisi" class="w-full p-2 rounded mb-3 text-sm glass-input bg-black/20" readonly>
+
+                <!-- 2. Pembayaran Dipisah Menjadi 2 Metode (Karena Sparring Bayar Masing-masing) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                    <div class="glass-panel-sub p-3 rounded-xl border border-emerald-400/30 space-y-2">
+                        <label class="block text-xs font-bold text-emerald-200">Pembayaran Tim 1</label>
+                        <input type="number" id="in-jumlah-1" placeholder="Nominal (Rp)" class="w-full p-2 rounded text-sm glass-input">
+                        <select id="in-metode-1" class="w-full p-2 rounded text-sm glass-input">
+                            <option value="Cash">Cash</option>
+                            <option value="QRIS">QRIS</option>
+                            <option value="Transfer">Transfer</option>
+                        </select>
+                    </div>
+
+                    <div class="glass-panel-sub p-3 rounded-xl border border-emerald-400/30 space-y-2">
+                        <label class="block text-xs font-bold text-emerald-200">Pembayaran Tim 2 (Opsional / Sparring)</label>
+                        <input type="number" id="in-jumlah-2" placeholder="Nominal (Rp)" class="w-full p-2 rounded text-sm glass-input">
+                        <select id="in-metode-2" class="w-full p-2 rounded text-sm glass-input">
+                            <option value="Cash">Cash</option>
+                            <option value="QRIS">QRIS</option>
+                            <option value="Transfer">Transfer</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="flex gap-2">
                     <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded text-sm font-semibold border border-emerald-400/40 shadow">Simpan</button>
                     <button type="button" onclick="showPage('home')" class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded text-sm font-semibold backdrop-blur border border-white/30">Kembali</button>
@@ -457,7 +471,6 @@
                 <label class="block text-xs font-medium mb-1 text-white/90">Tanggal Catat Pengeluaran</label>
                 <input type="date" id="k-tgl" class="w-full p-2 rounded mb-3 text-sm glass-input" required>
 
-                <!-- FITUR PILIH SUMBER CASH TANGGAL LAIN -->
                 <div class="glass-panel-sub p-3 rounded-xl border border-rose-400/30 mb-3 space-y-2">
                     <label class="block text-xs font-bold text-rose-200">Sumber Dana (Ambil dari Cash Tanggal Lain):</label>
                     <div class="flex items-center gap-2">
@@ -495,7 +508,6 @@
         const db = getDatabase(app);
         const storage = getStorage(app);
 
-        // Fungsi helper untuk mendapatkan tanggal lokal format YYYY-MM-DD secara akurat (menghindari selisih zona waktu UTC)
         function getLocalDateString(date = new Date()) {
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -503,7 +515,6 @@
             return `${year}-${month}-${day}`;
         }
 
-        // Inisialisasi Pilihan Periode Minggu pada Dropdown
         function initPeriodeDropdown() {
             let selectEl = document.getElementById('filter-periode-jadwal');
             if(!selectEl) return;
@@ -537,7 +548,10 @@
             let todayStr = getLocalDateString();
             if(document.getElementById('filter-tanggal')) document.getElementById('filter-tanggal').value = todayStr;
             if(document.getElementById('b-tanggal')) document.getElementById('b-tanggal').value = todayStr;
-            if(document.getElementById('in-tgl')) document.getElementById('in-tgl').value = todayStr;
+            if(document.getElementById('in-tgl')) {
+                document.getElementById('in-tgl').value = todayStr;
+                updateDropdownTimMasuk(); // Update dropdown tim otomatis sesuai tanggal hari ini
+            }
             if(document.getElementById('m-tgl')) document.getElementById('m-tgl').value = todayStr;
             if(document.getElementById('k-tgl')) document.getElementById('k-tgl').value = todayStr;
             if(document.getElementById('k-sumber-tgl')) document.getElementById('k-sumber-tgl').value = todayStr;
@@ -555,6 +569,9 @@
             if(id === 'keluar') {
                 cekSaldoSumberCash();
             }
+            if(id === 'masuk') {
+                updateDropdownTimMasuk();
+            }
         }
 
         window.toggleBukti = () => {
@@ -567,7 +584,6 @@
             }
         }
 
-        // Toggle untuk menampilkan/menyembunyikan tabel rincian minuman
         window.toggleRincianMinuman = () => {
             let container = document.getElementById('container-tabel-minuman');
             let btn = document.getElementById('btn-toggle-rincian');
@@ -606,7 +622,6 @@
             }
         }
 
-        // Fungsi menghitung sisa cash pada tanggal tertentu untuk validasi/informasi sumber dana
         window.cekSaldoSumberCash = () => {
             let tglSumber = document.getElementById('k-sumber-tgl').value;
             if(!tglSumber) return;
@@ -614,10 +629,11 @@
             let totalMasukCash = 0;
             let totalKeluar = 0;
 
-            // Hitung pemasukan cash pada tanggal sumber
             Object.values(globalCache.pemasukan).forEach(item => {
-                if(item.tgl === tglSumber && (item.metode || 'Cash') === 'Cash') {
-                    totalMasukCash += Number(item.jumlah || 0);
+                if(item.tgl === tglSumber) {
+                    if((item.metode1 || 'Cash') === 'Cash') totalMasukCash += Number(item.jumlah1 || 0);
+                    if((item.metode2 || 'Cash') === 'Cash') totalMasukCash += Number(item.jumlah2 || 0);
+                    if(!item.jumlah1 && (item.metode || 'Cash') === 'Cash') totalMasukCash += Number(item.jumlah || 0); // Support data lama
                 }
             });
 
@@ -633,9 +649,8 @@
                 }
             });
 
-            // Hitung pengeluaran yang mengambil dari tanggal sumber ini
             Object.values(globalCache.pengeluaran).forEach(item => {
-                let sumberDana = item.sumberTgl || item.tgl; // Support data lama & baru
+                let sumberDana = item.sumberTgl || item.tgl;
                 if(sumberDana === tglSumber) {
                     totalKeluar += Number(item.jumlah || 0);
                 }
@@ -646,6 +661,60 @@
             if(infoEl) {
                 infoEl.innerText = `Sisa Cash Tanggal ${tglSumber}: Rp ${sisaCash.toLocaleString('id-ID')}`;
             }
+        }
+
+        // Fungsi Memuat Dropdown Tim di Halaman Uang Masuk Berdasarkan Jadwal Hari Tersebut
+        window.updateDropdownTimMasuk = () => {
+            let tglInput = document.getElementById('in-tgl').value;
+            let selectTim = document.getElementById('in-tim');
+            if(!selectTim) return;
+            selectTim.innerHTML = `<option value="">-- Pilih Tim yang Main --</option>`;
+            document.getElementById('in-jam-main').value = "";
+
+            if(!tglInput) return;
+
+            let hariName = getNamaHari(tglInput);
+            let timBertanding = [];
+
+            // Ambil dari data member sesuai hari
+            listJam.forEach(jam => {
+                let cellData = (globalCache.member[jam] && globalCache.member[jam][hariName]) ? globalCache.member[jam][hariName] : null;
+                if(cellData && cellData.type !== 'off') {
+                    timBertanding.push({ nama: cellData.nama, jam: jam });
+                }
+            });
+
+            // Ambil juga dari data booking insidental pada tanggal tersebut
+            Object.values(globalCache.booking).forEach(b => {
+                if(b.tgl && b.tgl.split('T')[0] === tglInput) {
+                    let timePart = b.tgl.split('T')[1] ? b.tgl.split('T')[1].substring(0, 5) : "00:00";
+                    timBertanding.push({ nama: b.nama + " (Booking)", jam: timePart });
+                }
+            });
+
+            if(timBertanding.length > 0) {
+                timBertanding.forEach(t => {
+                    let opt = document.createElement('option');
+                    opt.value = t.nama;
+                    opt.setAttribute('data-jam', t.jam);
+                    opt.text = `${t.nama} (${t.jam})`;
+                    selectTim.appendChild(opt);
+                });
+            } else {
+                let opt = document.createElement('option');
+                opt.value = "Lainnya / Umum";
+                opt.setAttribute('data-jam', "-");
+                opt.text = "Lainnya / Umum (Tanpa Jadwal)";
+                selectTim.appendChild(opt);
+            }
+        }
+
+        // Mengisi Jam Main Otomatis Ketika Tim Dipilih
+        window.updateJamMainMasuk = () => {
+            let selectTim = document.getElementById('in-tim');
+            let selectedOption = selectTim.options[selectTim.selectedIndex];
+            let jam = selectedOption ? selectedOption.getAttribute('data-jam') : "";
+            document.getElementById('in-jam-main').value = jam || "-";
         }
 
         window.submitData = async (e, type) => {
@@ -676,11 +745,22 @@
                     bukti: url 
                 };
             } else if(type === 'pemasukan') {
+                let tim = document.getElementById('in-tim').value;
+                let jamMain = document.getElementById('in-jam-main').value;
+                let jml1 = Number(document.getElementById('in-jumlah-1').value || 0);
+                let met1 = document.getElementById('in-metode-1').value;
+                let jml2 = Number(document.getElementById('in-jumlah-2').value || 0);
+                let met2 = document.getElementById('in-metode-2').value;
+                let tgl = document.getElementById('in-tgl').value;
+
                 data = { 
-                    ket: document.getElementById('in-ket').value, 
-                    jumlah: Number(document.getElementById('in-jumlah').value),
-                    metode: document.getElementById('in-metode').value,
-                    tgl: document.getElementById('in-tgl').value
+                    ket: `Pelunasan ${tim} (${jamMain})`, 
+                    jumlah1: jml1,
+                    metode1: met1,
+                    jumlah2: jml2,
+                    metode2: met2,
+                    jumlah: jml1 + jml2, // Total gabungan untuk kompatibilitas rekap
+                    tgl: tgl
                 };
             } else if(type === 'minuman') {
                 data = { 
@@ -695,7 +775,7 @@
                     ket: document.getElementById('k-ket').value, 
                     jumlah: Number(document.getElementById('k-jumlah').value),
                     tgl: document.getElementById('k-tgl').value,
-                    sumberTgl: document.getElementById('k-sumber-tgl').value // Menyimpan tanggal asal cash diambil
+                    sumberTgl: document.getElementById('k-sumber-tgl').value 
                 };
             }
             await push(ref(db, type), data);
@@ -758,6 +838,7 @@
             renderGridJadwal();
             renderTabelBooking();
             renderRekapHarian();
+            updateDropdownTimMasuk();
         }
 
         onValue(ref(db, 'member'), (snapshot) => {
@@ -961,7 +1042,7 @@
             let totalKeluar = 0;
 
             let totalMasukCash = 0;
-            let totalMasukQrif = 0; // QRIS / Transfer
+            let totalMasukQrif = 0;
 
             let tLap = document.getElementById('tabel-lapangan');
             let tMin = document.getElementById('tabel-minuman');
@@ -984,20 +1065,33 @@
             Object.entries(globalCache.pemasukan).forEach(([key, item]) => {
                 if(item.tgl === selectedDate) {
                     hasLap = true;
-                    let nominal = Number(item.jumlah || 0);
-                    let metode = item.metode || 'Cash';
-                    totalLapangan += nominal;
+                    
+                    let jml1 = Number(item.jumlah1 || 0);
+                    let met1 = item.metode1 || 'Cash';
+                    let jml2 = Number(item.jumlah2 || 0);
+                    let met2 = item.metode2 || 'Cash';
 
-                    if (metode === 'Cash') {
-                        totalMasukCash += nominal;
-                    } else {
-                        totalMasukQrif += nominal;
+                    // Support data lama jika hanya menggunakan `jumlah` & `metode`
+                    if(!item.jumlah1 && item.jumlah) {
+                        jml1 = Number(item.jumlah);
+                        met1 = item.metode || 'Cash';
                     }
+
+                    if(jml1 > 0) {
+                        totalLapangan += jml1;
+                        if(met1 === 'Cash') totalMasukCash += jml1; else totalMasukQrif += jml1;
+                    }
+                    if(jml2 > 0) {
+                        totalLapangan += jml2;
+                        if(met2 === 'Cash') totalMasukCash += jml2; else totalMasukQrif += jml2;
+                    }
+
+                    let rincianMetodeText = jml2 > 0 ? `Tim1(${met1}), Tim2(${met2})` : `${met1}`;
 
                     tLap.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5">
                         <td class="p-1.5 sm:p-2 border border-white/10 font-medium truncate">${item.ket}</td>
-                        <td class="p-1.5 sm:p-2 border border-white/10 text-white/70 truncate">Masuk (${metode})</td>
-                        <td class="p-1.5 sm:p-2 border border-white/10 font-bold text-emerald-300 truncate">Rp ${nominal.toLocaleString('id-ID')}</td>
+                        <td class="p-1.5 sm:p-2 border border-white/10 text-white/70 truncate">${rincianMetodeText}</td>
+                        <td class="p-1.5 sm:p-2 border border-white/10 font-bold text-emerald-300 truncate">Rp ${(jml1 + jml2).toLocaleString('id-ID')}</td>
                         <td class="p-1.5 sm:p-2 border border-white/10 text-center"><button type="button" onclick="hapusDataKeuangan('pemasukan', '${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1.5 py-0.5 rounded text-[7px] sm:text-xs">Hapus</button></td>
                     </tr>`;
                 }
