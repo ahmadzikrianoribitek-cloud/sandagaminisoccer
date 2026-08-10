@@ -3,16 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Judul Website Anda</title>
+    <title>SANDAGA MINISOCCER 2 - Dashboard & Jadwal</title>
 
-    <!-- Tambahkan baris ini untuk ikon/logo website -->
+    <!-- Logo & Shortcut Website -->
     <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
 
-    <!-- Khusus untuk shortcut di HP (Android/iOS) -->
-    <link rel="apple-touch-icon" href="ikon.png">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minisoccer Dashboard & Jadwal - Liquid Glass</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { 
@@ -90,7 +86,7 @@
                     <div class="flex items-center gap-2 glass-panel-sub p-1.5 rounded-xl">
                         <label for="filter-periode-jadwal" class="text-xs font-medium text-white/90 pl-1">Pilih Periode:</label>
                         <select id="filter-periode-jadwal" onchange="renderGridJadwal()" class="p-1.5 rounded-lg text-xs glass-input">
-                            <!-- Diisi otomatis oleh JavaScript (Pilihan per minggu) -->
+                            <!-- Diisi otomatis oleh JavaScript -->
                         </select>
                     </div>
                     <button onclick="showPage('atur-member')" class="bg-indigo-600/80 hover:bg-indigo-600 backdrop-blur text-white px-3 py-2 rounded-xl text-xs font-semibold border border-indigo-400/40 shadow">⚙️ Atur Member</button>
@@ -100,24 +96,24 @@
             <div class="flex flex-wrap items-center gap-3 sm:gap-4 text-xs font-semibold mb-3 glass-panel-sub p-2.5 rounded-xl">
                 <span class="text-white font-bold">Keterangan:</span>
                 <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-blue-400/40 border border-blue-300 rounded"></span> Member (Biru)</span>
-                <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-rose-500/40 border border-rose-300 rounded"></span> Non-Member / Booking (Merah)</span>
-                <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-red-500/20 border border-red-500 border-dashed rounded"></span> OFF (Stempel Merah)</span>
-                <span class="flex items-center gap-1.5"><span class="px-1.5 py-0.5 bg-slate-700 text-slate-300 rounded text-[10px] font-bold">DONE</span> Hari Telah Berlalu</span>
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-rose-500/40 border border-rose-300 rounded"></span> Booking (Merah)</span>
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-red-500/20 border border-red-500 border-dashed rounded"></span> OFF</span>
+                <span class="flex items-center gap-1.5"><span class="px-1.5 py-0.5 bg-slate-700 text-slate-300 rounded text-[10px] font-bold">DONE</span> Selesai</span>
             </div>
             
-            <!-- TABEL JADWAL MATRIX (TANPA GESER / FULL LAYAR HP) -->
+            <!-- TABEL JADWAL MATRIX (PAS DI LAYAR HP / TANPA GESER) -->
             <div class="shadow-2xl rounded-xl border border-white/20 mb-8 overflow-hidden">
-                <table class="w-full text-center border-collapse text-[9px] sm:text-xs bg-black/30 backdrop-blur-md table-fixed">
+                <table class="w-full text-center border-collapse text-[8px] sm:text-xs bg-black/30 backdrop-blur-md table-fixed">
                     <thead>
                         <tr id="header-tabel-jadwal" class="bg-slate-900/80 text-white">
-                            <th class="p-1 sm:p-2 border border-white/10 w-9 sm:w-20">Jam</th>
-                            <th class="p-1 sm:p-2 border border-white/10">Senin</th>
-                            <th class="p-1 sm:p-2 border border-white/10">Selasa</th>
-                            <th class="p-1 sm:p-2 border border-white/10">Rabu</th>
-                            <th class="p-1 sm:p-2 border border-white/10">Kamis</th>
-                            <th class="p-1 sm:p-2 border border-white/10">Jumat</th>
-                            <th class="p-1 sm:p-2 border border-white/10">Sabtu</th>
-                            <th class="p-1 sm:p-2 border border-white/10">Minggu</th>
+                            <th class="p-0.5 sm:p-2 border border-white/10 w-8 sm:w-20">Jam</th>
+                            <th class="p-0.5 sm:p-2 border border-white/10">Sen</th>
+                            <th class="p-0.5 sm:p-2 border border-white/10">Sel</th>
+                            <th class="p-0.5 sm:p-2 border border-white/10">Rab</th>
+                            <th class="p-0.5 sm:p-2 border border-white/10">Kam</th>
+                            <th class="p-0.5 sm:p-2 border border-white/10">Jum</th>
+                            <th class="p-0.5 sm:p-2 border border-white/10">Sab</th>
+                            <th class="p-0.5 sm:p-2 border border-white/10">Min</th>
                         </tr>
                     </thead>
                     <tbody id="grid-jadwal-gabung">
@@ -126,7 +122,7 @@
                 </table>
             </div>
 
-            <!-- REKAP KEUANGAN TERPISAH (3 TABEL) -->
+            <!-- REKAP KEUANGAN TERPISAH (3 TABEL - PAS SATU LAYAR HP) -->
             <div class="glass-panel-sub p-3 sm:p-4 rounded-2xl mb-8 space-y-6">
                 <div class="flex flex-col sm:flex-row justify-between items-center gap-3">
                     <h2 class="font-bold text-base sm:text-lg text-white drop-shadow">📊 Rekap Keuangan Terpisah Harian</h2>
@@ -136,17 +132,17 @@
                 <!-- 1. TABEL KHUSUS UANG LAPANGAN -->
                 <div class="space-y-2">
                     <div class="flex justify-between items-center">
-                        <h3 class="font-bold text-sm text-blue-200 flex items-center gap-1.5">⚽ 1. Rincian Uang Lapangan</h3>
-                        <span id="subtotal-lapangan" class="text-xs font-bold text-blue-200 bg-blue-900/50 border border-blue-400/30 px-2.5 py-1 rounded-lg">Total: Rp 0</span>
+                        <h3 class="font-bold text-xs sm:text-sm text-blue-200 flex items-center gap-1.5">⚽ 1. Uang Lapangan</h3>
+                        <span id="subtotal-lapangan" class="text-[10px] sm:text-xs font-bold text-blue-200 bg-blue-900/50 border border-blue-400/30 px-2 py-1 rounded-lg">Total: Rp 0</span>
                     </div>
-                    <div class="overflow-x-auto shadow rounded-xl border border-white/10 bg-black/20 backdrop-blur [-webkit-overflow-scrolling:touch]">
-                        <table class="w-full text-left text-xs border-collapse min-w-[500px]">
+                    <div class="shadow rounded-xl border border-white/10 bg-black/20 backdrop-blur overflow-hidden">
+                        <table class="w-full text-left text-[9px] sm:text-xs border-collapse table-fixed">
                             <thead>
                                 <tr class="bg-blue-900/70 text-white border-b border-white/10">
-                                    <th class="p-2 border border-white/10">Tim / Keterangan</th>
-                                    <th class="p-2 border border-white/10">Detail / Metode</th>
-                                    <th class="p-2 border border-white/10">Jumlah (Rp)</th>
-                                    <th class="p-2 border border-white/10 text-center">Aksi</th>
+                                    <th class="p-1.5 sm:p-2 border border-white/10 w-[35%]">Tim / Ket</th>
+                                    <th class="p-1.5 sm:p-2 border border-white/10 w-[30%]">Detail</th>
+                                    <th class="p-1.5 sm:p-2 border border-white/10 w-[20%]">Jumlah</th>
+                                    <th class="p-1.5 sm:p-2 border border-white/10 text-center w-[15%]">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="tabel-lapangan"></tbody>
@@ -157,17 +153,17 @@
                 <!-- 2. TABEL KHUSUS MINUMAN -->
                 <div class="space-y-2">
                     <div class="flex justify-between items-center">
-                        <h3 class="font-bold text-sm text-amber-200 flex items-center gap-1.5">🥤 2. Rincian Penjualan Minuman</h3>
-                        <span id="subtotal-minuman" class="text-xs font-bold text-amber-200 bg-amber-900/50 border border-amber-400/30 px-2.5 py-1 rounded-lg">Total: Rp 0</span>
+                        <h3 class="font-bold text-xs sm:text-sm text-amber-200 flex items-center gap-1.5">🥤 2. Penjualan Minuman</h3>
+                        <span id="subtotal-minuman" class="text-[10px] sm:text-xs font-bold text-amber-200 bg-amber-900/50 border border-amber-400/30 px-2 py-1 rounded-lg">Total: Rp 0</span>
                     </div>
-                    <div class="overflow-x-auto shadow rounded-xl border border-white/10 bg-black/20 backdrop-blur [-webkit-overflow-scrolling:touch]">
-                        <table class="w-full text-left text-xs border-collapse min-w-[450px]">
+                    <div class="shadow rounded-xl border border-white/10 bg-black/20 backdrop-blur overflow-hidden">
+                        <table class="w-full text-left text-[9px] sm:text-xs border-collapse table-fixed">
                             <thead>
                                 <tr class="bg-amber-900/70 text-white border-b border-white/10">
-                                    <th class="p-2 border border-white/10">Nama Produk</th>
-                                    <th class="p-2 border border-white/10">Jumlah Pcs</th>
-                                    <th class="p-2 border border-white/10">Total Harga (Rp)</th>
-                                    <th class="p-2 border border-white/10 text-center">Aksi</th>
+                                    <th class="p-1.5 sm:p-2 border border-white/10 w-[40%]">Produk</th>
+                                    <th class="p-1.5 sm:p-2 border border-white/10 w-[20%]">Pcs</th>
+                                    <th class="p-1.5 sm:p-2 border border-white/10 w-[25%]">Total</th>
+                                    <th class="p-1.5 sm:p-2 border border-white/10 text-center w-[15%]">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="tabel-minuman"></tbody>
@@ -178,16 +174,16 @@
                 <!-- 3. TABEL KHUSUS PENGELUARAN -->
                 <div class="space-y-2">
                     <div class="flex justify-between items-center">
-                        <h3 class="font-bold text-sm text-rose-200 flex items-center gap-1.5">💸 3. Rincian Uang Keluar / Pengeluaran</h3>
-                        <span id="subtotal-keluar" class="text-xs font-bold text-rose-200 bg-rose-900/50 border border-rose-400/30 px-2.5 py-1 rounded-lg">Total: Rp 0</span>
+                        <h3 class="font-bold text-xs sm:text-sm text-rose-200 flex items-center gap-1.5">💸 3. Uang Keluar / Pengeluaran</h3>
+                        <span id="subtotal-keluar" class="text-[10px] sm:text-xs font-bold text-rose-200 bg-rose-900/50 border border-rose-400/30 px-2 py-1 rounded-lg">Total: Rp 0</span>
                     </div>
-                    <div class="overflow-x-auto shadow rounded-xl border border-white/10 bg-black/20 backdrop-blur [-webkit-overflow-scrolling:touch]">
-                        <table class="w-full text-left text-xs border-collapse min-w-[400px]">
+                    <div class="shadow rounded-xl border border-white/10 bg-black/20 backdrop-blur overflow-hidden">
+                        <table class="w-full text-left text-[9px] sm:text-xs border-collapse table-fixed">
                             <thead>
                                 <tr class="bg-rose-900/70 text-white border-b border-white/10">
-                                    <th class="p-2 border border-white/10">Keterangan Pengeluaran</th>
-                                    <th class="p-2 border border-white/10">Nominal (Rp)</th>
-                                    <th class="p-2 border border-white/10 text-center">Aksi</th>
+                                    <th class="p-1.5 sm:p-2 border border-white/10 w-[55%]">Keterangan</th>
+                                    <th class="p-1.5 sm:p-2 border border-white/10 w-[30%]">Nominal</th>
+                                    <th class="p-1.5 sm:p-2 border border-white/10 text-center w-[15%]">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="tabel-keluar"></tbody>
@@ -212,19 +208,18 @@
                 </div>
             </div>
 
-            <!-- TABEL DAFTAR BOOKING HARIAN (TANPA GESER / FULL LAYAR HP) -->
+            <!-- TABEL DAFTAR BOOKING HARIAN (PAS DI LAYAR HP / TANPA GESER) -->
             <h2 class="font-bold mb-4 text-base sm:text-lg text-white drop-shadow">📋 Daftar Riwayat Booking / Non-Member</h2>
             <div class="shadow-2xl rounded-xl border border-white/20 mb-8 overflow-hidden">
-                <table class="w-full text-center border-collapse text-[9px] sm:text-xs bg-black/30 backdrop-blur-md table-fixed">
+                <table class="w-full text-center border-collapse text-[8px] sm:text-xs bg-black/30 backdrop-blur-md table-fixed">
                     <thead>
                         <tr class="bg-slate-900/80 text-white">
-                            <th class="p-1 sm:p-2 border border-white/10 w-16 sm:w-28">Waktu</th>
-                            <th class="p-1 sm:p-2 border border-white/10">Tim</th>
-                            <th class="p-1 sm:p-2 border border-white/10 w-14 sm:w-24">Status</th>
-                            <th class="p-1 sm:p-2 border border-white/10 w-14 sm:w-24">DP</th>
-                            <th class="p-1 sm:p-2 border border-white/10 w-12 sm:w-20">Metode</th>
-                            <th class="p-1 sm:p-2 border border-white/10 w-10 sm:w-16">Bukti</th>
-                            <th class="p-1 sm:p-2 border border-white/10 w-10 sm:w-16">Aksi</th>
+                            <th class="p-1 sm:p-2 border border-white/10 w-[24%]">Waktu</th>
+                            <th class="p-1 sm:p-2 border border-white/10 w-[26%]">Tim</th>
+                            <th class="p-1 sm:p-2 border border-white/10 w-[14%]">Status</th>
+                            <th class="p-1 sm:p-2 border border-white/10 w-[16%]">DP</th>
+                            <th class="p-1 sm:p-2 border border-white/10 w-[10%]">Metode</th>
+                            <th class="p-1 sm:p-2 border border-white/10 w-[10%]">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="tabel-booking"></tbody>
@@ -260,14 +255,14 @@
             </form>
 
             <h3 class="font-bold text-sm text-white/90 mb-2">Daftar Jadwal / Member Aktif</h3>
-            <div class="overflow-x-auto max-h-60 border border-white/10 rounded-xl bg-black/20 backdrop-blur [-webkit-overflow-scrolling:touch]">
-                <table class="w-full text-left text-xs min-w-[400px]">
-                    <thead class="bg-slate-900/70 sticky top-0 text-white border-b border-white/10">
+            <div class="shadow rounded-xl border border-white/10 bg-black/20 backdrop-blur overflow-hidden">
+                <table class="w-full text-left text-xs table-fixed">
+                    <thead class="bg-slate-900/70 text-white border-b border-white/10">
                         <tr>
-                            <th class="p-2 border border-white/10">Tim / Keterangan</th>
-                            <th class="p-2 border border-white/10">Hari</th>
-                            <th class="p-2 border border-white/10">Jam</th>
-                            <th class="p-2 border border-white/10 text-center">Aksi</th>
+                            <th class="p-2 border border-white/10 w-[45%]">Tim / Keterangan</th>
+                            <th class="p-2 border border-white/10 w-[20%]">Hari</th>
+                            <th class="p-2 border border-white/10 w-[20%]">Jam</th>
+                            <th class="p-2 border border-white/10 text-center w-[15%]">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="tabel-list-member"></tbody>
@@ -609,7 +604,6 @@
                 { nama: "PIT FC", hari: "Senin", jam: "21:00" }, { nama: "TB UNITED", hari: "Rabu", jam: "21:00" }, { nama: "KPP FC", hari: "Jumat", jam: "21:00" }, { nama: "44 FC", hari: "Minggu", jam: "21:00" }
             ];
 
-            // Masukkan data default terlebih dahulu ke dalam cache
             defaultMembers.forEach(m => {
                 if(!globalCache.member[m.jam]) globalCache.member[m.jam] = {};
                 let isOff = (m.nama.toUpperCase() === 'OFF');
@@ -621,7 +615,7 @@
                     let m = child.val();
                     let key = child.key;
                     listTbody.innerHTML += `<tr class="border-b border-white/10">
-                        <td class="p-2 border border-white/10 font-medium">${m.nama}</td>
+                        <td class="p-2 border border-white/10 font-medium truncate">${m.nama}</td>
                         <td class="p-2 border border-white/10">${m.hari}</td>
                         <td class="p-2 border border-white/10">${m.jam}</td>
                         <td class="p-2 border border-white/10 text-center"><button type="button" onclick="hapusMember('${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
@@ -654,7 +648,7 @@
             let monday = mondayStrVal ? new Date(mondayStrVal) : new Date();
 
             let currentWeekDates = {};
-            let headerHtml = `<th class="p-1 sm:p-2 border border-white/10 w-9 sm:w-20">Jam</th>`;
+            let headerHtml = `<th class="p-0.5 sm:p-2 border border-white/10 w-8 sm:w-20">Jam</th>`;
 
             let optDateFormat = { day: 'numeric', month: 'short', year: 'numeric' };
             let formatDateShort = { day: 'numeric', month: 'numeric' };
@@ -692,11 +686,11 @@
                 tempDate.setHours(0,0,0,0);
                 let isFullDayPassed = tempDate < nowTime;
 
-                let badgeDone = isFullDayPassed ? `<div class="mt-0.5"><span class="px-1 py-0.5 bg-slate-700/90 text-amber-300 font-bold rounded text-[7px] sm:text-[9px] uppercase border border-slate-600">DONE</span></div>` : "";
+                let badgeDone = isFullDayPassed ? `<div class="mt-0.5"><span class="px-1 py-0.2 bg-slate-700/90 text-amber-300 font-bold rounded text-[6px] sm:text-[9px] uppercase border border-slate-600">DONE</span></div>` : "";
 
-                headerHtml += `<th class="p-1 sm:p-2 border border-white/10 align-middle">
+                headerHtml += `<th class="p-0.5 sm:p-2 border border-white/10 align-middle">
                     <div class="truncate">${h.nama.substring(0,3)}</div>
-                    <div class="text-[8px] sm:text-[10px] text-amber-300/90 font-normal">${labelTgl}</div>
+                    <div class="text-[7px] sm:text-[10px] text-amber-300/90 font-normal">${labelTgl}</div>
                     ${badgeDone}
                 </th>`;
             });
@@ -720,7 +714,7 @@
                             if(!matrix[jamFormat]) matrix[jamFormat] = {};
                             let isMemberBooking = (b.status === 'Member');
                             matrix[jamFormat][hariName] = { 
-                                nama: b.nama + (isMemberBooking ? " (M)" : " (Non-M)"), 
+                                nama: b.nama + (isMemberBooking ? " (M)" : " (Non)"), 
                                 type: isMemberBooking ? 'member' : 'nonmember' 
                             };
                         }
@@ -729,8 +723,8 @@
             });
 
             listJam.forEach(jam => {
-                let tr = `<tr class="border-b border-white/10 h-10 sm:h-14">`;
-                tr += `<td class="p-1 sm:p-2 border border-white/10 font-bold bg-black/40 text-white text-[8px] sm:text-xs">${jam}</td>`;
+                let tr = `<tr class="border-b border-white/10 h-8 sm:h-14">`;
+                tr += `<td class="p-0.5 sm:p-2 border border-white/10 font-bold bg-black/40 text-white text-[7px] sm:text-xs">${jam}</td>`;
                 
                 listHariKey.forEach(hari => {
                     let cellData = (matrix[jam] && matrix[jam][hari]) ? matrix[jam][hari] : null;
@@ -743,15 +737,15 @@
                         if(cellData.type === 'member') {
                             bgClass = "bg-blue-600/50 backdrop-blur text-blue-100 font-bold border border-blue-400/50 shadow-inner";
                         } else if(cellData.type === 'off') {
-                            bgClass = "bg-red-500/10 border-2 border-dashed border-red-600 text-red-600 font-black shadow-lg transform rotate-[-5deg] tracking-wider";
+                            bgClass = "bg-red-500/10 border border-dashed border-red-600 text-red-600 font-black shadow-lg";
                             textVal = "OFF";
                         } else {
                             bgClass = "bg-rose-600/70 backdrop-blur text-white font-bold border border-rose-400/50 shadow-inner";
                         }
                     }
 
-                    tr += `<td class="p-0.5 sm:p-2 ${bgClass} align-middle h-10 sm:h-14 overflow-hidden">
-                        <div class="flex items-center justify-center h-full text-[8px] sm:text-xs text-center leading-tight line-clamp-2">${textVal}</div>
+                    tr += `<td class="p-0.5 sm:p-1 ${bgClass} align-middle h-8 sm:h-14 overflow-hidden">
+                        <div class="flex items-center justify-center h-full text-[7px] sm:text-xs text-center leading-tight line-clamp-2">${textVal}</div>
                     </td>`;
                 });
                 tr += `</tr>`;
@@ -767,23 +761,22 @@
             if (Object.keys(data).length > 0) {
                 Object.entries(data).forEach(([key, item]) => {
                     let badgeStatus = item.status === 'Member' 
-                        ? '<span class="px-1.5 py-0.5 bg-blue-500/30 text-blue-200 border border-blue-400/40 rounded text-[8px] sm:text-xs font-bold">Member</span>' 
-                        : '<span class="px-1.5 py-0.5 bg-rose-500/30 text-rose-200 border border-rose-400/40 rounded text-[8px] sm:text-xs font-bold">Non-M</span>';
+                        ? '<span class="px-1 py-0.5 bg-blue-500/30 text-blue-200 border border-blue-400/40 rounded text-[7px] sm:text-xs font-bold">M</span>' 
+                        : '<span class="px-1 py-0.5 bg-rose-500/30 text-rose-200 border border-rose-400/40 rounded text-[7px] sm:text-xs font-bold">Non</span>';
 
                     let formattedTglJam = item.tgl ? item.tgl.replace('T', ' ') : '-';
 
-                    tbody.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5 h-10 sm:h-12">
-                        <td class="p-1 sm:p-2 border border-white/10 text-[8px] sm:text-xs leading-tight">${formattedTglJam}</td>
-                        <td class="p-1 sm:p-2 border border-white/10 font-medium text-[9px] sm:text-xs truncate">${item.nama}</td>
-                        <td class="p-1 sm:p-2 border border-white/10">${badgeStatus}</td>
-                        <td class="p-1 sm:p-2 border border-white/10 text-[8px] sm:text-xs">Rp ${Number(item.dp).toLocaleString('id-ID')}</td>
-                        <td class="p-1 sm:p-2 border border-white/10 text-[8px] sm:text-xs">${item.metode}</td>
-                        <td class="p-1 sm:p-2 border border-white/10 text-center">${item.bukti ? `<a href="${item.bukti}" target="_blank" class="text-blue-300 underline text-[8px] sm:text-xs">Lihat</a>` : '-'}</td>
-                        <td class="p-1 sm:p-2 border border-white/10 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1.5 py-0.5 rounded text-[8px] sm:text-xs">Hapus</button></td>
+                    tbody.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5 h-8 sm:h-12">
+                        <td class="p-1 border border-white/10 text-[7px] sm:text-xs leading-tight truncate">${formattedTglJam}</td>
+                        <td class="p-1 border border-white/10 font-medium text-[8px] sm:text-xs truncate">${item.nama}</td>
+                        <td class="p-1 border border-white/10">${badgeStatus}</td>
+                        <td class="p-1 border border-white/10 text-[7px] sm:text-xs truncate">Rp ${Number(item.dp).toLocaleString('id-ID')}</td>
+                        <td class="p-1 border border-white/10 text-[7px] sm:text-xs truncate">${item.metode}</td>
+                        <td class="p-1 border border-white/10 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1 py-0.5 rounded text-[7px] sm:text-xs">Hapus</button></td>
                     </tr>`;
                 });
             } else {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center p-4 text-white/50 text-xs">Belum ada data booking.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center p-4 text-white/50 text-xs">Belum ada data booking.</td></tr>`;
             }
         }
 
@@ -811,10 +804,10 @@
                     let nominal = Number(item.jumlah || 0);
                     totalLapangan += nominal;
                     tLap.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5">
-                        <td class="p-2 border border-white/10 font-medium">${item.ket}</td>
-                        <td class="p-2 border border-white/10 text-white/70">Uang Masuk / Pelunasan</td>
-                        <td class="p-2 border border-white/10 font-bold text-emerald-300">Rp ${nominal.toLocaleString('id-ID')}</td>
-                        <td class="p-2 border border-white/10 text-center"><button type="button" onclick="hapusDataKeuangan('pemasukan', '${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
+                        <td class="p-1.5 sm:p-2 border border-white/10 font-medium truncate">${item.ket}</td>
+                        <td class="p-1.5 sm:p-2 border border-white/10 text-white/70 truncate">Masuk/Lunas</td>
+                        <td class="p-1.5 sm:p-2 border border-white/10 font-bold text-emerald-300 truncate">Rp ${nominal.toLocaleString('id-ID')}</td>
+                        <td class="p-1.5 sm:p-2 border border-white/10 text-center"><button type="button" onclick="hapusDataKeuangan('pemasukan', '${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1.5 py-0.5 rounded text-[8px] sm:text-xs">Hapus</button></td>
                     </tr>`;
                 }
             });
@@ -824,12 +817,12 @@
                     hasLap = true;
                     let nominal = Number(item.dp || 0);
                     totalLapangan += nominal;
-                    let labelStatus = item.status === 'Member' ? 'Booking Member' : 'Booking DP';
+                    let labelStatus = item.status === 'Member' ? 'Member' : 'DP';
                     tLap.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5">
-                        <td class="p-2 border border-white/10 font-medium">Tim: ${item.nama}</td>
-                        <td class="p-2 border border-white/10 text-white/70">${labelStatus} (${item.metode})</td>
-                        <td class="p-2 border border-white/10 font-bold text-emerald-300">Rp ${nominal.toLocaleString('id-ID')}</td>
-                        <td class="p-2 border border-white/10 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
+                        <td class="p-1.5 sm:p-2 border border-white/10 font-medium truncate">${item.nama}</td>
+                        <td class="p-1.5 sm:p-2 border border-white/10 text-white/70 truncate">${labelStatus} (${item.metode})</td>
+                        <td class="p-1.5 sm:p-2 border border-white/10 font-bold text-emerald-300 truncate">Rp ${nominal.toLocaleString('id-ID')}</td>
+                        <td class="p-1.5 sm:p-2 border border-white/10 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1.5 py-0.5 rounded text-[8px] sm:text-xs">Hapus</button></td>
                     </tr>`;
                 }
             });
@@ -843,10 +836,10 @@
                     let pcs = Number(item.jumlahPcs || 0);
 
                     tMin.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5">
-                        <td class="p-2 border border-white/10 font-medium">${prod}</td>
-                        <td class="p-2 border border-white/10 text-white/70">${pcs} pcs</td>
-                        <td class="p-2 border border-white/10 font-bold text-amber-300">Rp ${nominal.toLocaleString('id-ID')}</td>
-                        <td class="p-2 border border-white/10 text-center"><button type="button" onclick="hapusDataKeuangan('minuman', '${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
+                        <td class="p-1.5 sm:p-2 border border-white/10 font-medium truncate">${prod}</td>
+                        <td class="p-1.5 sm:p-2 border border-white/10 text-white/70 truncate">${pcs}</td>
+                        <td class="p-1.5 sm:p-2 border border-white/10 font-bold text-amber-300 truncate">Rp ${nominal.toLocaleString('id-ID')}</td>
+                        <td class="p-1.5 sm:p-2 border border-white/10 text-center"><button type="button" onclick="hapusDataKeuangan('minuman', '${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1.5 py-0.5 rounded text-[8px] sm:text-xs">Hapus</button></td>
                     </tr>`;
                 }
             });
@@ -857,16 +850,16 @@
                     let nominal = Number(item.jumlah || 0);
                     totalKeluar += nominal;
                     tKel.innerHTML += `<tr class="border-b border-white/10 hover:bg-white/5">
-                        <td class="p-2 border border-white/10 font-medium">${item.ket}</td>
-                        <td class="p-2 border border-white/10 font-bold text-rose-300">Rp ${nominal.toLocaleString('id-ID')}</td>
-                        <td class="p-2 border border-white/10 text-center"><button type="button" onclick="hapusDataKeuangan('pengeluaran', '${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
+                        <td class="p-1.5 sm:p-2 border border-white/10 font-medium truncate">${item.ket}</td>
+                        <td class="p-1.5 sm:p-2 border border-white/10 font-bold text-rose-300 truncate">Rp ${nominal.toLocaleString('id-ID')}</td>
+                        <td class="p-1.5 sm:p-2 border border-white/10 text-center"><button type="button" onclick="hapusDataKeuangan('pengeluaran', '${key}')" class="bg-rose-500/80 hover:bg-rose-600 text-white px-1.5 py-0.5 rounded text-[8px] sm:text-xs">Hapus</button></td>
                     </tr>`;
                 }
             });
 
-            if(!hasLap) tLap.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-white/50 italic">Belum ada data uang lapangan pada tanggal ini.</td></tr>`;
-            if(!hasMin) tMin.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-white/50 italic">Belum ada penjualan minuman pada tanggal ini.</td></tr>`;
-            if(!hasKel) tKel.innerHTML = `<tr><td colspan="3" class="text-center p-3 text-white/50 italic">Belum ada pengeluaran pada tanggal ini.</td></tr>`;
+            if(!hasLap) tLap.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-white/50 italic text-[9px] sm:text-xs">Belum ada data uang lapangan.</td></tr>`;
+            if(!hasMin) tMin.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-white/50 italic text-[9px] sm:text-xs">Belum ada penjualan minuman.</td></tr>`;
+            if(!hasKel) tKel.innerHTML = `<tr><td colspan="3" class="text-center p-3 text-white/50 italic text-[9px] sm:text-xs">Belum ada pengeluaran.</td></tr>`;
 
             document.getElementById('subtotal-lapangan').innerText = "Total: Rp " + totalLapangan.toLocaleString('id-ID');
             document.getElementById('subtotal-minuman').innerText = "Total: Rp " + totalMinuman.toLocaleString('id-ID');
