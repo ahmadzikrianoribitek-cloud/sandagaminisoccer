@@ -492,6 +492,14 @@
         const db = getDatabase(app);
         const storage = getStorage(app);
 
+        // Fungsi helper untuk mendapatkan tanggal lokal format YYYY-MM-DD secara akurat (menghindari selisih zona waktu UTC)
+        function getLocalDateString(date = new Date()) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
         // Inisialisasi Pilihan Periode Minggu pada Dropdown
         function initPeriodeDropdown() {
             let selectEl = document.getElementById('filter-periode-jadwal');
@@ -508,7 +516,7 @@
                 let monday = new Date(new Date(d).setDate(diffToMonday));
                 let sunday = new Date(new Date(monday).setDate(monday.getDate() + 6));
 
-                let mondayStr = monday.toISOString().split('T')[0];
+                let mondayStr = getLocalDateString(monday);
                 let optLabel = `${monday.toLocaleDateString('id-ID', {day: 'numeric', month: 'short'})} s.d. ${sunday.toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'})}`;
 
                 let opt = document.createElement('option');
@@ -522,16 +530,19 @@
             }
         }
 
+        function setDefaultDates() {
+            let todayStr = getLocalDateString();
+            if(document.getElementById('filter-tanggal')) document.getElementById('filter-tanggal').value = todayStr;
+            if(document.getElementById('b-tanggal')) document.getElementById('b-tanggal').value = todayStr;
+            if(document.getElementById('in-tgl')) document.getElementById('in-tgl').value = todayStr;
+            if(document.getElementById('m-tgl')) document.getElementById('m-tgl').value = todayStr;
+            if(document.getElementById('k-tgl')) document.getElementById('k-tgl').value = todayStr;
+            if(document.getElementById('k-sumber-tgl')) document.getElementById('k-sumber-tgl').value = todayStr;
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
-            let today = new Date().toISOString().split('T')[0];
-            if(document.getElementById('filter-tanggal')) document.getElementById('filter-tanggal').value = today;
+            setDefaultDates();
             initPeriodeDropdown();
-            if(document.getElementById('b-tanggal')) document.getElementById('b-tanggal').value = today;
-            if(document.getElementById('in-tgl')) document.getElementById('in-tgl').value = today;
-            if(document.getElementById('m-tgl')) document.getElementById('m-tgl').value = today;
-            if(document.getElementById('k-tgl')) document.getElementById('k-tgl').value = today;
-            if(document.getElementById('k-sumber-tgl')) document.getElementById('k-sumber-tgl').value = today;
-            
             renderGridJadwal();
         });
 
@@ -687,12 +698,7 @@
             await push(ref(db, type), data);
             alert("Berhasil disimpan!");
             e.target.reset();
-            let today = new Date().toISOString().split('T')[0];
-            if(document.getElementById('b-tanggal')) document.getElementById('b-tanggal').value = today;
-            if(document.getElementById('in-tgl')) document.getElementById('in-tgl').value = today;
-            if(document.getElementById('m-tgl')) document.getElementById('m-tgl').value = today;
-            if(document.getElementById('k-tgl')) document.getElementById('k-tgl').value = today;
-            if(document.getElementById('k-sumber-tgl')) document.getElementById('k-sumber-tgl').value = today;
+            setDefaultDates();
             if(document.getElementById('m-select-pilihan')) document.getElementById('m-select-pilihan').value = "";
             
             toggleBukti();
@@ -834,7 +840,7 @@
             listHariMapping.forEach((h, idx) => {
                 let d = new Date(monday);
                 d.setDate(monday.getDate() + h.offset);
-                let dateStringFormatted = d.toISOString().split('T')[0];
+                let dateStringFormatted = getLocalDateString(d);
                 currentWeekDates[h.nama] = {
                     dateStr: dateStringFormatted,
                     fullDate: new Date(d.getTime())
