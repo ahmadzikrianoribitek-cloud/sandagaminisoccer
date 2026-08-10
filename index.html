@@ -197,7 +197,7 @@
             </div>
         </div>
 
-        <!-- HALAMAN DAILY RECAP -->
+        <!-- HALAMAN DAILY RECAP (UTAMA DENGAN 4 TOMBOL UTAMA) -->
         <div id="page-daily-recap" class="glass-panel p-3 sm:p-6 rounded-2xl hidden">
             <button type="button" onclick="showPage('home')" class="sticky-back-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
@@ -207,13 +207,32 @@
                 <h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm w-full text-center">📊 REKAP KEUANGAN HARIAN</h2>
             </div>
 
-            <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-6 p-3 rounded-xl border border-white/20">
-                <span class="text-xs text-slate-900 font-black uppercase tracking-wide">Pilih Tanggal Rekap:</span>
-                <input type="date" id="filter-tanggal" onchange="renderRekapHarian()" class="p-2 rounded-xl text-xs glass-input w-full sm:w-auto font-bold text-center">
+            <!-- 4 TOMBOL MENU UTAMA -->
+            <div id="daily-menu-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
+                <button onclick="showDailySub('lapangan')" class="glass-btn p-4 sm:p-6 rounded-2xl font-black shadow-lg transition text-sm sm:text-base flex flex-col items-center justify-center gap-2">
+                    <span class="text-2xl">⚽</span> UANG LAPANGAN
+                </button>
+                <button onclick="showDailySub('minuman')" class="glass-btn p-4 sm:p-6 rounded-2xl font-black shadow-lg transition text-sm sm:text-base flex flex-col items-center justify-center gap-2">
+                    <span class="text-2xl">🥤</span> MINUMAN
+                </button>
+                <button onclick="showDailySub('pengeluaran')" class="glass-btn p-4 sm:p-6 rounded-2xl font-black shadow-lg transition text-sm sm:text-base flex flex-col items-center justify-center gap-2">
+                    <span class="text-2xl">💸</span> PENGELUARAN
+                </button>
+                <button onclick="showDailySub('ringkasan')" class="glass-btn p-4 sm:p-6 rounded-2xl font-black shadow-lg transition text-sm sm:text-base flex flex-col items-center justify-center gap-2">
+                    <span class="text-2xl">📌</span> RINGKASAN
+                </button>
             </div>
 
-            <div class="space-y-6">
-                <!-- UANG LAPANGAN -->
+            <!-- KONTINOS SUB-MENU LAPANGAN -->
+            <div id="sub-page-lapangan" class="space-y-6 hidden">
+                <button type="button" onclick="backToDailyMenu()" class="sticky-back-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                    Kembali ke Menu Rekap
+                </button>
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4 p-3 rounded-xl border border-white/20">
+                    <span class="text-xs text-slate-900 font-black uppercase tracking-wide">Pilih Tanggal Rekap:</span>
+                    <input type="date" id="filter-tanggal-lapangan" onchange="syncFilterTanggal(this.value); renderRekapHarian()" class="p-2 rounded-xl text-xs glass-input w-full sm:w-auto font-bold text-center">
+                </div>
                 <section class="p-3 sm:p-5 rounded-2xl border border-blue-500/40 space-y-3 shadow-lg">
                     <div class="flex flex-col items-center justify-center text-center border-b border-blue-500/20 pb-3 gap-1">
                         <h3 id="title-lapangan" class="font-black text-sm sm:text-base text-blue-950 flex items-center justify-center gap-2 text-center w-full">⚽ UANG LAPANGAN</h3>
@@ -240,8 +259,18 @@
                         </table>
                     </div>
                 </section>
+            </div>
 
-                <!-- PENJUALAN MINUMAN -->
+            <!-- KONTINOS SUB-MENU MINUMAN -->
+            <div id="sub-page-minuman" class="space-y-6 hidden">
+                <button type="button" onclick="backToDailyMenu()" class="sticky-back-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                    Kembali ke Menu Rekap
+                </button>
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4 p-3 rounded-xl border border-white/20">
+                    <span class="text-xs text-slate-900 font-black uppercase tracking-wide">Pilih Tanggal Rekap:</span>
+                    <input type="date" id="filter-tanggal-minuman" onchange="syncFilterTanggal(this.value); renderRekapHarian()" class="p-2 rounded-xl text-xs glass-input w-full sm:w-auto font-bold text-center">
+                </div>
                 <section class="p-3 sm:p-5 rounded-2xl border border-amber-500/40 space-y-3 shadow-lg">
                     <div class="flex flex-col items-center justify-center text-center border-b border-amber-500/20 pb-3 gap-1">
                         <h3 id="title-minuman" class="font-black text-sm sm:text-base text-amber-950 flex items-center justify-center gap-2 text-center w-full">🥤 PENJUALAN MINUMAN</h3>
@@ -270,8 +299,18 @@
                         </table>
                     </div>
                 </section>
+            </div>
 
-                <!-- UANG KELUAR -->
+            <!-- KONTINOS SUB-MENU PENGELUARAN -->
+            <div id="sub-page-pengeluaran" class="space-y-6 hidden">
+                <button type="button" onclick="backToDailyMenu()" class="sticky-back-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                    Kembali ke Menu Rekap
+                </button>
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4 p-3 rounded-xl border border-white/20">
+                    <span class="text-xs text-slate-900 font-black uppercase tracking-wide">Pilih Tanggal Rekap:</span>
+                    <input type="date" id="filter-tanggal-keluar" onchange="syncFilterTanggal(this.value); renderRekapHarian()" class="p-2 rounded-xl text-xs glass-input w-full sm:w-auto font-bold text-center">
+                </div>
                 <section class="p-3 sm:p-5 rounded-2xl border border-rose-500/40 space-y-3 shadow-lg">
                     <div class="flex flex-col items-center justify-center text-center border-b border-rose-500/20 pb-3 gap-1">
                         <h3 id="title-keluar" class="font-black text-sm sm:text-base text-rose-950 flex items-center justify-center gap-2 text-center w-full">💸 PENGELUARAN</h3>
@@ -294,8 +333,18 @@
                         </table>
                     </div>
                 </section>
+            </div>
 
-                <!-- RINGKASAN AKHIR (REVISED MENU) -->
+            <!-- KONTINOS SUB-MENU RINGKASAN -->
+            <div id="sub-page-ringkasan" class="space-y-6 hidden">
+                <button type="button" onclick="backToDailyMenu()" class="sticky-back-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                    Kembali ke Menu Rekap
+                </button>
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4 p-3 rounded-xl border border-white/20">
+                    <span class="text-xs text-slate-900 font-black uppercase tracking-wide">Pilih Tanggal Rekap:</span>
+                    <input type="date" id="filter-tanggal-ringkasan" onchange="syncFilterTanggal(this.value); renderRekapHarian()" class="p-2 rounded-xl text-xs glass-input w-full sm:w-auto font-bold text-center">
+                </div>
                 <section class="p-3 sm:p-5 rounded-2xl border border-emerald-500/40 space-y-4 shadow-lg">
                     <div class="flex flex-col items-center justify-center text-center border-b border-emerald-500/20 pb-3 gap-1">
                         <h3 id="title-ringkasan-total" class="font-black text-sm sm:text-base text-emerald-950 flex items-center justify-center gap-2 text-center w-full">📌 RINGKASAN TOTAL KEUANGAN</h3>
@@ -728,7 +777,12 @@
         function setDefaultDates() {
             let todayStr = getLocalDateString();
             let todayYearMonth = todayStr.substring(0, 7);
-            if(document.getElementById('filter-tanggal')) document.getElementById('filter-tanggal').value = todayStr;
+            
+            ['filter-tanggal-lapangan', 'filter-tanggal-minuman', 'filter-tanggal-keluar', 'filter-tanggal-ringkasan'].forEach(id => {
+                let el = document.getElementById(id);
+                if(el) el.value = todayStr;
+            });
+
             if(document.getElementById('filter-bulan')) document.getElementById('filter-bulan').value = todayYearMonth;
             if(document.getElementById('b-tanggal')) document.getElementById('b-tanggal').value = todayStr;
             if(document.getElementById('in-tgl')) {
@@ -746,10 +800,42 @@
             renderGridJadwal();
         });
 
+        window.showDailySub = (sub) => {
+            document.getElementById('daily-menu-grid').classList.add('hidden');
+            ['lapangan', 'minuman', 'pengeluaran', 'ringkasan'].forEach(s => {
+                let el = document.getElementById('sub-page-' + s);
+                if(el) el.classList.add('hidden');
+            });
+            let targetEl = document.getElementById('sub-page-' + sub);
+            if(targetEl) targetEl.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            renderRekapHarian();
+        }
+
+        window.backToDailyMenu = () => {
+            ['lapangan', 'minuman', 'pengeluaran', 'ringkasan'].forEach(s => {
+                let el = document.getElementById('sub-page-' + s);
+                if(el) el.classList.add('hidden');
+            });
+            document.getElementById('daily-menu-grid').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.syncFilterTanggal = (val) => {
+            ['filter-tanggal-lapangan', 'filter-tanggal-minuman', 'filter-tanggal-keluar', 'filter-tanggal-ringkasan'].forEach(id => {
+                let el = document.getElementById(id);
+                if(el) el.value = val;
+            });
+        }
+
         window.showPage = (id) => {
             document.querySelectorAll('main > div').forEach(div => div.classList.add('hidden'));
             document.getElementById('page-' + id).classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if(id === 'daily-recap') {
+                backToDailyMenu();
+            }
 
             // Mengganti Background Body Berdasarkan Halaman yang Aktif
             if(id === 'home') {
@@ -1086,7 +1172,7 @@
         onValue(ref(db, 'member'), (snapshot) => {
             globalCache.member = {};
             let listTbody = document.getElementById('tabel-list-member');
-            listTbody.innerHTML = "";
+            if (listTbody) listTbody.innerHTML = "";
             
             let defaultMembers = [
                 { nama: "DALPA FC", hari: "Jumat", jam: "07:00" }, { nama: "DALPA FC", hari: "Jumat", jam: "08:00" }, { nama: "DALPA FC", hari: "Jumat", jam: "09:00" },
@@ -1107,12 +1193,14 @@
                 snapshot.forEach((child) => {
                     let m = child.val();
                     let key = child.key;
-                    listTbody.innerHTML += `<tr class="border-b border-slate-900/40">
-                        <td class="p-2 border border-slate-900/40 font-bold">${m.nama}</td>
-                        <td class="p-2 border border-slate-900/40">${m.hari}</td>
-                        <td class="p-2 border border-slate-900/40">${m.jam}</td>
-                        <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusMember('${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
-                    </tr>`;
+                    if(listTbody) {
+                        listTbody.innerHTML += `<tr class="border-b border-slate-900/40">
+                            <td class="p-2 border border-slate-900/40 font-bold">${m.nama}</td>
+                            <td class="p-2 border border-slate-900/40">${m.hari}</td>
+                            <td class="p-2 border border-slate-900/40">${m.jam}</td>
+                            <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusMember('${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
+                        </tr>`;
+                    }
                     if(!globalCache.member[m.jam]) globalCache.member[m.jam] = {};
                     let isOff = (m.nama.toUpperCase() === 'OFF');
                     globalCache.member[m.jam][m.hari] = { nama: m.nama, type: isOff ? 'off' : 'member' };
@@ -1227,26 +1315,38 @@
             });
         }
 
+        window.renderTabelBooking = () => {
+            let tbody = document.getElementById('tabel-booking');
+            if(!tbody) return;
+            tbody.innerHTML = "";
+            Object.entries(globalCache.booking).forEach(([key, item]) => {
+                tbody.innerHTML += `<tr class="border-b border-slate-900/40 font-bold">
+                    <td class="p-2 border border-slate-900/40">${item.tgl}</td>
+                    <td class="p-2 border border-slate-900/40">${item.nama}</td>
+                    <td class="p-2 border border-slate-900/40">${item.status}</td>
+                    <td class="p-2 border border-slate-900/40">Rp ${Number(item.dp || 0).toLocaleString('id-ID')}</td>
+                    <td class="p-2 border border-slate-900/40">${item.metode || 'Cash'}</td>
+                    <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
+                </tr>`;
+            });
+        }
+
         window.renderRekapHarian = () => {
-            let filterTgl = document.getElementById('filter-tanggal').value;
+            let filterTgl = document.getElementById('filter-tanggal-lapangan').value;
             if(!filterTgl) return;
 
             let formattedFullDate = formatTanggalFull(filterTgl);
 
-            // Update label hari dan tanggal di setiap bagian rekap harian
-            let labelLapangan = document.getElementById('label-tanggal-lapangan');
-            let labelMinuman = document.getElementById('label-tanggal-minuman');
-            let labelKeluar = document.getElementById('label-tanggal-keluar');
-            let labelRingkasan = document.getElementById('label-tanggal-ringkasan');
-
-            if(labelLapangan) labelLapangan.innerText = formattedFullDate;
-            if(labelMinuman) labelMinuman.innerText = formattedFullDate;
-            if(labelKeluar) labelKeluar.innerText = formattedFullDate;
-            if(labelRingkasan) labelRingkasan.innerText = formattedFullDate;
+            ['label-tanggal-lapangan', 'label-tanggal-minuman', 'label-tanggal-keluar', 'label-tanggal-ringkasan'].forEach(id => {
+                let el = document.getElementById(id);
+                if(el) el.innerText = formattedFullDate;
+            });
 
             // --- TABEL UANG LAPANGAN ---
             let tbodyLapangan = document.getElementById('tabel-lapangan');
-            tbodyLapangan.innerHTML = "";
+            if(tbodyLapangan) {
+                tbodyLapangan.innerHTML = "";
+            }
             let totalLapangan = 0, totalLapanganCash = 0, totalLapanganQrif = 0;
 
             Object.entries(globalCache.pemasukan).forEach(([key, item]) => {
@@ -1269,12 +1369,14 @@
                         detailTxt += `<br>Tim 2: Rp ${jml2.toLocaleString('id-ID')} (${met2})`;
                     }
 
-                    tbodyLapangan.innerHTML += `<tr class="border-b border-slate-900/40 text-center font-bold">
-                        <td class="p-2 border border-slate-900/40 text-left">${item.ket}</td>
-                        <td class="p-2 border border-slate-900/40 text-xs">${detailTxt}</td>
-                        <td class="p-2 border border-slate-900/40 text-emerald-900 font-black">Rp ${subTotalItem.toLocaleString('id-ID')}</td>
-                        <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusDataKeuangan('pemasukan', '${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
-                    </tr>`;
+                    if(tbodyLapangan) {
+                        tbodyLapangan.innerHTML += `<tr class="border-b border-slate-900/40 text-center font-bold">
+                            <td class="p-2 border border-slate-900/40 text-left">${item.ket}</td>
+                            <td class="p-2 border border-slate-900/40 text-xs">${detailTxt}</td>
+                            <td class="p-2 border border-slate-900/40 text-emerald-900 font-black">Rp ${subTotalItem.toLocaleString('id-ID')}</td>
+                            <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusDataKeuangan('pemasukan', '${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
+                        </tr>`;
+                    }
                 }
             });
 
@@ -1285,20 +1387,22 @@
                     totalLapangan += dpVal;
                     if(metode === 'Cash') totalLapanganCash += dpVal; else totalLapanganQrif += dpVal;
 
-                    tbodyLapangan.innerHTML += `<tr class="border-b border-slate-900/40 text-center font-bold">
-                        <td class="p-2 border border-slate-900/40 text-left">DP Booking: ${item.nama} (${item.status})</td>
-                        <td class="p-2 border border-slate-900/40 text-xs">Metode: ${metode}</td>
-                        <td class="p-2 border border-slate-900/40 text-emerald-900 font-black">Rp ${dpVal.toLocaleString('id-ID')}</td>
-                        <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
-                    </tr>`;
+                    if(tbodyLapangan) {
+                        tbodyLapangan.innerHTML += `<tr class="border-b border-slate-900/40 text-center font-bold">
+                            <td class="p-2 border border-slate-900/40 text-left">DP Booking: ${item.nama} (${item.status})</td>
+                            <td class="p-2 border border-slate-900/40 text-xs">Metode: ${metode}</td>
+                            <td class="p-2 border border-slate-900/40 text-emerald-900 font-black">Rp ${dpVal.toLocaleString('id-ID')}</td>
+                            <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
+                        </tr>`;
+                    }
                 }
             });
 
             // --- TABEL PENJUALAN MINUMAN ---
             let tbodyMinuman = document.getElementById('tabel-minuman');
             let ringkasanMinumanBox = document.getElementById('ringkasan-minuman-box');
-            tbodyMinuman.innerHTML = "";
-            ringkasanMinumanBox.innerHTML = "";
+            if(tbodyMinuman) tbodyMinuman.innerHTML = "";
+            if(ringkasanMinumanBox) ringkasanMinumanBox.innerHTML = "";
             let totalMinuman = 0, totalMinumanCash = 0, totalMinumanQrif = 0;
             let rekapProdukQty = {};
 
@@ -1313,27 +1417,31 @@
                     if(!rekapProdukQty[item.produk]) rekapProdukQty[item.produk] = 0;
                     rekapProdukQty[item.produk] += pcs;
 
-                    tbodyMinuman.innerHTML += `<tr class="border-b border-slate-900/40 text-center font-bold">
-                        <td class="p-2 border border-slate-900/40 text-left">${item.produk}</td>
-                        <td class="p-2 border border-slate-900/40">${pcs} Pcs</td>
-                        <td class="p-2 border border-slate-900/40 text-amber-900 font-black">Rp ${tot.toLocaleString('id-ID')} (${met})</td>
-                        <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusDataKeuangan('minuman', '${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
-                    </tr>`;
+                    if(tbodyMinuman) {
+                        tbodyMinuman.innerHTML += `<tr class="border-b border-slate-900/40 text-center font-bold">
+                            <td class="p-2 border border-slate-900/40 text-left">${item.produk}</td>
+                            <td class="p-2 border border-slate-900/40">${pcs} Pcs</td>
+                            <td class="p-2 border border-slate-900/40 text-amber-900 font-black">Rp ${tot.toLocaleString('id-ID')} (${met})</td>
+                            <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusDataKeuangan('minuman', '${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
+                        </tr>`;
+                    }
                 }
             });
 
             Object.entries(rekapProdukQty).forEach(([prodName, qty]) => {
-                ringkasanMinumanBox.innerHTML += `
-                    <div class="p-2.5 rounded-xl border border-amber-600/40 bg-white/30 text-center shadow">
-                        <p class="text-xs text-slate-900 font-bold">${prodName}</p>
-                        <p class="text-sm font-black text-amber-950">${qty} Pcs Terjual</p>
-                    </div>
-                `;
+                if(ringkasanMinumanBox) {
+                    ringkasanMinumanBox.innerHTML += `
+                        <div class="p-2.5 rounded-xl border border-amber-600/40 bg-white/30 text-center shadow">
+                            <p class="text-xs text-slate-900 font-bold">${prodName}</p>
+                            <p class="text-sm font-black text-amber-950">${qty} Pcs Terjual</p>
+                        </div>
+                    `;
+                }
             });
 
             // --- TABEL UANG KELUAR / PENGELUARAN ---
             let tbodyKeluar = document.getElementById('tabel-keluar');
-            tbodyKeluar.innerHTML = "";
+            if(tbodyKeluar) tbodyKeluar.innerHTML = "";
             let totalKeluar = 0;
 
             Object.entries(globalCache.pengeluaran).forEach(([key, item]) => {
@@ -1344,12 +1452,14 @@
                         totalKeluar += nominal;
                     }
 
-                    tbodyKeluar.innerHTML += `<tr class="border-b border-slate-900/40 text-center font-bold">
-                        <td class="p-2 border border-slate-900/40 text-left">${item.ket} (Catat: ${item.tgl})</td>
-                        <td class="p-2 border border-slate-900/40 text-xs">Dari Cash: ${sumberTanggal}</td>
-                        <td class="p-2 border border-slate-900/40 text-rose-800 font-black">Rp ${nominal.toLocaleString('id-ID')}</td>
-                        <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusDataKeuangan('pengeluaran', '${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
-                    </tr>`;
+                    if(tbodyKeluar) {
+                        tbodyKeluar.innerHTML += `<tr class="border-b border-slate-900/40 text-center font-bold">
+                            <td class="p-2 border border-slate-900/40 text-left">${item.ket} (Catat: ${item.tgl})</td>
+                            <td class="p-2 border border-slate-900/40 text-xs">Dari Cash: ${sumberTanggal}</td>
+                            <td class="p-2 border border-slate-900/40 text-rose-800 font-black">Rp ${nominal.toLocaleString('id-ID')}</td>
+                            <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusDataKeuangan('pengeluaran', '${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
+                        </tr>`;
+                    }
                 }
             });
 
@@ -1357,33 +1467,42 @@
             let totalSisaCash = sisaCashLapangan + totalMinumanCash;
 
             // Render Subtotals
-            document.getElementById('subtotal-lapangan').innerHTML = `
-                <span class="bg-white/60 border border-blue-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalLapangan.toLocaleString('id-ID')}</span>
-                <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp ${totalLapanganCash.toLocaleString('id-ID')}</span>
-                <span class="bg-white/60 border border-sky-500/40 px-2.5 py-1 rounded-lg text-sky-800 shadow font-black">QRIS/TF: Rp ${totalLapanganQrif.toLocaleString('id-ID')}</span>
-                <span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg text-rose-800 shadow font-black">Pengeluaran: Rp ${totalKeluar.toLocaleString('id-ID')}</span>
-                <span class="bg-white/60 border border-indigo-500/40 px-2.5 py-1 rounded-lg text-indigo-800 shadow font-black">Sisa Cash: Rp ${sisaCashLapangan.toLocaleString('id-ID')}</span>
-            `;
+            let subtotalLap = document.getElementById('subtotal-lapangan');
+            if(subtotalLap) {
+                subtotalLap.innerHTML = `
+                    <span class="bg-white/60 border border-blue-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalLapangan.toLocaleString('id-ID')}</span>
+                    <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp ${totalLapanganCash.toLocaleString('id-ID')}</span>
+                    <span class="bg-white/60 border border-sky-500/40 px-2.5 py-1 rounded-lg text-sky-800 shadow font-black">QRIS/TF: Rp ${totalLapanganQrif.toLocaleString('id-ID')}</span>
+                    <span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg text-rose-800 shadow font-black">Pengeluaran: Rp ${totalKeluar.toLocaleString('id-ID')}</span>
+                    <span class="bg-white/60 border border-indigo-500/40 px-2.5 py-1 rounded-lg text-indigo-800 shadow font-black">Sisa Cash: Rp ${sisaCashLapangan.toLocaleString('id-ID')}</span>
+                `;
+            }
 
-            document.getElementById('subtotal-minuman').innerHTML = `
-                <span class="bg-white/60 border border-amber-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalMinuman.toLocaleString('id-ID')}</span>
-                <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp ${totalMinumanCash.toLocaleString('id-ID')}</span>
-                <span class="bg-white/60 border border-sky-500/40 px-2.5 py-1 rounded-lg text-sky-800 shadow font-black">QRIS/TF: Rp ${totalMinumanQrif.toLocaleString('id-ID')}</span>
-            `;
+            let subtotalMin = document.getElementById('subtotal-minuman');
+            if(subtotalMin) {
+                subtotalMin.innerHTML = `
+                    <span class="bg-white/60 border border-amber-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalMinuman.toLocaleString('id-ID')}</span>
+                    <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp ${totalMinumanCash.toLocaleString('id-ID')}</span>
+                    <span class="bg-white/60 border border-sky-500/40 px-2.5 py-1 rounded-lg text-sky-800 shadow font-black">QRIS/TF: Rp ${totalMinumanQrif.toLocaleString('id-ID')}</span>
+                `;
+            }
 
-            document.getElementById('subtotal-keluar').innerHTML = `
-                <span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalKeluar.toLocaleString('id-ID')}</span>
-            `;
+            let subtotalKel = document.getElementById('subtotal-keluar');
+            if(subtotalKel) {
+                subtotalKel.innerHTML = `
+                    <span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalKeluar.toLocaleString('id-ID')}</span>
+                `;
+            }
 
             // Render Ringkasan Akhir Keuangan
-            document.getElementById('rekap-lapangan-cash').innerText = `Rp ${totalLapanganCash.toLocaleString('id-ID')}`;
-            document.getElementById('rekap-lapangan-qrif').innerText = `Rp ${totalLapanganQrif.toLocaleString('id-ID')}`;
-            document.getElementById('rekap-minuman-cash').innerText = `Rp ${totalMinumanCash.toLocaleString('id-ID')}`;
-            document.getElementById('rekap-minuman-qrif').innerText = `Rp ${totalMinumanQrif.toLocaleString('id-ID')}`;
-            document.getElementById('rekap-keluar').innerText = `Rp ${totalKeluar.toLocaleString('id-ID')}`;
-            document.getElementById('rekap-sisa-cash-lapangan').innerText = `Rp ${sisaCashLapangan.toLocaleString('id-ID')}`;
-            document.getElementById('rekap-sisa-cash-minuman').innerText = `Rp ${totalMinumanCash.toLocaleString('id-ID')}`;
-            document.getElementById('rekap-total-sisa-cash').innerText = `Rp ${totalSisaCash.toLocaleString('id-ID')}`;
+            if(document.getElementById('rekap-lapangan-cash')) document.getElementById('rekap-lapangan-cash').innerText = `Rp ${totalLapanganCash.toLocaleString('id-ID')}`;
+            if(document.getElementById('rekap-lapangan-qrif')) document.getElementById('rekap-lapangan-qrif').innerText = `Rp ${totalLapanganQrif.toLocaleString('id-ID')}`;
+            if(document.getElementById('rekap-minuman-cash')) document.getElementById('rekap-minuman-cash').innerText = `Rp ${totalMinumanCash.toLocaleString('id-ID')}`;
+            if(document.getElementById('rekap-minuman-qrif')) document.getElementById('rekap-minuman-qrif').innerText = `Rp ${totalMinumanQrif.toLocaleString('id-ID')}`;
+            if(document.getElementById('rekap-keluar')) document.getElementById('rekap-keluar').innerText = `Rp ${totalKeluar.toLocaleString('id-ID')}`;
+            if(document.getElementById('rekap-sisa-cash-lapangan')) document.getElementById('rekap-sisa-cash-lapangan').innerText = `Rp ${sisaCashLapangan.toLocaleString('id-ID')}`;
+            if(document.getElementById('rekap-sisa-cash-minuman')) document.getElementById('rekap-sisa-cash-minuman').innerText = `Rp ${totalMinumanCash.toLocaleString('id-ID')}`;
+            if(document.getElementById('rekap-total-sisa-cash')) document.getElementById('rekap-total-sisa-cash').innerText = `Rp ${totalSisaCash.toLocaleString('id-ID')}`;
         }
 
         window.renderMonthlyRecap = () => {
@@ -1403,9 +1522,9 @@
             let namaBulanStr = dateObjName.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' }).toUpperCase();
             let judulJudulRekap = `REKAP BULAN ${namaBulanStr}`;
 
-            document.getElementById('monthly-title-1').innerText = `${judulJudulRekap} (Tgl 1 - 11)`;
-            document.getElementById('monthly-title-2').innerText = `${judulJudulRekap} (Tgl 12 - 22)`;
-            document.getElementById('monthly-title-3').innerText = `${judulJudulRekap} (Tgl 23 - Selesai)`;
+            if(document.getElementById('monthly-title-1')) document.getElementById('monthly-title-1').innerText = `${judulJudulRekap} (Tgl 1 - 11)`;
+            if(document.getElementById('monthly-title-2')) document.getElementById('monthly-title-2').innerText = `${judulJudulRekap} (Tgl 12 - 22)`;
+            if(document.getElementById('monthly-title-3')) document.getElementById('monthly-title-3').innerText = `${judulJudulRekap} (Tgl 23 - Selesai)`;
 
             let daysInMonth = new Date(year, month, 0).getDate(); // Jumlah hari dalam bulan tsb
 
@@ -1420,9 +1539,9 @@
                 return html;
             };
 
-            document.getElementById('monthly-header-row-1').innerHTML = createHeader(1, Math.min(11, daysInMonth));
-            document.getElementById('monthly-header-row-2').innerHTML = createHeader(12, Math.min(22, daysInMonth));
-            document.getElementById('monthly-header-row-3').innerHTML = createHeader(23, daysInMonth);
+            if(document.getElementById('monthly-header-row-1')) document.getElementById('monthly-header-row-1').innerHTML = createHeader(1, Math.min(11, daysInMonth));
+            if(document.getElementById('monthly-header-row-2')) document.getElementById('monthly-header-row-2').innerHTML = createHeader(12, Math.min(22, daysInMonth));
+            if(document.getElementById('monthly-header-row-3')) document.getElementById('monthly-header-row-3').innerHTML = createHeader(23, daysInMonth);
 
             let recapData = {};
             for(let d = 1; d <= daysInMonth; d++) {
@@ -1554,219 +1673,36 @@
                 rTimBooking[targetBagian] += `<td class="p-1 border border-slate-900/40 font-bold text-center">${numTimBooking > 0 ? numTimBooking : 0}</td>`;
                 rTimMain[targetBagian] += `<td class="p-1 border border-slate-900/40 font-bold text-center">${numTimMain > 0 ? numTimMain : 0}</td>`;
                 rJmlJam[targetBagian] += `<td class="p-1 border border-slate-900/40 font-bold text-center">${numJamBooking > 0 ? numJamBooking : 0}</td>`;
-                rJmlCancel[targetBagian] += `<td class="p-1 border border-slate-900/40 text-rose-700 font-black text-center">${cancelCount > 0 ? cancelCount : 0}</td>`;
-                rTotalJamMain[targetBagian] += `<td class="p-1 border border-slate-900/40 text-cyan-950 font-black text-center">${actualJamMain > 0 ? actualJamMain : 0}</td>`;
+                rJmlCancel[targetBagian] += `<td class="p-1 border border-slate-900/40 font-bold text-center">${cancelCount > 0 ? cancelCount : 0}</td>`;
+                rTotalJamMain[targetBagian] += `<td class="p-1 border border-slate-900/40 font-bold text-center">${actualJamMain > 0 ? actualJamMain : 0}</td>`;
             }
 
-            let renderTableSection = (partNum) => {
-                let tbodyEl = document.getElementById(`monthly-tbody-${partNum}`);
-                if(!tbodyEl) return;
-
-                let makeRow = (title, htmlContent) => `<tr class="border-b border-slate-900/40 text-center"><td class="p-1.5 border border-slate-900/40 text-center font-black bg-slate-900 text-white">${title}</td>${htmlContent}</tr>`;
-                
-                tbodyEl.innerHTML = 
-                    makeRow("Jumlah Tim Booking", rTimBooking[partNum].replace("Jumlah Tim Booking", "")) +
-                    makeRow("Jumlah Tim Main", rTimMain[partNum].replace("Jumlah Tim Main", "")) +
-                    makeRow("Jumlah Jam Booking", rJmlJam[partNum].replace("Jumlah Jam Booking", "")) +
-                    makeRow("Jumlah Cancel", rJmlCancel[partNum].replace("Jumlah Cancel", "")) +
-                    `<tr class="bg-cyan-950/60 font-black text-center"><td class="p-1.5 border border-slate-900/40 text-center bg-cyan-900 text-white font-black">Jumlah Aktual Jam Main</td>` + rTotalJamMain[partNum].replace("Jumlah Aktual Jam Main", "") + `</tr>`;
+            let buildMonthlyTableBody = (partNum) => {
+                let html = ``;
+                html += `<tr><td class="p-1.5 border border-slate-900/40 text-left font-black bg-cyan-900/40">Jumlah Tim Booking</td>${rTimBooking[partNum]}</tr>`;
+                html += `<tr><td class="p-1.5 border border-slate-900/40 text-left font-black bg-cyan-900/40">Jumlah Tim Main</td>${rTimMain[partNum]}</tr>`;
+                html += `<tr><td class="p-1.5 border border-slate-900/40 text-left font-black bg-cyan-900/40">Jumlah Jam Booking</td>${rJmlJam[partNum]}</tr>`;
+                html += `<tr><td class="p-1.5 border border-slate-900/40 text-left font-black bg-cyan-900/40">Jumlah Cancel</td>${rJmlCancel[partNum]}</tr>`;
+                html += `<tr><td class="p-1.5 border border-slate-900/40 text-left font-black bg-cyan-900/40">Jumlah Aktual Jam Main</td>${rTotalJamMain[partNum]}</tr>`;
+                return html;
             };
 
-            renderTableSection(1);
-            renderTableSection(2);
-            renderTableSection(3);
-
-            totalJamBulanEl.innerText = totalJam1Bulan;
+            if(document.getElementById('monthly-tbody-1')) document.getElementById('monthly-tbody-1').innerHTML = buildMonthlyTableBody(1);
+            if(document.getElementById('monthly-tbody-2')) document.getElementById('monthly-tbody-2').innerHTML = buildMonthlyTableBody(2);
+            if(document.getElementById('monthly-tbody-3')) document.getElementById('monthly-tbody-3').innerHTML = buildMonthlyTableBody(3);
 
             if(summaryTbody) {
                 summaryTbody.innerHTML = `
-                    <tr class="border-b border-slate-900/40 text-center"><td class="p-2 border border-slate-900/40 text-center font-black">Akumulasi Jumlah Tim Booking (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black text-amber-950 text-center">${totalTimBookingBulan} Tim</td></tr>
-                    <tr class="border-b border-slate-900/40 text-center"><td class="p-2 border border-slate-900/40 text-center font-black">Akumulasi Jumlah Tim Main (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black text-emerald-950 text-center">${totalTimMainBulan} Tim</td></tr>
-                    <tr class="border-b border-slate-900/40 text-center"><td class="p-2 border border-slate-900/40 text-center font-black">Akumulasi Jumlah Jam Booking (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black text-cyan-950 text-center">${totalJamBookingBulan} Jam</td></tr>
-                    <tr class="border-b border-slate-900/40 text-center"><td class="p-2 border border-slate-900/40 text-center font-black">Akumulasi Jumlah Cancel (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black text-rose-700 text-center">${totalCancelBulan} Jadwal</td></tr>
-                    <tr class="bg-amber-950/25 font-black text-center"><td class="p-2 border border-slate-900/40 text-center font-black">Akumulasi Jumlah Aktual Jam Main (1 Bulan)</td><td class="p-2 border border-slate-900/40 text-amber-950 text-base font-black text-center">${totalJamMainBulan} Jam</td></tr>
+                    <tr class="border-b border-slate-900/40"><td class="p-2 border border-slate-900/40 text-left font-bold">Total Tim Booking (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black">${totalTimBookingBulan} Tim</td></tr>
+                    <tr class="border-b border-slate-900/40"><td class="p-2 border border-slate-900/40 text-left font-bold">Total Tim Main (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black">${totalTimMainBulan} Tim</td></tr>
+                    <tr class="border-b border-slate-900/40"><td class="p-2 border border-slate-900/40 text-left font-bold">Total Jam Booking (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black">${totalJamBookingBulan} Jam</td></tr>
+                    <tr class="border-b border-slate-900/40"><td class="p-2 border border-slate-900/40 text-left font-bold">Total Cancel (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black">${totalCancelBulan} Tim/Slot</td></tr>
+                    <tr class="border-b border-slate-900/40"><td class="p-2 border border-slate-900/40 text-left font-bold">Total Aktual Jam Main (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black text-amber-700">${totalJamMainBulan} Jam</td></tr>
                 `;
             }
-        }
 
-        window.downloadMonthlyRecapCSV = () => {
-            let filterBulanEl = document.getElementById('filter-bulan');
-            let selectedYearMonth = filterBulanEl ? filterBulanEl.value : getLocalDateString().substring(0, 7);
-            if(!selectedYearMonth) {
-                alert("Pilih bulan terlebih dahulu!");
-                return;
-            }
-
-            let [yearStr, monthStr] = selectedYearMonth.split('-');
-            let year = parseInt(yearStr);
-            let month = parseInt(monthStr);
-            let daysInMonth = new Date(year, month, 0).getDate();
-
-            let todayObj = new Date();
-            todayObj.setHours(0,0,0,0);
-
-            let dateObjName = new Date(year, month - 1, 1);
-            let namaBulanStr = dateObjName.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' }).toUpperCase();
-
-            let recapData = {};
-            for(let d = 1; d <= daysInMonth; d++) {
-                let dayFormatted = String(d).padStart(2, '0');
-                let monthFormatted = String(month).padStart(2, '0');
-                let dateStr = `${year}-${monthFormatted}-${dayFormatted}`;
-                recapData[d] = {
-                    dateStr: dateStr,
-                    hariName: getNamaHari(dateStr),
-                    scheduledSchedules: []
-                };
-            }
-
-            for(let d = 1; d <= daysInMonth; d++) {
-                let info = recapData[d];
-                let hName = info.hariName;
-                listJam.forEach(jam => {
-                    let cell = (globalCache.member[jam] && globalCache.member[jam][hName]) ? globalCache.member[jam][hName] : null;
-                    if(cell && cell.type !== 'off' && cell.nama) {
-                        let cleanName = cell.nama.toUpperCase().trim();
-                        info.scheduledSchedules.push({ nama: cleanName, jam: jam, source: 'member' });
-                    }
-                });
-
-                Object.values(globalCache.booking).forEach(b => {
-                    if(b.tgl && b.tgl.split('T')[0] === info.dateStr) {
-                        let cleanName = (b.nama || "").toUpperCase().trim();
-                        let timePart = b.tgl.split('T')[1] ? b.tgl.split('T')[1].substring(0, 5) : "07:00";
-                        if(cleanName) {
-                            info.scheduledSchedules.push({ nama: cleanName, jam: timePart, source: 'booking' });
-                        }
-                    }
-                });
-            }
-
-            let paidRecordsPerDate = {};
-            Object.values(globalCache.pemasukan).forEach(p => {
-                if(p.tgl && p.tgl.startsWith(selectedYearMonth)) {
-                    let dNum = parseInt(p.tgl.split('-')[2]);
-                    if(!paidRecordsPerDate[dNum]) paidRecordsPerDate[dNum] = [];
-                    let tName = p.timNamaBersih ? p.timNamaBersih.toUpperCase().trim() : (p.ket ? p.ket.toUpperCase().trim() : "");
-                    if(tName) {
-                        let jamDurasi = 1;
-                        if(p.ket && p.ket.includes('(') && p.ket.includes(')')) {
-                            let matchJam = p.ket.match(/\((.*?)\)/);
-                            if(matchJam && matchJam[1].includes('-')) {
-                                let parts = matchJam[1].split('-');
-                                if(parts.length === 2) {
-                                    let startH = parseInt(parts[0].split(':')[0]);
-                                    let endH = parseInt(parts[1].split(':')[0]);
-                                    if(!isNaN(startH) && !isNaN(endH) && endH > startH) jamDurasi = endH - startH;
-                                }
-                            }
-                        }
-                        paidRecordsPerDate[dNum].push({ nama: tName, jamDurasi: jamDurasi });
-                    }
-                }
-            });
-
-            let csvRows = [];
-            let totalKolom = daysInMonth + 1; 
-
-            let mergedHeaderArr = new Array(totalKolom).fill("");
-            mergedHeaderArr[0] = `REKAP BULAN ${namaBulanStr}`;
-            csvRows.push(mergedHeaderArr.map(val => `"${val}"`).join(","));
-
-            let headerRow = ["Keterangan"];
-            for(let d = 1; d <= daysInMonth; d++) {
-                headerRow.push(d); 
-            }
-            csvRows.push(headerRow.map(val => `"${val}"`).join(","));
-
-            let rowTimBookingArr = ["Jumlah Tim Booking"];
-            let rowTimMainArr = ["Jumlah Tim Main"];
-            let rowJumlahJamArr = ["Jumlah Jam Booking"];
-            let rowJumlahCancelArr = ["Jumlah Cancel"];
-            let rowTotalJamMainArr = ["Jumlah Aktual Jam Main"];
-
-            for(let d = 1; d <= daysInMonth; d++) {
-                let info = recapData[d];
-                let cellDateObj = new Date(year, month - 1, d);
-                cellDateObj.setHours(0,0,0,0);
-                let isFutureDate = cellDateObj > todayObj;
-
-                let schedules = info.scheduledSchedules;
-                let paidList = paidRecordsPerDate[d] || [];
-
-                let uniqueBookingTeams = new Set();
-                schedules.forEach(s => uniqueBookingTeams.add(s.nama));
-                let numTimBooking = uniqueBookingTeams.size;
-                let numJamBooking = schedules.length;
-
-                let actualPaidTeamsSet = new Set();
-                let actualJamMain = 0;
-
-                schedules.forEach(s => {
-                    let matchedPaid = paidList.find(p => p.nama.includes(s.nama) || s.nama.includes(p.nama));
-                    if(matchedPaid) {
-                        actualPaidTeamsSet.add(s.nama);
-                        actualJamMain += matchedPaid.jamDurasi;
-                    }
-                });
-
-                paidList.forEach(p => {
-                    let isAlreadyInSchedule = schedules.some(s => p.nama.includes(s.nama) || s.nama.includes(p.nama));
-                    if(!isAlreadyInSchedule) {
-                        actualPaidTeamsSet.add(p.nama);
-                        actualJamMain += p.jamDurasi;
-                    }
-                });
-
-                let numTimMain = actualPaidTeamsSet.size;
-                let cancelCount = isFutureDate ? 0 : Math.max(0, numTimBooking - numTimMain);
-
-                rowTimBookingArr.push(numTimBooking > 0 ? numTimBooking : 0);
-                rowTimMainArr.push(numTimMain > 0 ? numTimMain : 0);
-                rowJumlahJamArr.push(numJamBooking > 0 ? numJamBooking : 0);
-                rowJumlahCancelArr.push(cancelCount > 0 ? cancelCount : 0);
-                rowTotalJamMainArr.push(actualJamMain > 0 ? actualJamMain : 0);
-            }
-
-            csvRows.push(rowTimBookingArr.map(val => `"${val}"`).join(","));
-            csvRows.push(rowTimMainArr.map(val => `"${val}"`).join(","));
-            csvRows.push(rowJumlahJamArr.map(val => `"${val}"`).join(","));
-            csvRows.push(rowJumlahCancelArr.map(val => `"${val}"`).join(","));
-            csvRows.push(rowTotalJamMainArr.map(val => `"${val}"`).join(","));
-
-            let csvContent = "data:text/csv;charset=utf-8,\uFEFF" + csvRows.join("\n");
-            let encodedUri = encodeURI(csvContent);
-            let link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `Rekap_Bulanan_${selectedYearMonth}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        function renderTabelBooking() {
-            let tbody = document.getElementById('tabel-booking');
-            if(!tbody) return;
-            tbody.innerHTML = "";
-            let data = globalCache.booking;
-            
-            if (Object.keys(data).length > 0) {
-                Object.entries(data).forEach(([key, item]) => {
-                    let badgeStatus = item.status === 'Member' 
-                        ? '<span class="px-1 py-0.5 bg-blue-700 text-white border border-blue-400 rounded text-[6px] sm:text-xs font-black">M</span>' 
-                        : '<span class="px-1 py-0.5 bg-rose-700 text-white border border-rose-400 rounded text-[6px] sm:text-xs font-black">Non</span>';
-
-                    let formattedTglJam = item.tgl ? item.tgl.replace('T', ' ') : '-';
-
-                    tbody.innerHTML += `<tr class="border-b border-slate-900/40 hover:bg-white/10 font-bold text-center">
-                        <td class="p-2 border border-slate-900/40 text-[10px] sm:text-xs leading-tight text-center">${formattedTglJam}</td>
-                        <td class="p-2 border border-slate-900/40 font-black text-[10px] sm:text-xs text-center">${item.nama}</td>
-                        <td class="p-2 border border-slate-900/40 text-center">${badgeStatus}</td>
-                        <td class="p-2 border border-slate-900/40 text-[10px] sm:text-xs text-center">Rp ${Number(item.dp).toLocaleString('id-ID')}</td>
-                        <td class="p-2 border border-slate-900/40 text-[10px] sm:text-xs text-center">${item.metode}</td>
-                        <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
-                    </tr>`;
-                });
+            if(totalJamBulanEl) {
+                totalJamBulanEl.innerText = totalJamMainBulan;
             }
         }
     </script>
