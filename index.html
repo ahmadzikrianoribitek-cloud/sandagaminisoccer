@@ -84,98 +84,17 @@
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium">
 
     <!-- Header -->
-    <header class="w-full max-w-6xl flex flex-col items-center justify-center gap-2 mb-6 text-center relative">
-        <!-- Tombol Ikon Kunci Admin di Kanan Atas -->
-        <button onclick="bukaModalAdmin()" class="absolute right-0 top-0 glass-btn p-2.5 rounded-xl shadow-lg transition flex items-center justify-center" title="Login Admin">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
-            </svg>
-        </button>
-
+    <header class="w-full max-w-6xl flex flex-col items-center justify-center gap-2 mb-6 text-center">
         <img src="logo.png" class="w-30 h-24 sm:w-30 sm:h-28 object-contain rounded-xl">
         <h1 class="text-lg sm:text-2xl font-black text-slate-900 drop-shadow-sm">SANDAGA MINISOCCER 2</h1>
     </header>
 
     <main class="w-full max-w-6xl space-y-6">
         
-        <!-- MODAL PASSWORD ADMIN -->
-        <div id="modal-admin" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
-            <div class="glass-panel p-6 rounded-2xl w-full max-w-sm space-y-4 shadow-2xl bg-white/30">
-                <div class="flex justify-between items-center">
-                    <h3 class="font-black text-base sm:text-lg text-slate-900">🔐 Login Panel Admin</h3>
-                    <button type="button" onclick="tutupModalAdmin()" class="text-slate-900 font-bold text-sm">✕</button>
-                </div>
-                <p class="text-xs text-slate-800">Masukkan password untuk masuk ke dashboard admin.</p>
-                <form onsubmit="prosesLoginAdmin(event)" class="space-y-3">
-                    <input type="password" id="admin-password" placeholder="Password Admin" class="p-2 rounded text-sm glass-input font-bold" required>
-                    <div class="flex gap-2 justify-end">
-                        <button type="button" onclick="tutupModalAdmin()" class="bg-white/40 hover:bg-white/60 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold border border-white/50 shadow">Batal</button>
-                        <button type="submit" class="bg-slate-900 text-white px-4 py-1.5 rounded-lg text-xs font-bold shadow">Masuk</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- HALAMAN UTAMA / BERANDA (CUSTOMER BOOKING) -->
-        <div id="page-home" class="glass-panel p-4 sm:p-6 rounded-2xl">
-            <h2 class="text-center font-black mb-2 text-lg sm:text-xl text-blue-900 drop-shadow-sm tracking-wider">BOOKING LAPANGAN</h2>
-            <p class="text-center text-xs text-slate-800 mb-6 font-semibold">Silakan pilih tanggal dan jam kosong di bawah ini untuk melakukan pemesanan.</p>
+        <!-- BERANDA -->
+        <div id="page-home" class="glass-panel p-3 sm:p-6 rounded-2xl">
+            <h2 class="text-center font-black mb-4 text-lg sm:text-xl text-blue-900 drop-shadow-sm tracking-wider">MAIN MENU</h2>
             
-            <form onsubmit="submitCustomerBooking(event)" class="space-y-4">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold mb-1 text-slate-900">Pilih Tanggal Main</label>
-                        <input type="date" id="cust-tanggal" onchange="loadJamKosongCustomer()" class="w-full p-2.5 rounded-xl text-sm glass-input font-bold" required>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold mb-1 text-slate-900">Pilih Jam Kosong</label>
-                        <select id="cust-jam" class="w-full p-2.5 rounded-xl text-sm glass-input font-bold" required>
-                            <option value="">-- Pilih Tanggal Terlebih Dahulu --</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold mb-1 text-slate-900">Nama Tim / Pemesan</label>
-                    <input type="text" id="cust-nama" placeholder="Contoh: Sandaga FC" class="w-full p-2.5 rounded-xl text-sm glass-input font-bold" required>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold mb-1 text-slate-900">Jumlah DP (Rp)</label>
-                        <select id="cust-dp" class="w-full p-2.5 rounded-xl text-sm glass-input font-bold" required>
-                            <option value="">-- Pilih Nominal DP (Min. 100rb) --</option>
-                            <option value="100000">Rp 100.000</option>
-                            <option value="150000">Rp 150.000</option>
-                            <option value="200000">Rp 200.000</option>
-                            <option value="250000">Rp 250.000</option>
-                            <option value="300000">Rp 300.000</option>
-                            <option value="350000">Rp 350.000</option>
-                            <option value="400000">Rp 400.000</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold mb-1 text-slate-900">Metode Pembayaran DP</label>
-                        <select id="cust-metode" class="w-full p-2.5 rounded-xl text-sm glass-input font-bold" required>
-                            <option value="QRIS">QRIS</option>
-                            <option value="Transfer">Transfer</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="pt-2">
-                    <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white p-3 rounded-xl text-sm font-bold shadow-lg border border-blue-500/50 uppercase tracking-wider transition">Kirim Booking Sekarang</button>
-                </div>
-            </form>
-        </div>
-
-        <!-- DASHBOARD ADMIN (MENU UTAMA ADMIN) -->
-        <div id="page-admin-dashboard" class="glass-panel p-3 sm:p-6 rounded-2xl hidden">
-            <div class="flex justify-between items-center mb-4 border-b border-slate-900/20 pb-3">
-                <h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm">PANEL ADMIN DASHBOARD</h2>
-                <button type="button" onclick="showPage('home')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold backdrop-blur border border-white/50 shadow">Keluar / Beranda</button>
-            </div>
-
             <div class="flex flex-col gap-3 mb-6">
                 <button onclick="showPage('booking')" class="glass-btn p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm w-full">BOOKING</button>
                 <button onclick="showPage('masuk')" class="glass-btn p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm w-full">UANG MASUK</button>
@@ -200,7 +119,7 @@
         <div id="page-booking-schedule" class="glass-panel p-3 sm:p-6 rounded-2xl hidden">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm">📅 Jadwal Lapangan (Member & Booking)</h2>
-                <button type="button" onclick="showPage('admin-dashboard')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
+                <button type="button" onclick="showPage('home')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
             </div>
 
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
@@ -248,7 +167,7 @@
         <div id="page-daily-recap" class="glass-panel p-3 sm:p-6 rounded-2xl hidden">
             <div class="flex justify-between items-center mb-4 border-b border-slate-900/20 pb-3">
                 <h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm">📊 REKAP KEUANGAN HARIAN</h2>
-                <button type="button" onclick="showPage('admin-dashboard')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
+                <button type="button" onclick="showPage('home')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
             </div>
 
             <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-6 p-3 rounded-xl border border-white/20">
@@ -265,8 +184,6 @@
                             <span class="bg-white/60 border border-blue-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp 0</span>
                             <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp 0</span>
                             <span class="bg-white/60 border border-sky-500/40 px-2.5 py-1 rounded-lg text-sky-800 shadow font-black">QRIS/TF: Rp 0</span>
-                            <span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg text-rose-800 shadow font-black">Pengeluaran: Rp 0</span>
-                            <span class="bg-white/60 border border-indigo-500/40 px-2.5 py-1 rounded-lg text-indigo-800 shadow font-black">Total (Cash - Keluar): Rp 0</span>
                         </div>
                     </div>
                     <div class="shadow rounded-xl border border-white/30 bg-white/20 backdrop-blur-md overflow-hidden">
@@ -341,22 +258,22 @@
                     <div class="flex flex-col items-center justify-center text-center border-b border-emerald-500/20 pb-3 gap-1">
                         <h3 id="title-ringkasan-total" class="font-black text-sm sm:text-base text-emerald-950 flex items-center justify-center gap-2">📌 RINGKASAN TOTAL KEUANGAN</h3>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 font-bold">
-                        <div class="p-3 sm:p-4 rounded-xl border border-blue-600/50 text-center shadow bg-white/30">
-                            <p class="text-xs text-slate-900 font-bold mb-1">Uang Lapangan (Bersih)</p>
-                            <p id="rekap-lapangan-bersih" class="text-base sm:text-lg font-black text-blue-900">Rp 0</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 sm:gap-4 font-bold">
+                        <div class="p-3 sm:p-4 rounded-xl border border-emerald-600/50 text-center shadow bg-white/30">
+                            <p class="text-xs text-slate-900 font-bold mb-1">Total Masuk (Cash)</p>
+                            <p id="rekap-masuk-cash" class="text-base sm:text-lg font-black text-emerald-700">Rp 0</p>
                         </div>
-                        <div class="p-3 sm:p-4 rounded-xl border border-amber-600/50 text-center shadow bg-white/30">
-                            <p class="text-xs text-slate-900 font-bold mb-1">Uang Minuman (Bersih)</p>
-                            <p id="rekap-minuman-bersih" class="text-base sm:text-lg font-black text-amber-900">Rp 0</p>
+                        <div class="p-3 sm:p-4 rounded-xl border border-sky-600/50 text-center shadow bg-white/30">
+                            <p class="text-xs text-slate-900 font-bold mb-1">Total Masuk (QRIS / TF)</p>
+                            <p id="rekap-masuk-qrif" class="text-base sm:text-lg font-black text-sky-800">Rp 0</p>
                         </div>
                         <div class="p-3 sm:p-4 rounded-xl border border-rose-600/50 text-center shadow bg-white/30">
                             <p class="text-xs text-slate-900 font-bold mb-1">Total Keluar</p>
                             <p id="rekap-keluar" class="text-base sm:text-lg font-black text-rose-700">Rp 0</p>
                         </div>
-                        <div class="p-3 sm:p-4 rounded-xl border border-emerald-600/50 text-center shadow bg-white/30">
-                            <p class="text-xs text-slate-900 font-bold mb-1">Total Saldo Bersih Keseluruhan</p>
-                            <p id="rekap-saldo-cash" class="text-base sm:text-lg font-black text-emerald-800">Rp 0</p>
+                        <div class="p-3 sm:p-4 rounded-xl border border-indigo-600/50 text-center shadow bg-white/30">
+                            <p class="text-xs text-slate-900 font-bold mb-1">Saldo Bersih (Cash - Keluar)</p>
+                            <p id="rekap-saldo-cash" class="text-base sm:text-lg font-black text-indigo-800">Rp 0</p>
                         </div>
                     </div>
                 </section>
@@ -367,7 +284,7 @@
         <div id="page-monthly-recap" class="glass-panel p-3 sm:p-6 rounded-2xl hidden">
             <div class="flex justify-between items-center mb-4 border-b border-slate-900/20 pb-3">
                 <h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm">📅 REKAP BULANAN LAPANGAN</h2>
-                <button type="button" onclick="showPage('admin-dashboard')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
+                <button type="button" onclick="showPage('home')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
             </div>
 
             <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4 p-3 rounded-xl border border-white/20">
@@ -380,11 +297,11 @@
                 <button type="button" onclick="downloadMonthlyRecapCSV()" class="bg-emerald-700 hover:bg-emerald-800 backdrop-blur text-white px-4 py-2 rounded-xl text-xs font-bold border border-emerald-500/50 shadow flex items-center gap-2">📥 Download Tabel (CSV)</button>
             </div>
 
-            <!-- TABEL 1: DIJADIKAN 3 BAGIAN (PARUH) -->
+            <!-- TABEL 1: DIJADIKAN 3 BAGIAN (PARUH) AGAR FIT DI HP TANPA PERLU SCROLL KANAN KIRI -->
             <div class="space-y-4 mb-6 font-bold text-slate-900">
                 <!-- BAGIAN 1 (Tgl 1 - 11) -->
                 <div class="shadow-2xl rounded-xl border border-white/40 overflow-x-auto">
-                    <div id="monthly-title-1" class="p-2 bg-slate-900 text-cyan-300 text-xs font-bold border-b border-white/25">REKAP BULAN (Tgl 1 - 11)</div>
+                    <div id="monthly-title-1" class="p-2 bg-slate-900 text-cyan-300 text-xs font-bold border-b border-white/25">REKAP BULAN AGUSTUS 2026 (Tgl 1 - 11)</div>
                     <table class="w-full text-center border-collapse text-[9px] sm:text-xs bg-white/25 backdrop-blur-md border-slate-900/40">
                         <thead>
                             <tr id="monthly-header-row-1" class="bg-cyan-900 text-white font-bold">
@@ -397,7 +314,7 @@
 
                 <!-- BAGIAN 2 (Tgl 12 - 22) -->
                 <div class="shadow-2xl rounded-xl border border-white/40 overflow-x-auto">
-                    <div id="monthly-title-2" class="p-2 bg-slate-900 text-cyan-300 text-xs font-bold border-b border-white/25">REKAP BULAN (Tgl 12 - 22)</div>
+                    <div id="monthly-title-2" class="p-2 bg-slate-900 text-cyan-300 text-xs font-bold border-b border-white/25">REKAP BULAN AGUSTUS 2026 (Tgl 12 - 22)</div>
                     <table class="w-full text-center border-collapse text-[9px] sm:text-xs bg-white/25 backdrop-blur-md border-slate-900/40">
                         <thead>
                             <tr id="monthly-header-row-2" class="bg-cyan-900 text-white font-bold">
@@ -410,7 +327,7 @@
 
                 <!-- BAGIAN 3 (Tgl 23 - Akhir) -->
                 <div class="shadow-2xl rounded-xl border border-white/40 overflow-x-auto">
-                    <div id="monthly-title-3" class="p-2 bg-slate-900 text-cyan-300 text-xs font-bold border-b border-white/25">REKAP BULAN (Tgl 23 - Selesai)</div>
+                    <div id="monthly-title-3" class="p-2 bg-slate-900 text-cyan-300 text-xs font-bold border-b border-white/25">REKAP BULAN AGUSTUS 2026 (Tgl 23 - Selesai)</div>
                     <table class="w-full text-center border-collapse text-[9px] sm:text-xs bg-white/25 backdrop-blur-md border-slate-900/40">
                         <thead>
                             <tr id="monthly-header-row-3" class="bg-cyan-900 text-white font-bold">
@@ -432,7 +349,9 @@
                             <th class="p-2 border border-slate-900/40">Jumlah Total dalam 1 Bulan</th>
                         </tr>
                     </thead>
-                    <tbody id="monthly-summary-tbody"></tbody>
+                    <tbody id="monthly-summary-tbody">
+                        <!-- Diisi via Javascript -->
+                    </tbody>
                 </table>
             </div>
 
@@ -450,7 +369,7 @@
         <div id="page-booking-history" class="glass-panel p-3 sm:p-6 rounded-2xl hidden">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm">📋 Daftar Riwayat Booking</h2>
-                <button type="button" onclick="showPage('admin-dashboard')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
+                <button type="button" onclick="showPage('home')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
             </div>
             <div class="shadow-2xl rounded-xl border border-white/30 mb-4 overflow-hidden">
                 <table class="w-full text-center border-collapse text-[10px] sm:text-xs bg-white/20 backdrop-blur-md table-auto font-bold text-slate-900 border-slate-900/40">
@@ -511,7 +430,7 @@
             </div>
         </div>
 
-        <!-- FORM BOOKING ADMIN -->
+        <!-- FORM BOOKING -->
         <div id="page-booking" class="glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900">
             <h2 class="text-base sm:text-lg font-black mb-4 text-blue-950">Form Booking / Jadwal Lapangan</h2>
             <form onsubmit="submitData(event, 'booking')">
@@ -546,7 +465,7 @@
                 
                 <div class="flex gap-2">
                     <button type="submit" class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded text-sm font-bold border border-blue-500/50 shadow">Simpan</button>
-                    <button type="button" onclick="showPage('admin-dashboard')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-4 py-2 rounded text-sm font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
+                    <button type="button" onclick="showPage('home')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-4 py-2 rounded text-sm font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
                 </div>
             </form>
         </div>
@@ -600,7 +519,7 @@
 
                 <div class="flex gap-2">
                     <button type="submit" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded text-sm font-bold border border-emerald-500/50 shadow">Simpan</button>
-                    <button type="button" onclick="showPage('admin-dashboard')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-4 py-2 rounded text-sm font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
+                    <button type="button" onclick="showPage('home')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-4 py-2 rounded text-sm font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
                 </div>
             </form>
         </div>
@@ -632,7 +551,7 @@
                 <input type="date" id="m-tgl" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
                 <div class="flex gap-2">
                     <button type="submit" class="bg-amber-700 hover:bg-amber-800 text-white px-4 py-2 rounded text-sm font-bold border border-amber-500/50 shadow">Simpan</button>
-                    <button type="button" onclick="showPage('admin-dashboard')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-4 py-2 rounded text-sm font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
+                    <button type="button" onclick="showPage('home')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-4 py-2 rounded text-sm font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
                 </div>
             </form>
         </div>
@@ -657,7 +576,7 @@
 
                 <div class="flex gap-2">
                     <button type="submit" class="bg-rose-700 hover:bg-rose-800 text-white px-4 py-2 rounded text-sm font-bold border border-rose-500/50 shadow">Simpan</button>
-                    <button type="button" onclick="showPage('admin-dashboard')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-4 py-2 rounded text-sm font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
+                    <button type="button" onclick="showPage('home')" class="bg-white/40 hover:bg-white/60 text-slate-900 px-4 py-2 rounded text-sm font-bold backdrop-blur border border-white/50 shadow">Kembali</button>
                 </div>
             </form>
         </div>
@@ -732,10 +651,6 @@
             if(document.getElementById('filter-tanggal')) document.getElementById('filter-tanggal').value = todayStr;
             if(document.getElementById('filter-bulan')) document.getElementById('filter-bulan').value = todayYearMonth;
             if(document.getElementById('b-tanggal')) document.getElementById('b-tanggal').value = todayStr;
-            if(document.getElementById('cust-tanggal')) {
-                document.getElementById('cust-tanggal').value = todayStr;
-                loadJamKosongCustomer();
-            }
             if(document.getElementById('in-tgl')) {
                 document.getElementById('in-tgl').value = todayStr;
                 updateDropdownTimMasuk();
@@ -762,138 +677,6 @@
             }
             if(id === 'monthly-recap') {
                 renderMonthlyRecap();
-            }
-            if(id === 'home') {
-                setDefaultDates();
-            }
-        }
-
-        // FUNGSI MODAL ADMIN PASSWORD
-        window.bukaModalAdmin = () => {
-            document.getElementById('modal-admin').classList.remove('hidden');
-            document.getElementById('admin-password').value = "";
-            document.getElementById('admin-password').focus();
-        }
-
-        window.tutupModalAdmin = () => {
-            document.getElementById('modal-admin').classList.add('hidden');
-        }
-
-        window.prosesLoginAdmin = (e) => {
-            e.preventDefault();
-            let pass = document.getElementById('admin-password').value;
-            if(pass === "admin123" || pass === "sandaga2026") {
-                tutupModalAdmin();
-                showPage('admin-dashboard');
-            } else {
-                alert("Password Salah!");
-                document.getElementById('admin-password').value = "";
-            }
-        }
-
-        // FUNGSI CUSTOMER BOOKING SINKRON JADWAL KOSONG & WHATSAPP
-        const listJam = ["07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00"];
-        const listHariKey = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
-        let globalCache = { member: {}, booking: {}, pemasukan: {}, minuman: {}, pengeluaran: {} };
-
-        function getNamaHari(dateStr) {
-            let days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-            let d = new Date(dateStr);
-            return days[d.getDay()];
-        }
-
-        window.loadJamKosongCustomer = () => {
-            let tglInput = document.getElementById('cust-tanggal').value;
-            let selectJam = document.getElementById('cust-jam');
-            if(!selectJam) return;
-            selectJam.innerHTML = `<option value="">-- Pilih Jam Kosong --</option>`;
-
-            if(!tglInput) return;
-
-            let hariName = getNamaHari(tglInput);
-            let jamTerisi = new Set();
-
-            listJam.forEach(jam => {
-                let cellData = (globalCache.member[jam] && globalCache.member[jam][hariName]) ? globalCache.member[jam][hariName] : null;
-                if(cellData) {
-                    jamTerisi.add(jam);
-                }
-            });
-
-            Object.values(globalCache.booking).forEach(b => {
-                if(b.tgl && b.tgl.split('T')[0] === tglInput) {
-                    let timePart = b.tgl.split('T')[1];
-                    if(timePart) {
-                        jamTerisi.add(timePart.substring(0, 5));
-                    }
-                }
-            });
-
-            let jamKosongDitemukan = false;
-            listJam.forEach(jam => {
-                if(!jamTerisi.has(jam)) {
-                    let opt = document.createElement('option');
-                    opt.value = jam;
-                    opt.text = `${jam} WITA (Kosong)`;
-                    selectJam.appendChild(opt);
-                    jamKosongDitemukan = true;
-                }
-            });
-
-            if(!jamKosongDitemukan) {
-                let opt = document.createElement('option');
-                opt.value = "";
-                opt.text = "-- Maaf, Semua Jadwal di Tanggal Ini Sudah Penuh --";
-                selectJam.appendChild(opt);
-            }
-        }
-
-        window.submitCustomerBooking = async (e) => {
-            e.preventDefault();
-            let tglInput = document.getElementById('cust-tanggal').value;
-            let jamInput = document.getElementById('cust-jam').value;
-            let namaTim = document.getElementById('cust-nama').value;
-            let dpValue = document.getElementById('cust-dp').value;
-            let metodeVal = document.getElementById('cust-metode').value;
-
-            if(!jamInput) {
-                alert("Silakan pilih jam kosong terlebih dahulu!");
-                return;
-            }
-
-            let gabungTglJam = tglInput + "T" + jamInput;
-            let data = {
-                status: "Non-Member",
-                nama: namaTim,
-                tgl: gabungTglJam,
-                dp: dpValue,
-                metode: metodeVal,
-                timestamp: Date.now()
-            };
-
-            try {
-                await push(ref(db, 'booking'), data);
-                
-                // Format Pesan WhatsApp
-                let formattedDp = Number(dpValue).toLocaleString('id-ID');
-                let formattedTanggal = formatTanggalFull(tglInput);
-                let pesanWa = `Permisi min, mau konfirmasi booking jadwal dari ${namaTim} untuk hari ${formattedTanggal} jam ${jamInput}, dengan DP Rp${formattedDp} dengan metode pembayaran ${metodeVal}`;
-                
-                // Nomor WhatsApp Admin
-                let nomorAdmin = "6285124057148"; 
-                let whatsappUrl = `https://wa.me/${nomorAdmin}?text=${encodeURIComponent(pesanWa)}`;
-
-                alert("Booking berhasil disimpan! Anda akan diarahkan ke WhatsApp untuk konfirmasi ke admin.");
-                e.target.reset();
-                setDefaultDates();
-                loadJamKosongCustomer();
-
-                // Buka WhatsApp di tab baru / arahkan langsung
-                window.location.href = whatsappUrl;
-
-            } catch (error) {
-                console.error(error);
-                alert("Gagal melakukan booking: " + error.message);
             }
         }
 
@@ -1148,7 +931,7 @@
             }
 
             if(document.getElementById('m-select-pilihan')) document.getElementById('m-select-pilihan').value = "";
-            showPage('admin-dashboard');
+            showPage('home');
         }
 
         window.tambahMember = async (e) => {
@@ -1186,19 +969,29 @@
             }
         }
 
+        const listJam = ["07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00"];
+        const listHariKey = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
+
+        let globalCache = { member: {}, booking: {}, pemasukan: {}, minuman: {}, pengeluaran: {} };
+
+        function getNamaHari(dateStr) {
+            let days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+            let d = new Date(dateStr);
+            return days[d.getDay()];
+        }
+
         function renderAll() {
             renderGridJadwal();
             renderTabelBooking();
             renderRekapHarian();
             renderMonthlyRecap();
             updateDropdownTimMasuk();
-            loadJamKosongCustomer();
         }
 
         onValue(ref(db, 'member'), (snapshot) => {
             globalCache.member = {};
             let listTbody = document.getElementById('tabel-list-member');
-            if(listTbody) listTbody.innerHTML = "";
+            listTbody.innerHTML = "";
             
             let defaultMembers = [
                 { nama: "DALPA FC", hari: "Jumat", jam: "07:00" }, { nama: "DALPA FC", hari: "Jumat", jam: "08:00" }, { nama: "DALPA FC", hari: "Jumat", jam: "09:00" },
@@ -1219,14 +1012,12 @@
                 snapshot.forEach((child) => {
                     let m = child.val();
                     let key = child.key;
-                    if(listTbody) {
-                        listTbody.innerHTML += `<tr class="border-b border-slate-900/40">
-                            <td class="p-2 border border-slate-900/40 font-bold">${m.nama}</td>
-                            <td class="p-2 border border-slate-900/40">${m.hari}</td>
-                            <td class="p-2 border border-slate-900/40">${m.jam}</td>
-                            <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusMember('${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
-                        </tr>`;
-                    }
+                    listTbody.innerHTML += `<tr class="border-b border-slate-900/40">
+                        <td class="p-2 border border-slate-900/40 font-bold">${m.nama}</td>
+                        <td class="p-2 border border-slate-900/40">${m.hari}</td>
+                        <td class="p-2 border border-slate-900/40">${m.jam}</td>
+                        <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusMember('${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
+                    </tr>`;
                     if(!globalCache.member[m.jam]) globalCache.member[m.jam] = {};
                     let isOff = (m.nama.toUpperCase() === 'OFF');
                     globalCache.member[m.jam][m.hari] = { nama: m.nama, type: isOff ? 'off' : 'member' };
@@ -1348,249 +1139,31 @@
             });
         }
 
-        window.renderTabelBooking = () => {
-            let tabelBooking = document.getElementById('tabel-booking');
-            if(!tabelBooking) return;
-            tabelBooking.innerHTML = "";
-            let bookings = globalCache.booking;
-            
-            let keys = Object.keys(bookings);
-            if(keys.length === 0) {
-                tabelBooking.innerHTML = `<tr><td colspan="6" class="p-4 text-center font-bold">Belum ada riwayat booking.</td></tr>`;
-                return;
-            }
-
-            keys.forEach(key => {
-                let b = bookings[key];
-                let formattedTgl = formatTanggalFull(b.tgl ? b.tgl.split('T')[0] : '');
-                let jam = b.tgl && b.tgl.includes('T') ? b.tgl.split('T')[1] : '';
-                tabelBooking.innerHTML += `<tr class="border-b border-slate-900/40">
-                    <td class="p-2 border border-slate-900/40">${formattedTgl}<br>${jam}</td>
-                    <td class="p-2 border border-slate-900/40 font-bold">${b.nama}</td>
-                    <td class="p-2 border border-slate-900/40">${b.status}</td>
-                    <td class="p-2 border border-slate-900/40 font-black text-emerald-800">Rp ${Number(b.dp || 0).toLocaleString('id-ID')}</td>
-                    <td class="p-2 border border-slate-900/40">${b.metode || 'Cash'}</td>
-                    <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
-                </tr>`;
-            });
-        }
-
-        window.renderRekapHarian = () => {
-            let tglVal = document.getElementById('filter-tanggal').value;
-            if(!tglVal) return;
-
-            let tabelLapangan = document.getElementById('tabel-lapangan');
-            let tabelMinuman = document.getElementById('tabel-minuman');
-            let tabelKeluar = document.getElementById('tabel-keluar');
-            let ringkasanMinumanBox = document.getElementById('ringkasan-minuman-box');
-
-            if(tabelLapangan) tabelLapangan.innerHTML = "";
-            if(tabelMinuman) tabelMinuman.innerHTML = "";
-            if(tabelKeluar) tabelKeluar.innerHTML = "";
-            if(ringkasanMinumanBox) ringkasanMinumanBox.innerHTML = "";
-
-            let totalLap = 0, cashLap = 0, qrifLap = 0;
-            let totalMin = 0, cashMin = 0, qrifMin = 0;
-            let totalKel = 0;
-            let produkMinumanCount = {};
-
-            // 1. Data Pemasukan Lapangan
-            Object.keys(globalCache.pemasukan).forEach(key => {
-                let p = globalCache.pemasukan[key];
-                if(p.tgl === tglVal) {
-                    let jml1 = Number(p.jumlah1 || 0);
-                    let met1 = p.metode1 || 'Cash';
-                    let jml2 = Number(p.jumlah2 || 0);
-                    let met2 = p.metode2 || 'Cash';
-
-                    totalLap += Number(p.jumlah || (jml1 + jml2));
-                    if(jml1 > 0) {
-                        if(met1 === 'Cash') cashLap += jml1; else qrifLap += jml1;
-                    }
-                    if(jml2 > 0) {
-                        if(met2 === 'Cash') cashLap += jml2; else qrifLap += jml2;
-                    }
-
-                    if(tabelLapangan) {
-                        tabelLapangan.innerHTML += `<tr class="border-b border-slate-900/40">
-                            <td class="p-2 border border-slate-900/40 font-bold">${p.ket}</td>
-                            <td class="p-2 border border-slate-900/40">1: Rp ${jml1.toLocaleString('id-ID')} (${met1}) ${jml2 > 0 ? '<br>2: Rp ' + jml2.toLocaleString('id-ID') + ' (' + met2 + ')' : ''}</td>
-                            <td class="p-2 border border-slate-900/40 font-black text-blue-900">Rp ${Number(p.jumlah || (jml1 + jml2)).toLocaleString('id-ID')}</td>
-                            <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusDataKeuangan('pemasukan', '${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
-                        </tr>`;
-                    }
-                }
-            });
-
-            // 2. Data Booking DP Harian
-            Object.keys(globalCache.booking).forEach(key => {
-                let b = globalCache.booking[key];
-                if(b.tgl && b.tgl.split('T')[0] === tglVal) {
-                    let dpVal = Number(b.dp || 0);
-                    let metodeVal = b.metode || 'Cash';
-                    totalLap += dpVal;
-                    if(metodeVal === 'Cash') cashLap += dpVal; else qrifLap += dpVal;
-
-                    if(tabelLapangan) {
-                        tabelLapangan.innerHTML += `<tr class="border-b border-slate-900/40">
-                            <td class="p-2 border border-slate-900/40 font-bold">${b.nama} (DP Booking)</td>
-                            <td class="p-2 border border-slate-900/40">DP: Rp ${dpVal.toLocaleString('id-ID')} (${metodeVal})</td>
-                            <td class="p-2 border border-slate-900/40 font-black text-blue-900">Rp ${dpVal.toLocaleString('id-ID')}</td>
-                            <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusDataKeuangan('booking', '${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
-                        </tr>`;
-                    }
-                }
-            });
-
-            // 3. Data Penjualan Minuman
-            Object.keys(globalCache.minuman).forEach(key => {
-                let m = globalCache.minuman[key];
-                if(m.tgl === tglVal) {
-                    let tot = Number(m.total || 0);
-                    let pcs = Number(m.jumlahPcs || 0);
-                    let metodeVal = m.metode || 'Cash';
-                    totalMin += tot;
-                    if(metodeVal === 'Cash') cashMin += tot; else qrifMin += tot;
-
-                    if(!produkMinumanCount[m.produk]) {
-                        produkMinumanCount[m.produk] = { pcs: 0, total: 0 };
-                    }
-                    produkMinumanCount[m.produk].pcs += pcs;
-                    produkMinumanCount[m.produk].total += tot;
-
-                    if(tabelMinuman) {
-                        tabelMinuman.innerHTML += `<tr class="border-b border-slate-900/40">
-                            <td class="p-2 border border-slate-900/40 font-bold">${m.produk} (${metodeVal})</td>
-                            <td class="p-2 border border-slate-900/40">${pcs} Pcs</td>
-                            <td class="p-2 border border-slate-900/40 font-black text-amber-900">Rp ${tot.toLocaleString('id-ID')}</td>
-                            <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusDataKeuangan('minuman', '${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
-                        </tr>`;
-                    }
-                }
-            });
-
-            // Ringkasan Minuman Box
-            if(ringkasanMinumanBox) {
-                let hasMinuman = false;
-                Object.keys(produkMinumanCount).forEach(prod => {
-                    hasMinuman = true;
-                    let dataProd = produkMinumanCount[prod];
-                    ringkasanMinumanBox.innerHTML += `
-                        <div class="p-3 rounded-xl border border-amber-500/30 bg-white/30 shadow flex justify-between items-center">
-                            <div>
-                                <p class="text-xs font-bold text-slate-900">${prod}</p>
-                                <p class="text-[10px] text-amber-900">${dataProd.pcs} Pcs Terjual</p>
-                            </div>
-                            <p class="text-xs font-black text-amber-950">Rp ${dataProd.total.toLocaleString('id-ID')}</p>
-                        </div>
-                    `;
-                });
-                if(!hasMinuman) {
-                    ringkasanMinumanBox.innerHTML = `<p class="col-span-full text-center text-xs text-slate-700 font-bold">Belum ada penjualan minuman pada tanggal ini.</p>`;
-                }
-            }
-
-            // 4. Data Pengeluaran (Uang Keluar)
-            Object.keys(globalCache.pengeluaran).forEach(key => {
-                let k = globalCache.pengeluaran[key];
-                if(k.tgl === tglVal) {
-                    let jml = Number(k.jumlah || 0);
-                    totalKel += jml;
-
-                    if(tabelKeluar) {
-                        tabelKeluar.innerHTML += `<tr class="border-b border-slate-900/40">
-                            <td class="p-2 border border-slate-900/40 font-bold">${k.ket}</td>
-                            <td class="p-2 border border-slate-900/40">Cash (Sumber: ${k.sumberTgl || k.tgl})</td>
-                            <td class="p-2 border border-slate-900/40 font-black text-rose-700">Rp ${jml.toLocaleString('id-ID')}</td>
-                            <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusDataKeuangan('pengeluaran', '${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
-                        </tr>`;
-                    }
-                }
-            });
-
-            // Perhitungan Aturan Uang Keluar:
-            // "uang keluar utamakan dikurangi dari uang lapangan, kecuali uang lapangan kurang, baru dipotong dari uang minuman"
-            let sisaLapangan = cashLap - totalKel;
-            let sisaMinuman = cashMin;
-            let pengeluaranDariLapangan = totalKel;
-            let pengeluaranDariMinuman = 0;
-
-            if (sisaLapangan < 0) {
-                pengeluaranDariLapangan = cashLap;
-                pengeluaranDariMinuman = Math.abs(sisaLapangan);
-                sisaLapangan = 0;
-                sisaMinuman = cashMin - pengeluaranDariMinuman;
-                if (sisaMinuman < 0) sisaMinuman = 0;
-            }
-
-            let bersihLapanganFinal = sisaLapangan + qrifLap;
-            let bersihMinumanFinal = sisaMinuman + qrifMin;
-            let totalSaldoKeseluruhan = bersihLapanganFinal + bersihMinumanFinal;
-
-            // Update Subtotals di UI
-            if(document.getElementById('subtotal-lapangan')) {
-                document.getElementById('subtotal-lapangan.innerHTML') // safety
-                document.getElementById('subtotal-lapangan').innerHTML = `
-                    <span class="bg-white/60 border border-blue-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalLap.toLocaleString('id-ID')}</span>
-                    <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp ${cashLap.toLocaleString('id-ID')}</span>
-                    <span class="bg-white/60 border border-sky-500/40 px-2.5 py-1 rounded-lg text-sky-800 shadow font-black">QRIS/TF: Rp ${qrifLap.toLocaleString('id-ID')}</span>
-                    <span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg text-rose-800 shadow font-black">Pengeluaran: Rp ${totalKel.toLocaleString('id-ID')}</span>
-                    <span class="bg-white/60 border border-indigo-500/40 px-2.5 py-1 rounded-lg text-indigo-800 shadow font-black">Total (Cash - Keluar): Rp ${sisaLapangan.toLocaleString('id-ID')}</span>
-                `;
-            }
-
-            if(document.getElementById('subtotal-minuman')) {
-                document.getElementById('subtotal-minuman').innerHTML = `
-                    <span class="bg-white/60 border border-amber-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalMin.toLocaleString('id-ID')}</span>
-                    <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp ${cashMin.toLocaleString('id-ID')}</span>
-                    <span class="bg-white/60 border border-sky-500/40 px-2.5 py-1 rounded-lg text-sky-800 shadow font-black">QRIS/TF: Rp ${qrifMin.toLocaleString('id-ID')}</span>
-                `;
-            }
-
-            if(document.getElementById('subtotal-keluar')) {
-                document.getElementById('subtotal-keluar').innerHTML = `
-                    <span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalKel.toLocaleString('id-ID')}</span>
-                `;
-            }
-
-            // Update Ringkasan Akhir Keuangan
-            if(document.getElementById('rekap-lapangan-bersih')) {
-                document.getElementById('rekap-lapangan-bersih').innerText = `Rp ${bersihLapanganFinal.toLocaleString('id-ID')}`;
-            }
-            if(document.getElementById('rekap-minuman-bersih')) {
-                document.getElementById('rekap-minuman-bersih').innerText = `Rp ${bersihMinumanFinal.toLocaleString('id-ID')}`;
-            }
-            if(document.getElementById('rekap-keluar')) {
-                document.getElementById('rekap-keluar').innerText = `Rp ${totalKel.toLocaleString('id-ID')}`;
-            }
-            if(document.getElementById('rekap-saldo-cash')) {
-                document.getElementById('rekap-saldo-cash').innerText = `Rp ${totalSaldoKeseluruhan.toLocaleString('id-ID')}`;
-            }
-        }
-
+        // FUNGSI RENDER MONTHLY RECAP DIBAGI 3 BAGIAN (PARUH) UNTUK HP
         window.renderMonthlyRecap = () => {
             let filterBulanEl = document.getElementById('filter-bulan');
             let summaryTbody = document.getElementById('monthly-summary-tbody');
             let totalJamBulanEl = document.getElementById('monthly-total-jam');
             if(!filterBulanEl) return;
 
-            let selectedYearMonth = filterBulanEl.value;
+            let selectedYearMonth = filterBulanEl.value; // Format "YYYY-MM"
             if(!selectedYearMonth) return;
 
             let [yearStr, monthStr] = selectedYearMonth.split('-');
             let year = parseInt(yearStr);
-            let month = parseInt(monthStr);
+            let month = parseInt(monthStr); // 1 - 12
 
             let dateObjName = new Date(year, month - 1, 1);
             let namaBulanStr = dateObjName.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' }).toUpperCase();
             let judulJudulRekap = `REKAP BULAN ${namaBulanStr}`;
 
-            if(document.getElementById('monthly-title-1')) document.getElementById('monthly-title-1').innerText = `${judulJudulRekap} (Tgl 1 - 11)`;
-            if(document.getElementById('monthly-title-2')) document.getElementById('monthly-title-2').innerText = `${judulJudulRekap} (Tgl 12 - 22)`;
-            if(document.getElementById('monthly-title-3')) document.getElementById('monthly-title-3').innerText = `${judulJudulRekap} (Tgl 23 - Selesai)`;
+            document.getElementById('monthly-title-1').innerText = `${judulJudulRekap} (Tgl 1 - 11)`;
+            document.getElementById('monthly-title-2').innerText = `${judulJudulRekap} (Tgl 12 - 22)`;
+            document.getElementById('monthly-title-3').innerText = `${judulJudulRekap} (Tgl 23 - Selesai)`;
 
-            let daysInMonth = new Date(year, month, 0).getDate();
+            let daysInMonth = new Date(year, month, 0).getDate(); // Jumlah hari dalam bulan tsb
 
+            // Setup Header untuk 3 tabel terpisah
             let createHeader = (startD, endD) => {
                 let html = `<th class="p-1.5 border border-slate-900/40 text-left font-black w-[120px] bg-cyan-950 text-white">Tanggal</th>`;
                 for(let d = startD; d <= endD; d++) {
@@ -1599,10 +1172,11 @@
                 return html;
             };
 
-            if(document.getElementById('monthly-header-row-1')) document.getElementById('monthly-header-row-1').innerHTML = createHeader(1, Math.min(11, daysInMonth));
-            if(document.getElementById('monthly-header-row-2')) document.getElementById('monthly-header-row-2').innerHTML = createHeader(12, Math.min(22, daysInMonth));
-            if(document.getElementById('monthly-header-row-3')) document.getElementById('monthly-header-row-3').innerHTML = createHeader(23, daysInMonth);
+            document.getElementById('monthly-header-row-1').innerHTML = createHeader(1, Math.min(11, daysInMonth));
+            document.getElementById('monthly-header-row-2').innerHTML = createHeader(12, Math.min(22, daysInMonth));
+            document.getElementById('monthly-header-row-3').innerHTML = createHeader(23, daysInMonth);
 
+            // Inisialisasi data per tanggal
             let recapData = {};
             for(let d = 1; d <= daysInMonth; d++) {
                 let dayFormatted = String(d).padStart(2, '0');
@@ -1618,6 +1192,7 @@
                 };
             }
 
+            // A. Ambil Jadwal (Member & Booking) per Tanggal di Bulan Tersebut
             for(let d = 1; d <= daysInMonth; d++) {
                 let info = recapData[d];
                 let hName = info.hariName;
@@ -1644,8 +1219,9 @@
                 });
             }
 
+            // B. Ambil Pelunasan Pembayaran (Sumber data jam berdasarkan pelunasan)
             let paidTeamsMap = {}; 
-            let paidTeamsJamMap = {};
+            let paidTeamsJamMap = {}; // Menyimpan durasi jam berdasarkan pelunasan/pemasukan
             
             Object.values(globalCache.pemasukan).forEach(p => {
                 if(p.tgl && p.tgl.startsWith(selectedYearMonth)) {
@@ -1661,6 +1237,8 @@
                     }
                     if(tName) {
                         paidTeamsMap[dNum].add(tName);
+                        
+                        // Hitung jam dari keterangan jam main (misal: "07:00-09:00" -> 2 jam, atau default 1 jam)
                         let jamDurasi = 1;
                         if(p.ket && p.ket.includes('(') && p.ket.includes(')')) {
                             let matchJam = p.ket.match(/\((.*?)\)/);
@@ -1733,6 +1311,7 @@
                 let paidSet = paidTeamsMap[d] || new Set();
                 let paidJamMap = paidTeamsJamMap[d] || {};
 
+                // Hitung jam berdasarkan pelunasan (sudah lunas artinya sudah bermain, baru jamnya dihitung)
                 if(numTimBooking > 0) {
                     info.scheduledTeamsList.forEach(t => {
                         let isPaid = false;
@@ -1802,21 +1381,395 @@
             renderTableSection(2);
             renderTableSection(3);
 
-            if(totalJamBulanEl) totalJamBulanEl.innerText = totalJam1Bulan;
+            totalJamBulanEl.innerText = totalJam1Bulan;
 
             if(summaryTbody) {
                 summaryTbody.innerHTML = `
                     <tr class="border-b border-slate-900/40"><td class="p-2 border border-slate-900/40 text-left font-black">Akumulasi Jumlah Tim Booking (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black text-amber-950">${totalTimBookingBulan} Tim</td></tr>
                     <tr class="border-b border-slate-900/40"><td class="p-2 border border-slate-900/40 text-left font-black">Akumulasi Jumlah Tim Main (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black text-emerald-950">${totalTimMainBulan} Tim</td></tr>
                     <tr class="border-b border-slate-900/40"><td class="p-2 border border-slate-900/40 text-left font-black">Akumulasi Jumlah Jam Booking (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black text-cyan-950">${totalJamBookingBulan} Jam</td></tr>
-                    <tr class="border-b border-slate-900/40"><td class="p-2 border border-slate-900/40 text-left font-black">Akumulasi Jumlah Cancel (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black text-rose-700">${totalCancelBulan} Kali</td></tr>
-                    <tr class="border-b border-slate-900/40 bg-amber-950/20"><td class="p-2 border border-slate-900/40 text-left font-black text-amber-950">Total Keseluruhan Aktual Jam Main (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black text-amber-950">${totalJamMainBulan} Jam</td></tr>
+                    <tr class="border-b border-slate-900/40"><td class="p-2 border border-slate-900/40 text-left font-black">Akumulasi Jumlah Cancel (1 Bulan)</td><td class="p-2 border border-slate-900/40 font-black text-rose-700">${totalCancelBulan} Jadwal</td></tr>
+                    <tr class="bg-amber-950/25 font-black"><td class="p-2 border border-slate-900/40 text-left font-black">Akumulasi Jumlah Aktual Jam Main (1 Bulan)</td><td class="p-2 border border-slate-900/40 text-amber-950 text-base font-black">${totalJamMainBulan} Jam</td></tr>
                 `;
             }
         }
 
+        // FUNGSI DOWNLOAD TABEL (CSV EXPORT)
         window.downloadMonthlyRecapCSV = () => {
-            alert("Fitur download CSV siap digunakan.");
+            let filterBulanEl = document.getElementById('filter-bulan');
+            let selectedYearMonth = filterBulanEl ? filterBulanEl.value : getLocalDateString().substring(0, 7);
+            if(!selectedYearMonth) {
+                alert("Pilih bulan terlebih dahulu!");
+                return;
+            }
+
+            let [yearStr, monthStr] = selectedYearMonth.split('-');
+            let year = parseInt(yearStr);
+            let month = parseInt(monthStr);
+            let daysInMonth = new Date(year, month, 0).getDate();
+            let todayStr = getLocalDateString();
+
+            let dateObjName = new Date(year, month - 1, 1);
+            let namaBulanStr = dateObjName.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' }).toUpperCase();
+
+            let recapData = {};
+            for(let d = 1; d <= daysInMonth; d++) {
+                let dayFormatted = String(d).padStart(2, '0');
+                let monthFormatted = String(month).padStart(2, '0');
+                let dateStr = `${year}-${monthFormatted}-${dayFormatted}`;
+                recapData[d] = {
+                    dateStr: dateStr,
+                    hariName: getNamaHari(dateStr),
+                    timBookingSet: new Set(),
+                    totalJamBooking: 0,
+                    scheduledTeamsList: []
+                };
+            }
+
+            for(let d = 1; d <= daysInMonth; d++) {
+                let info = recapData[d];
+                let hName = info.hariName;
+                listJam.forEach(jam => {
+                    let cell = (globalCache.member[jam] && globalCache.member[jam][hName]) ? globalCache.member[jam][hName] : null;
+                    if(cell && cell.type !== 'off' && cell.nama) {
+                        let cleanName = cell.nama.toUpperCase().trim();
+                        info.timBookingSet.add(cleanName);
+                        info.totalJamBooking += 1; 
+                        info.scheduledTeamsList.push({ nama: cleanName, jam: jam });
+                    }
+                });
+
+                Object.values(globalCache.booking).forEach(b => {
+                    if(b.tgl && b.tgl.split('T')[0] === info.dateStr) {
+                        let cleanName = (b.nama || "").toUpperCase().trim();
+                        if(cleanName) {
+                            info.timBookingSet.add(cleanName);
+                            info.totalJamBooking += 1;
+                            info.scheduledTeamsList.push({ nama: cleanName, jam: "Booking" });
+                        }
+                    }
+                });
+            }
+
+            let paidTeamsMap = {}; 
+            let paidTeamsJamMap = {};
+            
+            Object.values(globalCache.pemasukan).forEach(p => {
+                if(p.tgl && p.tgl.startsWith(selectedYearMonth)) {
+                    let dNum = parseInt(p.tgl.split('-')[2]);
+                    if(!paidTeamsMap[dNum]) paidTeamsMap[dNum] = new Set();
+                    if(!paidTeamsJamMap[dNum]) paidTeamsJamMap[dNum] = {};
+                    let tName = p.timNamaBersih ? p.timNamaBersih.toUpperCase().trim() : (p.ket ? p.ket.toUpperCase().trim() : "");
+                    if(tName) {
+                        paidTeamsMap[dNum].add(tName);
+                        let jamDurasi = 1;
+                        if(p.ket && p.ket.includes('(') && p.ket.includes(')')) {
+                            let matchJam = p.ket.match(/\((.*?)\)/);
+                            if(matchJam && matchJam[1].includes('-')) {
+                                let parts = matchJam[1].split('-');
+                                if(parts.length === 2) {
+                                    let startH = parseInt(parts[0].split(':')[0]);
+                                    let endH = parseInt(parts[1].split(':')[0]);
+                                    if(!isNaN(startH) && !isNaN(endH) && endH > startH) jamDurasi = endH - startH;
+                                }
+                            }
+                        }
+                        paidTeamsJamMap[dNum][tName] = jamDurasi;
+                    }
+                }
+            });
+
+            Object.values(globalCache.booking).forEach(b => {
+                if(b.tgl && b.tgl.startsWith(selectedYearMonth)) {
+                    let dNum = parseInt(b.tgl.split('T')[0].split('-')[2]);
+                    if(!paidTeamsMap[dNum]) paidTeamsMap[dNum] = new Set();
+                    if(!paidTeamsJamMap[dNum]) paidTeamsJamMap[dNum] = {};
+                    let tName = (b.nama || "").toUpperCase().trim();
+                    if(tName) {
+                        paidTeamsMap[dNum].add(tName);
+                        let jamDurasi = 1;
+                        let timePart = b.tgl.split('T')[1];
+                        if(timePart && timePart.includes('-')) {
+                            let parts = timePart.split('-');
+                            if(parts.length === 2) {
+                                let startH = parseInt(parts[0].split(':')[0]);
+                                let endH = parseInt(parts[1].split(':')[0]);
+                                if(!isNaN(startH) && !isNaN(endH) && endH > startH) jamDurasi = endH - startH;
+                            }
+                        }
+                        paidTeamsJamMap[dNum][tName] = jamDurasi;
+                    }
+                }
+            });
+
+            let csvRows = [];
+            let totalKolom = daysInMonth + 1; 
+
+            let mergedHeaderArr = new Array(totalKolom).fill("");
+            mergedHeaderArr[0] = `REKAP BULAN ${namaBulanStr}`;
+            csvRows.push(mergedHeaderArr.map(val => `"${val}"`).join(","));
+
+            let headerRow = ["Keterangan"];
+            for(let d = 1; d <= daysInMonth; d++) {
+                headerRow.push(d); 
+            }
+            csvRows.push(headerRow.map(val => `"${val}"`).join(","));
+
+            let rowTimBookingArr = ["Jumlah Tim Booking"];
+            let rowTimMainArr = ["Jumlah Tim Main"];
+            let rowJumlahJamArr = ["Jumlah Jam Booking"];
+            let rowJumlahCancelArr = ["Jumlah Cancel"];
+            let rowTotalJamMainArr = ["Jumlah Aktual Jam Main"];
+
+            for(let d = 1; d <= daysInMonth; d++) {
+                let info = recapData[d];
+                let numTimBooking = info.timBookingSet.size;
+                let numJamBooking = info.totalJamBooking;
+                let actualTimMainSet = new Set();
+                let actualJamMain = 0;
+                let cancelCount = 0;
+                let isFutureDate = info.dateStr > todayStr;
+                let paidSet = paidTeamsMap[d] || new Set();
+                let paidJamMap = paidTeamsJamMap[d] || {};
+
+                if(numTimBooking > 0) {
+                    info.scheduledTeamsList.forEach(t => {
+                        let isPaid = false;
+                        let matchedPaidName = "";
+                        paidSet.forEach(pName => {
+                            if(pName.includes(t.nama) || t.nama.includes(pName)) {
+                                isPaid = true;
+                                matchedPaidName = pName;
+                            }
+                        });
+                        if(isPaid) {
+                            actualTimMainSet.add(t.nama);
+                            actualJamMain += (paidJamMap[matchedPaidName] || 1); 
+                        } else {
+                            if(!isFutureDate) cancelCount += 1;
+                        }
+                    });
+                }
+
+                if(paidSet.size > 0) {
+                    paidSet.forEach(pName => {
+                        let matched = false;
+                        info.scheduledTeamsList.forEach(t => {
+                            if(pName.includes(t.nama) || t.nama.includes(pName)) matched = true;
+                        });
+                        if(!matched) {
+                            actualTimMainSet.add(pName);
+                            actualJamMain += (paidJamMap[pName] || 1);
+                            if(numTimBooking === 0) numTimBooking = 1;
+                            if(numJamBooking === 0) numJamBooking = 1;
+                        }
+                    });
+                }
+
+                rowTimBookingArr.push(numTimBooking > 0 ? numTimBooking : 0);
+                rowTimMainArr.push(actualTimMainSet.size > 0 ? actualTimMainSet.size : 0);
+                rowJumlahJamArr.push(numJamBooking > 0 ? numJamBooking : 0);
+                rowJumlahCancelArr.push(cancelCount > 0 ? cancelCount : 0);
+                rowTotalJamMainArr.push(actualJamMain > 0 ? actualJamMain : 0);
+            }
+
+            csvRows.push(rowTimBookingArr.map(val => `"${val}"`).join(","));
+            csvRows.push(rowTimMainArr.map(val => `"${val}"`).join(","));
+            csvRows.push(rowJumlahJamArr.map(val => `"${val}"`).join(","));
+            csvRows.push(rowJumlahCancelArr.map(val => `"${val}"`).join(","));
+            csvRows.push(rowTotalJamMainArr.map(val => `"${val}"`).join(","));
+
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF" + csvRows.join("\n");
+            let encodedUri = encodeURI(csvContent);
+            let link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Rekap_Bulanan_${selectedYearMonth}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function renderTabelBooking() {
+            let tbody = document.getElementById('tabel-booking');
+            if(!tbody) return;
+            tbody.innerHTML = "";
+            let data = globalCache.booking;
+            
+            if (Object.keys(data).length > 0) {
+                Object.entries(data).forEach(([key, item]) => {
+                    let badgeStatus = item.status === 'Member' 
+                        ? '<span class="px-1 py-0.5 bg-blue-700 text-white border border-blue-400 rounded text-[6px] sm:text-xs font-black">M</span>' 
+                        : '<span class="px-1 py-0.5 bg-rose-700 text-white border border-rose-400 rounded text-[6px] sm:text-xs font-black">Non</span>';
+
+                    let formattedTglJam = item.tgl ? item.tgl.replace('T', ' ') : '-';
+
+                    tbody.innerHTML += `<tr class="border-b border-slate-900/40 hover:bg-white/10 font-bold">
+                        <td class="p-2 border border-slate-900/40 text-[10px] sm:text-xs leading-tight">${formattedTglJam}</td>
+                        <td class="p-2 border border-slate-900/40 font-black text-[10px] sm:text-xs">${item.nama}</td>
+                        <td class="p-2 border border-slate-900/40">${badgeStatus}</td>
+                        <td class="p-2 border border-slate-900/40 text-[10px] sm:text-xs">Rp ${Number(item.dp).toLocaleString('id-ID')}</td>
+                        <td class="p-2 border border-slate-900/40 text-[10px] sm:text-xs">${item.metode}</td>
+                        <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-1.5 py-1 rounded text-[10px] sm:text-xs font-bold">Hapus</button></td>
+                    </tr>`;
+                });
+            } else {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center p-4 text-slate-700 text-xs font-bold">Belum ada data booking.</td></tr>`;
+            }
+        }
+
+        window.renderRekapHarian = () => {
+            let filterTglEl = document.getElementById('filter-tanggal');
+            if(!filterTglEl) return;
+            let selectedDate = filterTglEl.value;
+            let tanggalFormattedStr = formatTanggalFull(selectedDate);
+
+            document.getElementById('title-lapangan').innerHTML = `⚽ UANG LAPANGAN ${tanggalFormattedStr.toUpperCase()}`;
+            document.getElementById('title-minuman').innerHTML = `🥤 PENJUALAN MINUMAN ${tanggalFormattedStr.toUpperCase()}`;
+            document.getElementById('title-keluar').innerHTML = `💸 PENGELUARAN ${tanggalFormattedStr.toUpperCase()}`;
+            document.getElementById('title-ringkasan-total').innerHTML = `📌 RINGKASAN TOTAL KEUANGAN ${tanggalFormattedStr.toUpperCase()}`;
+
+            let totalLapangan = 0, totalMinuman = 0, totalKeluar = 0;
+            let totalLapanganCash = 0, totalLapanganQrisTf = 0;
+            let totalMinumanCash = 0, totalMinumanQrisTf = 0;
+            let totalMasukCash = 0, totalMasukQrif = 0;
+
+            let tLap = document.getElementById('tabel-lapangan');
+            let tMin = document.getElementById('tabel-minuman');
+            let tKel = document.getElementById('tabel-keluar');
+            let ringkasanMinumanBox = document.getElementById('ringkasan-minuman-box');
+
+            if(!tLap) return;
+            tLap.innerHTML = ""; tMin.innerHTML = ""; tKel.innerHTML = ""; ringkasanMinumanBox.innerHTML = "";
+
+            let hasLap = false, hasMin = false, hasKel = false;
+            let rekapMinumanPerProduk = {};
+
+            Object.entries(globalCache.pemasukan).forEach(([key, item]) => {
+                if(item.tgl === selectedDate) {
+                    hasLap = true;
+                    let jml1 = Number(item.jumlah1 || 0);
+                    let met1 = item.metode1 || 'Cash';
+                    let jml2 = Number(item.jumlah2 || 0);
+                    let met2 = item.metode2 || 'Cash';
+
+                    if(!item.jumlah1 && item.jumlah) {
+                        jml1 = Number(item.jumlah);
+                        met1 = item.metode || 'Cash';
+                    }
+
+                    if(jml1 > 0) {
+                        totalLapangan += jml1;
+                        if(met1 === 'Cash') totalLapanganCash += jml1; else totalLapanganQrisTf += jml1;
+                    }
+                    if(jml2 > 0) {
+                        totalLapangan += jml2;
+                        if(met2 === 'Cash') totalLapanganCash += jml2; else totalLapanganQrisTf += jml2;
+                    }
+
+                    let detailStr1 = jml1 > 0 ? `${jml1.toLocaleString('id-ID')} (${met1})` : "-";
+                    let detailStr2 = jml2 > 0 ? ` + ${jml2.toLocaleString('id-ID')} (${met2})` : "";
+
+                    tLap.innerHTML += `<tr class="border-b border-slate-900/40 hover:bg-white/10 font-bold">
+                        <td class="p-2 border border-slate-900/40">${item.ket || '-'}</td>
+                        <td class="p-2 border border-slate-900/40 text-[10px] sm:text-xs">${detailStr1}${detailStr2}</td>
+                        <td class="p-2 border border-slate-900/40 font-black">Rp ${(jml1 + jml2).toLocaleString('id-ID')}</td>
+                        <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusDataKeuangan('pemasukan', '${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-1.5 py-0.5 rounded text-[10px]">Hapus</button></td>
+                    </tr>`;
+                }
+            });
+
+            if(!hasLap) {
+                tLap.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-slate-700 text-xs font-bold">Tidak ada data uang lapangan pada tanggal ini.</td></tr>`;
+            }
+
+            Object.entries(globalCache.minuman).forEach(([key, item]) => {
+                if(item.tgl === selectedDate) {
+                    hasMin = true;
+                    let tot = Number(item.total || 0);
+                    let met = item.metode || 'Cash';
+                    let produkName = item.produk || '-';
+                    let jumlahPcs = Number(item.jumlahPcs || 0);
+
+                    totalMinuman += tot;
+                    if(met === 'Cash') totalMinumanCash += tot; else totalMinumanQrisTf += tot;
+
+                    if(!rekapMinumanPerProduk[produkName]) {
+                        rekapMinumanPerProduk[produkName] = { pcs: 0, total: 0 };
+                    }
+                    rekapMinumanPerProduk[produkName].pcs += jumlahPcs;
+                    rekapMinumanPerProduk[produkName].total += tot;
+
+                    tMin.innerHTML += `<tr class="border-b border-slate-900/40 hover:bg-white/10 font-bold">
+                        <td class="p-2 border border-slate-900/40">${produkName} (${met})</td>
+                        <td class="p-2 border border-slate-900/40">${jumlahPcs} Pcs</td>
+                        <td class="p-2 border border-slate-900/40 font-black">Rp ${tot.toLocaleString('id-ID')}</td>
+                        <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusDataKeuangan('minuman', '${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-1.5 py-0.5 rounded text-[10px]">Hapus</button></td>
+                    </tr>`;
+                }
+            });
+
+            if(Object.keys(rekapMinumanPerProduk).length > 0) {
+                Object.entries(rekapMinumanPerProduk).forEach(([prod, val]) => {
+                    // DIREVISI: Ditambahkan "pcs" setelah angka agar terlihat jelas sesuai permintaan
+                    ringkasanMinumanBox.innerHTML += `
+                        <div class="p-2.5 rounded-xl border border-amber-500/40 bg-white/30 shadow flex justify-between items-center text-xs">
+                            <span class="font-bold text-slate-900">${prod}</span>
+                            <span class="font-black text-amber-950">${val.pcs} pcs (Rp ${val.total.toLocaleString('id-ID')})</span>
+                        </div>
+                    `;
+                });
+            } else {
+                ringkasanMinumanBox.innerHTML = `<div class="col-span-full text-center text-slate-700 text-xs font-bold py-2">Belum ada resep/penjualan minuman.</div>`;
+            }
+
+            if(!hasMin) {
+                tMin.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-slate-700 text-xs font-bold">Tidak ada data minuman pada tanggal ini.</td></tr>`;
+            }
+
+            Object.entries(globalCache.pengeluaran).forEach(([key, item]) => {
+                if(item.tgl === selectedDate) {
+                    hasKel = true;
+                    let jml = Number(item.jumlah || 0);
+                    totalKeluar += jml;
+                    let sumberKet = item.sumberTgl ? `Cash Tgl ${item.sumberTgl}` : 'Cash Utama';
+
+                    tKel.innerHTML += `<tr class="border-b border-slate-900/40 hover:bg-white/10 font-bold">
+                        <td class="p-2 border border-slate-900/40">${item.ket || '-'}</td>
+                        <td class="p-2 border border-slate-900/40 text-[10px] sm:text-xs">${sumberKet}</td>
+                        <td class="p-2 border border-slate-900/40 font-black">Rp ${jml.toLocaleString('id-ID')}</td>
+                        <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusDataKeuangan('pengeluaran', '${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-1.5 py-0.5 rounded text-[10px]">Hapus</button></td>
+                    </tr>`;
+                }
+            });
+
+            if(!hasKel) {
+                tKel.innerHTML = `<tr><td colspan="4" class="text-center p-3 text-slate-700 text-xs font-bold">Tidak ada data pengeluaran pada tanggal ini.</td></tr>`;
+            }
+
+            totalMasukCash = totalLapanganCash + totalMinumanCash;
+            totalMasukQrif = totalLapanganQrisTf + totalMinumanQrisTf;
+            let saldoBersihCash = totalMasukCash - totalKeluar;
+
+            document.getElementById('subtotal-lapangan').innerHTML = `
+                <span class="bg-white/60 border border-blue-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalLapangan.toLocaleString('id-ID')}</span>
+                <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp ${totalLapanganCash.toLocaleString('id-ID')}</span>
+                <span class="bg-white/60 border border-sky-500/40 px-2.5 py-1 rounded-lg text-sky-800 shadow font-black">QRIS/TF: Rp ${totalLapanganQrisTf.toLocaleString('id-ID')}</span>
+            `;
+
+            document.getElementById('subtotal-minuman').innerHTML = `
+                <span class="bg-white/60 border border-amber-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalMinuman.toLocaleString('id-ID')}</span>
+                <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp ${totalMinumanCash.toLocaleString('id-ID')}</span>
+                <span class="bg-white/60 border border-sky-500/40 px-2.5 py-1 rounded-lg text-sky-800 shadow font-black">QRIS/TF: Rp ${totalMinumanQrisTf.toLocaleString('id-ID')}</span>
+            `;
+
+            document.getElementById('subtotal-keluar').innerHTML = `
+                <span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalKeluar.toLocaleString('id-ID')}</span>
+            `;
+
+            document.getElementById('rekap-masuk-cash').innerText = `Rp ${totalMasukCash.toLocaleString('id-ID')}`;
+            document.getElementById('rekap-masuk-qrif').innerText = `Rp ${totalMasukQrif.toLocaleString('id-ID')}`;
+            document.getElementById('rekap-keluar').innerText = `Rp ${totalKeluar.toLocaleString('id-ID')}`;
+            document.getElementById('rekap-saldo-cash').innerText = `Rp ${saldoBersihCash.toLocaleString('id-ID')}`;
         }
     </script>
 </body>
