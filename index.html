@@ -1412,15 +1412,15 @@
                     <div class="p-3 rounded-xl border border-emerald-500/40 space-y-2 bg-white/30">
                         <label class="block text-xs font-black text-emerald-950">Pembayaran Tim 1</label>
                         <input type="number" id="in-jumlah-1" placeholder="Nominal (Rp)" class="w-full p-2 rounded text-sm glass-input font-bold">
-                        <select id="in-metode-1" class="w-full p-2 rounded text-sm glass-input font-bold">
-                            <option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option>
+                        <select id="in-metode-1" onchange="toggleFreePaymentInput(1)" class="w-full p-2 rounded text-sm glass-input font-bold">
+                            <option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option><option value="Free">Free / Gratis</option>
                         </select>
                     </div>
                     <div class="p-3 rounded-xl border border-emerald-500/40 space-y-2 bg-white/30">
                         <label class="block text-xs font-black text-emerald-950">Pembayaran Tim 2 (Opsional / Sparring)</label>
                         <input type="number" id="in-jumlah-2" placeholder="Nominal (Rp)" class="w-full p-2 rounded text-sm glass-input font-bold">
-                        <select id="in-metode-2" class="w-full p-2 rounded text-sm glass-input font-bold">
-                            <option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option>
+                        <select id="in-metode-2" onchange="toggleFreePaymentInput(2)" class="w-full p-2 rounded text-sm glass-input font-bold">
+                            <option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option><option value="Free">Free / Gratis</option>
                         </select>
                     </div>
                 </div>
@@ -1791,7 +1791,11 @@
                 if(item.tgl === tglSumber) {
                     let met1 = item.metode1 || 'Cash';
                     let met2 = item.metode2 || 'Cash';
-                    if(!item.jumlah1 && item.jumlah) {
+                    // Data baru memiliki jumlah1/jumlah2 secara eksplisit.
+                    // Jangan fallback ke `jumlah` hanya karena jumlah1 bernilai 0.
+                    // Contoh: Tim 1 = 0, Tim 2 = 175.000 -> yang dihitung 175.000.
+                    const hasSplitPayment = item.jumlah1 !== undefined && item.jumlah1 !== null;
+                    if(!hasSplitPayment && item.jumlah !== undefined && item.jumlah !== null) {
                         let singleMet = item.metode || 'Cash';
                         if(singleMet === 'Cash') totalMasukCash += Number(item.jumlah || 0);
                     } else {
@@ -1881,6 +1885,25 @@
             hitungOtomatisBiaya();
         }
 
+        // Jika metode Free dipilih, nominal otomatis menjadi Rp 0 dan
+        // tidak masuk ke perhitungan keuangan, tetapi tetap dianggap lunas.
+        window.toggleFreePaymentInput = (timNo) => {
+            const metodeEl = document.getElementById(`in-metode-${timNo}`);
+            const jumlahEl = document.getElementById(`in-jumlah-${timNo}`);
+            if(!metodeEl || !jumlahEl) return;
+            const isFree = metodeEl.value === 'Free';
+            if(isFree) {
+                jumlahEl.value = 0;
+                jumlahEl.disabled = true;
+                jumlahEl.classList.add('opacity-60', 'cursor-not-allowed');
+                jumlahEl.placeholder = 'FREE / Rp 0';
+            } else {
+                jumlahEl.disabled = false;
+                jumlahEl.classList.remove('opacity-60', 'cursor-not-allowed');
+                jumlahEl.placeholder = 'Nominal (Rp)';
+            }
+        };
+
         window.hitungOtomatisBiaya = () => {
             let jamMainStr = document.getElementById('in-jam-main').value;
             let durasiJam = 1;
@@ -1966,10 +1989,10 @@
             } else if(type === 'pemasukan') {
                 let tim = document.getElementById('in-tim').value;
                 let jamMain = document.getElementById('in-jam-main').value;
-                let jml1 = Number(document.getElementById('in-jumlah-1').value || 0);
                 let met1 = document.getElementById('in-metode-1').value;
-                let jml2 = Number(document.getElementById('in-jumlah-2').value || 0);
                 let met2 = document.getElementById('in-metode-2').value;
+                let jml1 = met1 === 'Free' ? 0 : Number(document.getElementById('in-jumlah-1').value || 0);
+                let jml2 = met2 === 'Free' ? 0 : Number(document.getElementById('in-jumlah-2').value || 0);
                 let tgl = document.getElementById('in-tgl').value;
 
                 let durasiJam = 1;
@@ -2203,6 +2226,105 @@
             }
         }
 
+        // Edit data Uang Lapangan (pemasukan). Tampilan mengikuti ikon aksi di Booking History.
+        window.editDataKeuangan = async (node, key) => {
+            if(node !== 'pemasukan') return;
+            const item = globalCache?.pemasukan?.[key];
+            if(!item) return;
+
+            const namaTim = item.timNamaBersih || String(item.ket || '').replace(/^Pelunasan\s+/i, '').replace(/\s*\(.*$/, '').trim();
+            const jamMatch = String(item.ket || '').match(/\(([^)]+)\)/);
+            const jamMain = jamMatch ? jamMatch[1] : '';
+            const tgl = item.tgl || getLocalDateString();
+            const jml1 = Number(item.jumlah1 ?? item.jumlah ?? 0);
+            const jml2 = Number(item.jumlah2 ?? 0);
+            const met1 = item.metode1 || item.metode || 'Cash';
+            const met2 = item.metode2 || 'Cash';
+
+            const old = document.getElementById('modal-edit-pemasukan');
+            if(old) old.remove();
+
+            const modal = document.createElement('div');
+            modal.id = 'modal-edit-pemasukan';
+            modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4';
+            modal.innerHTML = `
+                <div class="w-full max-w-lg rounded-2xl bg-white shadow-2xl border border-blue-100 overflow-hidden">
+                    <div class="bg-gradient-to-r from-blue-950 to-blue-700 px-5 py-4 text-white">
+                        <div class="flex items-center justify-between gap-3">
+                            <div><h3 class="font-black text-lg">Edit Uang Lapangan</h3><p class="text-xs text-blue-100">Perbarui data pemasukan tanpa mengubah fungsi lainnya.</p></div>
+                            <button type="button" onclick="document.getElementById('modal-edit-pemasukan')?.remove()" class="text-white/80 hover:text-white text-xl font-black">×</button>
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-3">
+                        <div><label class="text-xs font-black text-slate-700">Nama Tim</label><input id="edit-in-tim" value="${namaTim.replace(/&/g,'&amp;').replace(/"/g,'&quot;')}" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"></div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div><label class="text-xs font-black text-slate-700">Jam Main</label><input id="edit-in-jam" value="${jamMain.replace(/"/g,'&quot;')}" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"></div>
+                            <div><label class="text-xs font-black text-slate-700">Tanggal</label><input id="edit-in-tgl" type="date" value="${tgl}" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"></div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div><label class="text-xs font-black text-slate-700">Jumlah Tim 1</label><input id="edit-in-jml1" type="number" min="0" value="${jml1}" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"></div>
+                            <div><label class="text-xs font-black text-slate-700">Metode Tim 1</label><select id="edit-in-met1" onchange="toggleEditFreePaymentInput(1)" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"><option value="Cash" ${met1==='Cash'?'selected':''}>Cash</option><option value="QRIS" ${met1==='QRIS'?'selected':''}>QRIS</option><option value="Transfer" ${met1==='Transfer'?'selected':''}>Transfer</option><option value="Free" ${met1==='Free'?'selected':''}>Free / Gratis</option></select></div>
+                            <div><label class="text-xs font-black text-slate-700">Jumlah Tim 2</label><input id="edit-in-jml2" type="number" min="0" value="${jml2}" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"></div>
+                            <div><label class="text-xs font-black text-slate-700">Metode Tim 2</label><select id="edit-in-met2" onchange="toggleEditFreePaymentInput(2)" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"><option value="Cash" ${met2==='Cash'?'selected':''}>Cash</option><option value="QRIS" ${met2==='QRIS'?'selected':''}>QRIS</option><option value="Transfer" ${met2==='Transfer'?'selected':''}>Transfer</option><option value="Free" ${met2==='Free'?'selected':''}>Free / Gratis</option></select></div>
+                        </div>
+                        <div class="flex gap-2 pt-2">
+                            <button type="button" onclick="simpanEditDataKeuangan('pemasukan','${key}')" class="flex-1 bg-blue-700 hover:bg-blue-800 text-white px-4 py-2.5 rounded-xl font-black shadow">Simpan Perubahan</button>
+                            <button type="button" onclick="document.getElementById('modal-edit-pemasukan')?.remove()" class="bg-slate-200 hover:bg-slate-300 text-slate-900 px-4 py-2.5 rounded-xl font-black">Batal</button>
+                        </div>
+                    </div>
+                </div>`;
+            document.body.appendChild(modal);
+            toggleEditFreePaymentInput(1);
+            toggleEditFreePaymentInput(2);
+        };
+
+        window.toggleEditFreePaymentInput = (timNo) => {
+            const metodeEl = document.getElementById(`edit-in-met${timNo}`);
+            const jumlahEl = document.getElementById(`edit-in-jml${timNo}`);
+            if(!metodeEl || !jumlahEl) return;
+            const isFree = metodeEl.value === 'Free';
+            if(isFree) {
+                jumlahEl.value = 0;
+                jumlahEl.disabled = true;
+                jumlahEl.classList.add('opacity-60', 'cursor-not-allowed');
+            } else {
+                jumlahEl.disabled = false;
+                jumlahEl.classList.remove('opacity-60', 'cursor-not-allowed');
+            }
+        };
+
+        window.simpanEditDataKeuangan = async (node, key) => {
+            if(node !== 'pemasukan') return;
+            const tim = document.getElementById('edit-in-tim')?.value.trim();
+            const jam = document.getElementById('edit-in-jam')?.value.trim();
+            const tgl = document.getElementById('edit-in-tgl')?.value;
+            const met1 = document.getElementById('edit-in-met1')?.value || 'Cash';
+            const met2 = document.getElementById('edit-in-met2')?.value || 'Cash';
+            const jml1 = met1 === 'Free' ? 0 : Number(document.getElementById('edit-in-jml1')?.value || 0);
+            const jml2 = met2 === 'Free' ? 0 : Number(document.getElementById('edit-in-jml2')?.value || 0);
+            if(!tim || !tgl || jml1 < 0 || jml2 < 0) { alert('Mohon lengkapi data dengan benar.'); return; }
+            const oldItem = globalCache?.pemasukan?.[key] || {};
+            const rentalText = String(oldItem.ket || '').match(/\s\+\sSewa\s.*$/i)?.[0] || '';
+            try {
+                await update(ref(db, 'pemasukan/' + key), {
+                    ...oldItem,
+                    ket: `Pelunasan ${tim} (${jam})${rentalText}`,
+                    timNamaBersih: tim,
+                    jumlah1: jml1,
+                    metode1: met1,
+                    jumlah2: jml2,
+                    metode2: met2,
+                    jumlah: jml1 + jml2,
+                    tgl
+                });
+                document.getElementById('modal-edit-pemasukan')?.remove();
+                showSuccessPopup('Data uang lapangan berhasil diperbarui!');
+            } catch(error) {
+                console.error(error);
+                alert('Gagal memperbarui data: ' + error.message);
+            }
+        };
+
         const listJam = ["07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00"];
         const listHariKey = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
 
@@ -2415,10 +2537,16 @@
                         const jamPelunasan = jamMatch ? jamMatch[1].padStart(5, '0') : '';
 
                         if(!jamPelunasan || jamPelunasan === jamJadwal) {
-                            // Data pelunasan menyimpan total pada `jumlah`; fallback
-                            // ke jumlah1 + jumlah2 untuk data lama.
-                            const nilaiBayar = Number(p.jumlah || 0) ||
-                                (Number(p.jumlah1 || 0) + Number(p.jumlah2 || 0));
+                            // Jika jumlah1/jumlah2 tersedia, gunakan keduanya secara eksplisit.
+                            // Nilai 0 pada salah satu tim tetap valid dan tidak boleh
+                            // memicu fallback ke `jumlah`.
+                            const hasSplitPayment = p.jumlah1 !== undefined && p.jumlah1 !== null;
+                            const freePayment = p.metode1 === 'Free' || p.metode2 === 'Free' || p.metode === 'Free';
+                            const nilaiBayar = freePayment
+                                ? total
+                                : (hasSplitPayment
+                                    ? (Number(p.jumlah1 || 0) + Number(p.jumlah2 || 0))
+                                    : Number(p.jumlah || 0));
                             totalPelunasan += nilaiBayar;
                         }
                     }
@@ -2670,18 +2798,26 @@
 
             Object.entries(globalCache.pemasukan).forEach(([key, item]) => {
                 if(item.tgl === filterTgl) {
-                    let jml1 = Number(item.jumlah1 || item.jumlah || 0);
+                    // Jika jumlah1 tersedia, termasuk ketika nilainya 0,
+                    // jangan fallback ke jumlah lama.
+                    let jml1 = (item.jumlah1 !== undefined && item.jumlah1 !== null)
+                        ? Number(item.jumlah1 || 0)
+                        : Number(item.jumlah || 0);
                     let met1 = item.metode1 || item.metode || 'Cash';
                     let jml2 = Number(item.jumlah2 || 0);
                     let met2 = item.metode2 || 'Cash';
 
-                    let subTotalItem = jml1 + jml2;
+                    // Free/Gratis dianggap lunas, tetapi nominalnya tidak masuk
+                    // ke total keuangan maupun saldo Cash/QRIS/Transfer.
+                    const nilaiTim1Keuangan = met1 === 'Free' ? 0 : jml1;
+                    const nilaiTim2Keuangan = met2 === 'Free' ? 0 : jml2;
+                    let subTotalItem = nilaiTim1Keuangan + nilaiTim2Keuangan;
                     totalLapangan += subTotalItem;
 
-                    if(met1 === 'Cash') totalLapanganCash += jml1; else totalLapanganQrif += jml1;
-                    if(jml2 > 0) {
-                        if(met2 === 'Cash') totalLapanganCash += jml2; else totalLapanganQrif += jml2;
-                    }
+                    if(met1 === 'Cash') totalLapanganCash += nilaiTim1Keuangan;
+                    else if(met1 !== 'Free') totalLapanganQrif += nilaiTim1Keuangan;
+                    if(met2 === 'Cash') totalLapanganCash += nilaiTim2Keuangan;
+                    else if(met2 !== 'Free') totalLapanganQrif += nilaiTim2Keuangan;
 
                     let detailTxt = `Tim 1: Rp ${jml1.toLocaleString('id-ID')} (${met1})`;
                     if(jml2 > 0) {
@@ -2693,7 +2829,16 @@
                             <td class="p-2 border border-slate-900/40 text-left">${item.ket}</td>
                             <td class="p-2 border border-slate-900/40 text-xs">${detailTxt}</td>
                             <td class="p-2 border border-slate-900/40 text-emerald-900 font-black">Rp ${subTotalItem.toLocaleString('id-ID')}</td>
-                            <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusDataKeuangan('pemasukan', '${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
+                            <td class="p-2 border border-slate-900/40 text-center whitespace-nowrap">
+                                <div class="flex items-center justify-center gap-1">
+                                    <button type="button" onclick="editDataKeuangan('pemasukan', '${key}')" class="action-icon action-edit" title="Edit data" aria-label="Edit data">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 3.487a2.1 2.1 0 012.97 2.97L7.5 18.79 3 20l1.21-4.5L16.862 3.487z"/><path stroke-linecap="round" stroke-linejoin="round" d="M14.5 5.85l3.65 3.65"/></svg>
+                                    </button>
+                                    <button type="button" onclick="hapusDataKeuangan('pemasukan', '${key}')" class="action-icon action-delete" title="Hapus data" aria-label="Hapus data">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 0h14M10 11v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3"/></svg>
+                                    </button>
+                                </div>
+                            </td>
                         </tr>`;
                     }
                 }
