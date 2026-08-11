@@ -792,17 +792,78 @@
                 Kembali
             </button>
             <h2 class="text-base sm:text-lg font-black mb-4 text-amber-950">Penjualan Minuman</h2>
+            <style>
+                .minuman-btn {
+                    position: relative;
+                    min-height: 108px;
+                    padding: 10px !important;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.18s ease;
+                    cursor: pointer;
+                    overflow: hidden;
+                    border-width: 2px !important;
+                    border-color: rgba(255,255,255,.55) !important;
+                }
+                .minuman-btn img {
+                    width: 86px;
+                    height: 86px;
+                    object-fit: contain;
+                    display: block;
+                    transition: transform 0.18s ease, filter 0.18s ease;
+                }
+                .minuman-btn:hover {
+                    transform: translateY(-2px);
+                    background: rgba(255,255,255,.58);
+                    border-color: rgba(245,158,11,.55) !important;
+                }
+                .minuman-btn:hover img {
+                    transform: scale(1.06);
+                }
+                .minuman-btn.selected {
+                    background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%) !important;
+                    border-color: #fff !important;
+                    box-shadow: 0 0 0 3px rgba(245,158,11,.28), 0 8px 18px rgba(120,53,15,.28);
+                    transform: translateY(-2px) scale(1.01);
+                }
+                 .minuman-btn.selected img {
+                    transform: scale(1.10);
+                }
+                .minuman-btn.selected::after {
+                    content: '✓';
+                    position: absolute;
+                    top: 8px;
+                    right: 8px;
+                    width: 25px;
+                    height: 25px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 999px;
+                    background: rgba(255,255,255,.97);
+                    color: #c2410c;
+                    font-size: 15px;
+                    font-weight: 900;
+                    box-shadow: 0 2px 7px rgba(0,0,0,.18);
+                }
+                @media (max-width: 640px) {
+                    .minuman-btn { min-height: 88px; }
+                    .minuman-btn img { width: 68px; height: 68px; }
+                    .minuman-btn.selected::after { right: 6px; top: 6px; width: 22px; height: 22px; font-size: 13px; }
+                }
+            </style>
             <form onsubmit="submitData(event, 'minuman')">
                 <label class="block text-xs font-bold mb-1 text-slate-900">Pilih Jenis Minuman Cepat</label>
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
-                    <button type="button" onclick="pilihMinumanCepat('Air Mineral', 4000)" class="p-2 rounded-lg text-xs sm:text-sm glass-input font-bold hover:bg-white/50 transition">Air Mineral</button>
-                    <button type="button" onclick="pilihMinumanCepat('Air Mineral + 3 Permen', 5000)" class="p-2 rounded-lg text-xs sm:text-sm glass-input font-bold hover:bg-white/50 transition">Air Mineral + 3 Permen</button>
-                    <button type="button" onclick="pilihMinumanCepat('Pocari Sweat', 10000)" class="p-2 rounded-lg text-xs sm:text-sm glass-input font-bold hover:bg-white/50 transition">Pocari Sweat</button>
-                    <button type="button" onclick="pilihMinumanCepat('Fanta', 5000)" class="p-2 rounded-lg text-xs sm:text-sm glass-input font-bold hover:bg-white/50 transition">Fanta</button>
-                    <button type="button" onclick="pilihMinumanCepat('Sprite', 5000)" class="p-2 rounded-lg text-xs sm:text-sm glass-input font-bold hover:bg-white/50 transition">Sprite</button>
-                    <button type="button" onclick="pilihMinumanCepat('Coca Cola', 5000)" class="p-2 rounded-lg text-xs sm:text-sm glass-input font-bold hover:bg-white/50 transition">Coca Cola</button>
-                    <button type="button" onclick="pilihMinumanCepat('Teh Pucuk Harum', 5000)" class="p-2 rounded-lg text-xs sm:text-sm glass-input font-bold hover:bg-white/50 transition">Teh Pucuk Harum</button>
-                    <button type="button" onclick="pilihMinumanCepat('Milo', 5000)" class="p-2 rounded-lg text-xs sm:text-sm glass-input font-bold hover:bg-white/50 transition">Milo</button>
+                    <button type="button" data-nama="Air Mineral" onclick="pilihMinumanCepat('Air Mineral', 4000)" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" title="Air Mineral" aria-label="Air Mineral"><img src="mineral.png" alt="Air Mineral"></button>
+                    <button type="button" data-nama="Air Mineral + 3 Permen" onclick="pilihMinumanCepat('Air Mineral + 3 Permen', 5000)" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" title="Air Mineral + 3 Permen" aria-label="Air Mineral + 3 Permen"><img src="mineralpermen.png" alt="Air Mineral + 3 Permen"></button>
+                    <button type="button" data-nama="Pocari Sweat" onclick="pilihMinumanCepat('Pocari Sweat', 10000)" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" title="Pocari Sweat" aria-label="Pocari Sweat"><img src="pocari.png" alt="Pocari Sweat"></button>
+                    <button type="button" data-nama="Fanta" onclick="pilihMinumanCepat('Fanta', 5000)" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" title="Fanta" aria-label="Fanta"><img src="fanta.png" alt="Fanta"></button>
+                    <button type="button" data-nama="Sprite" onclick="pilihMinumanCepat('Sprite', 5000)" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" title="Sprite" aria-label="Sprite"><img src="sprite.png" alt="Sprite"></button>
+                    <button type="button" data-nama="Coca Cola" onclick="pilihMinumanCepat('Coca Cola', 5000)" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" title="Coca Cola" aria-label="Coca Cola"><img src="cocacola.png" alt="Coca Cola"></button>
+                    <button type="button" data-nama="Teh Pucuk Harum" onclick="pilihMinumanCepat('Teh Pucuk Harum', 5000)" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" title="Teh Pucuk Harum" aria-label="Teh Pucuk Harum"><img src="tehpucuk.png" alt="Teh Pucuk Harum"></button>
+                    <button type="button" data-nama="Milo" onclick="pilihMinumanCepat('Milo', 5000)" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" title="Milo" aria-label="Milo"><img src="milo.png" alt="Milo"></button>
                 </div>
                 <select id="m-select-pilihan" onchange="pilihMinuman(this)" class="hidden">
                     <option value="" data-harga="0">-- Pilih Minuman --</option>
@@ -1050,6 +1111,10 @@
             document.getElementById('m-produk').value = nama;
             const pcs = Number(document.getElementById('m-jumlah-pcs').value || 1);
             document.getElementById('m-total').value = harga * pcs;
+
+            document.querySelectorAll('.minuman-btn').forEach(btn => btn.classList.remove('selected'));
+            const tombol = Array.from(document.querySelectorAll('.minuman-btn')).find(btn => btn.dataset.nama === nama);
+            if(tombol) tombol.classList.add('selected');
         }
 
         window.hitungTotalMinuman = () => {
@@ -2234,4 +2299,4 @@
         }
     </script>
 </body>
-</html>
+</htmldata-nama="Air Mineral" data-nama="Air Mineral + 3 Permen" data-nama="Pocari Sweat" data-nama="Fanta" data-nama="Sprite" data-nama="Coca Cola" data-nama="Teh Pucuk Harum" data-nama="Milo" >
