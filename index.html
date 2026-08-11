@@ -1302,20 +1302,9 @@
             let listTbody = document.getElementById('tabel-list-member');
             if (listTbody) listTbody.innerHTML = "";
             
-            let defaultMembers = [
-                { nama: "DALPA FC", hari: "Jumat", jam: "07:00" }, { nama: "DALPA FC", hari: "Jumat", jam: "08:00" }, { nama: "DALPA FC", hari: "Jumat", jam: "09:00" },
-                { nama: "FHS FC", hari: "Senin", jam: "17:00" }, { nama: "DINSOS FC", hari: "Selasa", jam: "17:00" }, { nama: "KULAWARGA", hari: "Rabu", jam: "17:00" }, { nama: "MAG FC", hari: "Kamis", jam: "17:00" },
-                { nama: "OFF", hari: "Senin", jam: "18:00" }, { nama: "OFF", hari: "Selasa", jam: "18:00" }, { nama: "OFF", hari: "Rabu", jam: "18:00" }, { nama: "OFF", hari: "Kamis", jam: "18:00" }, { nama: "OFF", hari: "Jumat", jam: "18:00" }, { nama: "OFF", hari: "Sabtu", jam: "18:00" }, { nama: "OFF", hari: "Minggu", jam: "18:00" },
-                { nama: "KESULTANAN FC", hari: "Senin", jam: "19:00" }, { nama: "ASDU FC", hari: "Senin", jam: "20:00" }, { nama: "SAMSAT FC", hari: "Selasa", jam: "20:00" },
-                { nama: "SMU FC", hari: "Rabu", jam: "20:00" }, { nama: "KPP FC", hari: "Jumat", jam: "20:00" }, { nama: "PAMA FC", hari: "Sabtu", jam: "20:00" },
-                { nama: "PIT FC", hari: "Senin", jam: "21:00" }, { nama: "TB UNITED", hari: "Rabu", jam: "21:00" }, { nama: "KPP FC", hari: "Jumat", jam: "21:00" }, { nama: "44 FC", hari: "Minggu", jam: "21:00" }
-            ];
-
-            defaultMembers.forEach(m => {
-                if(!globalCache.member[m.jam]) globalCache.member[m.jam] = {};
-                let isOff = (m.nama.toUpperCase() === 'OFF');
-                globalCache.member[m.jam][m.hari] = { nama: m.nama, type: isOff ? 'off' : 'member' };
-            });
+            // Jadwal Member hanya mengambil data yang benar-benar tersimpan di Firebase.
+            // Tidak ada lagi data default yang ditanam di kode, sehingga tim yang tidak
+            // tercatat di daftar Member tidak akan muncul sebagai Member (biru).
 
             if (snapshot.exists()) {
                 snapshot.forEach((child) => {
