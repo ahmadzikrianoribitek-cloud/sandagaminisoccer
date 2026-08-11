@@ -662,6 +662,11 @@
                         <option value="19:00">19:00</option><option value="20:00">20:00</option><option value="21:00">21:00</option><option value="22:00">22:00</option>
                         <option value="23:00">23:00</option><option value="24:00">24:00</option>
                     </select>
+                    <div class="sm:col-span-3">
+                        <label class="block text-[11px] font-black text-indigo-950 mb-1">Mulai Berlaku</label>
+                        <input type="date" id="m-mulai" class="p-2 rounded text-sm glass-input w-full" required>
+                        <p class="text-[10px] text-slate-600 mt-1">Jadwal member baru hanya berlaku mulai tanggal ini.</p>
+                    </div>
                 </div>
                 <button type="submit" class="bg-indigo-700 hover:bg-indigo-800 text-white px-4 py-2 rounded text-xs font-bold shadow border border-indigo-500/50">Simpan Jadwal</button>
             </form>
@@ -673,7 +678,9 @@
                         <tr>
                             <th class="p-2 border border-slate-900/40 w-[45%]">Tim / Keterangan</th>
                             <th class="p-2 border border-slate-900/40 w-[20%]">Hari</th>
-                            <th class="p-2 border border-slate-900/40 w-[20%]">Jam</th>
+                            <th class="p-2 border border-slate-900/40 w-[15%]">Jam</th>
+                            <th class="p-2 border border-slate-900/40 w-[20%]">Mulai</th>
+                            <th class="p-2 border border-slate-900/40 w-[25%]">Status</th>
                             <th class="p-2 border border-slate-900/40 text-center w-[15%]">Aksi</th>
                         </tr>
                     </thead>
@@ -1017,6 +1024,7 @@
                 updateDropdownTimMasuk();
             }
             if(document.getElementById('m-tgl')) document.getElementById('m-tgl').value = todayStr;
+            if(document.getElementById('m-mulai')) document.getElementById('m-mulai').value = todayStr;
             if(document.getElementById('k-tgl')) document.getElementById('k-tgl').value = todayStr;
             if(document.getElementById('k-sumber-tgl')) document.getElementById('k-sumber-tgl').value = todayStr;
         }
@@ -1197,7 +1205,7 @@
 
             listJam.forEach(jam => {
                 let cellData = (globalCache.member[jam] && globalCache.member[jam][hariName]) ? globalCache.member[jam][hariName] : null;
-                if(cellData && cellData.type !== 'off') {
+                if(cellData && cellData.type !== 'off' && isMemberActiveOnDate(cellData, tglInput)) {
                     timBertanding.push({ nama: cellData.nama, jam: jam });
                 }
             });
@@ -1366,18 +1374,39 @@
 
         window.tambahMember = async (e) => {
             e.preventDefault();
-            let nama = document.getElementById('m-nama').value;
+            let nama = document.getElementById('m-nama').value.trim();
             let hari = document.getElementById('m-hari').value;
             let jam = document.getElementById('m-jam').value;
+            let mulai = document.getElementById('m-mulai').value || getLocalDateString();
 
             try {
-                await push(ref(db, 'member'), { nama, hari, jam });
-                alert("Jadwal berhasil ditambahkan!");
+                await push(ref(db, 'member'), { nama, hari, jam, mulai, berhenti: '' });
+                alert(`Jadwal berhasil ditambahkan mulai ${mulai}!`);
                 document.getElementById('form-member').reset();
+                document.getElementById('m-mulai').value = getLocalDateString();
                 showPage('booking-schedule');
             } catch (error) {
                 console.error(error);
                 alert("Gagal menyimpan: " + error.message);
+            }
+        }
+
+        window.berhentiMember = async (key) => {
+            const today = getLocalDateString();
+            const member = globalCache.member;
+            let nama = '';
+            Object.values(member || {}).forEach(perHari => {
+                Object.values(perHari || {}).forEach(cell => {
+                    if(cell && cell.key === key) nama = cell.nama || nama;
+                });
+            });
+            if(!confirm(`Berhentikan ${nama || 'member ini'} mulai tanggal ${today}?\n\nJadwal sebelum tanggal ini tetap dipertahankan.`)) return;
+            try {
+                await update(ref(db, 'member/' + key), { berhenti: today });
+                alert(`Member dihentikan mulai ${today}. Jadwal sebelumnya tetap ada.`);
+            } catch (error) {
+                console.error(error);
+                alert("Gagal menghentikan member: " + error.message);
             }
         }
 
@@ -1526,6 +1555,19 @@
             return days[d.getDay()];
         }
 
+        // Member aktif pada tanggal tertentu.
+        // Member lama tanpa tanggal mulai tetap dianggap berlaku sejak awal data.
+        // Jika sudah dihentikan, tanggal berhenti bersifat eksklusif: mulai tanggal itu
+        // member tidak lagi masuk jadwal tetap, sementara tanggal-tanggal sebelumnya tetap tampil.
+        function isMemberActiveOnDate(member, dateStr) {
+            if(!member || !dateStr) return false;
+            const mulai = member.mulai || '';
+            const berhenti = member.berhenti || '';
+            if(mulai && dateStr < mulai) return false;
+            if(berhenti && dateStr >= berhenti) return false;
+            return true;
+        }
+
         function renderAll() {
             renderGridJadwal();
             renderTabelBooking();
@@ -1548,17 +1590,28 @@
                 snapshot.forEach((child) => {
                     let m = child.val();
                     let key = child.key;
+                    const isOff = String(m.nama || '').toUpperCase() === 'OFF';
+                    const mulai = m.mulai || '';
+                    const berhenti = m.berhenti || '';
+                    const statusHtml = berhenti
+                        ? `<span class="inline-flex items-center px-2 py-1 rounded bg-slate-300 text-slate-700 text-[10px] font-black">BERHENTI ${berhenti}</span>`
+                        : `<span class="inline-flex items-center px-2 py-1 rounded bg-emerald-600 text-white text-[10px] font-black">AKTIF</span>`;
                     if(listTbody) {
                         listTbody.innerHTML += `<tr class="border-b border-slate-900/40">
                             <td class="p-2 border border-slate-900/40 font-bold">${m.nama}</td>
                             <td class="p-2 border border-slate-900/40">${m.hari}</td>
                             <td class="p-2 border border-slate-900/40">${m.jam}</td>
-                            <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusMember('${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
+                            <td class="p-2 border border-slate-900/40 text-center">${mulai || '-'} </td>
+                            <td class="p-2 border border-slate-900/40 text-center">${statusHtml}</td>
+                            <td class="p-2 border border-slate-900/40 text-center">
+                                ${(!berhenti && !isOff) ? `<button type="button" onclick="berhentiMember('${key}')" class="bg-amber-600 hover:bg-amber-700 text-white px-2 py-1 rounded text-[10px] font-black mr-1">Berhenti</button>` : ''}
+                                <button type="button" onclick="hapusMember('${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-[10px]">Hapus</button>
+                            </td>
                         </tr>`;
                     }
                     if(!globalCache.member[m.jam]) globalCache.member[m.jam] = {};
-                    let isOff = (m.nama.toUpperCase() === 'OFF');
-                    globalCache.member[m.jam][m.hari] = { nama: m.nama, type: isOff ? 'off' : 'member' };
+                    // Simpan metadata tanggal agar jadwal bisa berubah berdasarkan tanggal yang sedang dilihat.
+                    globalCache.member[m.jam][m.hari] = { nama: m.nama, type: isOff ? 'off' : 'member', mulai, berhenti, key };
                 });
             }
             renderAll();
@@ -1638,7 +1691,7 @@
             // Jadwal Member dari Firebase.
             Object.entries(globalCache.member || {}).forEach(([jam, perHari]) => {
                 const cell = perHari ? perHari[hariNama] : null;
-                if(!cell || !cell.nama || cell.type === 'off') return;
+                if(!cell || !cell.nama || cell.type === 'off' || !isMemberActiveOnDate(cell, today)) return;
                 const jamKey = jam.substring(0, 5);
                 schedules[jamKey] = {
                     nama: cell.nama,
@@ -1799,7 +1852,20 @@
 
             headerTr.innerHTML = headerHtml;
 
-            let matrix = JSON.parse(JSON.stringify(globalCache.member));
+            // Bentuk matrix member berdasarkan tanggal masing-masing hari.
+            // Dengan ini member baru tidak muncul sebelum tanggal mulai dan member berhenti
+            // tidak muncul lagi mulai tanggal berhenti, tanpa menghapus histori tanggal sebelumnya.
+            let matrix = {};
+            listHariKey.forEach(hari => {
+                const dateStr = currentWeekDates[hari] ? currentWeekDates[hari].dateStr : '';
+                listJam.forEach(jam => {
+                    const cell = (globalCache.member[jam] && globalCache.member[jam][hari]) ? globalCache.member[jam][hari] : null;
+                    if(cell && cell.nama && isMemberActiveOnDate(cell, dateStr)) {
+                        if(!matrix[jam]) matrix[jam] = {};
+                        matrix[jam][hari] = { ...cell };
+                    }
+                });
+            });
 
             Object.values(globalCache.booking).forEach(b => {
                 if(b.tgl) {
@@ -2142,6 +2208,17 @@
 
             let createHeader = (startD, endD) => {
                 let html = `<th class="p-1.5 border border-slate-900/40 text-center font-black w-[120px] bg-cyan-950 text-white">Tanggal</th>`;
+
+                // Khusus Agustus 2026: tanggal 1-9 digabung menjadi satu area agar
+                // tidak membuat tabel melebar di layar HP. Tanggal 10-11 tetap normal.
+                if(year === 2026 && month === 8 && startD === 1) {
+                    html += `<th colspan="9" class="p-1 border border-amber-400/60 min-w-[150px] font-black text-center bg-amber-100/80 text-amber-900">1 - 9</th>`;
+                    for(let d = 10; d <= endD; d++) {
+                        html += `<th class="p-1 border border-slate-900/40 min-w-[25px] font-black text-center">${d}</th>`;
+                    }
+                    return html;
+                }
+
                 for(let d = startD; d <= endD; d++) {
                     html += `<th class="p-1 border border-slate-900/40 min-w-[25px] font-black text-center">${d}</th>`;
                 }
@@ -2171,7 +2248,7 @@
 
                 listJam.forEach(jam => {
                     let cell = (globalCache.member[jam] && globalCache.member[jam][hName]) ? globalCache.member[jam][hName] : null;
-                    if(cell && cell.type !== 'off' && cell.nama) {
+                    if(cell && cell.type !== 'off' && cell.nama && isMemberActiveOnDate(cell, info.dateStr)) {
                         let cleanName = cell.nama.toUpperCase().trim();
                         info.scheduledSchedules.push({ nama: cleanName, jam: jam, source: 'member' });
                     }
@@ -2246,12 +2323,19 @@
                 let targetBagian = (d <= 11) ? 1 : (d <= 22 ? 2 : 3);
 
                 if(isSystemNotCreated) {
-                    const belumDibuatCell = `<td class="p-1 border border-amber-500/40 font-black text-center bg-amber-100/80 text-amber-800 text-[8px] sm:text-[9px] leading-tight">SISTEM<br>BELUM DIBUAT</td>`;
-                    rTimBooking[targetBagian] += belumDibuatCell;
-                    rTimMain[targetBagian] += belumDibuatCell;
-                    rJmlJam[targetBagian] += belumDibuatCell;
-                    rJmlCancel[targetBagian] += belumDibuatCell;
-                    rTotalJamMain[targetBagian] += belumDibuatCell;
+                    // KHUSUS AGUSTUS 2026: tanggal 1-9 menjadi SATU area gabungan.
+                    // Satu sel memakai colspan=9 (tanggal 1-9) dan rowspan=5 (seluruh metrik).
+                    // Jadi tidak ada lagi 9 kolom kecil yang berulang.
+                    if(d === 1) {
+                        const belumDibuatCell = `<td colspan="9" rowspan="5" class="monthly-system-cell p-0 border border-amber-400/60 text-center bg-amber-100/70 align-middle">
+                            <div class="w-full h-full min-h-[190px] sm:min-h-[220px] flex items-center justify-center overflow-hidden">
+                                <img src="stempel.png" alt="Sistem belum dibuat" class="monthly-system-stamp w-[110px] h-[110px] sm:w-[140px] sm:h-[140px] object-contain opacity-95" loading="eager">
+                            </div>
+                        </td>`;
+                        rTimBooking[targetBagian] += belumDibuatCell;
+                    }
+                    // Karena sel di atas memakai rowspan=5, empat baris metrik berikutnya
+                    // tidak menambahkan sel apa pun untuk tanggal 1-9.
                     continue;
                 }
 
