@@ -689,7 +689,112 @@
         .sub-menu-modern .minuman-btn:hover { background:#fff !important; border-color:#bfdbfe !important; }
         .sub-menu-modern .minuman-btn.selected { box-shadow:0 0 0 3px rgba(37,99,235,.14), 0 10px 24px rgba(37,99,235,.16) !important; }
         @media (max-width:640px) { .sub-menu-modern { border-radius:1.15rem !important; } .sub-menu-modern::before { height:4px; } .sub-menu-modern table { box-shadow:0 5px 16px rgba(15,23,42,.05); } }
-</style>
+
+        /* Booking Schedule - visual polish only */
+        #booking-schedule-grid-wrap {
+            background: rgba(255,255,255,.92);
+            border-color: rgba(148,163,184,.35);
+            box-shadow: 0 18px 45px rgba(15,23,42,.12);
+        }
+        #booking-schedule-grid-wrap table {
+            background: #ffffff;
+            color: #0f172a;
+        }
+        #booking-schedule-grid-wrap tbody td {
+            color: #0f172a !important;
+        }
+        .schedule-time {
+            color: #0f172a !important;
+            background: #fef3c7 !important;
+            border-color: #fcd34d !important;
+            text-shadow: none !important;
+        }
+        .schedule-team-member {
+            color: #1d4ed8 !important;
+            background: #eff6ff !important;
+            border: 1px solid #93c5fd !important;
+            font-weight: 900 !important;
+            display: block;
+            width: 100%;
+            padding: .4rem .6rem;
+            border-radius: .65rem;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.8), 0 3px 8px rgba(37,99,235,.08);
+        }
+        .schedule-team-nonmember {
+            color: #dc2626 !important;
+            background: #fff1f2 !important;
+            border: 1px solid #fda4af !important;
+            font-weight: 900 !important;
+            display: block;
+            width: 100%;
+            padding: .4rem .6rem;
+            border-radius: .65rem;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.8), 0 3px 8px rgba(220,38,38,.08);
+        }
+        .schedule-card {
+            background: #ffffff !important;
+            border-color: #e2e8f0 !important;
+            box-shadow: 0 5px 16px rgba(15,23,42,.08);
+        }
+        .schedule-money {
+            color: #0f172a !important;
+            background: #f8fafc !important;
+            border-color: #e2e8f0 !important;
+        }
+        .schedule-money .schedule-total-label { color:#475569 !important; }
+        .schedule-money .schedule-dp-label { color:#2563eb !important; }
+        .schedule-money .schedule-sisa-label { color:#d97706 !important; }
+        .schedule-legend {
+            background: rgba(255,255,255,.92) !important;
+            border: 1px solid #e2e8f0 !important;
+            box-shadow: 0 8px 24px rgba(15,23,42,.08);
+            color: #334155 !important;
+        }
+        .schedule-legend-title { color:#0f172a !important; }
+        .schedule-legend-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            color: #334155 !important;
+            border-radius: 999px;
+            padding: .35rem .65rem;
+        }
+
+        /* Booking Schedule grid - holder nama tim di dalam sel */
+        #booking-schedule-grid-wrap .schedule-grid-team-holder {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 96%;
+            min-height: 1.7rem;
+            padding: .28rem .55rem;
+            border-radius: .65rem;
+            font-weight: 900 !important;
+            line-height: 1.1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            box-shadow: 0 2px 7px rgba(15,23,42,.10), inset 0 1px 0 rgba(255,255,255,.65);
+        }
+        #booking-schedule-grid-wrap .schedule-grid-team-member {
+            color: #1e40af !important;
+            background: #dbeafe !important;
+            border: 1px solid #60a5fa !important;
+        }
+        #booking-schedule-grid-wrap .schedule-grid-team-nonmember {
+            color: #b91c1c !important;
+            background: #fee2e2 !important;
+            border: 1px solid #f87171 !important;
+        }
+        @media (max-width:640px) {
+            #booking-schedule-grid-wrap .schedule-grid-team-holder {
+                min-height: 1.45rem;
+                padding: .22rem .35rem;
+                border-radius: .5rem;
+                max-width: 98%;
+            }
+        }
+
+    </style>
 </head>
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium">
 
@@ -833,12 +938,12 @@
                 </table>
             </div>
 
-            <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs font-bold mt-4 p-2.5 rounded-xl border border-white/20 text-slate-900 bg-white/10 backdrop-blur">
-                <span class="font-black">Keterangan:</span>
-                <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-blue-600 border border-blue-400 rounded"></span> Member (Biru)</span>
-                <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-rose-600 border border-rose-400 rounded"></span> Non-Member (Merah)</span>
-                <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-red-500/20 border border-red-600 border-dashed rounded"></span> OFF</span>
-                <span class="flex items-center gap-1.5"><span class="px-1.5 py-0.5 bg-slate-800 text-slate-200 rounded text-[10px] font-bold">DONE</span> Selesai</span>
+            <div class="schedule-legend flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs font-bold mt-4 p-3 rounded-2xl">
+                <span class="schedule-legend-title font-black px-2">Keterangan</span>
+                <span class="schedule-legend-item flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-blue-600 border border-blue-400 rounded-full"></span> <span class="text-blue-700 font-black">Member</span></span>
+                <span class="schedule-legend-item flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-rose-600 border border-rose-400 rounded-full"></span> <span class="text-rose-700 font-black">Non-Member</span></span>
+                <span class="schedule-legend-item flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-red-100 border border-red-500 border-dashed rounded-full"></span> <span class="text-red-700 font-black">OFF</span></span>
+                <span class="schedule-legend-item flex items-center gap-1.5"><span class="px-1.5 py-0.5 bg-slate-800 text-white rounded text-[10px] font-bold">DONE</span> <span class="text-slate-700 font-black">Selesai</span></span>
             </div>
         </div>
 
@@ -2337,23 +2442,23 @@
 
                 const namaTampil = item.nama || '-';
 
-                return `<div class="rounded-xl border border-white/15 bg-slate-950/25 backdrop-blur-xl p-2.5 shadow-sm shadow-slate-950/20">
+                return `<div class="schedule-card rounded-xl border p-2.5 shadow-sm">
                     <div class="flex items-center gap-2">
-                        <span class="shrink-0 inline-flex items-center justify-center px-2 py-1 rounded-lg bg-amber-500/90 text-slate-950 border border-amber-300/50 font-black text-xs sm:text-sm shadow-sm">⏰ ${jam.replace(':','.')}</span>
+                        <span class="schedule-time shrink-0 inline-flex items-center justify-center px-2 py-1 rounded-lg border font-black text-xs sm:text-sm shadow-sm">⏰ ${jam.replace(':','.')}</span>
                         <div class="min-w-0 flex-1">
-                            <div class="font-black text-xs sm:text-sm truncate">${namaTampil}</div>
+                            <div class="${isMember ? 'schedule-team-member' : 'schedule-team-nonmember'} font-black text-xs sm:text-sm truncate">${namaTampil}</div>
                             <div class="flex flex-wrap gap-1 mt-1">${statusBadge}</div>
                         </div>
                     </div>
                     <div class="grid grid-cols-3 gap-1.5 mt-2 text-center text-[9px] sm:text-[10px] font-black">
-                        <div class="rounded-lg bg-white/10 border border-white/10 p-1.5">
-                            <div class="text-amber-300/80">TOTAL</div><div>${formatRupiah(total)}</div>
+                        <div class="schedule-money rounded-lg border p-1.5">
+                            <div class="schedule-total-label">TOTAL</div><div>${formatRupiah(total)}</div>
                         </div>
-                        <div class="rounded-lg bg-amber-500/10 border border-amber-400/20 p-1.5">
-                            <div class="text-amber-300">DP</div><div>${formatRupiah(dp)}</div>
+                        <div class="schedule-money rounded-lg border p-1.5">
+                            <div class="schedule-dp-label">DP</div><div>${formatRupiah(dp)}</div>
                         </div>
-                        <div class="rounded-lg bg-amber-500/15 border border-amber-400/25 p-1.5">
-                            <div class="text-amber-200">SISA</div><div>${formatRupiah(sisa)}</div>
+                        <div class="schedule-money rounded-lg border p-1.5">
+                            <div class="schedule-sisa-label">SISA</div><div>${formatRupiah(sisa)}</div>
                         </div>
                     </div>
                 </div>`;
@@ -2463,15 +2568,16 @@
                         textVal = `<img src="off.png" alt="OFF" class="max-h-7 sm:max-h-11 max-w-[80%] sm:max-w-[75%] w-auto h-auto object-contain mx-auto drop-shadow-lg" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
                             <span class="hidden items-center justify-center text-red-500 font-black text-[9px] sm:text-xs tracking-widest">OFF</span>`;
                     } else if(cellData) {
-                        textVal = cellData.nama;
                         if(cellData.type === 'member') {
-                            bgClass = "bg-blue-600 backdrop-blur text-white font-black border border-slate-900/40 shadow-inner text-center";
+                            textVal = `<span class="schedule-grid-team-holder schedule-grid-team-member">${cellData.nama}</span>`;
+                            bgClass = "bg-blue-50 border border-blue-200 text-slate-900 font-black shadow-inner text-center";
                         } else if(cellData.type === 'off') {
                             bgClass = "bg-red-500/20 border border-slate-900/40 border-dashed text-red-900 font-black shadow-lg text-center";
                             textVal = `<img src="off.png" alt="OFF" class="max-h-7 sm:max-h-11 max-w-[80%] sm:max-w-[75%] w-auto h-auto object-contain mx-auto drop-shadow-lg" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
                                 <span class="hidden items-center justify-center text-red-900 font-black text-[9px] sm:text-xs tracking-widest">OFF</span>`;
                         } else {
-                            bgClass = "bg-rose-600 backdrop-blur text-white font-black border border-slate-900/40 shadow-inner text-center";
+                            textVal = `<span class="schedule-grid-team-holder schedule-grid-team-nonmember">${cellData.nama}</span>`;
+                            bgClass = "bg-rose-50 border border-rose-200 text-slate-900 font-black shadow-inner text-center";
                         }
                     }
 
