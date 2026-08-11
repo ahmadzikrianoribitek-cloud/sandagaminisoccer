@@ -240,10 +240,10 @@
             </div>
 
             <!-- JADWAL TIM HARI INI -->
-            <div id="today-schedule-panel" class="mb-6 rounded-2xl border border-blue-500/30 bg-white/20 backdrop-blur-md p-3 sm:p-4 shadow-xl">
+            <div id="today-schedule-panel" class="mb-6 rounded-2xl border border-amber-400/30 bg-slate-950/20 backdrop-blur-xl p-3 sm:p-4 shadow-xl shadow-slate-950/20">
                 <div class="flex items-center justify-between gap-2 mb-3">
-                    <h3 class="font-black text-sm sm:text-base text-blue-950">📅 JADWAL TIM HARI INI</h3>
-                    <span id="today-schedule-date" class="text-[10px] sm:text-xs font-black px-2 py-1 rounded-lg bg-slate-900 text-white"></span>
+                    <h3 class="font-black text-sm sm:text-base text-amber-300 drop-shadow-sm">📅 JADWAL TIM HARI INI</h3>
+                    <span id="today-schedule-date" class="text-[10px] sm:text-xs font-black px-2 py-1 rounded-lg bg-amber-500/90 text-slate-950 border border-amber-300/50 shadow-sm shadow-amber-900/20"></span>
                 </div>
                 <div id="today-schedule-list" class="space-y-2"></div>
             </div>
@@ -1730,23 +1730,23 @@
 
                 const namaTampil = item.nama || '-';
 
-                return `<div class="rounded-xl border border-slate-300/50 bg-white/50 p-2.5 shadow-sm">
+                return `<div class="rounded-xl border border-white/15 bg-slate-950/25 backdrop-blur-xl p-2.5 shadow-sm shadow-slate-950/20">
                     <div class="flex items-center gap-2">
-                        <span class="shrink-0 inline-flex items-center justify-center px-2 py-1 rounded-lg bg-amber-500 text-white border border-amber-600 font-black text-xs sm:text-sm">⏰ ${jam.replace(':','.')}</span>
+                        <span class="shrink-0 inline-flex items-center justify-center px-2 py-1 rounded-lg bg-amber-500/90 text-slate-950 border border-amber-300/50 font-black text-xs sm:text-sm shadow-sm">⏰ ${jam.replace(':','.')}</span>
                         <div class="min-w-0 flex-1">
                             <div class="font-black text-xs sm:text-sm truncate">${namaTampil}</div>
                             <div class="flex flex-wrap gap-1 mt-1">${statusBadge}</div>
                         </div>
                     </div>
                     <div class="grid grid-cols-3 gap-1.5 mt-2 text-center text-[9px] sm:text-[10px] font-black">
-                        <div class="rounded-lg bg-slate-100/80 border border-slate-300/50 p-1.5">
-                            <div class="text-slate-500">TOTAL</div><div>${formatRupiah(total)}</div>
+                        <div class="rounded-lg bg-white/10 border border-white/10 p-1.5">
+                            <div class="text-amber-300/80">TOTAL</div><div>${formatRupiah(total)}</div>
                         </div>
-                        <div class="rounded-lg bg-emerald-100/80 border border-emerald-300/50 p-1.5">
-                            <div class="text-emerald-700">DP</div><div>${formatRupiah(dp)}</div>
+                        <div class="rounded-lg bg-amber-500/10 border border-amber-400/20 p-1.5">
+                            <div class="text-amber-300">DP</div><div>${formatRupiah(dp)}</div>
                         </div>
-                        <div class="rounded-lg bg-rose-100/80 border border-rose-300/50 p-1.5">
-                            <div class="text-rose-700">SISA</div><div>${formatRupiah(sisa)}</div>
+                        <div class="rounded-lg bg-amber-500/15 border border-amber-400/25 p-1.5">
+                            <div class="text-amber-200">SISA</div><div>${formatRupiah(sisa)}</div>
                         </div>
                     </div>
                 </div>`;
@@ -2240,6 +2240,21 @@
                 
                 let isFutureDate = cellDateObj > todayObj;
 
+                // KHUSUS AGUSTUS 2026: tanggal 1-9 tidak dihitung karena sistem belum dibuat.
+                // Bulan/tahun lain tetap dihitung normal.
+                let isSystemNotCreated = (year === 2026 && month === 8 && d >= 1 && d <= 9);
+                let targetBagian = (d <= 11) ? 1 : (d <= 22 ? 2 : 3);
+
+                if(isSystemNotCreated) {
+                    const belumDibuatCell = `<td class="p-1 border border-amber-500/40 font-black text-center bg-amber-100/80 text-amber-800 text-[8px] sm:text-[9px] leading-tight">SISTEM<br>BELUM DIBUAT</td>`;
+                    rTimBooking[targetBagian] += belumDibuatCell;
+                    rTimMain[targetBagian] += belumDibuatCell;
+                    rJmlJam[targetBagian] += belumDibuatCell;
+                    rJmlCancel[targetBagian] += belumDibuatCell;
+                    rTotalJamMain[targetBagian] += belumDibuatCell;
+                    continue;
+                }
+
                 let schedules = info.scheduledSchedules;
                 let paidList = paidRecordsPerDate[d] || [];
 
@@ -2276,8 +2291,6 @@
                 totalJamBookingBulan += numJamBooking;
                 totalCancelBulan += cancelCount;
                 totalJamMainBulan += actualJamMain;
-
-                let targetBagian = (d <= 11) ? 1 : (d <= 22 ? 2 : 3);
 
                 rTimBooking[targetBagian] += `<td class="p-1 border border-slate-900/40 font-bold text-center">${numTimBooking > 0 ? numTimBooking : 0}</td>`;
                 rTimMain[targetBagian] += `<td class="p-1 border border-slate-900/40 font-bold text-center">${numTimMain > 0 ? numTimMain : 0}</td>`;
