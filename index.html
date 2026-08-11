@@ -1,21 +1,19 @@
 <!DOCTYPE html>
+
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SANDAGA MINISOCCER 2 - Dashboard & Jadwal</title>
-
-    <!-- Penghubung Manifest untuk Android/Chrome -->
-    <link rel="manifest" href="manifest.json">
-
-    <!-- Ikon Standar & Apple Touch Icon -->
-    <link rel="icon" type="image/png" href="ikon.png">
-    <link rel="apple-touch-icon" href="ikon.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="ikon.png">
-    <link rel="apple-touch-icon" sizes="167x167" href="ikon.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="ikon.png">
-
-    <script src="https://cdn.tailwindcss.com">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SANDAGA MINISOCCER 2 - Dashboard &amp; Jadwal</title>
+<!-- Penghubung Manifest untuk Android/Chrome -->
+<link href="manifest.json" rel="manifest"/>
+<!-- Ikon Standar & Apple Touch Icon -->
+<link href="ikon.png" rel="icon" type="image/png"/>
+<link href="ikon.png" rel="apple-touch-icon"/>
+<link href="ikon.png" rel="apple-touch-icon" sizes="152x152"/>
+<link href="ikon.png" rel="apple-touch-icon" sizes="167x167"/>
+<link href="ikon.png" rel="apple-touch-icon" sizes="180x180"/>
+<script src="https://cdn.tailwindcss.com">
         function bookingSudahLunasUntukJadwal(item) {
             const dp = Number(item?.dp || 0);
             const total = Number(item?.totalHarga || item?.harga || item?.total || 0);
@@ -23,21 +21,33 @@
             return Number(item?.sisaTagihan ?? item?.sisa ?? -1) === 0;
         }
 </script>
-    <style>
+<style>
         /* Default Background untuk Halaman Awal */
+        /* Latar halaman dibuat fixed agar tetap diam saat konten di-scroll */
+        html {
+            min-height: 100%;
+            background-color: #eef6ff;
+        }
+
         body { 
             background-image: url('latar.png'); 
             background-size: cover; 
-            background-attachment: fixed; 
-            background-position: center;
+            background-attachment: fixed !important; 
+            background-position: center center;
             background-repeat: no-repeat;
+            background-clip: border-box;
             min-height: 100vh;
             min-height: 100dvh;
+            overscroll-behavior-y: auto;
         }
 
-        /* Background untuk Sub Menu menggunakan latar1.png */
+        /* Background untuk Sub Menu juga tetap fixed di viewport */
         body.sub-menu-active {
             background-image: url('latar1.png') !important;
+            background-size: cover !important;
+            background-attachment: fixed !important;
+            background-position: center center !important;
+            background-repeat: no-repeat !important;
         }
         
         /* Efek Liquid Glassmorphism */
@@ -191,30 +201,90 @@
             box-shadow: 0 6px 24px 0 rgba(0, 0, 0, 0.3);
         }
 
-        /* Tombol Kembali Sticky Glass */
+        /* Tombol Kembali baru: ikon saja, glass, fixed terhadap viewport */
         .sticky-back-btn {
-            position: sticky;
-            top: 1rem;
-            z-index: 50;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(255, 255, 255, 0.25);
+            position: fixed !important;
+            top: 18px !important;
+            left: 18px !important;
+            right: auto !important;
+            z-index: 9999 !important;
+            width: 44px !important;
+            height: 44px !important;
+            min-width: 44px !important;
+            min-height: 44px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            background: rgba(255, 255, 255, 0.92) !important;
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            color: #0f172a;
-            padding: 0.5rem 0.8rem;
-            border-radius: 0.75rem;
-            font-size: 0.75rem;
+            border: 1px solid #dbeafe !important;
+            color: #1e3a8a !important;
+            border-radius: 14px !important;
+            font-size: 0 !important;
             font-weight: 700;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-            transition: all 0.3s ease;
-            margin-bottom: 1rem;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.16) !important;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+        .sticky-back-btn svg {
+            width: 21px !important;
+            height: 21px !important;
+            flex: 0 0 auto;
         }
         .sticky-back-btn:hover {
-            background: rgba(255, 255, 255, 0.4);
-            border-color: rgba(255, 255, 255, 0.8);
+            background: #eff6ff !important;
+            border-color: #93c5fd !important;
+            color: #1d4ed8 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(30, 64, 175, 0.20) !important;
+        }
+        .sticky-back-btn:active {
+            transform: scale(0.95);
+        }
+        /* Pastikan tombol tidak terklip oleh container sub-menu dan selalu mengikuti viewport */
+        .sub-menu-modern .sticky-back-btn {
+            position: fixed !important;
+            top: 18px !important;
+            left: 18px !important;
+            right: auto !important;
+            z-index: 2147483647 !important;
+            background: rgba(255,255,255,.22) !important;
+            border: 1px solid rgba(255,255,255,.62) !important;
+            color: #0f3b82 !important;
+            box-shadow: 0 10px 30px rgba(15,23,42,.18), inset 0 1px 0 rgba(255,255,255,.72) !important;
+            backdrop-filter: blur(18px) saturate(150%) !important;
+            -webkit-backdrop-filter: blur(18px) saturate(150%) !important;
+        }
+        .sub-menu-modern .sticky-back-btn:hover {
+            background: rgba(255,255,255,.34) !important;
+            border-color: rgba(255,255,255,.85) !important;
+            color: #1d4ed8 !important;
+        }
+        @media (max-width: 640px) {
+            .sticky-back-btn {
+                top: 12px !important;
+                left: 12px !important;
+                right: auto !important;
+                width: 42px !important;
+                height: 42px !important;
+                min-width: 42px !important;
+                min-height: 42px !important;
+                border-radius: 13px !important;
+            }
+            .sticky-back-btn svg {
+                width: 20px !important;
+                height: 20px !important;
+            }
+            .sub-menu-modern .sticky-back-btn {
+                top: 12px !important;
+                left: 12px !important;
+                right: auto !important;
+                width: 42px !important;
+                height: 42px !important;
+            }
         }
 
 
@@ -646,7 +716,7 @@
     
         /* Modern visual theme for all sub-menus. Visual-only: JS/IDs/handlers untouched. */
         .sub-menu-modern {
-            position: relative; overflow: hidden;
+            position: relative; overflow: visible !important;
             background: rgba(255,255,255,.94) !important;
             border: 1px solid rgba(226,232,240,.95) !important;
             box-shadow: 0 20px 55px rgba(15,23,42,.12), 0 4px 16px rgba(15,23,42,.06) !important;
@@ -654,8 +724,8 @@
         }
         .sub-menu-modern::before { content:""; position:absolute; inset:0 0 auto 0; height:5px; background:linear-gradient(90deg,#2563eb 0%,#7c3aed 48%,#06b6d4 100%); pointer-events:none; }
         .sub-menu-modern h2 { color:#0f172a !important; text-shadow:none !important; letter-spacing:.02em; }
-        .sub-menu-modern .sticky-back-btn { background:#f8fafc !important; border:1px solid #e2e8f0 !important; color:#334155 !important; box-shadow:0 5px 14px rgba(15,23,42,.07) !important; }
-        .sub-menu-modern .sticky-back-btn:hover { background:#eff6ff !important; border-color:#bfdbfe !important; color:#1d4ed8 !important; }
+        .sub-menu-modern .sticky-back-btn { background:rgba(255,255,255,.92) !important; border:1px solid #dbeafe !important; color:#1e3a8a !important; box-shadow:0 8px 24px rgba(15,23,42,.16) !important; }
+        .sub-menu-modern .sticky-back-btn:hover { background:#eff6ff !important; border-color:#93c5fd !important; color:#1d4ed8 !important; }
         .sub-menu-modern .glass-input { background:#f8fafc !important; border:1px solid #dbe3ee !important; color:#0f172a !important; box-shadow:inset 0 1px 2px rgba(15,23,42,.025); }
         .sub-menu-modern .glass-input:focus { background:#fff !important; border-color:#93c5fd !important; box-shadow:0 0 0 3px rgba(59,130,246,.10) !important; outline:none; }
         .sub-menu-modern .glass-input option { background:#fff; color:#0f172a; }
@@ -795,650 +865,662 @@
         }
 
     </style>
-</head>
-<body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium">
+<style>
+/* =========================================================
+   GLOBAL BACK BUTTON — OUTSIDE ALL MENU HOLDERS
+   The buttons are direct children of <body>, so their fixed
+   position is relative to the viewport and cannot be clipped
+   or scrolled by a menu/container.
+   ========================================================= */
+body > .sticky-back-btn {
+    position: fixed !important;
+    top: 18px !important;
+    left: 18px !important;
+    right: auto !important;
+    bottom: auto !important;
+    z-index: 2147483647 !important;
+    display: none !important;
+    box-sizing: border-box !important;
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px !important;
+    min-height: 46px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 16px !important;
+    border: 1px solid rgba(255,255,255,.72) !important;
+    background: rgba(255,255,255,.26) !important;
+    color: #0f3b82 !important;
+    box-shadow: 0 10px 30px rgba(15,23,42,.18), inset 0 1px 0 rgba(255,255,255,.78) !important;
+    backdrop-filter: blur(18px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
+    font-size: 0 !important;
+    line-height: 1 !important;
+    transform: translateZ(0) !important;
+}
+body > .sticky-back-btn svg {
+    width: 22px !important;
+    height: 22px !important;
+    display: block !important;
+    margin: 0 !important;
+    flex: 0 0 auto !important;
+}
+body > .sticky-back-btn:hover {
+    background: rgba(255,255,255,.42) !important;
+    border-color: rgba(255,255,255,.95) !important;
+    color: #1d4ed8 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 12px 32px rgba(15,23,42,.22), inset 0 1px 0 rgba(255,255,255,.9) !important;
+}
+body > .sticky-back-btn:active {
+    transform: scale(.94) !important;
+}
 
-    <!-- Header -->
-    <header class="w-full max-w-6xl flex flex-col items-center justify-center gap-2 mb-6 text-center">
-        <img src="logo.png" class="w-30 h-24 sm:w-30 sm:h-28 object-contain rounded-xl">
-        <h1 class="text-lg sm:text-2xl font-black text-slate-900 drop-shadow-sm">SANDAGA MINISOCCER 2</h1>
-    </header>
+/* Show exactly the button belonging to the currently visible page. */
+body:has(#page-booking-schedule:not(.hidden)) > .sticky-back-btn[data-back-context="page-booking-schedule"],
+body:has(#page-daily-recap:not(.hidden)):has(#sub-page-lapangan:not(.hidden)) > .sticky-back-btn[data-back-context="sub-page-lapangan"],
+body:has(#page-daily-recap:not(.hidden)):has(#sub-page-minuman:not(.hidden)) > .sticky-back-btn[data-back-context="sub-page-minuman"],
+body:has(#page-daily-recap:not(.hidden)):has(#sub-page-pengeluaran:not(.hidden)) > .sticky-back-btn[data-back-context="sub-page-pengeluaran"],
+body:has(#page-daily-recap:not(.hidden)):has(#sub-page-ringkasan:not(.hidden)) > .sticky-back-btn[data-back-context="sub-page-ringkasan"],
+body:has(#page-monthly-recap:not(.hidden)) > .sticky-back-btn[data-back-context="page-monthly-recap"],
+body:has(#page-booking-history:not(.hidden)) > .sticky-back-btn[data-back-context="page-booking-history"],
+body:has(#page-atur-member:not(.hidden)) > .sticky-back-btn[data-back-context="page-atur-member"],
+body:has(#page-booking:not(.hidden)) > .sticky-back-btn[data-back-context="page-booking"],
+body:has(#page-masuk:not(.hidden)) > .sticky-back-btn[data-back-context="page-masuk"],
+body:has(#page-minuman:not(.hidden)) > .sticky-back-btn[data-back-context="page-minuman"],
+body:has(#page-keluar:not(.hidden)) > .sticky-back-btn[data-back-context="page-keluar"] {
+    display: inline-flex !important;
+}
 
-    <main class="w-full max-w-6xl space-y-6">
-        
-        <!-- BERANDA -->
-        <div id="page-home" class="glass-panel home-dashboard p-3 sm:p-6 rounded-2xl">
-            <div class="home-hero">
-                <div>
-                    <span class="home-eyebrow">SANDAGA MINISOCCER 2</span>
-                    <h2>Dashboard Lapangan</h2>
-                    <p>Kelola booking, keuangan, minuman, dan laporan dengan lebih cepat.</p>
-                </div>
-                <div class="home-hero-badge">⚡</div>
-            </div>
-
-            <section class="home-section">
-                <div class="home-section-heading">
-                    <div>
-                        <span class="home-section-kicker">MENU UTAMA</span>
-                        <h3>Akses Cepat</h3>
-                    </div>
-                    <span class="home-section-dot"></span>
-                </div>
-
-                <div class="home-menu-grid">
-                    <button onclick="showPage('booking')" class="home-menu-card menu-blue">
-                        <span class="menu-card-icon">⚽</span>
-                        <span class="menu-card-copy"><strong>BOOKING</strong><small>Tambah jadwal lapangan</small></span>
-                        <span class="menu-card-arrow">→</span>
-                    </button>
-                    <button onclick="showPage('masuk')" class="home-menu-card menu-emerald">
-                        <span class="menu-card-icon">💰</span>
-                        <span class="menu-card-copy"><strong>UANG MASUK</strong><small>Catat pembayaran & pelunasan</small></span>
-                        <span class="menu-card-arrow">→</span>
-                    </button>
-                    <button onclick="showPage('minuman')" class="home-menu-card menu-amber">
-                        <span class="menu-card-icon">🥤</span>
-                        <span class="menu-card-copy"><strong>MINUMAN</strong><small>Kelola transaksi minuman</small></span>
-                        <span class="menu-card-arrow">→</span>
-                    </button>
-                    <button onclick="showPage('keluar')" class="home-menu-card menu-rose">
-                        <span class="menu-card-icon">💸</span>
-                        <span class="menu-card-copy"><strong>UANG KELUAR</strong><small>Catat pengeluaran operasional</small></span>
-                        <span class="menu-card-arrow">→</span>
-                    </button>
-                </div>
-            </section>
-
-            <!-- JADWAL TIM HARI INI -->
-            <section id="today-schedule-panel" class="today-schedule-modern">
-                <div class="today-schedule-head">
-                    <div class="today-title-wrap">
-                        <span class="today-icon">📅</span>
-                        <div>
-                            <span class="home-section-kicker">AKTIVITAS HARI INI</span>
-                            <h3>Jadwal Tim Hari Ini</h3>
-                        </div>
-                    </div>
-                    <span id="today-schedule-date" class="today-date-badge"></span>
-                </div>
-                <div id="today-schedule-list" class="today-schedule-list-modern"></div>
-            </section>
-
-            <section class="result-modern">
-                <div class="home-section-heading result-heading">
-                    <div>
-                        <span class="home-section-kicker">HASIL & LAPORAN</span>
-                        <h3>Result</h3>
-                    </div>
-                    <span class="result-heading-icon">📊</span>
-                </div>
-
-                <div class="result-grid">
-                    <button onclick="showPage('booking-schedule')" class="result-card">
-                        <span class="result-icon result-blue">📅</span>
-                        <span><strong>BOOKING SCHEDULE</strong><small>Lihat jadwal mingguan</small></span>
-                        <span class="result-arrow">→</span>
-                    </button>
-                    <button onclick="showPage('daily-recap')" class="result-card">
-                        <span class="result-icon result-emerald">📈</span>
-                        <span><strong>DAILY RECAP</strong><small>Rekap keuangan harian</small></span>
-                        <span class="result-arrow">→</span>
-                    </button>
-                    <button onclick="showPage('monthly-recap')" class="result-card">
-                        <span class="result-icon result-purple">📊</span>
-                        <span><strong>MONTHLY RECAP</strong><small>Ringkasan aktivitas bulanan</small></span>
-                        <span class="result-arrow">→</span>
-                    </button>
-                    <button onclick="showPage('booking-history')" class="result-card">
-                        <span class="result-icon result-amber">📋</span>
-                        <span><strong>BOOKING HISTORY</strong><small>Riwayat seluruh booking</small></span>
-                        <span class="result-arrow">→</span>
-                    </button>
-                </div>
-            </section>
-        </div>
-
-
+@media (max-width: 640px) {
+    body > .sticky-back-btn {
+        top: 12px !important;
+        left: 12px !important;
+        width: 42px !important;
+        height: 42px !important;
+        min-width: 42px !important;
+        min-height: 42px !important;
+        border-radius: 14px !important;
+    }
+    body > .sticky-back-btn svg {
+        width: 20px !important;
+        height: 20px !important;
+    }
+}
+</style></head>
+<body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium"><button class="sticky-back-btn" data-back-context="page-keluar" onclick="showPage('home')" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-minuman" onclick="showPage('home')" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-masuk" onclick="showPage('home')" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-booking" onclick="showPage('home')" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-atur-member" onclick="showPage('booking-schedule')" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-booking-history" onclick="showPage('home')" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-monthly-recap" onclick="showPage('home')" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="sub-page-ringkasan" onclick="backToDailyMenu()" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="sub-page-pengeluaran" onclick="backToDailyMenu()" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="sub-page-minuman" onclick="backToDailyMenu()" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="sub-page-lapangan" onclick="backToDailyMenu()" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-daily-recap" onclick="showPage('home')" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-booking-schedule" onclick="showPage('home')" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+<!-- Header -->
+<header class="w-full max-w-6xl flex flex-col items-center justify-center gap-2 mb-6 text-center">
+<img class="w-30 h-24 sm:w-30 sm:h-28 object-contain rounded-xl" src="logo.png"/>
+<h1 class="text-lg sm:text-2xl font-black text-slate-900 drop-shadow-sm">SANDAGA MINISOCCER 2</h1>
+</header>
+<main class="w-full max-w-6xl space-y-6">
+<!-- BERANDA -->
+<div class="glass-panel home-dashboard p-3 sm:p-6 rounded-2xl" id="page-home">
+<div class="home-hero">
+<div>
+<span class="home-eyebrow">SANDAGA MINISOCCER 2</span>
+<h2>Dashboard Lapangan</h2>
+<p>Kelola booking, keuangan, minuman, dan laporan dengan lebih cepat.</p>
+</div>
+<div class="home-hero-badge">⚡</div>
+</div>
+<section class="home-section">
+<div class="home-section-heading">
+<div>
+<span class="home-section-kicker">MENU UTAMA</span>
+<h3>Akses Cepat</h3>
+</div>
+<span class="home-section-dot"></span>
+</div>
+<div class="home-menu-grid">
+<button class="home-menu-card menu-blue" onclick="showPage('booking')">
+<span class="menu-card-icon">⚽</span>
+<span class="menu-card-copy"><strong>BOOKING</strong><small>Tambah jadwal lapangan</small></span>
+<span class="menu-card-arrow">→</span>
+</button>
+<button class="home-menu-card menu-emerald" onclick="showPage('masuk')">
+<span class="menu-card-icon">💰</span>
+<span class="menu-card-copy"><strong>UANG MASUK</strong><small>Catat pembayaran &amp; pelunasan</small></span>
+<span class="menu-card-arrow">→</span>
+</button>
+<button class="home-menu-card menu-amber" onclick="showPage('minuman')">
+<span class="menu-card-icon">🥤</span>
+<span class="menu-card-copy"><strong>MINUMAN</strong><small>Kelola transaksi minuman</small></span>
+<span class="menu-card-arrow">→</span>
+</button>
+<button class="home-menu-card menu-rose" onclick="showPage('keluar')">
+<span class="menu-card-icon">💸</span>
+<span class="menu-card-copy"><strong>UANG KELUAR</strong><small>Catat pengeluaran operasional</small></span>
+<span class="menu-card-arrow">→</span>
+</button>
+</div>
+</section>
+<!-- JADWAL TIM HARI INI -->
+<section class="today-schedule-modern" id="today-schedule-panel">
+<div class="today-schedule-head">
+<div class="today-title-wrap">
+<span class="today-icon">📅</span>
+<div>
+<span class="home-section-kicker">AKTIVITAS HARI INI</span>
+<h3>Jadwal Tim Hari Ini</h3>
+</div>
+</div>
+<span class="today-date-badge" id="today-schedule-date"></span>
+</div>
+<div class="today-schedule-list-modern" id="today-schedule-list"></div>
+</section>
+<section class="result-modern">
+<div class="home-section-heading result-heading">
+<div>
+<span class="home-section-kicker">HASIL &amp; LAPORAN</span>
+<h3>Result</h3>
+</div>
+<span class="result-heading-icon">📊</span>
+</div>
+<div class="result-grid">
+<button class="result-card" onclick="showPage('booking-schedule')">
+<span class="result-icon result-blue">📅</span>
+<span><strong>BOOKING SCHEDULE</strong><small>Lihat jadwal mingguan</small></span>
+<span class="result-arrow">→</span>
+</button>
+<button class="result-card" onclick="showPage('daily-recap')">
+<span class="result-icon result-emerald">📈</span>
+<span><strong>DAILY RECAP</strong><small>Rekap keuangan harian</small></span>
+<span class="result-arrow">→</span>
+</button>
+<button class="result-card" onclick="showPage('monthly-recap')">
+<span class="result-icon result-purple">📊</span>
+<span><strong>MONTHLY RECAP</strong><small>Ringkasan aktivitas bulanan</small></span>
+<span class="result-arrow">→</span>
+</button>
+<button class="result-card" onclick="showPage('booking-history')">
+<span class="result-icon result-amber">📋</span>
+<span><strong>BOOKING HISTORY</strong><small>Riwayat seluruh booking</small></span>
+<span class="result-arrow">→</span>
+</button>
+</div>
+</section>
+</div>
 <!-- HALAMAN BOOKING SCHEDULE -->
-        <div id="page-booking-schedule" class="sub-menu-modern glass-panel p-3 sm:p-6 rounded-2xl hidden">
-            <button type="button" onclick="showPage('home')" class="sticky-back-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                Kembali
-            </button>
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm w-full text-center">📅 BOOKING SCHEDULE</h2>
-            </div>
+<div class="sub-menu-modern glass-panel p-3 sm:p-6 rounded-2xl hidden" id="page-booking-schedule">
 
-            <div class="flex flex-col items-center justify-center mb-4 gap-3">
-                <div class="flex items-center justify-center gap-2 p-1.5 rounded-xl border border-white/20 w-full sm:w-auto">
-                    <select id="filter-periode-jadwal" onchange="renderGridJadwal()" class="p-1.5 rounded-lg text-xs glass-input font-bold text-center">
-                    </select>
-                </div>
-                <div class="flex justify-center w-full">
-                    <button onclick="showPage('atur-member')" class="glass-btn px-4 py-2 rounded-xl text-xs font-bold shadow">⚙️ Atur Member</button>
-                </div>
-            </div>
+<div class="flex justify-between items-center mb-4">
+<h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm w-full text-center">📅 BOOKING SCHEDULE</h2>
+</div>
+<div class="flex flex-col items-center justify-center mb-4 gap-3">
+<div class="flex items-center justify-center gap-2 p-1.5 rounded-xl border border-white/20 w-full sm:w-auto">
+<select class="p-1.5 rounded-lg text-xs glass-input font-bold text-center" id="filter-periode-jadwal" onchange="renderGridJadwal()">
+</select>
+</div>
+<div class="flex justify-center w-full">
+<button class="glass-btn px-4 py-2 rounded-xl text-xs font-bold shadow" onclick="showPage('atur-member')">⚙️ Atur Member</button>
+</div>
+</div>
+<div class="shadow-2xl rounded-xl border border-white/30 mb-4 overflow-hidden relative" id="booking-schedule-grid-wrap">
+<table class="w-full text-center border-collapse text-[6px] sm:text-[10px] bg-white/20 backdrop-blur-md table-fixed border-slate-900/40">
+<thead>
+<tr class="bg-slate-900 text-white font-bold text-center" id="header-tabel-jadwal">
+<th class="p-0.5 sm:p-2 border border-slate-900/40 w-7 sm:w-20 text-center"><svg class="w-4 h-4 sm:w-6 sm:h-6 mx-auto" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2" stroke-linecap="round" stroke-linejoin="round"></path></svg></th>
+<th class="p-0.5 sm:p-2 border border-slate-900/40 text-center">Sen</th>
+<th class="p-0.5 sm:p-2 border border-slate-900/40 text-center">Sel</th>
+<th class="p-0.5 sm:p-2 border border-slate-900/40 text-center">Rab</th>
+<th class="p-0.5 sm:p-2 border border-slate-900/40 text-center">Kam</th>
+<th class="p-0.5 sm:p-2 border border-slate-900/40 text-center">Jum</th>
+<th class="p-0.5 sm:p-2 border border-slate-900/40 text-center">Sab</th>
+<th class="p-0.5 sm:p-2 border border-slate-900/40 text-center">Min</th>
+</tr>
+</thead>
+<tbody class="font-bold text-slate-900 text-center" id="grid-jadwal-gabung"></tbody>
+</table>
+</div>
+<div class="schedule-legend flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs font-bold mt-4 p-3 rounded-2xl">
+<span class="schedule-legend-title font-black px-2">Keterangan</span>
+<span class="schedule-legend-item flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-blue-600 border border-blue-400 rounded-full"></span> <span class="text-blue-700 font-black">Member</span></span>
+<span class="schedule-legend-item flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-rose-600 border border-rose-400 rounded-full"></span> <span class="text-rose-700 font-black">Non-Member</span></span>
+<span class="schedule-legend-item flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-red-100 border border-red-500 border-dashed rounded-full"></span> <span class="text-red-700 font-black">OFF</span></span>
+<span class="schedule-legend-item flex items-center gap-1.5"><span class="px-1.5 py-0.5 bg-slate-800 text-white rounded text-[10px] font-bold">DONE</span> <span class="text-slate-700 font-black">Selesai</span></span>
+</div>
+</div>
+<!-- HALAMAN DAILY RECAP -->
+<div class="sub-menu-modern glass-panel p-3 sm:p-6 rounded-2xl hidden" id="page-daily-recap">
 
-            <div id="booking-schedule-grid-wrap" class="shadow-2xl rounded-xl border border-white/30 mb-4 overflow-hidden relative">
-                <table class="w-full text-center border-collapse text-[6px] sm:text-[10px] bg-white/20 backdrop-blur-md table-fixed border-slate-900/40">
-                    <thead>
-                        <tr id="header-tabel-jadwal" class="bg-slate-900 text-white font-bold text-center">
-                            <th class="p-0.5 sm:p-2 border border-slate-900/40 w-7 sm:w-20 text-center"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 sm:w-6 sm:h-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2"/></svg></th>
-                            <th class="p-0.5 sm:p-2 border border-slate-900/40 text-center">Sen</th>
-                            <th class="p-0.5 sm:p-2 border border-slate-900/40 text-center">Sel</th>
-                            <th class="p-0.5 sm:p-2 border border-slate-900/40 text-center">Rab</th>
-                            <th class="p-0.5 sm:p-2 border border-slate-900/40 text-center">Kam</th>
-                            <th class="p-0.5 sm:p-2 border border-slate-900/40 text-center">Jum</th>
-                            <th class="p-0.5 sm:p-2 border border-slate-900/40 text-center">Sab</th>
-                            <th class="p-0.5 sm:p-2 border border-slate-900/40 text-center">Min</th>
-                        </tr>
-                    </thead>
-                    <tbody id="grid-jadwal-gabung" class="font-bold text-slate-900 text-center"></tbody>
-                </table>
-            </div>
-
-            <div class="schedule-legend flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs font-bold mt-4 p-3 rounded-2xl">
-                <span class="schedule-legend-title font-black px-2">Keterangan</span>
-                <span class="schedule-legend-item flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-blue-600 border border-blue-400 rounded-full"></span> <span class="text-blue-700 font-black">Member</span></span>
-                <span class="schedule-legend-item flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-rose-600 border border-rose-400 rounded-full"></span> <span class="text-rose-700 font-black">Non-Member</span></span>
-                <span class="schedule-legend-item flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-red-100 border border-red-500 border-dashed rounded-full"></span> <span class="text-red-700 font-black">OFF</span></span>
-                <span class="schedule-legend-item flex items-center gap-1.5"><span class="px-1.5 py-0.5 bg-slate-800 text-white rounded text-[10px] font-bold">DONE</span> <span class="text-slate-700 font-black">Selesai</span></span>
-            </div>
-        </div>
-
-        <!-- HALAMAN DAILY RECAP -->
-        <div id="page-daily-recap" class="sub-menu-modern glass-panel p-3 sm:p-6 rounded-2xl hidden">
-            <button type="button" onclick="showPage('home')" class="sticky-back-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                Kembali
-            </button>
-            <div class="flex justify-between items-center mb-4 border-b border-slate-900/20 pb-3">
-                <h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm w-full text-center">📊 REKAP KEUANGAN HARIAN</h2>
-            </div>
-
-            <!-- 4 TOMBOL MENU UTAMA -->
-            <div id="daily-menu-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
-                <button onclick="showDailySub('lapangan')" class="glass-btn p-4 sm:p-6 rounded-2xl font-black shadow-lg transition text-sm sm:text-base flex flex-col items-center justify-center gap-2">
-                    <span class="text-2xl">⚽</span> UANG LAPANGAN
+<div class="flex justify-between items-center mb-4 border-b border-slate-900/20 pb-3">
+<h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm w-full text-center">📊 REKAP KEUANGAN HARIAN</h2>
+</div>
+<!-- 4 TOMBOL MENU UTAMA -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6" id="daily-menu-grid">
+<button class="glass-btn p-4 sm:p-6 rounded-2xl font-black shadow-lg transition text-sm sm:text-base flex flex-col items-center justify-center gap-2" onclick="showDailySub('lapangan')">
+<span class="text-2xl">⚽</span> UANG LAPANGAN
                 </button>
-                <button onclick="showDailySub('minuman')" class="glass-btn p-4 sm:p-6 rounded-2xl font-black shadow-lg transition text-sm sm:text-base flex flex-col items-center justify-center gap-2">
-                    <span class="text-2xl">🥤</span> MINUMAN
+<button class="glass-btn p-4 sm:p-6 rounded-2xl font-black shadow-lg transition text-sm sm:text-base flex flex-col items-center justify-center gap-2" onclick="showDailySub('minuman')">
+<span class="text-2xl">🥤</span> MINUMAN
                 </button>
-                <button onclick="showDailySub('pengeluaran')" class="glass-btn p-4 sm:p-6 rounded-2xl font-black shadow-lg transition text-sm sm:text-base flex flex-col items-center justify-center gap-2">
-                    <span class="text-2xl">💸</span> PENGELUARAN
+<button class="glass-btn p-4 sm:p-6 rounded-2xl font-black shadow-lg transition text-sm sm:text-base flex flex-col items-center justify-center gap-2" onclick="showDailySub('pengeluaran')">
+<span class="text-2xl">💸</span> PENGELUARAN
                 </button>
-                <button onclick="showDailySub('ringkasan')" class="glass-btn p-4 sm:p-6 rounded-2xl font-black shadow-lg transition text-sm sm:text-base flex flex-col items-center justify-center gap-2">
-                    <span class="text-2xl">📌</span> RINGKASAN
+<button class="glass-btn p-4 sm:p-6 rounded-2xl font-black shadow-lg transition text-sm sm:text-base flex flex-col items-center justify-center gap-2" onclick="showDailySub('ringkasan')">
+<span class="text-2xl">📌</span> RINGKASAN
                 </button>
-            </div>
+</div>
+<!-- KONTINOS SUB-MENU LAPANGAN -->
+<div class="space-y-6 hidden" id="sub-page-lapangan">
 
-            <!-- KONTINOS SUB-MENU LAPANGAN -->
-            <div id="sub-page-lapangan" class="space-y-6 hidden">
-                <button type="button" onclick="backToDailyMenu()" class="sticky-back-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                    Kembali ke Menu Rekap
-                </button>
-                <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4 p-3 rounded-xl border border-white/20">
-                    <span class="text-xs text-slate-900 font-black uppercase tracking-wide">Pilih Tanggal Rekap:</span>
-                    <input type="date" id="filter-tanggal-lapangan" onchange="syncFilterTanggal(this.value); renderRekapHarian()" class="p-2 rounded-xl text-xs glass-input w-full sm:w-auto font-bold text-center">
-                </div>
-                <section class="p-3 sm:p-5 rounded-2xl border border-blue-500/40 space-y-3 shadow-lg">
-                    <div class="flex flex-col items-center justify-center text-center border-b border-blue-500/20 pb-3 gap-1">
-                        <h3 id="title-lapangan" class="font-black text-sm sm:text-base text-blue-950 flex items-center justify-center gap-2 text-center w-full">⚽ UANG LAPANGAN</h3>
-                        <p id="label-tanggal-lapangan" class="text-xs font-bold text-blue-900"></p>
-                        <div id="subtotal-lapangan" class="flex flex-wrap justify-center gap-2 text-xs font-bold text-blue-900 mt-1">
-                            <span class="bg-white/60 border border-blue-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp 0</span>
-                            <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp 0</span>
-                            <span class="bg-white/60 border border-sky-500/40 px-2.5 py-1 rounded-lg text-sky-800 shadow font-black">QRIS/TF: Rp 0</span>
-                            <span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg text-rose-800 shadow font-black">Pengeluaran: Rp 0</span>
-                            <span class="bg-white/60 border border-indigo-500/40 px-2.5 py-1 rounded-lg text-indigo-800 shadow font-black">Sisa Cash: Rp 0</span>
-                        </div>
-                    </div>
-                    <div class="shadow rounded-xl border border-white/30 bg-white/20 backdrop-blur-md overflow-hidden">
-                        <table class="w-full text-center text-[10px] sm:text-xs border-collapse table-auto font-bold text-slate-900 border-slate-900/40">
-                            <thead>
-                                <tr class="bg-slate-900 text-white border-b border-slate-900/40 text-center">
-                                    <th class="p-2 border border-slate-900/40 w-[45%] text-center">Tim / Ket</th>
-                                    <th class="p-2 border border-slate-900/40 w-[25%] text-center">Detail</th>
-                                    <th class="p-2 border border-slate-900/40 w-[20%] text-center">Jumlah</th>
-                                    <th class="p-2 border border-slate-900/40 text-center w-[10%]">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabel-lapangan" class="text-center"></tbody>
-                        </table>
-                    </div>
-                </section>
-            </div>
+<div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4 p-3 rounded-xl border border-white/20">
+<span class="text-xs text-slate-900 font-black uppercase tracking-wide">Pilih Tanggal Rekap:</span>
+<input class="p-2 rounded-xl text-xs glass-input w-full sm:w-auto font-bold text-center" id="filter-tanggal-lapangan" onchange="syncFilterTanggal(this.value); renderRekapHarian()" type="date"/>
+</div>
+<section class="p-3 sm:p-5 rounded-2xl border border-blue-500/40 space-y-3 shadow-lg">
+<div class="flex flex-col items-center justify-center text-center border-b border-blue-500/20 pb-3 gap-1">
+<h3 class="font-black text-sm sm:text-base text-blue-950 flex items-center justify-center gap-2 text-center w-full" id="title-lapangan">⚽ UANG LAPANGAN</h3>
+<p class="text-xs font-bold text-blue-900" id="label-tanggal-lapangan"></p>
+<div class="flex flex-wrap justify-center gap-2 text-xs font-bold text-blue-900 mt-1" id="subtotal-lapangan">
+<span class="bg-white/60 border border-blue-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp 0</span>
+<span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp 0</span>
+<span class="bg-white/60 border border-sky-500/40 px-2.5 py-1 rounded-lg text-sky-800 shadow font-black">QRIS/TF: Rp 0</span>
+<span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg text-rose-800 shadow font-black">Pengeluaran: Rp 0</span>
+<span class="bg-white/60 border border-indigo-500/40 px-2.5 py-1 rounded-lg text-indigo-800 shadow font-black">Sisa Cash: Rp 0</span>
+</div>
+</div>
+<div class="shadow rounded-xl border border-white/30 bg-white/20 backdrop-blur-md overflow-hidden">
+<table class="w-full text-center text-[10px] sm:text-xs border-collapse table-auto font-bold text-slate-900 border-slate-900/40">
+<thead>
+<tr class="bg-slate-900 text-white border-b border-slate-900/40 text-center">
+<th class="p-2 border border-slate-900/40 w-[45%] text-center">Tim / Ket</th>
+<th class="p-2 border border-slate-900/40 w-[25%] text-center">Detail</th>
+<th class="p-2 border border-slate-900/40 w-[20%] text-center">Jumlah</th>
+<th class="p-2 border border-slate-900/40 text-center w-[10%]">Aksi</th>
+</tr>
+</thead>
+<tbody class="text-center" id="tabel-lapangan"></tbody>
+</table>
+</div>
+</section>
+</div>
+<!-- KONTINOS SUB-MENU MINUMAN -->
+<div class="space-y-6 hidden" id="sub-page-minuman">
 
-            <!-- KONTINOS SUB-MENU MINUMAN -->
-            <div id="sub-page-minuman" class="space-y-6 hidden">
-                <button type="button" onclick="backToDailyMenu()" class="sticky-back-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                    Kembali ke Menu Rekap
-                </button>
-                <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4 p-3 rounded-xl border border-white/20">
-                    <span class="text-xs text-slate-900 font-black uppercase tracking-wide">Pilih Tanggal Rekap:</span>
-                    <input type="date" id="filter-tanggal-minuman" onchange="syncFilterTanggal(this.value); renderRekapHarian()" class="p-2 rounded-xl text-xs glass-input w-full sm:w-auto font-bold text-center">
-                </div>
-                <section class="p-3 sm:p-5 rounded-2xl border border-amber-500/40 space-y-3 shadow-lg">
-                    <div class="flex flex-col items-center justify-center text-center border-b border-amber-500/20 pb-3 gap-1">
-                        <h3 id="title-minuman" class="font-black text-sm sm:text-base text-amber-950 flex items-center justify-center gap-2 text-center w-full">🥤 PENJUALAN MINUMAN</h3>
-                        <p id="label-tanggal-minuman" class="text-xs font-bold text-amber-900"></p>
-                        <div id="subtotal-minuman" class="flex flex-wrap justify-center gap-2 text-xs font-bold text-amber-900 mt-1">
-                            <span class="bg-white/60 border border-amber-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp 0</span>
-                            <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp 0</span>
-                            <span class="bg-white/60 border border-sky-500/40 px-2.5 py-1 rounded-lg text-sky-800 shadow font-black">QRIS/TF: Rp 0</span>
-                        </div>
-                    </div>
-                    <div id="ringkasan-minuman-box" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 font-bold text-center"></div>
-                    <div class="text-center pt-2">
-                        <button type="button" onclick="toggleRincianMinuman()" id="btn-toggle-rincian" class="bg-amber-700 hover:bg-amber-800 text-white px-4 py-2 rounded-xl text-xs font-bold backdrop-blur border border-amber-500/50 shadow transition">▼ Lihat Rincian Transaksi Minuman</button>
-                    </div>
-                    <div id="container-tabel-minuman" class="shadow rounded-xl border border-white/30 bg-white/20 backdrop-blur-md overflow-hidden hidden mt-2">
-                        <table class="w-full text-center text-[10px] sm:text-xs border-collapse table-auto font-bold text-slate-900 border-slate-900/40">
-                            <thead>
-                                <tr class="bg-slate-900 text-white border-b border-slate-900/40 text-center">
-                                    <th class="p-2 border border-slate-900/40 w-[45%] text-center">Produk</th>
-                                    <th class="p-2 border border-slate-900/40 w-[20%] text-center">Pcs</th>
-                                    <th class="p-2 border border-slate-900/40 w-[25%] text-center">Total</th>
-                                    <th class="p-2 border border-slate-900/40 text-center w-[10%]">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabel-minuman" class="text-center"></tbody>
-                        </table>
-                    </div>
-                </section>
-            </div>
+<div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4 p-3 rounded-xl border border-white/20">
+<span class="text-xs text-slate-900 font-black uppercase tracking-wide">Pilih Tanggal Rekap:</span>
+<input class="p-2 rounded-xl text-xs glass-input w-full sm:w-auto font-bold text-center" id="filter-tanggal-minuman" onchange="syncFilterTanggal(this.value); renderRekapHarian()" type="date"/>
+</div>
+<section class="p-3 sm:p-5 rounded-2xl border border-amber-500/40 space-y-3 shadow-lg">
+<div class="flex flex-col items-center justify-center text-center border-b border-amber-500/20 pb-3 gap-1">
+<h3 class="font-black text-sm sm:text-base text-amber-950 flex items-center justify-center gap-2 text-center w-full" id="title-minuman">🥤 PENJUALAN MINUMAN</h3>
+<p class="text-xs font-bold text-amber-900" id="label-tanggal-minuman"></p>
+<div class="flex flex-wrap justify-center gap-2 text-xs font-bold text-amber-900 mt-1" id="subtotal-minuman">
+<span class="bg-white/60 border border-amber-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp 0</span>
+<span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp 0</span>
+<span class="bg-white/60 border border-sky-500/40 px-2.5 py-1 rounded-lg text-sky-800 shadow font-black">QRIS/TF: Rp 0</span>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 font-bold text-center" id="ringkasan-minuman-box"></div>
+<div class="text-center pt-2">
+<button class="bg-amber-700 hover:bg-amber-800 text-white px-4 py-2 rounded-xl text-xs font-bold backdrop-blur border border-amber-500/50 shadow transition" id="btn-toggle-rincian" onclick="toggleRincianMinuman()" type="button">▼ Lihat Rincian Transaksi Minuman</button>
+</div>
+<div class="shadow rounded-xl border border-white/30 bg-white/20 backdrop-blur-md overflow-hidden hidden mt-2" id="container-tabel-minuman">
+<table class="w-full text-center text-[10px] sm:text-xs border-collapse table-auto font-bold text-slate-900 border-slate-900/40">
+<thead>
+<tr class="bg-slate-900 text-white border-b border-slate-900/40 text-center">
+<th class="p-2 border border-slate-900/40 w-[45%] text-center">Produk</th>
+<th class="p-2 border border-slate-900/40 w-[20%] text-center">Pcs</th>
+<th class="p-2 border border-slate-900/40 w-[25%] text-center">Total</th>
+<th class="p-2 border border-slate-900/40 text-center w-[10%]">Aksi</th>
+</tr>
+</thead>
+<tbody class="text-center" id="tabel-minuman"></tbody>
+</table>
+</div>
+</section>
+</div>
+<!-- KONTINOS SUB-MENU PENGELUARAN -->
+<div class="space-y-6 hidden" id="sub-page-pengeluaran">
 
-            <!-- KONTINOS SUB-MENU PENGELUARAN -->
-            <div id="sub-page-pengeluaran" class="space-y-6 hidden">
-                <button type="button" onclick="backToDailyMenu()" class="sticky-back-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                    Kembali ke Menu Rekap
-                </button>
-                <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4 p-3 rounded-xl border border-white/20">
-                    <span class="text-xs text-slate-900 font-black uppercase tracking-wide">Pilih Tanggal Rekap:</span>
-                    <input type="date" id="filter-tanggal-keluar" onchange="syncFilterTanggal(this.value); renderRekapHarian()" class="p-2 rounded-xl text-xs glass-input w-full sm:w-auto font-bold text-center">
-                </div>
-                <section class="p-3 sm:p-5 rounded-2xl border border-rose-500/40 space-y-3 shadow-lg">
-                    <div class="flex flex-col items-center justify-center text-center border-b border-rose-500/20 pb-3 gap-1">
-                        <h3 id="title-keluar" class="font-black text-sm sm:text-base text-rose-950 flex items-center justify-center gap-2 text-center w-full">💸 PENGELUARAN</h3>
-                        <p id="label-tanggal-keluar" class="text-xs font-bold text-rose-900"></p>
-                        <div id="subtotal-keluar" class="flex flex-wrap justify-center gap-2 text-xs font-bold text-rose-900 mt-1">
-                            <span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp 0</span>
-                        </div>
-                    </div>
-                    <div class="shadow rounded-xl border border-white/30 bg-white/20 backdrop-blur-md overflow-hidden">
-                        <table class="w-full text-center text-[10px] sm:text-xs border-collapse table-auto font-bold text-slate-900 border-slate-900/40">
-                            <thead>
-                                <tr class="bg-slate-900 text-white border-b border-slate-900/40 text-center">
-                                    <th class="p-2 border border-slate-900/40 w-[45%] text-center">Keterangan</th>
-                                    <th class="p-2 border border-slate-900/40 w-[25%] text-center">Sumber Dana</th>
-                                    <th class="p-2 border border-slate-900/40 w-[20%] text-center">Nominal</th>
-                                    <th class="p-2 border border-slate-900/40 text-center w-[10%]">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabel-keluar" class="text-center"></tbody>
-                        </table>
-                    </div>
-                </section>
-            </div>
+<div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4 p-3 rounded-xl border border-white/20">
+<span class="text-xs text-slate-900 font-black uppercase tracking-wide">Pilih Tanggal Rekap:</span>
+<input class="p-2 rounded-xl text-xs glass-input w-full sm:w-auto font-bold text-center" id="filter-tanggal-keluar" onchange="syncFilterTanggal(this.value); renderRekapHarian()" type="date"/>
+</div>
+<section class="p-3 sm:p-5 rounded-2xl border border-rose-500/40 space-y-3 shadow-lg">
+<div class="flex flex-col items-center justify-center text-center border-b border-rose-500/20 pb-3 gap-1">
+<h3 class="font-black text-sm sm:text-base text-rose-950 flex items-center justify-center gap-2 text-center w-full" id="title-keluar">💸 PENGELUARAN</h3>
+<p class="text-xs font-bold text-rose-900" id="label-tanggal-keluar"></p>
+<div class="flex flex-wrap justify-center gap-2 text-xs font-bold text-rose-900 mt-1" id="subtotal-keluar">
+<span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp 0</span>
+</div>
+</div>
+<div class="shadow rounded-xl border border-white/30 bg-white/20 backdrop-blur-md overflow-hidden">
+<table class="w-full text-center text-[10px] sm:text-xs border-collapse table-auto font-bold text-slate-900 border-slate-900/40">
+<thead>
+<tr class="bg-slate-900 text-white border-b border-slate-900/40 text-center">
+<th class="p-2 border border-slate-900/40 w-[45%] text-center">Keterangan</th>
+<th class="p-2 border border-slate-900/40 w-[25%] text-center">Sumber Dana</th>
+<th class="p-2 border border-slate-900/40 w-[20%] text-center">Nominal</th>
+<th class="p-2 border border-slate-900/40 text-center w-[10%]">Aksi</th>
+</tr>
+</thead>
+<tbody class="text-center" id="tabel-keluar"></tbody>
+</table>
+</div>
+</section>
+</div>
+<!-- KONTINOS SUB-MENU RINGKASAN -->
+<div class="space-y-6 hidden" id="sub-page-ringkasan">
 
-            <!-- KONTINOS SUB-MENU RINGKASAN -->
-            <div id="sub-page-ringkasan" class="space-y-6 hidden">
-                <button type="button" onclick="backToDailyMenu()" class="sticky-back-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                    Kembali ke Menu Rekap
-                </button>
-                <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4 p-3 rounded-xl border border-white/20">
-                    <span class="text-xs text-slate-900 font-black uppercase tracking-wide">Pilih Tanggal Rekap:</span>
-                    <input type="date" id="filter-tanggal-ringkasan" onchange="syncFilterTanggal(this.value); renderRekapHarian()" class="p-2 rounded-xl text-xs glass-input w-full sm:w-auto font-bold text-center">
-                </div>
-                <section class="p-3 sm:p-5 rounded-2xl border border-emerald-500/40 space-y-4 shadow-lg">
-                    <div class="flex flex-col items-center justify-center text-center border-b border-emerald-500/20 pb-3 gap-1">
-                        <h3 id="title-ringkasan-total" class="font-black text-sm sm:text-base text-emerald-950 flex items-center justify-center gap-2 text-center w-full">📌 RINGKASAN TOTAL KEUANGAN</h3>
-                        <p id="label-tanggal-ringkasan" class="text-xs font-bold text-emerald-900"></p>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 font-bold text-center">
-                        <div class="p-3 sm:p-4 rounded-xl border border-blue-600/50 text-center shadow bg-white/30">
-                            <p class="text-xs text-slate-900 font-bold mb-1 text-center">Total Lapangan Cash</p>
-                            <p id="rekap-lapangan-cash" class="text-base sm:text-lg font-black text-blue-900 text-center">Rp 0</p>
-                        </div>
-                        <div class="p-3 sm:p-4 rounded-xl border border-sky-600/50 text-center shadow bg-white/30">
-                            <p class="text-xs text-slate-900 font-bold mb-1 text-center">Total Lapangan QRIS/Transfer</p>
-                            <p id="rekap-lapangan-qrif" class="text-base sm:text-lg font-black text-sky-800 text-center">Rp 0</p>
-                        </div>
-                        <div class="p-3 sm:p-4 rounded-xl border border-amber-600/50 text-center shadow bg-white/30">
-                            <p class="text-xs text-slate-900 font-bold mb-1 text-center">Total Minuman Cash</p>
-                            <p id="rekap-minuman-cash" class="text-base sm:text-lg font-black text-amber-800 text-center">Rp 0</p>
-                        </div>
-                        <div class="p-3 sm:p-4 rounded-xl border border-teal-600/50 text-center shadow bg-white/30">
-                            <p class="text-xs text-slate-900 font-bold mb-1 text-center">Total Minuman QRIS/Transfer</p>
-                            <p id="rekap-minuman-qrif" class="text-base sm:text-lg font-black text-teal-800 text-center">Rp 0</p>
-                        </div>
-                        <div class="p-3 sm:p-4 rounded-xl border border-rose-600/50 text-center shadow bg-white/30">
-                            <p class="text-xs text-slate-900 font-bold mb-1 text-center">Pengeluaran (Dipotong dari Cash Lapangan)</p>
-                            <p id="rekap-keluar" class="text-base sm:text-lg font-black text-rose-700 text-center">Rp 0</p>
-                        </div>
-                        <div class="p-3 sm:p-4 rounded-xl border border-indigo-600/50 text-center shadow bg-white/30">
-                            <p class="text-xs text-slate-900 font-bold mb-1 text-center">Sisa Cash Lapangan</p>
-                            <p id="rekap-sisa-cash-lapangan" class="text-base sm:text-lg font-black text-indigo-800 text-center">Rp 0</p>
-                        </div>
-                        <div class="p-3 sm:p-4 rounded-xl border border-purple-600/50 text-center shadow bg-white/30">
-                            <p class="text-xs text-slate-900 font-bold mb-1 text-center">Sisa Cash Minuman</p>
-                            <p id="rekap-sisa-cash-minuman" class="text-base sm:text-lg font-black text-purple-800 text-center">Rp 0</p>
-                        </div>
-                        <div class="p-3 sm:p-4 rounded-xl border border-emerald-600/50 text-center shadow bg-white/30">
-                            <p class="text-xs text-slate-900 font-bold mb-1 text-center">Total Sisa Cash</p>
-                            <p id="rekap-total-sisa-cash" class="text-base sm:text-lg font-black text-emerald-700 text-center">Rp 0</p>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </div>
+<div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4 p-3 rounded-xl border border-white/20">
+<span class="text-xs text-slate-900 font-black uppercase tracking-wide">Pilih Tanggal Rekap:</span>
+<input class="p-2 rounded-xl text-xs glass-input w-full sm:w-auto font-bold text-center" id="filter-tanggal-ringkasan" onchange="syncFilterTanggal(this.value); renderRekapHarian()" type="date"/>
+</div>
+<section class="p-3 sm:p-5 rounded-2xl border border-emerald-500/40 space-y-4 shadow-lg">
+<div class="flex flex-col items-center justify-center text-center border-b border-emerald-500/20 pb-3 gap-1">
+<h3 class="font-black text-sm sm:text-base text-emerald-950 flex items-center justify-center gap-2 text-center w-full" id="title-ringkasan-total">📌 RINGKASAN TOTAL KEUANGAN</h3>
+<p class="text-xs font-bold text-emerald-900" id="label-tanggal-ringkasan"></p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 font-bold text-center">
+<div class="p-3 sm:p-4 rounded-xl border border-blue-600/50 text-center shadow bg-white/30">
+<p class="text-xs text-slate-900 font-bold mb-1 text-center">Total Lapangan Cash</p>
+<p class="text-base sm:text-lg font-black text-blue-900 text-center" id="rekap-lapangan-cash">Rp 0</p>
+</div>
+<div class="p-3 sm:p-4 rounded-xl border border-sky-600/50 text-center shadow bg-white/30">
+<p class="text-xs text-slate-900 font-bold mb-1 text-center">Total Lapangan QRIS/Transfer</p>
+<p class="text-base sm:text-lg font-black text-sky-800 text-center" id="rekap-lapangan-qrif">Rp 0</p>
+</div>
+<div class="p-3 sm:p-4 rounded-xl border border-amber-600/50 text-center shadow bg-white/30">
+<p class="text-xs text-slate-900 font-bold mb-1 text-center">Total Minuman Cash</p>
+<p class="text-base sm:text-lg font-black text-amber-800 text-center" id="rekap-minuman-cash">Rp 0</p>
+</div>
+<div class="p-3 sm:p-4 rounded-xl border border-teal-600/50 text-center shadow bg-white/30">
+<p class="text-xs text-slate-900 font-bold mb-1 text-center">Total Minuman QRIS/Transfer</p>
+<p class="text-base sm:text-lg font-black text-teal-800 text-center" id="rekap-minuman-qrif">Rp 0</p>
+</div>
+<div class="p-3 sm:p-4 rounded-xl border border-rose-600/50 text-center shadow bg-white/30">
+<p class="text-xs text-slate-900 font-bold mb-1 text-center">Pengeluaran (Dipotong dari Cash Lapangan)</p>
+<p class="text-base sm:text-lg font-black text-rose-700 text-center" id="rekap-keluar">Rp 0</p>
+</div>
+<div class="p-3 sm:p-4 rounded-xl border border-indigo-600/50 text-center shadow bg-white/30">
+<p class="text-xs text-slate-900 font-bold mb-1 text-center">Sisa Cash Lapangan</p>
+<p class="text-base sm:text-lg font-black text-indigo-800 text-center" id="rekap-sisa-cash-lapangan">Rp 0</p>
+</div>
+<div class="p-3 sm:p-4 rounded-xl border border-purple-600/50 text-center shadow bg-white/30">
+<p class="text-xs text-slate-900 font-bold mb-1 text-center">Sisa Cash Minuman</p>
+<p class="text-base sm:text-lg font-black text-purple-800 text-center" id="rekap-sisa-cash-minuman">Rp 0</p>
+</div>
+<div class="p-3 sm:p-4 rounded-xl border border-emerald-600/50 text-center shadow bg-white/30">
+<p class="text-xs text-slate-900 font-bold mb-1 text-center">Total Sisa Cash</p>
+<p class="text-base sm:text-lg font-black text-emerald-700 text-center" id="rekap-total-sisa-cash">Rp 0</p>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- HALAMAN MONTHLY RECAP -->
+<div class="sub-menu-modern glass-panel p-3 sm:p-6 rounded-2xl hidden" id="page-monthly-recap">
 
-        <!-- HALAMAN MONTHLY RECAP -->
-        <div id="page-monthly-recap" class="sub-menu-modern glass-panel p-3 sm:p-6 rounded-2xl hidden">
-            <button type="button" onclick="showPage('home')" class="sticky-back-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                Kembali
-            </button>
-            <div class="flex justify-between items-center mb-4 border-b border-slate-900/20 pb-3">
-                <h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm w-full text-center">📅 REKAP BULANAN LAPANGAN</h2>
-            </div>
+<div class="flex justify-between items-center mb-4 border-b border-slate-900/20 pb-3">
+<h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm w-full text-center">📅 REKAP BULANAN LAPANGAN</h2>
+</div>
+<div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4 p-3 rounded-xl border border-white/20">
+<span class="text-xs text-slate-900 font-black uppercase tracking-wide">Pilih Bulan &amp; Tahun:</span>
+<input class="p-2 rounded-xl text-xs glass-input w-full sm:w-auto font-bold text-center" id="filter-bulan" onchange="renderMonthlyRecap()" type="month"/>
+</div>
+<!-- TOMBOL DOWNLOAD TABEL -->
+<div class="flex justify-center mb-3">
+<button class="bg-emerald-700 hover:bg-emerald-800 backdrop-blur text-white px-4 py-2 rounded-xl text-xs font-bold border border-emerald-500/50 shadow flex items-center gap-2" onclick="downloadMonthlyRecapCSV()" type="button">📥 Download Tabel (CSV)</button>
+</div>
+<!-- TABEL 1: DIJADIKAN 3 BAGIAN (PARUH) AGAR FIT DI HP TANPA PERLU SCROLL KANAN KIRI -->
+<div class="space-y-4 mb-6 font-bold text-slate-900">
+<!-- BAGIAN 1 (Tgl 1 - 11) -->
+<div class="shadow-2xl rounded-xl border border-white/40 overflow-x-auto text-center">
+<div class="p-2 bg-slate-900 text-cyan-300 text-xs font-bold border-b border-white/25 text-center" id="monthly-title-1">REKAP BULAN AGUSTUS 2026 (Tgl 1 - 11)</div>
+<table class="w-full text-center border-collapse text-[9px] sm:text-xs bg-white/25 backdrop-blur-md border-slate-900/40">
+<thead>
+<tr class="bg-cyan-900 text-white font-bold text-center" id="monthly-header-row-1">
+<th class="p-1.5 border border-slate-900/40 text-center font-bold w-[120px]">Tanggal</th>
+</tr>
+</thead>
+<tbody class="text-center" id="monthly-tbody-1"></tbody>
+</table>
+</div>
+<!-- BAGIAN 2 (Tgl 12 - 22) -->
+<div class="shadow-2xl rounded-xl border border-white/40 overflow-x-auto text-center">
+<div class="p-2 bg-slate-900 text-cyan-300 text-xs font-bold border-b border-white/25 text-center" id="monthly-title-2">REKAP BULAN AGUSTUS 2026 (Tgl 12 - 22)</div>
+<table class="w-full text-center border-collapse text-[9px] sm:text-xs bg-white/25 backdrop-blur-md border-slate-900/40">
+<thead>
+<tr class="bg-cyan-900 text-white font-bold text-center" id="monthly-header-row-2">
+<th class="p-1.5 border border-slate-900/40 text-center font-bold w-[120px]">Tanggal</th>
+</tr>
+</thead>
+<tbody class="text-center" id="monthly-tbody-2"></tbody>
+</table>
+</div>
+<!-- BAGIAN 3 (Tgl 23 - Akhir) -->
+<div class="shadow-2xl rounded-xl border border-white/40 overflow-x-auto text-center">
+<div class="p-2 bg-slate-900 text-cyan-300 text-xs font-bold border-b border-white/25 text-center" id="monthly-title-3">REKAP BULAN AGUSTUS 2026 (Tgl 23 - Selesai)</div>
+<table class="w-full text-center border-collapse text-[9px] sm:text-xs bg-white/25 backdrop-blur-md border-slate-900/40">
+<thead>
+<tr class="bg-cyan-900 text-white font-bold text-center" id="monthly-header-row-3">
+<th class="p-1.5 border border-slate-900/40 text-center font-bold w-[120px]">Tanggal</th>
+</tr>
+</thead>
+<tbody class="text-center" id="monthly-tbody-3"></tbody>
+</table>
+</div>
+</div>
+<!-- TABEL 2: FORMAT TABEL RINGKASAN REKAP BULANAN -->
+<div class="shadow-2xl rounded-xl border border-white/30 mb-4 overflow-x-auto font-bold text-slate-900 text-center">
+<div class="p-2 bg-slate-900 text-amber-300 text-xs font-bold border-b border-white/25 text-center">Format Tabel Rangkuman Aktivitas Bulanan</div>
+<table class="w-full text-center border-collapse text-[10px] sm:text-xs bg-white/25 backdrop-blur-md border-slate-900/40">
+<thead>
+<tr class="bg-amber-900 text-white font-bold text-center">
+<th class="p-2 border border-slate-900/40 text-center">Keterangan Aktivitas / Status</th>
+<th class="p-2 border border-slate-900/40 text-center">Jumlah Total dalam 1 Bulan</th>
+</tr>
+</thead>
+<tbody class="text-center" id="monthly-summary-tbody">
+<!-- Diisi via Javascript -->
+</tbody>
+</table>
+</div>
+<!-- Footer Total Jam 1 Bulan -->
+<div class="p-4 rounded-xl border border-cyan-600/50 flex justify-between items-center shadow-lg bg-white/30 font-bold">
+<span class="font-black text-sm text-cyan-950">Jumlah Aktual Jam Main ( 1 Bulan )</span>
+<div class="flex items-center gap-2 bg-slate-900 border border-cyan-400/50 px-4 py-2 rounded-lg shadow text-white">
+<span class="font-black text-cyan-300 text-base" id="monthly-total-jam">0</span>
+<span class="text-xs text-white font-bold">Jam</span>
+</div>
+</div>
+</div>
+<!-- HALAMAN BOOKING HISTORY -->
+<div class="sub-menu-modern glass-panel p-3 sm:p-6 rounded-2xl hidden" id="page-booking-history">
 
-            <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4 p-3 rounded-xl border border-white/20">
-                <span class="text-xs text-slate-900 font-black uppercase tracking-wide">Pilih Bulan & Tahun:</span>
-                <input type="month" id="filter-bulan" onchange="renderMonthlyRecap()" class="p-2 rounded-xl text-xs glass-input w-full sm:w-auto font-bold text-center">
-            </div>
+<div class="flex justify-between items-center mb-4">
+<h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm w-full text-center">📋 DAFTAR RIWAYAT BOOKING</h2>
+</div>
+<!-- BOOKING SUDAH DP -->
+<div class="mb-5">
+<h3 class="font-black text-sm sm:text-base text-emerald-900 text-center mb-2 p-2 rounded-xl border border-emerald-500/40 bg-emerald-500/10">💰 SUDAH DP</h3>
+<div class="shadow-2xl rounded-xl border border-white/30 overflow-hidden">
+<table class="w-full text-center border-collapse text-[10px] sm:text-xs bg-white/20 backdrop-blur-md table-auto font-bold text-slate-900 border-slate-900/40">
+<thead><tr class="bg-slate-900 text-white font-bold text-center">
+<th class="p-2 border border-slate-900/40 text-center">Waktu</th><th class="p-2 border border-slate-900/40 text-center">Tim</th><th class="p-2 border border-slate-900/40 text-center">Status</th><th class="p-2 border border-slate-900/40 text-center">DP</th><th class="p-2 border border-slate-900/40 text-center">Metode</th><th class="p-2 border border-slate-900/40 text-center">Aksi</th>
+</tr></thead>
+<tbody class="text-center" id="tabel-booking-dp"></tbody>
+</table>
+</div>
+</div>
+<!-- BOOKING TANPA DP -->
+<div class="mb-5">
+<h3 class="font-black text-sm sm:text-base text-amber-900 text-center mb-2 p-2 rounded-xl border border-amber-500/40 bg-amber-500/10">📝 TIDAK ADA DP (DP Rp0)</h3>
+<div class="shadow-2xl rounded-xl border border-white/30 overflow-hidden">
+<table class="w-full text-center border-collapse text-[10px] sm:text-xs bg-white/20 backdrop-blur-md table-auto font-bold text-slate-900 border-slate-900/40">
+<thead><tr class="bg-slate-900 text-white font-bold text-center">
+<th class="p-2 border border-slate-900/40 text-center">Waktu</th><th class="p-2 border border-slate-900/40 text-center">Tim</th><th class="p-2 border border-slate-900/40 text-center">Status</th><th class="p-2 border border-slate-900/40 text-center">DP</th><th class="p-2 border border-slate-900/40 text-center">Metode</th><th class="p-2 border border-slate-900/40 text-center">Aksi</th>
+</tr></thead>
+<tbody class="text-center" id="tabel-booking-nodp"></tbody>
+</table>
+</div>
+</div>
+<!-- BOOKING TANGGAL SUDAH LEWAT -->
+<div class="mb-5">
+<h3 class="font-black text-sm sm:text-base text-slate-900 text-center mb-2 p-2 rounded-xl border border-slate-500/40 bg-slate-500/10">✅ TANGGAL SUDAH LEWAT (SELESAI)</h3>
+<div class="shadow-2xl rounded-xl border border-white/30 overflow-hidden">
+<table class="w-full text-center border-collapse text-[10px] sm:text-xs bg-white/20 backdrop-blur-md table-auto font-bold text-slate-900 border-slate-900/40">
+<thead><tr class="bg-slate-900 text-white font-bold text-center">
+<th class="p-2 border border-slate-900/40 text-center">Waktu</th><th class="p-2 border border-slate-900/40 text-center">Tim</th><th class="p-2 border border-slate-900/40 text-center">Status</th><th class="p-2 border border-slate-900/40 text-center">DP</th><th class="p-2 border border-slate-900/40 text-center">Metode</th><th class="p-2 border border-slate-900/40 text-center">Aksi</th>
+</tr></thead>
+<tbody class="text-center" id="tabel-booking-selesai"></tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- FORM KELOLA / TAMBAH MEMBER -->
+<div class="sub-menu-modern glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900" id="page-atur-member">
 
-            <!-- TOMBOL DOWNLOAD TABEL -->
-            <div class="flex justify-center mb-3">
-                <button type="button" onclick="downloadMonthlyRecapCSV()" class="bg-emerald-700 hover:bg-emerald-800 backdrop-blur text-white px-4 py-2 rounded-xl text-xs font-bold border border-emerald-500/50 shadow flex items-center gap-2">📥 Download Tabel (CSV)</button>
-            </div>
+<div class="flex justify-between items-center mb-4">
+<h2 class="text-base sm:text-lg font-black text-indigo-950">⚙️ Kelola Jadwal Member</h2>
+</div>
+<form class="p-4 rounded-xl border border-indigo-500/40 mb-6 space-y-3 bg-white/30" id="form-member" onsubmit="tambahMember(event)">
+<h3 class="font-black text-sm text-indigo-950">Tambah Jadwal Member / Status Baru</h3>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+<input class="p-2 rounded text-sm glass-input" id="m-nama" placeholder="Nama Tim / OFF (Contoh: OFF atau FHS FC)" required="" type="text"/>
+<select class="p-2 rounded text-sm glass-input" id="m-hari" required="">
+<option value="Senin">Senin</option><option value="Selasa">Selasa</option><option value="Rabu">Rabu</option>
+<option value="Kamis">Kamis</option><option value="Jumat">Jumat</option><option value="Sabtu">Sabtu</option><option value="Minggu">Minggu</option>
+</select>
+<select class="p-2 rounded text-sm glass-input" id="m-jam" required="">
+<option value="07:00">07:00</option><option value="08:00">08:00</option><option value="09:00">09:00</option><option value="10:00">10:00</option>
+<option value="11:00">11:00</option><option value="12:00">12:00</option><option value="13:00">13:00</option><option value="14:00">14:00</option>
+<option value="15:00">15:00</option><option value="16:00">16:00</option><option value="17:00">17:00</option><option value="18:00">18:00</option>
+<option value="19:00">19:00</option><option value="20:00">20:00</option><option value="21:00">21:00</option><option value="22:00">22:00</option>
+<option value="23:00">23:00</option><option value="24:00">24:00</option>
+</select>
+<div class="sm:col-span-3">
+<label class="block text-[11px] font-black text-indigo-950 mb-1">Mulai Berlaku</label>
+<input class="p-2 rounded text-sm glass-input w-full" id="m-mulai" required="" type="date"/>
+<p class="text-[10px] text-slate-600 mt-1">Jadwal member baru hanya berlaku mulai tanggal ini.</p>
+</div>
+</div>
+<button class="bg-indigo-700 hover:bg-indigo-800 text-white px-4 py-2 rounded text-xs font-bold shadow border border-indigo-500/50" type="submit">Simpan Jadwal</button>
+</form>
+<h3 class="font-black text-sm text-slate-900 mb-2">Daftar Jadwal / Member Aktif</h3>
+<div class="shadow rounded-xl border border-white/30 bg-white/20 backdrop-blur overflow-hidden">
+<table class="w-full text-left text-xs table-auto font-bold text-slate-900 border-slate-900/40">
+<thead class="bg-slate-900 text-white border-b border-slate-900/40">
+<tr>
+<th class="p-2 border border-slate-900/40 w-[45%]">Tim / Keterangan</th>
+<th class="p-2 border border-slate-900/40 w-[20%]">Hari</th>
+<th class="p-2 border border-slate-900/40 w-[15%]">Jam</th>
+<th class="p-2 border border-slate-900/40 w-[20%]">Mulai</th>
+<th class="p-2 border border-slate-900/40 w-[25%]">Status</th>
+<th class="p-2 border border-slate-900/40 text-center w-[15%]">Aksi</th>
+</tr>
+</thead>
+<tbody id="tabel-list-member"></tbody>
+</table>
+</div>
+</div>
+<!-- FORM BOOKING -->
+<div class="sub-menu-modern glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900" id="page-booking">
 
-            <!-- TABEL 1: DIJADIKAN 3 BAGIAN (PARUH) AGAR FIT DI HP TANPA PERLU SCROLL KANAN KIRI -->
-            <div class="space-y-4 mb-6 font-bold text-slate-900">
-                <!-- BAGIAN 1 (Tgl 1 - 11) -->
-                <div class="shadow-2xl rounded-xl border border-white/40 overflow-x-auto text-center">
-                    <div id="monthly-title-1" class="p-2 bg-slate-900 text-cyan-300 text-xs font-bold border-b border-white/25 text-center">REKAP BULAN AGUSTUS 2026 (Tgl 1 - 11)</div>
-                    <table class="w-full text-center border-collapse text-[9px] sm:text-xs bg-white/25 backdrop-blur-md border-slate-900/40">
-                        <thead>
-                            <tr id="monthly-header-row-1" class="bg-cyan-900 text-white font-bold text-center">
-                                <th class="p-1.5 border border-slate-900/40 text-center font-bold w-[120px]">Tanggal</th>
-                            </tr>
-                        </thead>
-                        <tbody id="monthly-tbody-1" class="text-center"></tbody>
-                    </table>
-                </div>
+<h2 class="text-base sm:text-lg font-black mb-4 text-blue-950">Form Booking / Jadwal Lapangan</h2>
+<form onsubmit="submitData(event, 'booking')">
+<label class="block text-xs font-bold mb-1 text-slate-900">Status Tim</label>
+<select class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="b-status">
+<option value="Non-Member">Non-Member / Booking Insidental (Merah)</option>
+<option value="Member">Member (Biru)</option>
+</select>
+<input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="b-nama" placeholder="Nama Tim" required="" type="text"/>
+<label class="block text-xs font-bold mb-1 text-slate-900">Tanggal Main</label>
+<input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="b-tanggal" required="" type="date"/>
+<label class="block text-xs font-bold mb-1 text-slate-900">Jam Main (Pilih Jam)</label>
+<select class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="b-jam" required="">
+<option value="07:00">07:00</option><option value="08:00">08:00</option><option value="09:00">09:00</option><option value="10:00">10:00</option>
+<option value="11:00">11:00</option><option value="12:00">12:00</option><option value="13:00">13:00</option><option value="14:00">14:00</option>
+<option value="15:00">15:00</option><option value="16:00">16:00</option><option value="17:00">17:00</option><option value="18:00">18:00</option>
+<option value="19:00">19:00</option><option value="20:00">20:00</option><option value="21:00">21:00</option><option value="22:00">22:00</option>
+<option value="23:00">23:00</option><option value="24:00">24:00</option>
+</select>
+<input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="b-dp" min="0" placeholder="Jumlah DP / Bayar (Rp)" required="" type="number"/>
+<label class="block text-xs font-bold mb-1 text-slate-900">Tanggal DP / Bayar</label>
+<input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="b-tanggal-dp" type="date"/>
+<label class="block text-xs font-bold mb-1 text-slate-900">Metode Pembayaran</label>
+<select class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="b-metode">
+<option value="Cash">Cash</option>
+<option value="QRIS">QRIS</option>
+<option value="Transfer">Transfer</option>
+</select>
+<div class="flex gap-2">
+<button class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded text-sm font-bold border border-blue-500/50 shadow" type="submit">Simpan</button>
+</div>
+</form>
+</div>
+<!-- FORM UANG MASUK -->
+<div class="sub-menu-modern glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900" id="page-masuk">
 
-                <!-- BAGIAN 2 (Tgl 12 - 22) -->
-                <div class="shadow-2xl rounded-xl border border-white/40 overflow-x-auto text-center">
-                    <div id="monthly-title-2" class="p-2 bg-slate-900 text-cyan-300 text-xs font-bold border-b border-white/25 text-center">REKAP BULAN AGUSTUS 2026 (Tgl 12 - 22)</div>
-                    <table class="w-full text-center border-collapse text-[9px] sm:text-xs bg-white/25 backdrop-blur-md border-slate-900/40">
-                        <thead>
-                            <tr id="monthly-header-row-2" class="bg-cyan-900 text-white font-bold text-center">
-                                <th class="p-1.5 border border-slate-900/40 text-center font-bold w-[120px]">Tanggal</th>
-                            </tr>
-                        </thead>
-                        <tbody id="monthly-tbody-2" class="text-center"></tbody>
-                    </table>
-                </div>
+<h2 class="text-base sm:text-lg font-black mb-4 text-emerald-950">Uang Masuk / Pelunasan Lapangan</h2>
+<form onsubmit="submitData(event, 'pemasukan')">
+<label class="block text-xs font-bold mb-1 text-slate-900">Pilih Tanggal Main / Pelunasan</label>
+<input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="in-tgl" onchange="updateDropdownTimMasuk()" required="" type="date"/>
+<label class="block text-xs font-bold mb-1 text-slate-900">Pilih Tim / Keterangan</label>
+<select class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="in-tim" onchange="updateJamMainMasuk()" required="">
+<option value="">-- Pilih Tanggal Terlebih Dahulu --</option>
+</select>
+<label class="block text-xs font-bold mb-1 text-slate-900">Jam Main (Otomatis)</label>
+<input class="w-full p-2 rounded mb-3 text-sm glass-input bg-white/40 font-bold" id="in-jam-main" placeholder="Jam main akan otomatis terisi" readonly="" type="text"/>
+<div class="p-3 rounded-xl border border-emerald-500/40 mb-3 space-y-3 bg-white/30">
+<label class="block text-xs font-black text-emerald-950">⚽ Opsi Tambahan Sewa (Opsional)</label>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+<label class="flex items-center gap-2 cursor-pointer bg-white/40 p-2 rounded-lg border border-white/30">
+<input class="w-4 h-4 rounded accent-emerald-600" id="in-sewa-bola" onchange="hitungOtomatisBiaya()" type="checkbox"/>
+<span class="text-xs text-slate-900 font-bold">Sewa Bola (Rp 25.000/jam)</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer bg-white/40 p-2 rounded-lg border border-white/30">
+<input class="w-4 h-4 rounded accent-emerald-600" id="in-sewa-rompi" onchange="hitungOtomatisBiaya()" type="checkbox"/>
+<span class="text-xs text-slate-900 font-bold">Sewa Rompi (Rp 30.000/jam)</span>
+</label>
+</div>
+<p class="text-[10px] text-amber-950 font-extrabold italic" id="info-biaya-tambahan">Biaya tambahan sewa: Rp 0</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+<div class="p-3 rounded-xl border border-emerald-500/40 space-y-2 bg-white/30">
+<label class="block text-xs font-black text-emerald-950">Pembayaran Tim 1</label>
+<input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-jumlah-1" placeholder="Nominal (Rp)" type="number"/>
+<select class="w-full p-2 rounded text-sm glass-input font-bold" id="in-metode-1" onchange="toggleFreePaymentInput(1)">
+<option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option><option value="Free">Free / Gratis</option>
+</select>
+</div>
+<div class="p-3 rounded-xl border border-emerald-500/40 space-y-2 bg-white/30">
+<label class="block text-xs font-black text-emerald-950">Pembayaran Tim 2 (Opsional / Sparring)</label>
+<input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-jumlah-2" placeholder="Nominal (Rp)" type="number"/>
+<select class="w-full p-2 rounded text-sm glass-input font-bold" id="in-metode-2" onchange="toggleFreePaymentInput(2)">
+<option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option><option value="Free">Free / Gratis</option>
+</select>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded text-sm font-bold border border-emerald-500/50 shadow" type="submit">Simpan</button>
+</div>
+</form>
+</div>
+<!-- FORM MINUMAN -->
+<div class="sub-menu-modern glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900" id="page-minuman">
 
-                <!-- BAGIAN 3 (Tgl 23 - Akhir) -->
-                <div class="shadow-2xl rounded-xl border border-white/40 overflow-x-auto text-center">
-                    <div id="monthly-title-3" class="p-2 bg-slate-900 text-cyan-300 text-xs font-bold border-b border-white/25 text-center">REKAP BULAN AGUSTUS 2026 (Tgl 23 - Selesai)</div>
-                    <table class="w-full text-center border-collapse text-[9px] sm:text-xs bg-white/25 backdrop-blur-md border-slate-900/40">
-                        <thead>
-                            <tr id="monthly-header-row-3" class="bg-cyan-900 text-white font-bold text-center">
-                                <th class="p-1.5 border border-slate-900/40 text-center font-bold w-[120px]">Tanggal</th>
-                            </tr>
-                        </thead>
-                        <tbody id="monthly-tbody-3" class="text-center"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- TABEL 2: FORMAT TABEL RINGKASAN REKAP BULANAN -->
-            <div class="shadow-2xl rounded-xl border border-white/30 mb-4 overflow-x-auto font-bold text-slate-900 text-center">
-                <div class="p-2 bg-slate-900 text-amber-300 text-xs font-bold border-b border-white/25 text-center">Format Tabel Rangkuman Aktivitas Bulanan</div>
-                <table class="w-full text-center border-collapse text-[10px] sm:text-xs bg-white/25 backdrop-blur-md border-slate-900/40">
-                    <thead>
-                        <tr class="bg-amber-900 text-white font-bold text-center">
-                            <th class="p-2 border border-slate-900/40 text-center">Keterangan Aktivitas / Status</th>
-                            <th class="p-2 border border-slate-900/40 text-center">Jumlah Total dalam 1 Bulan</th>
-                        </tr>
-                    </thead>
-                    <tbody id="monthly-summary-tbody" class="text-center">
-                        <!-- Diisi via Javascript -->
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Footer Total Jam 1 Bulan -->
-            <div class="p-4 rounded-xl border border-cyan-600/50 flex justify-between items-center shadow-lg bg-white/30 font-bold">
-                <span class="font-black text-sm text-cyan-950">Jumlah Aktual Jam Main ( 1 Bulan )</span>
-                <div class="flex items-center gap-2 bg-slate-900 border border-cyan-400/50 px-4 py-2 rounded-lg shadow text-white">
-                    <span id="monthly-total-jam" class="font-black text-cyan-300 text-base">0</span>
-                    <span class="text-xs text-white font-bold">Jam</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- HALAMAN BOOKING HISTORY -->
-        <div id="page-booking-history" class="sub-menu-modern glass-panel p-3 sm:p-6 rounded-2xl hidden">
-            <button type="button" onclick="showPage('home')" class="sticky-back-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                Kembali
-            </button>
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm w-full text-center">📋 DAFTAR RIWAYAT BOOKING</h2>
-            </div>
-
-            <!-- BOOKING SUDAH DP -->
-            <div class="mb-5">
-                <h3 class="font-black text-sm sm:text-base text-emerald-900 text-center mb-2 p-2 rounded-xl border border-emerald-500/40 bg-emerald-500/10">💰 SUDAH DP</h3>
-                <div class="shadow-2xl rounded-xl border border-white/30 overflow-hidden">
-                    <table class="w-full text-center border-collapse text-[10px] sm:text-xs bg-white/20 backdrop-blur-md table-auto font-bold text-slate-900 border-slate-900/40">
-                        <thead><tr class="bg-slate-900 text-white font-bold text-center">
-                            <th class="p-2 border border-slate-900/40 text-center">Waktu</th><th class="p-2 border border-slate-900/40 text-center">Tim</th><th class="p-2 border border-slate-900/40 text-center">Status</th><th class="p-2 border border-slate-900/40 text-center">DP</th><th class="p-2 border border-slate-900/40 text-center">Metode</th><th class="p-2 border border-slate-900/40 text-center">Aksi</th>
-                        </tr></thead>
-                        <tbody id="tabel-booking-dp" class="text-center"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- BOOKING TANPA DP -->
-            <div class="mb-5">
-                <h3 class="font-black text-sm sm:text-base text-amber-900 text-center mb-2 p-2 rounded-xl border border-amber-500/40 bg-amber-500/10">📝 TIDAK ADA DP (DP Rp0)</h3>
-                <div class="shadow-2xl rounded-xl border border-white/30 overflow-hidden">
-                    <table class="w-full text-center border-collapse text-[10px] sm:text-xs bg-white/20 backdrop-blur-md table-auto font-bold text-slate-900 border-slate-900/40">
-                        <thead><tr class="bg-slate-900 text-white font-bold text-center">
-                            <th class="p-2 border border-slate-900/40 text-center">Waktu</th><th class="p-2 border border-slate-900/40 text-center">Tim</th><th class="p-2 border border-slate-900/40 text-center">Status</th><th class="p-2 border border-slate-900/40 text-center">DP</th><th class="p-2 border border-slate-900/40 text-center">Metode</th><th class="p-2 border border-slate-900/40 text-center">Aksi</th>
-                        </tr></thead>
-                        <tbody id="tabel-booking-nodp" class="text-center"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- BOOKING TANGGAL SUDAH LEWAT -->
-            <div class="mb-5">
-                <h3 class="font-black text-sm sm:text-base text-slate-900 text-center mb-2 p-2 rounded-xl border border-slate-500/40 bg-slate-500/10">✅ TANGGAL SUDAH LEWAT (SELESAI)</h3>
-                <div class="shadow-2xl rounded-xl border border-white/30 overflow-hidden">
-                    <table class="w-full text-center border-collapse text-[10px] sm:text-xs bg-white/20 backdrop-blur-md table-auto font-bold text-slate-900 border-slate-900/40">
-                        <thead><tr class="bg-slate-900 text-white font-bold text-center">
-                            <th class="p-2 border border-slate-900/40 text-center">Waktu</th><th class="p-2 border border-slate-900/40 text-center">Tim</th><th class="p-2 border border-slate-900/40 text-center">Status</th><th class="p-2 border border-slate-900/40 text-center">DP</th><th class="p-2 border border-slate-900/40 text-center">Metode</th><th class="p-2 border border-slate-900/40 text-center">Aksi</th>
-                        </tr></thead>
-                        <tbody id="tabel-booking-selesai" class="text-center"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- FORM KELOLA / TAMBAH MEMBER -->
-        <div id="page-atur-member" class="sub-menu-modern glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900">
-            <button type="button" onclick="showPage('booking-schedule')" class="sticky-back-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                Kembali
-            </button>
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-base sm:text-lg font-black text-indigo-950">⚙️ Kelola Jadwal Member</h2>
-            </div>
-            
-            <form id="form-member" onsubmit="tambahMember(event)" class="p-4 rounded-xl border border-indigo-500/40 mb-6 space-y-3 bg-white/30">
-                <h3 class="font-black text-sm text-indigo-950">Tambah Jadwal Member / Status Baru</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <input type="text" id="m-nama" placeholder="Nama Tim / OFF (Contoh: OFF atau FHS FC)" class="p-2 rounded text-sm glass-input" required>
-                    <select id="m-hari" class="p-2 rounded text-sm glass-input" required>
-                        <option value="Senin">Senin</option><option value="Selasa">Selasa</option><option value="Rabu">Rabu</option>
-                        <option value="Kamis">Kamis</option><option value="Jumat">Jumat</option><option value="Sabtu">Sabtu</option><option value="Minggu">Minggu</option>
-                    </select>
-                    <select id="m-jam" class="p-2 rounded text-sm glass-input" required>
-                        <option value="07:00">07:00</option><option value="08:00">08:00</option><option value="09:00">09:00</option><option value="10:00">10:00</option>
-                        <option value="11:00">11:00</option><option value="12:00">12:00</option><option value="13:00">13:00</option><option value="14:00">14:00</option>
-                        <option value="15:00">15:00</option><option value="16:00">16:00</option><option value="17:00">17:00</option><option value="18:00">18:00</option>
-                        <option value="19:00">19:00</option><option value="20:00">20:00</option><option value="21:00">21:00</option><option value="22:00">22:00</option>
-                        <option value="23:00">23:00</option><option value="24:00">24:00</option>
-                    </select>
-                    <div class="sm:col-span-3">
-                        <label class="block text-[11px] font-black text-indigo-950 mb-1">Mulai Berlaku</label>
-                        <input type="date" id="m-mulai" class="p-2 rounded text-sm glass-input w-full" required>
-                        <p class="text-[10px] text-slate-600 mt-1">Jadwal member baru hanya berlaku mulai tanggal ini.</p>
-                    </div>
-                </div>
-                <button type="submit" class="bg-indigo-700 hover:bg-indigo-800 text-white px-4 py-2 rounded text-xs font-bold shadow border border-indigo-500/50">Simpan Jadwal</button>
-            </form>
-
-            <h3 class="font-black text-sm text-slate-900 mb-2">Daftar Jadwal / Member Aktif</h3>
-            <div class="shadow rounded-xl border border-white/30 bg-white/20 backdrop-blur overflow-hidden">
-                <table class="w-full text-left text-xs table-auto font-bold text-slate-900 border-slate-900/40">
-                    <thead class="bg-slate-900 text-white border-b border-slate-900/40">
-                        <tr>
-                            <th class="p-2 border border-slate-900/40 w-[45%]">Tim / Keterangan</th>
-                            <th class="p-2 border border-slate-900/40 w-[20%]">Hari</th>
-                            <th class="p-2 border border-slate-900/40 w-[15%]">Jam</th>
-                            <th class="p-2 border border-slate-900/40 w-[20%]">Mulai</th>
-                            <th class="p-2 border border-slate-900/40 w-[25%]">Status</th>
-                            <th class="p-2 border border-slate-900/40 text-center w-[15%]">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabel-list-member"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- FORM BOOKING -->
-        <div id="page-booking" class="sub-menu-modern glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900">
-            <button type="button" onclick="showPage('home')" class="sticky-back-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                Kembali
-            </button>
-            <h2 class="text-base sm:text-lg font-black mb-4 text-blue-950">Form Booking / Jadwal Lapangan</h2>
-            <form onsubmit="submitData(event, 'booking')">
-                <label class="block text-xs font-bold mb-1 text-slate-900">Status Tim</label>
-                <select id="b-status" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold">
-                    <option value="Non-Member">Non-Member / Booking Insidental (Merah)</option>
-                    <option value="Member">Member (Biru)</option>
-                </select>
-
-                <input type="text" id="b-nama" placeholder="Nama Tim" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
-                
-                <label class="block text-xs font-bold mb-1 text-slate-900">Tanggal Main</label>
-                <input type="date" id="b-tanggal" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
-
-                <label class="block text-xs font-bold mb-1 text-slate-900">Jam Main (Pilih Jam)</label>
-                <select id="b-jam" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
-                    <option value="07:00">07:00</option><option value="08:00">08:00</option><option value="09:00">09:00</option><option value="10:00">10:00</option>
-                    <option value="11:00">11:00</option><option value="12:00">12:00</option><option value="13:00">13:00</option><option value="14:00">14:00</option>
-                    <option value="15:00">15:00</option><option value="16:00">16:00</option><option value="17:00">17:00</option><option value="18:00">18:00</option>
-                    <option value="19:00">19:00</option><option value="20:00">20:00</option><option value="21:00">21:00</option><option value="22:00">22:00</option>
-                    <option value="23:00">23:00</option><option value="24:00">24:00</option>
-                </select>
-                
-                <input type="number" id="b-dp" placeholder="Jumlah DP / Bayar (Rp)" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" min="0" required>
-
-                <label class="block text-xs font-bold mb-1 text-slate-900">Tanggal DP / Bayar</label>
-                <input type="date" id="b-tanggal-dp" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold">
-                
-                <label class="block text-xs font-bold mb-1 text-slate-900">Metode Pembayaran</label>
-                <select id="b-metode" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold">
-                    <option value="Cash">Cash</option>
-                    <option value="QRIS">QRIS</option>
-                    <option value="Transfer">Transfer</option>
-                </select>
-                
-                <div class="flex gap-2">
-                    <button type="submit" class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded text-sm font-bold border border-blue-500/50 shadow">Simpan</button>
-                </div>
-            </form>
-        </div>
-
-        <!-- FORM UANG MASUK -->
-        <div id="page-masuk" class="sub-menu-modern glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900">
-            <button type="button" onclick="showPage('home')" class="sticky-back-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                Kembali
-            </button>
-            <h2 class="text-base sm:text-lg font-black mb-4 text-emerald-950">Uang Masuk / Pelunasan Lapangan</h2>
-            <form onsubmit="submitData(event, 'pemasukan')">
-                <label class="block text-xs font-bold mb-1 text-slate-900">Pilih Tanggal Main / Pelunasan</label>
-                <input type="date" id="in-tgl" onchange="updateDropdownTimMasuk()" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
-
-                <label class="block text-xs font-bold mb-1 text-slate-900">Pilih Tim / Keterangan</label>
-                <select id="in-tim" onchange="updateJamMainMasuk()" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
-                    <option value="">-- Pilih Tanggal Terlebih Dahulu --</option>
-                </select>
-
-                <label class="block text-xs font-bold mb-1 text-slate-900">Jam Main (Otomatis)</label>
-                <input type="text" id="in-jam-main" placeholder="Jam main akan otomatis terisi" class="w-full p-2 rounded mb-3 text-sm glass-input bg-white/40 font-bold" readonly>
-
-                <div class="p-3 rounded-xl border border-emerald-500/40 mb-3 space-y-3 bg-white/30">
-                    <label class="block text-xs font-black text-emerald-950">⚽ Opsi Tambahan Sewa (Opsional)</label>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <label class="flex items-center gap-2 cursor-pointer bg-white/40 p-2 rounded-lg border border-white/30">
-                            <input type="checkbox" id="in-sewa-bola" onchange="hitungOtomatisBiaya()" class="w-4 h-4 rounded accent-emerald-600">
-                            <span class="text-xs text-slate-900 font-bold">Sewa Bola (Rp 25.000/jam)</span>
-                        </label>
-                        <label class="flex items-center gap-2 cursor-pointer bg-white/40 p-2 rounded-lg border border-white/30">
-                            <input type="checkbox" id="in-sewa-rompi" onchange="hitungOtomatisBiaya()" class="w-4 h-4 rounded accent-emerald-600">
-                            <span class="text-xs text-slate-900 font-bold">Sewa Rompi (Rp 30.000/jam)</span>
-                        </label>
-                    </div>
-                    <p id="info-biaya-tambahan" class="text-[10px] text-amber-950 font-extrabold italic">Biaya tambahan sewa: Rp 0</p>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-                    <div class="p-3 rounded-xl border border-emerald-500/40 space-y-2 bg-white/30">
-                        <label class="block text-xs font-black text-emerald-950">Pembayaran Tim 1</label>
-                        <input type="number" id="in-jumlah-1" placeholder="Nominal (Rp)" class="w-full p-2 rounded text-sm glass-input font-bold">
-                        <select id="in-metode-1" onchange="toggleFreePaymentInput(1)" class="w-full p-2 rounded text-sm glass-input font-bold">
-                            <option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option><option value="Free">Free / Gratis</option>
-                        </select>
-                    </div>
-                    <div class="p-3 rounded-xl border border-emerald-500/40 space-y-2 bg-white/30">
-                        <label class="block text-xs font-black text-emerald-950">Pembayaran Tim 2 (Opsional / Sparring)</label>
-                        <input type="number" id="in-jumlah-2" placeholder="Nominal (Rp)" class="w-full p-2 rounded text-sm glass-input font-bold">
-                        <select id="in-metode-2" onchange="toggleFreePaymentInput(2)" class="w-full p-2 rounded text-sm glass-input font-bold">
-                            <option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option><option value="Free">Free / Gratis</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="flex gap-2">
-                    <button type="submit" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded text-sm font-bold border border-emerald-500/50 shadow">Simpan</button>
-                </div>
-            </form>
-        </div>
-
-        <!-- FORM MINUMAN -->
-        <div id="page-minuman" class="sub-menu-modern glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900">
-            <button type="button" onclick="showPage('home')" class="sticky-back-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                Kembali
-            </button>
-            <h2 class="text-base sm:text-lg font-black mb-4 text-amber-950">Penjualan Minuman</h2>
-            <style>
+<h2 class="text-base sm:text-lg font-black mb-4 text-amber-950 text-center uppercase w-full">PENJUALAN MINUMAN</h2>
+<style>
                 .minuman-grid {
                     display: grid;
                     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1505,86 +1587,76 @@
                     .minuman-btn.selected::after { right: 6px; top: 6px; width: 22px; height: 22px; font-size: 13px; }
                 }
             </style>
-            <form onsubmit="submitData(event, 'minuman')">
-                <label class="block text-xs font-bold mb-1 text-slate-900">Pilih Jenis Minuman Cepat</label>
-                <div class="minuman-grid grid gap-2 mb-3">
-                    <button type="button" data-nama="Air Mineral" onclick="pilihMinumanCepat('Air Mineral', 4000)" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" title="Air Mineral" aria-label="Air Mineral"><img src="mineral.png" alt="Air Mineral"></button>
-                    <button type="button" data-nama="Air Mineral + 3 Permen" onclick="pilihMinumanCepat('Air Mineral + 3 Permen', 5000)" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" title="Air Mineral + 3 Permen" aria-label="Air Mineral + 3 Permen"><img src="mineralpermen.png" alt="Air Mineral + 3 Permen"></button>
-                    <button type="button" data-nama="Pocari Sweat" onclick="pilihMinumanCepat('Pocari Sweat', 10000)" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" title="Pocari Sweat" aria-label="Pocari Sweat"><img src="pocari.png" alt="Pocari Sweat"></button>
-                    <button type="button" data-nama="Fanta" onclick="pilihMinumanCepat('Fanta', 5000)" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" title="Fanta" aria-label="Fanta"><img src="fanta.png" alt="Fanta"></button>
-                    <button type="button" data-nama="Sprite" onclick="pilihMinumanCepat('Sprite', 5000)" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" title="Sprite" aria-label="Sprite"><img src="sprite.png" alt="Sprite"></button>
-                    <button type="button" data-nama="Coca Cola" onclick="pilihMinumanCepat('Coca Cola', 5000)" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" title="Coca Cola" aria-label="Coca Cola"><img src="cocacola.png" alt="Coca Cola"></button>
-                    <button type="button" data-nama="Teh Pucuk Harum" onclick="pilihMinumanCepat('Teh Pucuk Harum', 5000)" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" title="Teh Pucuk Harum" aria-label="Teh Pucuk Harum"><img src="tehpucuk.png" alt="Teh Pucuk Harum"></button>
-                    <button type="button" data-nama="Milo" onclick="pilihMinumanCepat('Milo', 5000)" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" title="Milo" aria-label="Milo"><img src="milo.png" alt="Milo"></button>
-                </div>
-                <select id="m-select-pilihan" onchange="pilihMinuman(this)" class="hidden">
-                    <option value="" data-harga="0">-- Pilih Minuman --</option>
-                    <option value="Air Mineral" data-harga="4000">Air Mineral (Rp 4.000)</option>
-                    <option value="Air Mineral + 3 Permen" data-harga="5000">Air Mineral + 3 Permen (Rp 5.000)</option>
-                    <option value="Pocari Sweat" data-harga="10000">Pocari Sweat (Rp 10.000)</option>
-                    <option value="Fanta" data-harga="5000">Fanta (Rp 5.000)</option>
-                    <option value="Sprite" data-harga="5000">Sprite (Rp 5.000)</option>
-                    <option value="Coca Cola" data-harga="5000">Coca Cola (Rp 5.000)</option>
-                    <option value="Teh Pucuk Harum" data-harga="5000">Teh Pucuk Harum (Rp 5.000)</option>
-                    <option value="Milo" data-harga="5000">Milo (Rp 5.000)</option>
-                </select>
+<form onsubmit="submitData(event, 'minuman')">
+<div class="minuman-grid grid gap-2 mb-3">
+<button aria-label="Air Mineral" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" data-nama="Air Mineral" onclick="pilihMinumanCepat('Air Mineral', 4000)" title="Air Mineral" type="button"><img alt="Air Mineral" src="mineral.png"/></button>
+<button aria-label="Air Mineral + 3 Permen" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" data-nama="Air Mineral + 3 Permen" onclick="pilihMinumanCepat('Air Mineral + 3 Permen', 5000)" title="Air Mineral + 3 Permen" type="button"><img alt="Air Mineral + 3 Permen" src="mineralpermen.png"/></button>
+<button aria-label="Pocari Sweat" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" data-nama="Pocari Sweat" onclick="pilihMinumanCepat('Pocari Sweat', 10000)" title="Pocari Sweat" type="button"><img alt="Pocari Sweat" src="pocari.png"/></button>
+<button aria-label="Fanta" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" data-nama="Fanta" onclick="pilihMinumanCepat('Fanta', 5000)" title="Fanta" type="button"><img alt="Fanta" src="fanta.png"/></button>
+<button aria-label="Sprite" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" data-nama="Sprite" onclick="pilihMinumanCepat('Sprite', 5000)" title="Sprite" type="button"><img alt="Sprite" src="sprite.png"/></button>
+<button aria-label="Coca Cola" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" data-nama="Coca Cola" onclick="pilihMinumanCepat('Coca Cola', 5000)" title="Coca Cola" type="button"><img alt="Coca Cola" src="cocacola.png"/></button>
+<button aria-label="Teh Pucuk Harum" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" data-nama="Teh Pucuk Harum" onclick="pilihMinumanCepat('Teh Pucuk Harum', 5000)" title="Teh Pucuk Harum" type="button"><img alt="Teh Pucuk Harum" src="tehpucuk.png"/></button>
+<button aria-label="Milo" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" data-nama="Milo" onclick="pilihMinumanCepat('Milo', 5000)" title="Milo" type="button"><img alt="Milo" src="milo.png"/></button>
+</div>
+<select class="hidden" id="m-select-pilihan" onchange="pilihMinuman(this)">
+<option data-harga="0" value="">-- Pilih Minuman --</option>
+<option data-harga="4000" value="Air Mineral">Air Mineral (Rp 4.000)</option>
+<option data-harga="5000" value="Air Mineral + 3 Permen">Air Mineral + 3 Permen (Rp 5.000)</option>
+<option data-harga="10000" value="Pocari Sweat">Pocari Sweat (Rp 10.000)</option>
+<option data-harga="5000" value="Fanta">Fanta (Rp 5.000)</option>
+<option data-harga="5000" value="Sprite">Sprite (Rp 5.000)</option>
+<option data-harga="5000" value="Coca Cola">Coca Cola (Rp 5.000)</option>
+<option data-harga="5000" value="Teh Pucuk Harum">Teh Pucuk Harum (Rp 5.000)</option>
+<option data-harga="5000" value="Milo">Milo (Rp 5.000)</option>
+</select>
+<input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="m-produk" placeholder="Nama Minuman (Bisa diketik manual)" required="" type="text"/>
+<select class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="m-jumlah-pcs" onchange="hitungTotalMinuman()" required="">
+<option selected="" value="1">1 Pcs</option>
+<option value="2">2 Pcs</option>
+<option value="3">3 Pcs</option>
+<option value="4">4 Pcs</option>
+<option value="5">5 Pcs</option>
+<option value="6">6 Pcs</option>
+<option value="7">7 Pcs</option>
+<option value="8">8 Pcs</option>
+<option value="9">9 Pcs</option>
+<option value="10">10 Pcs</option>
+</select>
+<input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="m-total" placeholder="Total Harga (Rp)" required="" type="number"/>
+<label class="block text-xs font-bold mb-1 text-slate-900">Metode Pembayaran</label>
+<select class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="m-metode">
+<option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option>
+</select>
+<input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="m-tgl" required="" type="date"/>
+<div class="flex justify-end gap-2 mt-2">
+<button class="bg-amber-700 hover:bg-amber-800 text-white px-5 py-2.5 rounded-xl text-sm font-bold border border-amber-500/50 shadow-lg min-h-[44px] touch-manipulation" type="submit">Simpan</button>
+</div>
+</form>
+</div>
+<!-- FORM UANG KELUAR -->
+<div class="sub-menu-modern glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900" id="page-keluar">
 
-                <input type="text" id="m-produk" placeholder="Nama Minuman (Bisa diketik manual)" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
-                <select id="m-jumlah-pcs" onchange="hitungTotalMinuman()" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
-                    <option value="1" selected>1 Pcs</option>
-                    <option value="2">2 Pcs</option>
-                    <option value="3">3 Pcs</option>
-                    <option value="4">4 Pcs</option>
-                    <option value="5">5 Pcs</option>
-                    <option value="6">6 Pcs</option>
-                    <option value="7">7 Pcs</option>
-                    <option value="8">8 Pcs</option>
-                    <option value="9">9 Pcs</option>
-                    <option value="10">10 Pcs</option>
-                </select>
-                <input type="number" id="m-total" placeholder="Total Harga (Rp)" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
-                <label class="block text-xs font-bold mb-1 text-slate-900">Metode Pembayaran</label>
-                <select id="m-metode" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold">
-                    <option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option>
-                </select>
-                <input type="date" id="m-tgl" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
-                <div class="flex gap-2">
-                    <button type="submit" class="bg-amber-700 hover:bg-amber-800 text-white px-4 py-2 rounded text-sm font-bold border border-amber-500/50 shadow">Simpan</button>
-                </div>
-            </form>
-        </div>
-
-        <!-- FORM UANG KELUAR -->
-        <div id="page-keluar" class="sub-menu-modern glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900">
-            <button type="button" onclick="showPage('home')" class="sticky-back-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                Kembali
-            </button>
-            <h2 class="text-base sm:text-lg font-black mb-4 text-rose-950">Uang Keluar</h2>
-            <form onsubmit="submitData(event, 'pengeluaran')">
-                <input type="text" id="k-ket" placeholder="Keterangan Pengeluaran" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
-                <input type="number" id="k-jumlah" placeholder="Nominal (Rp)" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
-                
-                <label class="block text-xs font-bold mb-1 text-slate-900">Tanggal Catat Pengeluaran</label>
-                <input type="date" id="k-tgl" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
-
-                <div class="p-3 rounded-xl border border-rose-500/40 mb-3 space-y-2 bg-white/30">
-                    <label class="block text-xs font-black text-rose-950">Sumber Dana (Ambil dari Cash Tanggal Lain):</label>
-                    <div class="flex items-center gap-2">
-                        <input type="date" id="k-sumber-tgl" onchange="cekSaldoSumberCash()" class="w-full p-2 rounded text-sm glass-input font-bold" required>
-                    </div>
-                    <p id="info-saldo-sumber" class="text-xs text-amber-950 font-extrabold">Sisa Cash Tanggal Terpilih: Menghitung...</p>
-                </div>
-
-                <div class="flex gap-2">
-                    <button type="submit" class="bg-rose-700 hover:bg-rose-800 text-white px-4 py-2 rounded text-sm font-bold border border-rose-500/50 shadow">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </main>
-
-    <!-- Script Firebase & Logika Aplikasi -->
-    <script type="module">
+<h2 class="text-base sm:text-lg font-black mb-4 text-rose-950">Uang Keluar</h2>
+<form onsubmit="submitData(event, 'pengeluaran')">
+<input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="k-ket" placeholder="Keterangan Pengeluaran" required="" type="text"/>
+<input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="k-jumlah" placeholder="Nominal (Rp)" required="" type="number"/>
+<label class="block text-xs font-bold mb-1 text-slate-900">Tanggal Catat Pengeluaran</label>
+<input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="k-tgl" required="" type="date"/>
+<div class="p-3 rounded-xl border border-rose-500/40 mb-3 space-y-2 bg-white/30">
+<label class="block text-xs font-black text-rose-950">Sumber Dana (Ambil dari Cash Tanggal Lain):</label>
+<div class="flex items-center gap-2">
+<input class="w-full p-2 rounded text-sm glass-input font-bold" id="k-sumber-tgl" onchange="cekSaldoSumberCash()" required="" type="date"/>
+</div>
+<p class="text-xs text-amber-950 font-extrabold" id="info-saldo-sumber">Sisa Cash Tanggal Terpilih: Menghitung...</p>
+</div>
+<div class="flex gap-2">
+<button class="bg-rose-700 hover:bg-rose-800 text-white px-4 py-2 rounded text-sm font-bold border border-rose-500/50 shadow" type="submit">Simpan</button>
+</div>
+</form>
+</div>
+</main>
+<!-- Script Firebase & Logika Aplikasi -->
+<script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getDatabase, ref, push, remove, update, onValue } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 
@@ -3243,7 +3315,6 @@
             }
         }
     </script>
-
 <!-- MODERN APP DIALOGS: visual layer only -->
 <style id="modern-dialog-styles">
 #modern-dialog-root{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:18px}
@@ -3287,14 +3358,14 @@
             color: #64748b !important;
         }
 </style>
-<div id="modern-dialog-root" aria-hidden="true">
-  <div class="modern-dialog-backdrop"></div>
-  <div class="modern-dialog-card is-info" role="dialog" aria-modal="true">
-    <div class="modern-dialog-icon">i</div>
-    <div class="modern-dialog-title">Informasi</div>
-    <div class="modern-dialog-message"></div>
-    <div class="modern-dialog-actions"></div>
-  </div>
+<div aria-hidden="true" id="modern-dialog-root">
+<div class="modern-dialog-backdrop"></div>
+<div aria-modal="true" class="modern-dialog-card is-info" role="dialog">
+<div class="modern-dialog-icon">i</div>
+<div class="modern-dialog-title">Informasi</div>
+<div class="modern-dialog-message"></div>
+<div class="modern-dialog-actions"></div>
+</div>
 </div>
 <script>
 (function(){
@@ -3345,6 +3416,5 @@
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&root.classList.contains('is-open')) close(false);});
 })();
 </script>
-
 </body>
-</htmldata-nama="Air Mineral" data-nama="Air Mineral + 3 Permen" data-nama="Pocari Sweat" data-nama="Fanta" data-nama="Sprite" data-nama="Coca Cola" data-nama="Teh Pucuk Harum" data-nama="Milo" >
+</html>
