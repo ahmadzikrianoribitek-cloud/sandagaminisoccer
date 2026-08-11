@@ -2764,7 +2764,7 @@
 
                 // Semua tanggal sebelum 09-08-2026 digabung menjadi satu area
                 // agar menampilkan stempel "Sistem Belum Dibuat" tanpa angka harian.
-                const cutoffDate = new Date(2026, 7, 9); // 9 Agustus 2026
+                const cutoffDate = new Date(2026, 7, 10); // 10 Agustus 2026
                 const partStartDate = new Date(year, month - 1, startD);
                 const partEndDate = new Date(year, month - 1, endD);
                 if(partEndDate < cutoffDate) {
@@ -2773,10 +2773,18 @@
                     return html;
                 }
                 if(partStartDate < cutoffDate) {
-                    let lastBeforeCutoff = Math.min(endD, 8);
-                    const spanDays = lastBeforeCutoff - startD + 1;
-                    html += `<th colspan="${spanDays}" class="p-1 border border-amber-400/60 min-w-[150px] font-black text-center bg-amber-100/80 text-amber-900">${startD} - ${lastBeforeCutoff}</th>`;
-                    for(let d = lastBeforeCutoff + 1; d <= endD; d++) {
+                    // Tentukan tanggal terakhir yang masih sebelum cutoff berdasarkan bulan/tahun terpilih.
+                    // Ini penting agar seluruh bagian bulan sebelum 9 Agustus 2026 ikut mendapat stempel,
+                    // termasuk bagian tanggal 12-22 dan 23-selesai pada Juli 2026.
+                    let lastBeforeCutoff = endD;
+                    while(lastBeforeCutoff >= startD && new Date(year, month - 1, lastBeforeCutoff) >= cutoffDate) {
+                        lastBeforeCutoff--;
+                    }
+                    if(lastBeforeCutoff >= startD) {
+                        const spanDays = lastBeforeCutoff - startD + 1;
+                        html += `<th colspan="${spanDays}" class="p-1 border border-amber-400/60 min-w-[150px] font-black text-center bg-amber-100/80 text-amber-900">${startD} - ${lastBeforeCutoff}</th>`;
+                    }
+                    for(let d = Math.max(startD, lastBeforeCutoff + 1); d <= endD; d++) {
                         html += `<th class="p-1 border border-slate-900/40 min-w-[25px] font-black text-center">${d}</th>`;
                     }
                     return html;
@@ -2880,9 +2888,9 @@
                 
                 let isFutureDate = cellDateObj > todayObj;
 
-                // Semua tanggal sebelum 09-08-2026 tidak dihitung karena sistem belum dibuat.
-                // Tanggal 09-08-2026 dan seterusnya tetap dihitung normal.
-                const cutoffDateStr = '2026-08-09';
+                // Semua tanggal sebelum 10-08-2026 tidak dihitung karena sistem belum dibuat.
+                // Tanggal 10-08-2026 dan seterusnya dihitung normal.
+                const cutoffDateStr = '2026-08-10';
                 let isSystemNotCreated = info.dateStr < cutoffDateStr;
                 let targetBagian = (d <= 11) ? 1 : (d <= 22 ? 2 : 3);
 
@@ -2892,7 +2900,13 @@
                     const partStart = targetBagian === 1 ? 1 : (targetBagian === 2 ? 12 : 23);
                     const partEnd = targetBagian === 1 ? Math.min(11, daysInMonth) : (targetBagian === 2 ? Math.min(22, daysInMonth) : daysInMonth);
                     const firstUncreated = partStart;
-                    const lastUncreated = Math.min(partEnd, 8);
+                    // Cari seluruh rentang tanggal dalam bagian ini yang masih sebelum cutoff.
+                    // Jangan memakai angka 8 secara hard-code karena bulan seperti Juli 2026
+                    // seluruh tanggalnya berada sebelum 9 Agustus 2026.
+                    let lastUncreated = partEnd;
+                    while(lastUncreated >= firstUncreated && new Date(year, month - 1, lastUncreated) >= new Date(2026, 7, 10)) {
+                        lastUncreated--;
+                    }
                     if(d === firstUncreated && firstUncreated <= lastUncreated) {
                         const spanDays = lastUncreated - firstUncreated + 1;
                         const belumDibuatCell = `<td colspan="${spanDays}" rowspan="5" class="monthly-system-cell p-0 border border-amber-400/60 text-center bg-amber-100/70 align-middle">
