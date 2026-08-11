@@ -794,7 +794,17 @@
             <h2 class="text-base sm:text-lg font-black mb-4 text-amber-950">Penjualan Minuman</h2>
             <form onsubmit="submitData(event, 'minuman')">
                 <label class="block text-xs font-bold mb-1 text-slate-900">Pilih Jenis Minuman Cepat</label>
-                <select id="m-select-pilihan" onchange="pilihMinuman(this)" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+                    <button type="button" onclick="pilihMinumanCepat('Air Mineral', 4000)" class="p-2 rounded-lg text-xs sm:text-sm glass-input font-bold hover:bg-white/50 transition">Air Mineral</button>
+                    <button type="button" onclick="pilihMinumanCepat('Air Mineral + 3 Permen', 5000)" class="p-2 rounded-lg text-xs sm:text-sm glass-input font-bold hover:bg-white/50 transition">Air Mineral + 3 Permen</button>
+                    <button type="button" onclick="pilihMinumanCepat('Pocari Sweat', 10000)" class="p-2 rounded-lg text-xs sm:text-sm glass-input font-bold hover:bg-white/50 transition">Pocari Sweat</button>
+                    <button type="button" onclick="pilihMinumanCepat('Fanta', 5000)" class="p-2 rounded-lg text-xs sm:text-sm glass-input font-bold hover:bg-white/50 transition">Fanta</button>
+                    <button type="button" onclick="pilihMinumanCepat('Sprite', 5000)" class="p-2 rounded-lg text-xs sm:text-sm glass-input font-bold hover:bg-white/50 transition">Sprite</button>
+                    <button type="button" onclick="pilihMinumanCepat('Coca Cola', 5000)" class="p-2 rounded-lg text-xs sm:text-sm glass-input font-bold hover:bg-white/50 transition">Coca Cola</button>
+                    <button type="button" onclick="pilihMinumanCepat('Teh Pucuk Harum', 5000)" class="p-2 rounded-lg text-xs sm:text-sm glass-input font-bold hover:bg-white/50 transition">Teh Pucuk Harum</button>
+                    <button type="button" onclick="pilihMinumanCepat('Milo', 5000)" class="p-2 rounded-lg text-xs sm:text-sm glass-input font-bold hover:bg-white/50 transition">Milo</button>
+                </div>
+                <select id="m-select-pilihan" onchange="pilihMinuman(this)" class="hidden">
                     <option value="" data-harga="0">-- Pilih Minuman --</option>
                     <option value="Air Mineral" data-harga="4000">Air Mineral (Rp 4.000)</option>
                     <option value="Air Mineral + 3 Permen" data-harga="5000">Air Mineral + 3 Permen (Rp 5.000)</option>
@@ -807,7 +817,18 @@
                 </select>
 
                 <input type="text" id="m-produk" placeholder="Nama Minuman (Bisa diketik manual)" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
-                <input type="number" id="m-jumlah-pcs" placeholder="Jumlah (Pcs)" oninput="hitungTotalMinuman()" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
+                <select id="m-jumlah-pcs" onchange="hitungTotalMinuman()" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
+                    <option value="1" selected>1 Pcs</option>
+                    <option value="2">2 Pcs</option>
+                    <option value="3">3 Pcs</option>
+                    <option value="4">4 Pcs</option>
+                    <option value="5">5 Pcs</option>
+                    <option value="6">6 Pcs</option>
+                    <option value="7">7 Pcs</option>
+                    <option value="8">8 Pcs</option>
+                    <option value="9">9 Pcs</option>
+                    <option value="10">10 Pcs</option>
+                </select>
                 <input type="number" id="m-total" placeholder="Total Harga (Rp)" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
                 <label class="block text-xs font-bold mb-1 text-slate-900">Metode Pembayaran</label>
                 <select id="m-metode" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold">
@@ -1020,6 +1041,15 @@
                 }
                 document.getElementById('m-total').value = hargaSatuan * pcs;
             }
+        }
+
+        window.pilihMinumanCepat = (nama, harga) => {
+            const selectEl = document.getElementById('m-select-pilihan');
+            const option = Array.from(selectEl.options).find(opt => opt.value === nama);
+            if(option) selectEl.value = nama;
+            document.getElementById('m-produk').value = nama;
+            const pcs = Number(document.getElementById('m-jumlah-pcs').value || 1);
+            document.getElementById('m-total').value = harga * pcs;
         }
 
         window.hitungTotalMinuman = () => {
