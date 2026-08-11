@@ -793,6 +793,12 @@
             </button>
             <h2 class="text-base sm:text-lg font-black mb-4 text-amber-950">Penjualan Minuman</h2>
             <style>
+                .minuman-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, minmax(0, 1fr));
+                    gap: 0.5rem;
+                }
+
                 .minuman-btn {
                     position: relative;
                     min-height: 108px;
@@ -855,7 +861,7 @@
             </style>
             <form onsubmit="submitData(event, 'minuman')">
                 <label class="block text-xs font-bold mb-1 text-slate-900">Pilih Jenis Minuman Cepat</label>
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+                <div class="minuman-grid grid gap-2 mb-3">
                     <button type="button" data-nama="Air Mineral" onclick="pilihMinumanCepat('Air Mineral', 4000)" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" title="Air Mineral" aria-label="Air Mineral"><img src="mineral.png" alt="Air Mineral"></button>
                     <button type="button" data-nama="Air Mineral + 3 Permen" onclick="pilihMinumanCepat('Air Mineral + 3 Permen', 5000)" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" title="Air Mineral + 3 Permen" aria-label="Air Mineral + 3 Permen"><img src="mineralpermen.png" alt="Air Mineral + 3 Permen"></button>
                     <button type="button" data-nama="Pocari Sweat" onclick="pilihMinumanCepat('Pocari Sweat', 10000)" class="minuman-btn rounded-xl glass-input font-bold border-2 border-transparent" title="Pocari Sweat" aria-label="Pocari Sweat"><img src="pocari.png" alt="Pocari Sweat"></button>
@@ -1672,28 +1678,39 @@
                 // pada booking yang dibaca, sehingga booking yang dilunasi lewat
                 // laporan keuangan tetap dianggap belum lunas.
                 let totalPelunasan = 0;
-                if(item.booking) {
-                    Object.values(globalCache.pemasukan || {}).forEach(p => {
-                        if(!p || p.tgl !== today) return;
+                // Hitung pembayaran/pelunasan untuk booking maupun jadwal member.
+                // Jadwal member tidak memiliki flag booking, tetapi tetap bisa sudah
+                // lunas melalui menu Uang Masuk / Pelunasan.
+                Object.values(globalCache.pemasukan || {}).forEach(p => {
+                    if(!p || p.tgl !== today) return;
 
-                        const namaPemasukan = String(p.timNamaBersih || '').trim().toLowerCase();
-                        const namaBooking = String(item.nama || '').trim().toLowerCase();
-                        const ketPelunasan = String(p.ket || '');
-                        const isPelunasan = ketPelunasan.toLowerCase().startsWith('pelunasan');
+                    const namaPemasukan = String(p.timNamaBersih || '').trim().toLowerCase();
+                    const namaTim = String(item.nama || '').trim().toLowerCase();
+                    const ketPelunasan = String(p.ket || '');
+                    const ketLower = ketPelunasan.toLowerCase();
+                    const isPelunasan = ketLower.includes('pelunasan');
 
-                        if(isPelunasan && namaPemasukan && namaPemasukan === namaBooking) {
-                            // Jika keterangan memiliki jam main, cocokkan juga jamnya.
-                            // Jika tidak ada, tetap gunakan nama tim sebagai fallback.
-                            const jamBooking = String(jam || '').substring(0, 5);
-                            const jamMatch = ketPelunasan.match(/\((\d{1,2}:\d{2})\)/);
-                            const jamPelunasan = jamMatch ? jamMatch[1].padStart(5, '0') : '';
+                    // Cocokkan nama tim dari field timNamaBersih. Sebagai fallback,
+                    // cocokkan juga nama tim yang tercantum di keterangan.
+                    const namaCocok = (namaPemasukan && namaPemasukan === namaTim) ||
+                        (!namaPemasukan && namaTim && ketLower.includes(namaTim));
 
-                            if(!jamPelunasan || jamPelunasan === jamBooking) {
-                                totalPelunasan += Number(p.jumlah || 0);
-                            }
+                    if(isPelunasan && namaCocok) {
+                        // Jika keterangan memiliki jam main, cocokkan juga jamnya.
+                        // Jika tidak ada, pembayaran tetap dianggap milik tim tersebut.
+                        const jamJadwal = String(jam || '').substring(0, 5);
+                        const jamMatch = ketPelunasan.match(/\((\d{1,2}:\d{2})\)/);
+                        const jamPelunasan = jamMatch ? jamMatch[1].padStart(5, '0') : '';
+
+                        if(!jamPelunasan || jamPelunasan === jamJadwal) {
+                            // Data pelunasan menyimpan total pada `jumlah`; fallback
+                            // ke jumlah1 + jumlah2 untuk data lama.
+                            const nilaiBayar = Number(p.jumlah || 0) ||
+                                (Number(p.jumlah1 || 0) + Number(p.jumlah2 || 0));
+                            totalPelunasan += nilaiBayar;
                         }
-                    });
-                }
+                    }
+                });
 
                 const totalTerbayar = dp + totalPelunasan;
                 const sisa = Math.max(0, total - totalTerbayar);
@@ -1708,7 +1725,7 @@
                 // Jika booking sudah lunas, jangan render seluruh jadwalnya.
                 // Jadi jam, nama tim, status, total, DP, dan sisa semuanya hilang.
                 // Jadwal member yang belum booking tetap ditampilkan seperti biasa.
-                const sudahLunas = item.booking && total > 0 && sisa <= 0;
+                const sudahLunas = total > 0 && sisa <= 0;
                 if (sudahLunas) return '';
 
                 const namaTampil = item.nama || '-';
