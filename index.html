@@ -949,7 +949,153 @@ body:has(#page-keluar:not(.hidden)) > .sticky-back-btn[data-back-context="page-k
         height: 20px !important;
     }
 }
-</style></head>
+</style>
+<style>
+/* =========================================================
+   ADMIN — DAILY RECAP POLISH
+   Visual-only revision. Existing JS / IDs / onclick untouched.
+   ========================================================= */
+
+/* 1) Tombol kembali untuk halaman utama Daily Recap */
+body:has(#page-daily-recap:not(.hidden)) > .sticky-back-btn[data-back-context="page-daily-recap"] {
+    display: inline-flex !important;
+}
+
+/* Pastikan tetap berada di viewport, bukan di dalam holder Daily */
+body > .sticky-back-btn[data-back-context="page-daily-recap"] {
+    position: fixed !important;
+    top: 18px !important;
+    left: 18px !important;
+    z-index: 2147483647 !important;
+}
+
+/* 2) Empat tombol Daily dibuat mengikuti bahasa warna halaman utama */
+#daily-menu-grid .glass-btn {
+    position: relative !important;
+    overflow: hidden !important;
+    min-height: 118px !important;
+    color: #fff !important;
+    border: 1px solid rgba(255,255,255,.28) !important;
+    border-radius: 1.15rem !important;
+    box-shadow: 0 14px 30px rgba(15,23,42,.14) !important;
+    transition: transform .22s ease, box-shadow .22s ease, filter .22s ease !important;
+}
+
+/* Lapangan — biru */
+#daily-menu-grid .glass-btn:nth-child(1) {
+    background:
+        radial-gradient(circle at 92% 18%, rgba(255,255,255,.20) 0 3px, transparent 4px),
+        linear-gradient(135deg, #2563eb 0%, #1d4ed8 55%, #3730a3 100%) !important;
+}
+
+/* Minuman — hijau */
+#daily-menu-grid .glass-btn:nth-child(2) {
+    background:
+        radial-gradient(circle at 92% 18%, rgba(255,255,255,.20) 0 3px, transparent 4px),
+        linear-gradient(135deg, #10b981 0%, #059669 55%, #047857 100%) !important;
+}
+
+/* Pengeluaran — orange */
+#daily-menu-grid .glass-btn:nth-child(3) {
+    background:
+        radial-gradient(circle at 92% 18%, rgba(255,255,255,.20) 0 3px, transparent 4px),
+        linear-gradient(135deg, #f59e0b 0%, #ea580c 55%, #c2410c 100%) !important;
+}
+
+/* Ringkasan — pink/rose */
+#daily-menu-grid .glass-btn:nth-child(4) {
+    background:
+        radial-gradient(circle at 92% 18%, rgba(255,255,255,.20) 0 3px, transparent 4px),
+        linear-gradient(135deg, #f43f5e 0%, #e11d48 55%, #be123c 100%) !important;
+}
+
+#daily-menu-grid .glass-btn::after {
+    content: "";
+    position: absolute;
+    right: -28px;
+    bottom: -48px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.10);
+    pointer-events: none;
+}
+
+#daily-menu-grid .glass-btn span {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 15px;
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.25);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.22);
+    font-size: 1.45rem !important;
+}
+
+#daily-menu-grid .glass-btn {
+    letter-spacing: .025em;
+}
+
+#daily-menu-grid .glass-btn:hover {
+    transform: translateY(-3px) !important;
+    filter: saturate(1.08) brightness(1.03);
+    box-shadow: 0 18px 36px rgba(15,23,42,.20) !important;
+}
+
+#daily-menu-grid .glass-btn:active {
+    transform: translateY(0) scale(.985) !important;
+}
+
+/* Mobile: 2 x 2 seperti quick-access card di beranda */
+@media (max-width: 640px) {
+    body > .sticky-back-btn[data-back-context="page-daily-recap"] {
+        top: 12px !important;
+        left: 12px !important;
+        width: 42px !important;
+        height: 42px !important;
+        min-width: 42px !important;
+        min-height: 42px !important;
+    }
+
+    #daily-menu-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: .65rem !important;
+        margin-top: 1rem !important;
+        margin-bottom: 1rem !important;
+    }
+
+    #daily-menu-grid .glass-btn {
+        min-height: 108px !important;
+        padding: .75rem .45rem !important;
+        border-radius: 1rem !important;
+        font-size: .62rem !important;
+        line-height: 1.15 !important;
+    }
+
+    #daily-menu-grid .glass-btn span {
+        width: 42px;
+        height: 42px;
+        border-radius: 13px;
+        font-size: 1.25rem !important;
+    }
+}
+
+@media (max-width: 380px) {
+    #daily-menu-grid {
+        gap: .5rem !important;
+    }
+
+    #daily-menu-grid .glass-btn {
+        min-height: 100px !important;
+        font-size: .57rem !important;
+    }
+}
+</style>
+
+</head>
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium"><button class="sticky-back-btn" data-back-context="page-keluar" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-minuman" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-masuk" onclick="showPage('home')" type="button">
