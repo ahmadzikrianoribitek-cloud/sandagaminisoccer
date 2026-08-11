@@ -137,6 +137,15 @@
                 <button onclick="showPage('keluar')" class="glass-btn p-3 sm:p-4 rounded-xl font-bold shadow-lg transition text-xs sm:text-sm w-full">UANG KELUAR</button>
             </div>
 
+            <!-- JADWAL TIM HARI INI -->
+            <div id="today-schedule-panel" class="mb-6 rounded-2xl border border-blue-500/30 bg-white/20 backdrop-blur-md p-3 sm:p-4 shadow-xl">
+                <div class="flex items-center justify-between gap-2 mb-3">
+                    <h3 class="font-black text-sm sm:text-base text-blue-950">📅 JADWAL TIM HARI INI</h3>
+                    <span id="today-schedule-date" class="text-[10px] sm:text-xs font-black px-2 py-1 rounded-lg bg-slate-900 text-white"></span>
+                </div>
+                <div id="today-schedule-list" class="space-y-2"></div>
+            </div>
+
             <hr class="border-t border-slate-900/20 my-6">
 
             <div class="space-y-3">
@@ -1292,6 +1301,7 @@
         function renderAll() {
             renderGridJadwal();
             renderTabelBooking();
+            renderTodaySchedule();
             renderRekapHarian();
             renderMonthlyRecap();
             updateDropdownTimMasuk();
@@ -1334,6 +1344,129 @@
         onValue(ref(db, 'pemasukan'), (snapshot) => { globalCache.pemasukan = snapshot.val() || {}; renderRekapHarian(); renderMonthlyRecap(); });
         onValue(ref(db, 'minuman'), (snapshot) => { globalCache.minuman = snapshot.val() || {}; renderRekapHarian(); });
         onValue(ref(db, 'pengeluaran'), (snapshot) => { globalCache.pengeluaran = snapshot.val() || {}; renderRekapHarian(); });
+
+        // Menentukan harga lapangan berdasarkan hari dan jam booking.
+        function getHargaLapangan(tanggalStr, jamStr, status) {
+            if(!tanggalStr || !jamStr) return 0;
+
+            const d = new Date(tanggalStr + 'T00:00:00');
+            if(isNaN(d.getTime())) return 0;
+
+            const hari = d.getDay(); // 0=Minggu, 1=Senin ... 6=Sabtu
+            const jam = parseInt(String(jamStr).substring(0, 2), 10);
+            let harga = 0;
+
+            if(hari >= 1 && hari <= 5) { // Senin-Jumat
+                if(jam >= 7 && jam <= 9) harga = 200000;
+                else if(jam >= 10 && jam <= 14) harga = 250000;
+                else if(jam >= 15 && jam <= 17) harga = 300000;
+
+                if(hari >= 1 && hari <= 4) { // Senin-Kamis
+                    if(jam >= 18 && jam <= 24) harga = 350000;
+                } else if(hari === 5) { // Jumat
+                    if(jam >= 18 && jam <= 19) harga = 350000;
+                    else if(jam >= 20 && jam <= 24) harga = 400000;
+                }
+            } else { // Sabtu-Minggu
+                if(jam >= 7 && jam <= 14) harga = 300000;
+                else if(jam >= 15 && jam <= 17) harga = 350000;
+                else if(jam >= 18 && jam <= 24) harga = 400000;
+            }
+
+            // Member mendapat potongan Rp50.000.
+            if(String(status || '').toLowerCase() === 'member' && harga > 0) {
+                harga = Math.max(0, harga - 50000);
+            }
+
+            return harga;
+        }
+
+        function formatRupiah(nominal) {
+            return 'Rp ' + Number(nominal || 0).toLocaleString('id-ID');
+        }
+
+        window.renderTodaySchedule = () => {
+            const listEl = document.getElementById('today-schedule-list');
+            const dateEl = document.getElementById('today-schedule-date');
+            if(!listEl || !dateEl) return;
+
+            const today = getLocalDateString();
+            const todayDate = new Date(today + 'T00:00:00');
+            const hariNama = getNamaHari(today);
+            dateEl.textContent = todayDate.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+            // Booking hari ini menjadi sumber utama. Jadwal member yang belum punya
+            // booking tetap ditampilkan agar admin tahu slot member yang terjadwal.
+            const schedules = {};
+
+            // Jadwal Member dari Firebase.
+            Object.entries(globalCache.member || {}).forEach(([jam, perHari]) => {
+                const cell = perHari ? perHari[hariNama] : null;
+                if(!cell || !cell.nama || cell.type === 'off') return;
+                const jamKey = jam.substring(0, 5);
+                schedules[jamKey] = {
+                    nama: cell.nama,
+                    status: 'Member',
+                    dp: 0,
+                    booking: false
+                };
+            });
+
+            // Booking hari ini menimpa jadwal member pada jam yang sama.
+            Object.values(globalCache.booking || {}).forEach(item => {
+                if(!item.tgl || item.tgl.split('T')[0] !== today) return;
+                const jam = item.tgl.split('T')[1] ? item.tgl.split('T')[1].substring(0, 5) : '';
+                if(!jam) return;
+                schedules[jam] = {
+                    nama: item.nama || '-',
+                    status: item.status || 'Non-Member',
+                    dp: Number(item.dp || 0),
+                    booking: true
+                };
+            });
+
+            const jamList = Object.keys(schedules).sort((a,b) => a.localeCompare(b));
+
+            if(jamList.length === 0) {
+                listEl.innerHTML = `<div class="text-center p-4 rounded-xl bg-white/30 border border-slate-300/40 text-xs sm:text-sm font-bold text-slate-600">Tidak ada jadwal tim hari ini.</div>`;
+                return;
+            }
+
+            listEl.innerHTML = jamList.map(jam => {
+                const item = schedules[jam];
+                const total = getHargaLapangan(today, jam, item.status);
+                const dp = Math.min(Number(item.dp || 0), total);
+                const sisa = Math.max(0, total - dp);
+                const isMember = String(item.status).toLowerCase() === 'member';
+                const statusBadge = isMember
+                    ? `<span class="px-1.5 py-0.5 rounded bg-blue-600 text-white text-[9px] font-black">MEMBER</span>`
+                    : `<span class="px-1.5 py-0.5 rounded bg-rose-600 text-white text-[9px] font-black">NON-MEMBER</span>`;
+                const bookingBadge = item.booking
+                    ? ''
+                    : `<span class="px-1.5 py-0.5 rounded bg-slate-500 text-white text-[9px] font-black">BELUM BOOKING</span>`;
+
+                return `<div class="rounded-xl border border-slate-300/50 bg-white/50 p-2.5 shadow-sm">
+                    <div class="flex items-center gap-2">
+                        <span class="shrink-0 inline-flex items-center justify-center px-2 py-1 rounded-lg bg-amber-500 text-white border border-amber-600 font-black text-xs sm:text-sm">⏰ ${jam.replace(':','.')}</span>
+                        <div class="min-w-0 flex-1">
+                            <div class="font-black text-xs sm:text-sm truncate">${item.nama}</div>
+                            <div class="flex flex-wrap gap-1 mt-1">${statusBadge}${bookingBadge}</div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-1.5 mt-2 text-center text-[9px] sm:text-[10px] font-black">
+                        <div class="rounded-lg bg-slate-100/80 border border-slate-300/50 p-1.5">
+                            <div class="text-slate-500">TOTAL</div><div>${formatRupiah(total)}</div>
+                        </div>
+                        <div class="rounded-lg bg-emerald-100/80 border border-emerald-300/50 p-1.5">
+                            <div class="text-emerald-700">DP</div><div>${formatRupiah(dp)}</div>
+                        </div>
+                        <div class="rounded-lg bg-rose-100/80 border border-rose-300/50 p-1.5">
+                            <div class="text-rose-700">SISA</div><div>${formatRupiah(sisa)}</div>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        };
 
         window.renderGridJadwal = () => {
             let gridTbody = document.getElementById('grid-jadwal-gabung');
