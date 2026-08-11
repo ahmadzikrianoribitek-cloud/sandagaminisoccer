@@ -608,7 +608,10 @@
                     <option value="23:00">23:00</option><option value="24:00">24:00</option>
                 </select>
                 
-                <input type="number" id="b-dp" placeholder="Jumlah DP / Bayar (Rp)" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" required>
+                <input type="number" id="b-dp" placeholder="Jumlah DP / Bayar (Rp)" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" min="0" required>
+
+                <label class="block text-xs font-bold mb-1 text-slate-900">Tanggal DP / Bayar</label>
+                <input type="date" id="b-tanggal-dp" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold">
                 
                 <label class="block text-xs font-bold mb-1 text-slate-900">Metode Pembayaran</label>
                 <select id="b-metode" class="w-full p-2 rounded mb-3 text-sm glass-input font-bold">
@@ -818,6 +821,7 @@
 
             if(document.getElementById('filter-bulan')) document.getElementById('filter-bulan').value = todayYearMonth;
             if(document.getElementById('b-tanggal')) document.getElementById('b-tanggal').value = todayStr;
+            if(document.getElementById('b-tanggal-dp')) document.getElementById('b-tanggal-dp').value = todayStr;
             if(document.getElementById('in-tgl')) {
                 document.getElementById('in-tgl').value = todayStr;
                 updateDropdownTimMasuk();
@@ -1073,11 +1077,20 @@
                 let jamInput = document.getElementById('b-jam').value;
                 let gabungTglJam = tglInput + "T" + jamInput;
 
+                const dpInput = Number(document.getElementById('b-dp').value || 0);
+                const tanggalDp = document.getElementById('b-tanggal-dp').value || getLocalDateString();
+
+                if(dpInput > 0 && !tanggalDp) {
+                    alert('Tanggal DP wajib diisi jika ada DP.');
+                    return;
+                }
+
                 data = { 
                     status,
                     nama: document.getElementById('b-nama').value, 
                     tgl: gabungTglJam, 
-                    dp: document.getElementById('b-dp').value, 
+                    dp: dpInput, 
+                    tglDp: tanggalDp,
                     metode 
                 };
             } else if(type === 'pemasukan') {
@@ -1228,6 +1241,11 @@
                             </div>
 
                             <div>
+                                <label class="block text-xs font-black mb-1">Tanggal DP / Bayar</label>
+                                <input id="edit-b-tanggal-dp" type="date" value="${item.tglDp || getLocalDateString()}" class="w-full p-2.5 rounded-xl border border-slate-300 bg-white font-bold text-sm">
+                            </div>
+
+                            <div>
                                 <label class="block text-xs font-black mb-1">Metode Pembayaran</label>
                                 <select id="edit-b-metode" class="w-full p-2.5 rounded-xl border border-slate-300 bg-white font-bold text-sm">
                                     <option value="Cash" ${(item.metode || 'Cash') === 'Cash' ? 'selected' : ''}>Cash</option>
@@ -1258,7 +1276,13 @@
             const jam = document.getElementById('edit-b-jam')?.value;
             const status = document.getElementById('edit-b-status')?.value;
             const dp = Number(document.getElementById('edit-b-dp')?.value || 0);
+            const tanggalDp = document.getElementById('edit-b-tanggal-dp')?.value || getLocalDateString();
             const metode = document.getElementById('edit-b-metode')?.value || 'Cash';
+
+            if(dp > 0 && !tanggalDp) {
+                alert('Tanggal DP wajib diisi jika ada DP.');
+                return;
+            }
 
             if(!nama || !tanggal || !jam || !status || isNaN(dp) || dp < 0) {
                 alert('Mohon lengkapi data dengan benar.');
@@ -1271,6 +1295,7 @@
                     tgl: tanggal + 'T' + jam,
                     status,
                     dp,
+                    tglDp: tanggalDp,
                     metode
                 });
                 tutupEditBooking();
@@ -1588,7 +1613,12 @@
                     </td>
                     <td class="p-2 border border-slate-900/40">${item.nama}</td>
                     <td class="p-2 border border-slate-900/40">${item.status}</td>
-                    <td class="p-2 border border-slate-900/40">Rp ${dpVal.toLocaleString('id-ID')}</td>
+                    <td class="p-2 border border-slate-900/40">
+                        <div class="flex flex-col items-center gap-0.5">
+                            <span>Rp ${dpVal.toLocaleString('id-ID')}</span>
+                            ${dpVal > 0 ? `<span class="text-[8px] sm:text-[10px] text-indigo-700 font-black">DP: ${item.tglDp ? item.tglDp.split('-').reverse().join('/') : '-'}</span>` : '<span class="text-[8px] sm:text-[10px] text-slate-500 font-black">Tgl DP: -</span>'}
+                        </div>
+                    </td>
                     <td class="p-2 border border-slate-900/40">${item.metode || 'Cash'}</td>
                     <td class="p-2 border border-slate-900/40 text-center">
                         <div class="flex items-center justify-center gap-1">
@@ -1663,16 +1693,30 @@
             });
 
             Object.entries(globalCache.booking).forEach(([key, item]) => {
-                if(item.tgl && item.tgl.split('T')[0] === filterTgl) {
+                // Untuk laporan keuangan, DP dicatat berdasarkan TANGGAL DP,
+                // bukan tanggal main. Booking dari web customer sudah mengirim tglDp.
+                // Data lama yang belum memiliki tglDp tetap menggunakan tanggal main
+                // sebagai fallback agar tidak hilang dari laporan.
+                let tanggalDp = item.tglDp || (item.tgl ? item.tgl.split('T')[0] : '');
+
+                if(tanggalDp === filterTgl) {
                     let dpVal = Number(item.dp || 0);
+                    if(dpVal <= 0) return;
+
                     let metode = item.metode || 'Cash';
                     totalLapangan += dpVal;
                     if(metode === 'Cash') totalLapanganCash += dpVal; else totalLapanganQrif += dpVal;
 
                     if(tbodyLapangan) {
+                        let tanggalMain = item.tgl ? item.tgl.split('T')[0] : '';
+                        let jamMain = item.tgl && item.tgl.split('T')[1] ? item.tgl.split('T')[1].substring(0,5).replace(':','.') : '-';
+
                         tbodyLapangan.innerHTML += `<tr class="border-b border-slate-900/40 text-center font-bold">
-                            <td class="p-2 border border-slate-900/40 text-left">DP Booking: ${item.nama} (${item.status})</td>
-                            <td class="p-2 border border-slate-900/40 text-xs">Metode: ${metode}</td>
+                            <td class="p-2 border border-slate-900/40 text-left">
+                                DP Booking: ${item.nama} (${item.status})
+                                <div class="text-[9px] text-slate-600 mt-0.5">Main: ${tanggalMain ? tanggalMain.split('-').reverse().join('/') : '-'} ⏰ ${jamMain}</div>
+                            </td>
+                            <td class="p-2 border border-slate-900/40 text-xs">Metode: ${metode}<br><span class="text-indigo-700 font-black">Tgl DP: ${tanggalDp ? tanggalDp.split('-').reverse().join('/') : '-'}</span></td>
                             <td class="p-2 border border-slate-900/40 text-emerald-900 font-black">Rp ${dpVal.toLocaleString('id-ID')}</td>
                             <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
                         </tr>`;
