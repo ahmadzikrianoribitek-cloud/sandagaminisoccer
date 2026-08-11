@@ -281,7 +281,7 @@
                 </div>
             </div>
 
-            <div class="shadow-2xl rounded-xl border border-white/30 mb-4 overflow-hidden">
+            <div id="booking-schedule-grid-wrap" class="shadow-2xl rounded-xl border border-white/30 mb-4 overflow-hidden relative">
                 <table class="w-full text-center border-collapse text-[6px] sm:text-[10px] bg-white/20 backdrop-blur-md table-fixed border-slate-900/40">
                     <thead>
                         <tr id="header-tabel-jadwal" class="bg-slate-900 text-white font-bold text-center">
@@ -1675,7 +1675,8 @@
                 let tempDate = new Date(d);
                 tempDate.setHours(0,0,0,0);
                 let isFullDayPassed = tempDate < nowTime;
-                let badgeDone = isFullDayPassed ? `<div class="mt-0.5 text-center"><span class="px-1 py-0.2 bg-slate-900 text-amber-300 font-black rounded text-[6px] sm:text-[9px] uppercase border border-slate-700">DONE</span></div>` : "";
+                // Penanda DONE ditampilkan langsung di dalam grid, bukan di header hari.
+                let badgeDone = "";
 
                 headerHtml += `<th class="p-0.5 sm:p-2 border border-slate-900/40 align-middle text-center">
                     <div class="text-[8px] sm:text-xs font-black uppercase tracking-wider text-center">${h.nama}</div>
@@ -1708,16 +1709,30 @@
                 }
             });
 
-            listJam.forEach(jam => {
+            listJam.forEach((jam, rowIndex) => {
                 let tr = `<tr class="border-b border-slate-900/40 h-7 sm:h-14 text-center">`;
                 tr += `<td class="p-0.5 sm:p-2 border border-slate-900/40 font-black bg-slate-900 text-white text-[8px] sm:text-sm text-center">${jam}</td>`;
-                
+
                 listHariKey.forEach(hari => {
+                    const tanggalKolom = currentWeekDates[hari] ? currentWeekDates[hari].fullDate : null;
+                    const hariSudahLewat = tanggalKolom ? tanggalKolom < nowTime : false;
+
+                    // DONE untuk hari yang sudah lewat: tetap render isi sel normal,
+                    // lalu tambahkan satu strip visual selebar 50% kolom di dalam sel.
+                    // Dengan begitu nama tim/booking tetap terlihat di sisi kiri/kanan strip.
                     let cellData = (matrix[jam] && matrix[jam][hari]) ? matrix[jam][hari] : null;
                     let bgClass = "border border-slate-900/40 text-slate-900 text-center";
                     let textVal = "";
 
-                    if(cellData) {
+                    if(jam === '18:00') {
+                        // Jam 18 OFF dibuat berbeda dari Non-Member:
+                        // latar hitam, garis miring, dan stempel merah tebal.
+                        bgClass = "bg-slate-950 border-2 border-red-700 text-red-500 font-black text-center";
+                        textVal = `<span class="inline-flex items-center justify-center px-2 py-1 sm:px-3 sm:py-1.5 rounded-md border-2 border-red-600 bg-slate-950 text-red-500 font-black text-[9px] sm:text-xs tracking-widest shadow-xl -rotate-2"
+                            style="background-image: repeating-linear-gradient(135deg, rgba(255,255,255,.08) 0, rgba(255,255,255,.08) 4px, transparent 4px, transparent 8px);">
+                            OFF
+                        </span>`;
+                    } else if(cellData) {
                         textVal = cellData.nama;
                         if(cellData.type === 'member') {
                             bgClass = "bg-blue-600 backdrop-blur text-white font-black border border-slate-900/40 shadow-inner text-center";
@@ -1729,8 +1744,12 @@
                         }
                     }
 
-                    tr += `<td class="p-0.5 sm:p-1 ${bgClass} align-middle h-7 sm:h-14 overflow-hidden text-center">
-                        <div class="flex items-center justify-center h-full text-[6px] sm:text-[10px] text-center leading-tight line-clamp-2 font-black">${textVal}</div>
+                    tr += `<td class="p-0.5 sm:p-1 ${bgClass} align-middle h-7 sm:h-14 overflow-hidden text-center relative">
+                        <div class="flex items-center justify-center h-full text-[6px] sm:text-[10px] text-center leading-tight line-clamp-2 font-black relative z-[2]">${textVal}</div>
+                        ${hariSudahLewat ? `
+                        <div class="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-1/2 bg-blue-400/90 text-white pointer-events-none z-[3] flex items-center justify-center overflow-hidden">
+                            <span class="font-black text-[7px] sm:text-[10px] leading-none whitespace-nowrap tracking-wide" style="transform:rotate(-90deg); transform-origin:center;">• DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE •</span>
+                        </div>` : ''}
                     </td>`;
                 });
                 tr += `</tr>`;
@@ -1759,7 +1778,7 @@
                             <span class="inline-flex items-center justify-center px-2 py-1 rounded-lg bg-amber-500 text-white border border-amber-600 shadow-sm font-black text-[10px] sm:text-xs">⏰ ${item.tgl && item.tgl.split('T')[1] ? item.tgl.split('T')[1].substring(0,5).replace(':','.') : '-'}</span>
                         </div>
                     </td>
-                    <td class="p-1 sm:p-2 border border-slate-900/40 font-black break-words">${Number(item.sisaTagihan ?? item.sisa ?? 0) <= 0 && Number(item.dp || 0) > 0 ? '' : item.nama}</td>
+                    <td class="p-1 sm:p-2 border border-slate-900/40 font-black break-words">${item.nama || '-'}</td>
                     <td class="p-1 sm:p-2 border border-slate-900/40 text-center">
                         ${String(item.status || '').toLowerCase() === 'member'
                             ? `<span class="status-badge-member" title="Member">M</span>`
@@ -2160,8 +2179,8 @@
                 html += `<tr><td class="p-1.5 border border-slate-900/40 text-left font-black bg-cyan-900/40">Jumlah Tim Booking</td>${rTimBooking[partNum]}</tr>`;
                 html += `<tr><td class="p-1.5 border border-slate-900/40 text-left font-black bg-cyan-900/40">Jumlah Tim Main</td>${rTimMain[partNum]}</tr>`;
                 html += `<tr><td class="p-1.5 border border-slate-900/40 text-left font-black bg-cyan-900/40">Jumlah Jam Booking</td>${rJmlJam[partNum]}</tr>`;
-                html += `<tr><td class="p-1.5 border border-slate-900/40 text-left font-black bg-cyan-900/40">Jumlah Cancel</td>${rJmlCancel[partNum]}</tr>`;
-                html += `<tr><td class="p-1.5 border border-slate-900/40 text-left font-black bg-cyan-900/40">Jumlah Aktual Jam Main</td>${rTotalJamMain[partNum]}</tr>`;
+                html += `<tr><td class="p-1.5 border border-slate-900/40 text-left font-black bg-cyan-900/40">Jumlah Cancel</td>${rJmlCancel[partNum].replaceAll('font-bold text-center','font-black text-center bg-red-100 text-red-700')}`;
+                html += `<tr><td class="p-1.5 border border-slate-900/40 text-left font-black bg-cyan-900/40">Jumlah Aktual Jam Main</td>${rTotalJamMain[partNum].replaceAll('font-bold text-center','font-black text-center bg-emerald-100 text-emerald-800')}`;
                 return html;
             };
 
