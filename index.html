@@ -2379,6 +2379,59 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
     text-align-last: center !important;
 }
 </style>
+
+<style>
+/* ---------- DAILY CASH: TOMBOL SIMPAN ---------- */
+#daily-cash-dashboard #btn-simpan-daily-cash {
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+#daily-cash-dashboard #daily-cash-save-status {
+    min-height: 14px;
+    line-height: 1.2;
+}
+
+@media (max-width: 640px) {
+    #daily-cash-dashboard #btn-simpan-daily-cash {
+        min-height: 40px;
+        padding: .65rem .75rem !important;
+        font-size: 11px !important;
+    }
+}
+</style>
+
+
+<style>
+/* ---------- CASH PER SHIFT ---------- */
+#daily-cash-dashboard #daily-cash-pagi-fisik,
+#daily-cash-dashboard #daily-cash-malam-fisik {
+    min-width: 0;
+}
+
+#daily-cash-dashboard #btn-simpan-daily-cash-pagi,
+#daily-cash-dashboard #btn-simpan-daily-cash-malam {
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width:640px) {
+    #daily-cash-dashboard .grid.sm\:grid-cols-2 {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    #daily-cash-dashboard #daily-cash-pagi-fisik,
+    #daily-cash-dashboard #daily-cash-malam-fisik {
+        font-size: 14px !important;
+    }
+}
+</style>
+
 </head>
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium"><button class="sticky-back-btn" data-back-context="page-keluar" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-minuman" onclick="showPage('home')" type="button">
@@ -2702,18 +2755,59 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
             </div>
         </div>
 
-        <div class="mt-4 grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3 items-end p-3 rounded-xl border border-indigo-500/25 bg-white/55">
-            <div>
-                <label for="daily-cash-fisik" class="block text-xs font-black text-slate-800 mb-1">💵 Uang Cash Fisik yang Dihitung</label>
-                <input id="daily-cash-fisik" type="number" min="0" step="1000" inputmode="numeric"
-                       placeholder="Masukkan jumlah cash fisik..."
-                       class="w-full p-3 rounded-xl glass-input font-black text-base"
-                       oninput="updateDailyCashCheck()">
-                <p class="text-[10px] text-slate-500 font-bold mt-1">Disimpan di browser ini berdasarkan tanggal, tidak mengubah data transaksi.</p>
+        <div class="mt-4 p-3 rounded-xl border border-indigo-500/25 bg-white/55">
+            <div class="mb-3 text-center">
+                <p class="text-xs font-black text-slate-800">💵 Rekap Cash Per Shift</p>
+                <p id="daily-cash-shift-info" class="text-[10px] text-slate-500 font-bold mt-1">Pilih shift untuk menghitung cash.</p>
             </div>
-            <div class="sm:min-w-[220px] p-3 rounded-xl border border-indigo-500/25 bg-indigo-50/60 text-center">
-                <p class="text-[10px] font-bold text-slate-500">Selisih Cash</p>
-                <p id="daily-cash-selisih" class="text-lg sm:text-xl font-black text-slate-700 mt-1">-</p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <!-- SHIFT PAGI -->
+                <div class="p-3 rounded-xl border border-amber-300/50 bg-amber-50/60">
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <p class="text-xs font-black text-amber-950">🌅 CASH AKHIR PAGI</p>
+                        <span class="text-[9px] font-black px-2 py-1 rounded-full bg-amber-100 text-amber-800">SHIFT PAGI</span>
+                    </div>
+                    <p id="daily-cash-pagi-awal" class="text-[10px] text-slate-500 font-bold">Cash awal: Rp 0</p>
+                    <p id="daily-cash-pagi-seharusnya" class="text-[10px] text-slate-500 font-bold mt-1">Seharusnya: Rp 0</p>
+                    <input id="daily-cash-pagi-fisik" type="number" min="0" step="1000" inputmode="numeric"
+                           placeholder="Cash fisik akhir pagi..."
+                           class="w-full mt-2 p-3 rounded-xl glass-input font-black text-base"
+                           oninput="updateDailyCashShiftCheck('pagi')">
+                    <button type="button" id="btn-simpan-daily-cash-pagi"
+                            onclick="simpanDailyCashShift('pagi')"
+                            class="w-full mt-2.5 px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-black text-xs shadow-lg transition">
+                        💾 SIMPAN CASH PAGI
+                    </button>
+                    <p id="daily-cash-save-status-pagi" class="text-[10px] text-slate-500 font-bold mt-1 text-center">Belum disimpan</p>
+                    <p id="daily-cash-selisih-pagi" class="text-xs font-black text-slate-700 mt-2 text-center">Selisih: -</p>
+                </div>
+
+                <!-- SHIFT MALAM -->
+                <div class="p-3 rounded-xl border border-indigo-300/50 bg-indigo-50/60">
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <p class="text-xs font-black text-indigo-950">🌙 CASH AKHIR MALAM</p>
+                        <span class="text-[9px] font-black px-2 py-1 rounded-full bg-indigo-100 text-indigo-800">SHIFT MALAM</span>
+                    </div>
+                    <p id="daily-cash-malam-awal" class="text-[10px] text-slate-500 font-bold">Cash awal malam: Rp 0</p>
+                    <p id="daily-cash-malam-seharusnya" class="text-[10px] text-slate-500 font-bold mt-1">Seharusnya: Rp 0</p>
+                    <input id="daily-cash-malam-fisik" type="number" min="0" step="1000" inputmode="numeric"
+                           placeholder="Cash fisik akhir malam..."
+                           class="w-full mt-2 p-3 rounded-xl glass-input font-black text-base"
+                           oninput="updateDailyCashShiftCheck('malam')">
+                    <button type="button" id="btn-simpan-daily-cash-malam"
+                            onclick="simpanDailyCashShift('malam')"
+                            class="w-full mt-2.5 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs shadow-lg transition">
+                        💾 SIMPAN CASH MALAM
+                    </button>
+                    <p id="daily-cash-save-status-malam" class="text-[10px] text-slate-500 font-bold mt-1 text-center">Belum disimpan</p>
+                    <p id="daily-cash-selisih-malam" class="text-xs font-black text-slate-700 mt-2 text-center">Selisih: -</p>
+                </div>
+            </div>
+
+            <div class="mt-3 p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-center">
+                <p class="text-[10px] font-bold text-slate-500">Alur Cash</p>
+                <p class="text-[10px] sm:text-xs font-black text-slate-700 mt-1">Cash akhir pagi → menjadi cash awal malam → pemasukan/pengeluaran malam → cash akhir malam</p>
             </div>
         </div>
     </section>
@@ -5341,15 +5435,150 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
             return `Rp ${Number(nominal || 0).toLocaleString('id-ID')}`;
         }
 
-        function dailyCashStorageKey(tanggal){
-            return `sandaga_daily_cash_fisik_${tanggal}`;
+        function dailyCashStorageKey(tanggal, shift){
+            return `sandaga_daily_cash_fisik_${tanggal}_${shift}`;
         }
+
+        function dailyCashGetSaved(tanggal, shift){
+            const saved = localStorage.getItem(dailyCashStorageKey(tanggal, shift));
+            return saved !== null ? Number(saved) : null;
+        }
+
+        function dailyCashGetShiftExpected(shift){
+            const base = Number(window.__dailyCashSeharusnya || 0);
+            const pagiSaved = dailyCashGetSaved(getLocalDateString(), 'pagi');
+            if(shift === 'pagi') return base;
+            return Number(pagiSaved !== null ? pagiSaved : base);
+        }
+
+        function dailyCashUpdateShiftUI(shift){
+            const tanggal = document.getElementById('filter-tanggal-lapangan')?.value || getLocalDateString();
+            const fisikEl = document.getElementById(`daily-cash-${shift}-fisik`);
+            const selisihEl = document.getElementById(`daily-cash-selisih-${shift}`);
+            const statusEl = document.getElementById(`daily-cash-save-status-${shift}`);
+            const seharusnyaEl = document.getElementById(`daily-cash-${shift}-seharusnya`);
+            const awalEl = document.getElementById(`daily-cash-${shift}-awal`);
+            if(!fisikEl || !selisihEl || !statusEl || !seharusnyaEl) return;
+
+            const expectedBase = Number(window.__dailyCashSeharusnya || 0);
+            const pagiSaved = dailyCashGetSaved(tanggal, 'pagi');
+            const expected = shift === 'pagi'
+                ? expectedBase
+                : Number(pagiSaved !== null ? pagiSaved : expectedBase);
+
+            seharusnyaEl.textContent = `Seharusnya: ${formatRupiahDaily(expected)}`;
+
+            if(awalEl){
+                awalEl.textContent = shift === 'pagi'
+                    ? `Cash awal: ${formatRupiahDaily(0)}`
+                    : `Cash awal malam: ${formatRupiahDaily(pagiSaved !== null ? pagiSaved : 0)}`;
+            }
+
+            const raw = fisikEl.value.trim();
+            const saved = dailyCashGetSaved(tanggal, shift);
+            const isSaved = raw !== '' && saved !== null && Number(raw) === saved;
+
+            statusEl.textContent = isSaved ? '✓ Tersimpan' : (raw === '' ? 'Belum disimpan' : 'Belum disimpan');
+            statusEl.className = isSaved
+                ? 'text-[10px] text-emerald-600 font-black mt-1 text-center'
+                : 'text-[10px] text-amber-600 font-black mt-1 text-center';
+
+            if(raw === ''){
+                selisihEl.textContent = 'Selisih: -';
+                selisihEl.className = 'text-xs font-black text-slate-700 mt-2 text-center';
+                return;
+            }
+
+            const fisik = Number(raw);
+            const selisih = fisik - expected;
+            selisihEl.textContent = `Selisih: ${selisih > 0 ? '+' : ''}${formatRupiahDaily(selisih)}`;
+
+            if(selisih === 0){
+                selisihEl.className = 'text-xs font-black text-emerald-700 mt-2 text-center';
+            }else{
+                selisihEl.className = 'text-xs font-black text-rose-700 mt-2 text-center';
+            }
+        }
+
+        window.restoreDailyCashFisik = (tanggal) => {
+            ['pagi','malam'].forEach(shift => {
+                const input = document.getElementById(`daily-cash-${shift}-fisik`);
+                if(!input) return;
+                const saved = localStorage.getItem(dailyCashStorageKey(tanggal, shift));
+                input.value = saved !== null ? saved : '';
+                dailyCashUpdateShiftUI(shift);
+            });
+        };
+
+        window.updateDailyCashShiftCheck = (shift) => {
+            const tanggal = document.getElementById('filter-tanggal-lapangan')?.value || getLocalDateString();
+
+            if(shift === 'pagi'){
+                dailyCashUpdateShiftUI('pagi');
+                // Jika cash pagi berubah/diisi, hitungan awal malam ikut diperbarui.
+                dailyCashUpdateShiftUI('malam');
+            }else{
+                dailyCashUpdateShiftUI('malam');
+            }
+        };
+
+        window.simpanDailyCashShift = (shift) => {
+            const tanggal = document.getElementById('filter-tanggal-lapangan')?.value || getLocalDateString();
+            const input = document.getElementById(`daily-cash-${shift}-fisik`);
+            const statusEl = document.getElementById(`daily-cash-save-status-${shift}`);
+            const btn = document.getElementById(`btn-simpan-daily-cash-${shift}`);
+            if(!input) return;
+
+            const raw = input.value.trim();
+            if(raw === '' || !Number.isFinite(Number(raw)) || Number(raw) < 0){
+                if(statusEl){
+                    statusEl.textContent = 'Masukkan jumlah cash terlebih dahulu';
+                    statusEl.className = 'text-[10px] text-rose-600 font-black mt-1 text-center';
+                }
+                input.focus();
+                return;
+            }
+
+            const fisik = Number(raw);
+            localStorage.setItem(dailyCashStorageKey(tanggal, shift), String(fisik));
+
+            if(statusEl){
+                statusEl.textContent = `✓ CASH ${shift.toUpperCase()} TERSIMPAN`;
+                statusEl.className = 'text-[10px] text-emerald-600 font-black mt-1 text-center';
+            }
+
+            if(btn){
+                const original = btn.innerHTML;
+                btn.innerHTML = '✓ TERSIMPAN';
+                btn.classList.add('opacity-90');
+                setTimeout(() => {
+                    btn.innerHTML = original;
+                    btn.classList.remove('opacity-90');
+                }, 1400);
+            }
+
+            dailyCashUpdateShiftUI(shift);
+            if(shift === 'pagi') dailyCashUpdateShiftUI('malam');
+        };
+
+        // Kompatibilitas dengan kode lama.
+        window.updateDailyCashCheck = () => {
+            dailyCashUpdateShiftUI('pagi');
+            dailyCashUpdateShiftUI('malam');
+        };
 
         window.restoreDailyCashFisik = (tanggal) => {
             const input = document.getElementById('daily-cash-fisik');
             if(!input) return;
-            const saved = localStorage.getItem(dailyCashStorageKey(tanggal));
+            const saved = localStorage.getItem(dailyCashStorageKey(tanggal, 'pagi'));
             input.value = saved !== null ? saved : '';
+            const saveStatusEl = document.getElementById('daily-cash-save-status');
+            if(saveStatusEl){
+                saveStatusEl.textContent = saved !== null ? '✓ Tersimpan' : 'Belum disimpan';
+                saveStatusEl.className = saved !== null
+                    ? 'text-[10px] text-emerald-600 font-black mt-1 text-center'
+                    : 'text-[10px] text-slate-500 font-bold mt-1 text-center';
+            }
             updateDailyCashCheck();
         };
 
@@ -5357,13 +5586,22 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
             const input = document.getElementById('daily-cash-fisik');
             const selisihEl = document.getElementById('daily-cash-selisih');
             const statusEl = document.getElementById('daily-cash-status');
+            const saveStatusEl = document.getElementById('daily-cash-save-status');
             if(!input || !selisihEl || !statusEl) return;
 
             const tanggal = document.getElementById('filter-tanggal-lapangan')?.value || getLocalDateString();
             const raw = input.value.trim();
 
+            if(saveStatusEl) {
+                const saved = localStorage.getItem(dailyCashStorageKey(tanggal, 'pagi'));
+                const isSameAsSaved = raw !== '' && saved !== null && String(Number(raw)) === String(Number(saved));
+                saveStatusEl.textContent = isSameAsSaved ? '✓ Tersimpan' : (raw === '' ? 'Belum disimpan' : 'Belum disimpan');
+                saveStatusEl.className = isSameAsSaved
+                    ? 'text-[10px] text-emerald-600 font-black mt-1 text-center'
+                    : 'text-[10px] text-amber-600 font-black mt-1 text-center';
+            }
+
             if(raw === ''){
-                localStorage.removeItem(dailyCashStorageKey(tanggal));
                 selisihEl.textContent = '-';
                 selisihEl.className = 'text-lg sm:text-xl font-black text-slate-700 mt-1';
                 statusEl.textContent = 'Belum dicek';
@@ -5372,7 +5610,6 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
             }
 
             const fisik = Number(raw || 0);
-            localStorage.setItem(dailyCashStorageKey(tanggal), String(fisik));
 
             const seharusnya = Number(window.__dailyCashSeharusnya || 0);
             const selisih = fisik - seharusnya;
@@ -5392,6 +5629,56 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
                 statusEl.className = 'px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-black bg-blue-100 text-blue-800';
             }
         };
+        window.simpanDailyCashFisik = () => {
+            const input = document.getElementById('daily-cash-fisik');
+            const saveStatusEl = document.getElementById('daily-cash-save-status');
+            const saveBtn = document.getElementById('btn-simpan-daily-cash');
+            if(!input) return;
+
+            const tanggal = document.getElementById('filter-tanggal-lapangan')?.value || getLocalDateString();
+            const raw = input.value.trim();
+
+            if(raw === ''){
+                if(saveStatusEl){
+                    saveStatusEl.textContent = 'Masukkan jumlah cash terlebih dahulu';
+                    saveStatusEl.className = 'text-[10px] text-rose-600 font-black mt-1 text-center';
+                }
+                input.focus();
+                return;
+            }
+
+            const fisik = Number(raw);
+            if(!Number.isFinite(fisik) || fisik < 0){
+                if(saveStatusEl){
+                    saveStatusEl.textContent = 'Jumlah cash tidak valid';
+                    saveStatusEl.className = 'text-[10px] text-rose-600 font-black mt-1 text-center';
+                }
+                return;
+            }
+
+            localStorage.setItem(dailyCashStorageKey(tanggal), String(fisik));
+
+            if(saveStatusEl){
+                saveStatusEl.textContent = '✓ CASH TERSIMPAN';
+                saveStatusEl.className = 'text-[10px] text-emerald-600 font-black mt-1 text-center';
+            }
+
+            if(saveBtn){
+                const original = saveBtn.innerHTML;
+                saveBtn.innerHTML = '✓ TERSIMPAN';
+                saveBtn.classList.remove('bg-indigo-600', 'hover:bg-indigo-700', 'active:bg-indigo-800');
+                saveBtn.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
+                setTimeout(() => {
+                    saveBtn.innerHTML = original;
+                    saveBtn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
+                    saveBtn.classList.add('bg-indigo-600', 'hover:bg-indigo-700', 'active:bg-indigo-800');
+                }, 1400);
+            }
+
+            updateDailyCashCheck();
+        };
+
+
 
         window.renderRekapHarian = () => {
             let filterTgl = document.getElementById('filter-tanggal-lapangan').value;
