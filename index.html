@@ -2127,6 +2127,223 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
 }
 </style>
 
+
+<style>
+/* =========================================================
+   FINAL POLISH — JADWAL ADMIN JAGA DI HP
+   Visual-only: tidak mengubah data, ID, onclick, atau fungsi.
+   ========================================================= */
+
+/* Warna Jadwal Hari Ini disamakan persis dengan warna shift di kalender. */
+#page-admin-jaga .admin-today-pagi {
+    background: #E9F0F4 !important;
+    border: 1px solid #7B8F9E !important;
+    color: #0E2538 !important;
+}
+
+#page-admin-jaga .admin-today-malam {
+    background: #7B8F9E !important;
+    border: 1px solid #2E607A !important;
+    color: #0E2538 !important;
+}
+
+/* Tanggal hari ini dibuat lebih tegas dan mudah dibaca. */
+#page-admin-jaga .admin-today-card-date {
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    margin: 4px auto 10px !important;
+    padding: 5px 10px;
+    border-radius: 9px;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    color: #0E2538 !important;
+    font-size: 11px !important;
+    line-height: 1.2;
+    font-weight: 950 !important;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+/* Kalender: tanggal dibuat lebih jelas, sementara isi tetap muat di 7 kolom. */
+#page-admin-jaga .admin-day {
+    min-width: 0 !important;
+    overflow: hidden !important;
+}
+
+#page-admin-jaga .admin-day-num {
+    min-width: 0 !important;
+    font-size: 11px !important;
+    font-weight: 950 !important;
+    line-height: 1;
+}
+
+#page-admin-jaga .admin-shift {
+    min-width: 0 !important;
+    width: 100% !important;
+    justify-content: center !important;
+    text-align: center !important;
+    gap: 0 !important;
+    box-sizing: border-box !important;
+}
+
+#page-admin-jaga .admin-shift-name {
+    display: block;
+    width: 100%;
+    min-width: 0 !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+    font-size: 8.5px !important;
+    line-height: 1.1;
+    font-weight: 950 !important;
+}
+
+/* Ikon pada tabel benar-benar disembunyikan. */
+#page-admin-jaga .admin-shift-icon {
+    display: none !important;
+}
+
+@media (max-width: 640px) {
+    #page-admin-jaga {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+    }
+
+    #page-admin-jaga .admin-roster-toolbar {
+        grid-template-columns: minmax(0, 1fr) minmax(72px, .9fr) minmax(0, 1fr) !important;
+        gap: 4px !important;
+    }
+
+    #page-admin-jaga .admin-month-btn {
+        min-width: 0 !important;
+        width: 100% !important;
+        padding: 6px 2px !important;
+        font-size: 7.5px !important;
+        line-height: 1.05 !important;
+        overflow-wrap: anywhere;
+    }
+
+    #page-admin-jaga .admin-month-title {
+        min-width: 0 !important;
+        font-size: 10px !important;
+        line-height: 1.1 !important;
+        white-space: nowrap;
+    }
+
+    #page-admin-jaga .admin-calendar {
+        width: 100% !important;
+        max-width: 100% !important;
+        grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+        gap: 3px !important;
+        box-sizing: border-box !important;
+    }
+
+    #page-admin-jaga .admin-cal-head {
+        min-width: 0 !important;
+        padding: 6px 1px !important;
+        font-size: 8px !important;
+        line-height: 1 !important;
+    }
+
+    #page-admin-jaga .admin-day {
+        min-width: 0 !important;
+        min-height: 91px !important;
+        padding: 4px 2px !important;
+        gap: 3px !important;
+        border-radius: 9px !important;
+    }
+
+    #page-admin-jaga .admin-day-num {
+        font-size: 10px !important;
+        min-height: 13px;
+    }
+
+    #page-admin-jaga .admin-today-badge {
+        max-width: 28px !important;
+        font-size: 5px !important;
+        padding: 2px 2px !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    #page-admin-jaga .admin-shift {
+        min-height: 25px !important;
+        padding: 4px 2px !important;
+        border-radius: 7px !important;
+    }
+
+    #page-admin-jaga .admin-shift-name {
+        font-size: 7.5px !important;
+        line-height: 1.05 !important;
+    }
+
+    #page-admin-jaga .admin-edit-btn {
+        width: 23px !important;
+        height: 23px !important;
+        min-height: 23px !important;
+        font-size: 12px !important;
+        padding: 0 !important;
+    }
+
+    #page-admin-jaga .admin-today-card-date {
+        max-width: 100% !important;
+        margin: 4px auto 9px !important;
+        padding: 5px 8px !important;
+        font-size: 10.5px !important;
+        line-height: 1.2 !important;
+    }
+
+    #page-admin-jaga .admin-today-shifts {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 5px !important;
+    }
+
+    #page-admin-jaga .admin-today-shift {
+        min-width: 0 !important;
+        padding: 7px 6px !important;
+        gap: 3px !important;
+        border-radius: 8px !important;
+        font-size: 8.5px !important;
+    }
+
+    #page-admin-jaga .admin-today-shift strong {
+        min-width: 0 !important;
+        max-width: 100%;
+        font-size: 8.5px !important;
+    }
+
+    #page-admin-jaga .admin-today-icon {
+        display: none !important;
+    }
+
+    #page-admin-jaga .admin-today-label {
+        font-size: 8px !important;
+        font-weight: 900 !important;
+    }
+}
+
+@media (max-width: 380px) {
+    #page-admin-jaga .admin-day {
+        min-height: 88px !important;
+        padding-left: 2px !important;
+        padding-right: 2px !important;
+    }
+
+    #page-admin-jaga .admin-shift-name {
+        font-size: 7px !important;
+    }
+
+    #page-admin-jaga .admin-today-card-date {
+        font-size: 10px !important;
+    }
+}
+</style>
+
 </head>
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium"><button class="sticky-back-btn" data-back-context="page-keluar" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-minuman" onclick="showPage('home')" type="button">
@@ -3806,8 +4023,8 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
                 const pagi=getAdminShiftName(key,'pagi'), malam=getAdminShiftName(key,'malam');
                 html += `<div class="admin-day ${isToday?'today':''}">
                     <div class="admin-day-num"><span>${day}</span>${isToday?'<span class="admin-today-badge">HARI INI</span>':''}</div>
-                    <div class="admin-shift pagi" title="Shift Pagi"><span class="admin-shift-icon" aria-hidden="true">☀️</span><span class="admin-shift-name">${pagi}</span></div>
-                    <div class="admin-shift malam" title="Shift Malam"><span class="admin-shift-icon" aria-hidden="true">🌙</span><span class="admin-shift-name">${malam}</span></div>
+                    <div class="admin-shift pagi" title="Shift Pagi"><span class="admin-shift-name">${pagi}</span></div>
+                    <div class="admin-shift malam" title="Shift Malam"><span class="admin-shift-name">${malam}</span></div>
                     <button type="button" class="admin-edit-btn" aria-label="Edit jadwal ${key}" title="Edit jadwal" onclick="editJadwalAdminTanggal('${key}')">✏️</button>
                 </div>`;
             }
