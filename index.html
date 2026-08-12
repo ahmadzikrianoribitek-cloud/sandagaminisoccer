@@ -1862,6 +1862,183 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
 }
 </style>
 
+
+<style>
+/* =========================================================
+   MOBILE — BOOKING SCHEDULE FULL VIEW
+   Dibuat agar jadwal mingguan lebih compact dan mudah
+   di-screenshot dari HP tanpa scroll vertikal.
+   ========================================================= */
+@media (max-width: 640px) {
+    #page-booking-schedule {
+        padding: .55rem !important;
+        border-radius: 1rem !important;
+    }
+
+    #page-booking-schedule > .flex.justify-between.items-center {
+        margin-bottom: .35rem !important;
+        min-height: 28px;
+    }
+
+    #page-booking-schedule h2 {
+        font-size: .82rem !important;
+        line-height: 1.05 !important;
+    }
+
+    #page-booking-schedule > .flex.flex-col.items-center.justify-center {
+        margin-bottom: .4rem !important;
+        gap: .25rem !important;
+    }
+
+    #page-booking-schedule #filter-periode-jadwal {
+        height: 28px !important;
+        padding: .15rem .4rem !important;
+        font-size: 9px !important;
+    }
+
+    #booking-schedule-grid-wrap {
+        margin-bottom: .35rem !important;
+        border-radius: .65rem !important;
+        box-shadow: 0 5px 15px rgba(15,23,42,.10) !important;
+    }
+
+    #booking-schedule-grid-wrap table {
+        width: 100% !important;
+        table-layout: fixed !important;
+        font-size: 5.5px !important;
+    }
+
+    #booking-schedule-grid-wrap thead th {
+        height: 30px !important;
+        padding: 1px !important;
+        line-height: .9 !important;
+    }
+
+    #booking-schedule-grid-wrap thead th:first-child {
+        width: 28px !important;
+    }
+
+    #booking-schedule-grid-wrap thead th svg {
+        width: 13px !important;
+        height: 13px !important;
+    }
+
+    #booking-schedule-grid-wrap thead th .text-\[8px\] {
+        font-size: 6px !important;
+        line-height: .9 !important;
+    }
+
+    #booking-schedule-grid-wrap thead th .text-\[7px\] {
+        font-size: 5.5px !important;
+        line-height: .9 !important;
+        margin-top: 1px !important;
+        padding: 1px 2px !important;
+    }
+
+    /* 18 slot waktu dibuat sangat pendek agar seluruh minggu
+       masuk dalam satu layar HP. */
+    #booking-schedule-grid-wrap tbody tr {
+        height: 24px !important;
+        min-height: 24px !important;
+    }
+
+    #booking-schedule-grid-wrap tbody td {
+        height: 24px !important;
+        min-height: 24px !important;
+        padding: 1px !important;
+        line-height: .85 !important;
+        vertical-align: middle !important;
+    }
+
+    #booking-schedule-grid-wrap tbody td:first-child {
+        width: 28px !important;
+        font-size: 6px !important;
+        padding: 1px 0 !important;
+        white-space: nowrap !important;
+    }
+
+    #booking-schedule-grid-wrap .schedule-grid-team-holder {
+        min-height: 19px !important;
+        max-height: 21px !important;
+        width: 96% !important;
+        padding: 1px 2px !important;
+        border-radius: 3px !important;
+        font-size: 5.5px !important;
+        line-height: .85 !important;
+        letter-spacing: -.03em !important;
+        overflow: hidden !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    #booking-schedule-grid-wrap td > div.absolute {
+        width: 30% !important;
+    }
+
+    #booking-schedule-grid-wrap td > div.absolute span {
+        font-size: 5px !important;
+        line-height: .8 !important;
+    }
+
+    #booking-schedule-grid-wrap td img {
+        max-height: 18px !important;
+        max-width: 65% !important;
+    }
+
+    /* Legenda dibuat satu baris dan sangat ringkas. */
+    #page-booking-schedule .schedule-legend {
+        margin-top: .25rem !important;
+        padding: .25rem !important;
+        gap: 3px !important;
+        border-radius: .55rem !important;
+        font-size: 6px !important;
+        line-height: 1 !important;
+    }
+
+    #page-booking-schedule .schedule-legend-title {
+        padding: 1px 3px !important;
+        font-size: 6px !important;
+    }
+
+    #page-booking-schedule .schedule-legend-item {
+        gap: 2px !important;
+        padding: .15rem .3rem !important;
+        font-size: 6px !important;
+    }
+
+    #page-booking-schedule .schedule-legend-item > span:first-child {
+        width: 5px !important;
+        height: 5px !important;
+        min-width: 5px !important;
+    }
+}
+
+/* HP sangat kecil: dibuat sedikit lebih padat lagi. */
+@media (max-width: 380px) {
+    #page-booking-schedule {
+        padding: .4rem !important;
+    }
+
+    #booking-schedule-grid-wrap tbody tr,
+    #booking-schedule-grid-wrap tbody td {
+        height: 22px !important;
+        min-height: 22px !important;
+    }
+
+    #booking-schedule-grid-wrap .schedule-grid-team-holder {
+        min-height: 17px !important;
+        max-height: 19px !important;
+        font-size: 5px !important;
+    }
+
+    #booking-schedule-grid-wrap tbody td:first-child {
+        width: 26px !important;
+        font-size: 5.5px !important;
+    }
+}
+</style>
+
 </head>
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium"><button class="sticky-back-btn" data-back-context="page-keluar" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-minuman" onclick="showPage('home')" type="button">
@@ -2030,34 +2207,22 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
     <div class="flex items-center justify-between gap-2 mb-3">
       <div>
         <h3 class="text-sm sm:text-base font-black text-sparring-dark" id="sparring-form-title">➕ Catat Permintaan Sparring</h3>
-        <p class="text-[10px] sm:text-xs text-slate-500 font-semibold">Pilih tim dari booking pada tanggal & jam yang sama, atau ketik manual.</p>
+        <p class="text-[10px] sm:text-xs text-slate-500 font-semibold">Pilih tim langsung dari jadwal booking. Tanggal dan jam akan tersinkron otomatis.</p>
       </div>
       <button type="button" id="sparring-cancel-edit" onclick="batalEditSparring()" class="hidden px-3 py-2 rounded-xl bg-slate-200 text-slate-700 text-[10px] font-black">BATAL EDIT</button>
     </div>
 
     <form onsubmit="simpanSparring(event)">
       <input type="hidden" id="sparring-edit-key" value="">
+      <input type="hidden" id="sparring-tanggal" value="">
+      <input type="hidden" id="sparring-jam" value="">
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <label class="sparring-label">Tanggal Main</label>
-          <input id="sparring-tanggal" type="date" required class="sparring-input">
-        </div>
-        <div>
-          <label class="sparring-label">Jam Main</label>
-          <select id="sparring-jam" required class="sparring-input">
-            <option value="07:00">07:00</option><option value="08:00">08:00</option><option value="09:00">09:00</option><option value="10:00">10:00</option>
-            <option value="11:00">11:00</option><option value="12:00">12:00</option><option value="13:00">13:00</option><option value="14:00">14:00</option>
-            <option value="15:00">15:00</option><option value="16:00">16:00</option><option value="17:00">17:00</option><option value="18:00">18:00</option>
-            <option value="19:00">19:00</option><option value="20:00">20:00</option><option value="21:00">21:00</option><option value="22:00">22:00</option>
-            <option value="23:00">23:00</option><option value="24:00">24:00</option>
-          </select>
-        </div>
-        <div>
           <label class="sparring-label">Tim 1 / Tim yang Mencari Lawan</label>
-          <select id="sparring-tim-a" required class="sparring-input">
+          <select id="sparring-tim-a" required class="sparring-input" onchange="updateSparringBookingOptions()">
             <option value="">Pilih tim dari jadwal booking</option>
           </select>
-          <div class="mt-1 text-[9px] text-slate-500 font-semibold">Tim 1 otomatis diambil dari jadwal booking sesuai tanggal &amp; jam.</div>
+          <div class="mt-1 text-[9px] text-slate-500 font-semibold">Tanggal &amp; jam otomatis mengikuti booking tim yang dipilih.</div>
         </div>
         <div>
           <label class="sparring-label">Tim 2 / Lawan Sparring <span class="text-slate-400">(boleh dikosongkan)</span></label>
@@ -2065,7 +2230,7 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
           <div class="mt-1 text-[9px] text-slate-500 font-semibold">Kosong = masih mencari lawan.</div>
         </div>
       </div>
-      <div id="sparring-booking-info" class="sparring-booking-info">Pilih tanggal dan jam untuk melihat tim yang sedang booking.</div>
+      <div id="sparring-booking-info" class="sparring-booking-info">Pilih tim dari jadwal booking untuk mengisi tanggal dan jam otomatis.</div>
       <div>
         <label class="sparring-label">Catatan</label>
         <textarea id="sparring-catatan" rows="2" class="sparring-input" placeholder="Contoh: sudah konfirmasi via WhatsApp, minta jam 20.00, dll."></textarea>
@@ -2125,8 +2290,6 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
 <span class="schedule-legend-title font-black px-2">Keterangan</span>
 <span class="schedule-legend-item flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-blue-600 border border-blue-400 rounded-full"></span> <span class="text-blue-700 font-black">Member</span></span>
 <span class="schedule-legend-item flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-rose-600 border border-rose-400 rounded-full"></span> <span class="text-rose-700 font-black">Non-Member</span></span>
-<span class="schedule-legend-item flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-red-100 border border-red-500 border-dashed rounded-full"></span> <span class="text-red-700 font-black">OFF</span></span>
-<span class="schedule-legend-item flex items-center gap-1.5"><span class="px-1.5 py-0.5 bg-slate-800 text-white rounded text-[10px] font-bold">DONE</span> <span class="text-slate-700 font-black">Selesai</span></span>
 </div>
 </div>
 <!-- HALAMAN DAILY RECAP -->
@@ -2918,7 +3081,6 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
             if(document.getElementById('m-tgl')) document.getElementById('m-tgl').value = todayStr;
             if(document.getElementById('m-mulai')) document.getElementById('m-mulai').value = todayStr;
             if(document.getElementById('a-tanggal')) document.getElementById('a-tanggal').value = todayStr;
-            if(document.getElementById('sparring-tanggal')) document.getElementById('sparring-tanggal').value = todayStr;
             if(document.getElementById('k-tgl')) document.getElementById('k-tgl').value = todayStr;
             if(document.getElementById('k-sumber-tgl')) document.getElementById('k-sumber-tgl').value = todayStr;
             restoreDailyCashFisik(todayStr);
@@ -2927,10 +3089,6 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
         document.addEventListener("DOMContentLoaded", () => {
             setDefaultDates();
             initPeriodeDropdown();
-            const st=document.getElementById('sparring-tanggal');
-            const sj=document.getElementById('sparring-jam');
-            if(st) st.addEventListener('change', updateSparringBookingOptions);
-            if(sj) sj.addEventListener('change', updateSparringBookingOptions);
             updateSparringBookingOptions();
             renderGridJadwal();
             setTimeout(() => renderRekapHarian(), 0);
@@ -4328,40 +4486,156 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
             return names.sort((a,b)=>a.localeCompare(b,'id'));
         }
 
+        // Dropdown Tim 1 SPARRING mengambil gabungan jadwal MEMBER dan BOOKING
+        // untuk hari ini sampai maksimal 30 hari ke depan.
+        function formatTanggalSparring(tanggal) {
+            if(!tanggal) return '-';
+            const d = new Date(tanggal + 'T00:00:00');
+            if(isNaN(d.getTime())) return tanggal;
+            return d.toLocaleDateString('id-ID', { day:'2-digit', month:'2-digit', year:'numeric' });
+        }
+
+        function getSparringDateRange() {
+            const startStr = getLocalDateString();
+            const start = new Date(startStr + 'T00:00:00');
+            const end = new Date(start);
+            end.setDate(end.getDate() + 30);
+            const endStr = `${end.getFullYear()}-${String(end.getMonth()+1).padStart(2,'0')}-${String(end.getDate()).padStart(2,'0')}`;
+            return { startStr, endStr, start, end };
+        }
+
+        function isSparringDateInRange(tanggal) {
+            const {startStr, endStr} = getSparringDateRange();
+            return String(tanggal || '') >= startStr && String(tanggal || '') <= endStr;
+        }
+
+        function getMemberOptionsForSparring() {
+            const options = [];
+            const {start, end} = getSparringDateRange();
+
+            for(let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+                const tanggal = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+                const hariNama = getNamaHari(tanggal);
+
+                Object.entries(globalCache.member || {}).forEach(([jam, perHari]) => {
+                    const cell = perHari ? perHari[hariNama] : null;
+                    if(!cell || !cell.nama || cell.type === 'off' || !isMemberScheduledOnDate(cell, tanggal)) return;
+                    const jamNormal = String(jam || '').substring(0,5);
+                    if(!jamNormal) return;
+                    options.push({
+                        source:'Member',
+                        key:`member|${cell.key || ''}|${tanggal}|${jamNormal}`,
+                        nama:String(cell.nama).trim(),
+                        tanggal,
+                        jam:jamNormal,
+                        memberKey:cell.key || ''
+                    });
+                });
+            }
+            return options;
+        }
+
+        function getBookingOptionsForSparring() {
+            const options = [];
+            Object.entries(globalCache.booking || {}).forEach(([key, item]) => {
+                if(!item || !item.nama || !item.tgl) return;
+                const dt = sparringDateTime(item);
+                if(!dt.date || !dt.jam || !isSparringDateInRange(dt.date)) return;
+                options.push({
+                    source:'Booking',
+                    key:`booking|${key}`,
+                    bookingKey:key,
+                    nama:String(item.nama).trim(),
+                    tanggal:dt.date,
+                    jam:dt.jam
+                });
+            });
+            return options;
+        }
+
+        function getSparringTeamOptions() {
+            const bookingOptions = getBookingOptionsForSparring();
+            const memberOptions = getMemberOptionsForSparring();
+            const merged = [];
+            const seen = new Map();
+
+            // Booking diprioritaskan jika pada tim/tanggal/jam yang sama juga ada jadwal member.
+            [...memberOptions, ...bookingOptions].forEach(item => {
+                const namaKey = String(item.nama || '').trim().toLowerCase();
+                const uniqueKey = `${namaKey}|${item.tanggal}|${item.jam}`;
+                const existing = seen.get(uniqueKey);
+                if(existing) {
+                    if(item.source === 'Booking' && existing.source !== 'Booking') {
+                        const idx = merged.indexOf(existing);
+                        if(idx >= 0) merged[idx] = item;
+                        seen.set(uniqueKey, item);
+                    }
+                    return;
+                }
+                seen.set(uniqueKey, item);
+                merged.push(item);
+            });
+
+            return merged.sort((a,b) => {
+                const dateTimeA = `${a.tanggal} ${a.jam}`;
+                const dateTimeB = `${b.tanggal} ${b.jam}`;
+                return dateTimeA.localeCompare(dateTimeB) || a.nama.localeCompare(b.nama,'id');
+            });
+        }
+
         window.updateSparringBookingOptions = () => {
-            const tanggal = document.getElementById('sparring-tanggal')?.value || getLocalDateString();
-            const jam = document.getElementById('sparring-jam')?.value || '19:00';
             const selectTimA = document.getElementById('sparring-tim-a');
             const info = document.getElementById('sparring-booking-info');
+            const tanggal = document.getElementById('sparring-tanggal');
+            const jam = document.getElementById('sparring-jam');
             if(!selectTimA) return;
-            const currentValue = selectTimA.value || '';
-            const teams = getBookingTeamsForSparring(tanggal, jam);
+
             const editKey = document.getElementById('sparring-edit-key')?.value || '';
-            const currentEditTeam = editKey ? String(globalCache.sparring?.[editKey]?.timA || '').trim() : '';
-            const options = [...teams];
-            if(currentEditTeam && !options.some(x => x.toLowerCase() === currentEditTeam.toLowerCase())) options.unshift(currentEditTeam);
-            selectTimA.innerHTML = '<option value="">Pilih tim dari jadwal booking</option>' + options.map(n => `<option value="${escapeHtmlSparring(n)}">${escapeHtmlSparring(n)}</option>`).join('');
-            const desired = currentValue || currentEditTeam;
-            if(desired && options.some(x => x.toLowerCase() === desired.toLowerCase())) {
-                const found = options.find(x => x.toLowerCase() === desired.toLowerCase());
-                selectTimA.value = found;
+            const currentItem = editKey ? globalCache.sparring?.[editKey] : null;
+            const currentTeam = String(currentItem?.timA || '').trim();
+            const currentDate = String(currentItem?.tanggal || '');
+            const currentJam = String(currentItem?.jam || '');
+            const currentValue = selectTimA.value || '';
+            const options = getSparringTeamOptions();
+
+            selectTimA.innerHTML = '<option value="">Pilih tim dari jadwal</option>' + options.map(item =>
+                `<option value="${escapeHtmlSparring(item.key)}" data-source="${escapeHtmlSparring(item.source)}" data-booking-key="${escapeHtmlSparring(item.bookingKey || '')}" data-tanggal="${escapeHtmlSparring(item.tanggal)}" data-jam="${escapeHtmlSparring(item.jam)}">${escapeHtmlSparring(item.nama)} · ${escapeHtmlSparring(formatTanggalSparring(item.tanggal))} · ${escapeHtmlSparring(item.jam)}${item.source === 'Member' ? ' · Member' : ' · Booking'}</option>`
+            ).join('');
+
+            let selected = null;
+            if(currentValue) selected = options.find(item => item.key === currentValue) || null;
+            if(!selected && currentTeam) {
+                selected = options.find(item =>
+                    item.nama.toLowerCase() === currentTeam.toLowerCase() &&
+                    item.tanggal === currentDate && item.jam === currentJam
+                ) || null;
             }
-            if(info) {
-                info.innerHTML = teams.length
-                    ? `📅 Booking pada <b>${escapeHtmlSparring(tanggal.split('-').reverse().join('/'))}</b> · <b>${escapeHtmlSparring(jam)}</b>: ${teams.map(escapeHtmlSparring).join(', ')}`
-                    : `📅 Belum ada booking yang cocok pada <b>${escapeHtmlSparring(tanggal.split('-').reverse().join('/'))}</b> · <b>${escapeHtmlSparring(jam)}</b>. Pilih tanggal/jam yang sesuai dengan jadwal booking.`;
+
+            if(selected) {
+                selectTimA.value = selected.key;
+                if(tanggal) tanggal.value = selected.tanggal;
+                if(jam) jam.value = selected.jam;
+                if(info) info.innerHTML = `🔗 <b>${escapeHtmlSparring(selected.nama)}</b> · ${escapeHtmlSparring(formatTanggalSparring(selected.tanggal))} · ${escapeHtmlSparring(selected.jam)} · ${selected.source === 'Member' ? 'Jadwal Member' : 'Booking'}`;
+            } else {
+                if(tanggal) tanggal.value = '';
+                if(jam) jam.value = '';
+                if(info) info.innerHTML = options.length
+                    ? `📋 Ada <b>${options.length}</b> jadwal Tim dari Member &amp; Booking dalam 30 hari ke depan.`
+                    : '📋 Belum ada jadwal Tim Member atau Booking dalam 30 hari ke depan.';
             }
         };
 
         window.simpanSparring = async (e) => {
             e.preventDefault();
             const editKey = document.getElementById('sparring-edit-key')?.value || '';
-            const tanggal = document.getElementById('sparring-tanggal')?.value || '';
-            const jam = document.getElementById('sparring-jam')?.value || '';
-            const timA = document.getElementById('sparring-tim-a')?.value.trim() || '';
+            const selectedValue = document.getElementById('sparring-tim-a')?.value || '';
+            const selectedOption = document.querySelector(`#sparring-tim-a option[value="${CSS.escape(selectedValue)}"]`);
+            const tanggal = selectedOption?.dataset?.tanggal || document.getElementById('sparring-tanggal')?.value || '';
+            const jam = selectedOption?.dataset?.jam || document.getElementById('sparring-jam')?.value || '';
+            const timA = String(selectedOption?.textContent || '').split(' · ')[0].trim();
             const timB = document.getElementById('sparring-tim-b')?.value.trim() || '';
             const catatan = document.getElementById('sparring-catatan')?.value.trim() || '';
-            if(!tanggal || !jam || !timA) { alert('Tanggal, jam, dan Tim 1 wajib diisi. Pilih Tim 1 dari jadwal booking.'); return; }
+            if(!selectedValue || !tanggal || !jam || !timA) { alert('Pilih Tim 1 dari jadwal Member atau Booking terlebih dahulu.'); return; }
             if(timB && timA.toLowerCase() === timB.toLowerCase()) { alert('Tim A dan Tim B tidak boleh sama.'); return; }
 
             const duplicate = Object.entries(globalCache.sparring || {}).find(([key,item]) => {
@@ -4427,8 +4701,6 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
             const item = globalCache.sparring?.[key];
             if(!item) return;
             document.getElementById('sparring-edit-key').value = key;
-            document.getElementById('sparring-tanggal').value = item.tanggal || getLocalDateString();
-            document.getElementById('sparring-jam').value = item.jam || '19:00';
             document.getElementById('sparring-tim-b').value = item.timB || '';
             document.getElementById('sparring-catatan').value = item.catatan || '';
             document.getElementById('sparring-form-title').textContent = '✏️ Edit Catatan Sparring';
@@ -4442,8 +4714,8 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
             const form = document.querySelector('#page-sparring form');
             if(form) form.reset();
             document.getElementById('sparring-edit-key').value = '';
-            document.getElementById('sparring-tanggal').value = getLocalDateString();
-            document.getElementById('sparring-jam').value = '19:00';
+            document.getElementById('sparring-tanggal').value = '';
+            document.getElementById('sparring-jam').value = '';
             document.getElementById('sparring-form-title').textContent = '➕ Catat Permintaan Sparring';
             document.getElementById('sparring-save-btn').textContent = 'Simpan Catatan';
             document.getElementById('sparring-cancel-edit').classList.add('hidden');
@@ -4575,7 +4847,7 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
                             if(!matrix[jamFormat]) matrix[jamFormat] = {};
                             let isMemberBooking = (b.status === 'Member');
                             matrix[jamFormat][hariName] = { 
-                                nama: b.nama + (isMemberBooking ? " (M)" : " (Non)"), 
+                                nama: b.nama, 
                                 type: isMemberBooking ? 'member' : 'nonmember',
                                 bookingKey: Object.keys(globalCache.booking).find(k => globalCache.booking[k] === b) || ''
                             };
