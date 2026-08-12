@@ -2344,6 +2344,13 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
 }
 </style>
 
+<style>
+/* Booking Schedule: holder OFF dibuat sama panjang dengan holder nama tim. */
+#booking-schedule-grid-wrap .schedule-grid-off-holder{display:flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;width:96%!important;max-width:96%!important;min-width:0!important;min-height:1.55rem!important;max-height:21px!important;margin:0 auto!important;padding:.22rem .2rem!important;border-radius:.45rem!important;overflow:hidden!important;line-height:.95!important;}
+#booking-schedule-grid-wrap .schedule-grid-off-stamp{display:block!important;width:auto!important;max-width:65%!important;max-height:18px!important;height:auto!important;object-fit:contain!important;margin:0 auto!important;}
+@media(max-width:640px){#booking-schedule-grid-wrap .schedule-grid-off-holder{width:96%!important;max-width:96%!important;min-height:19px!important;max-height:21px!important;padding:1px 2px!important;border-radius:3px!important;}#booking-schedule-grid-wrap .schedule-grid-off-stamp{max-width:65%!important;max-height:18px!important;}}
+@media(max-width:380px){#booking-schedule-grid-wrap .schedule-grid-off-holder{min-height:17px!important;max-height:19px!important;}#booking-schedule-grid-wrap .schedule-grid-off-stamp{max-height:16px!important;}}
+</style>
 </head>
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium"><button class="sticky-back-btn" data-back-context="page-keluar" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-minuman" onclick="showPage('home')" type="button">
@@ -5210,16 +5217,20 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
                         // Jam 18 tetap menjadi slot OFF, tetapi tampil menggunakan
                         // referensi gambar off.png agar lebih jelas dan elegan.
                         bgClass = "bg-slate-950 border-2 border-red-700 text-red-500 font-black text-center";
-                        textVal = `<img src="off.png" alt="OFF" class="max-h-7 sm:max-h-11 max-w-[80%] sm:max-w-[75%] w-auto h-auto object-contain mx-auto drop-shadow-lg" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
-                            <span class="hidden items-center justify-center text-red-500 font-black text-[9px] sm:text-xs tracking-widest">OFF</span>`;
+                        textVal = `<span class="schedule-grid-off-holder">
+                            <img src="off.png" alt="OFF" class="schedule-grid-off-stamp" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+                            <span class="hidden items-center justify-center text-red-500 font-black text-[9px] sm:text-xs tracking-widest">OFF</span>
+                        </span>`;
                     } else if(cellData) {
                         if(cellData.type === 'member') {
                             textVal = `<span class="schedule-grid-team-holder schedule-grid-team-member">${cellData.nama}</span>`;
                             bgClass = "bg-blue-50 border border-blue-200 text-slate-900 font-black shadow-inner text-center";
                         } else if(cellData.type === 'off') {
                             bgClass = "bg-red-500/20 border border-slate-900/40 border-dashed text-red-900 font-black shadow-lg text-center";
-                            textVal = `<img src="off.png" alt="OFF" class="max-h-7 sm:max-h-11 max-w-[80%] sm:max-w-[75%] w-auto h-auto object-contain mx-auto drop-shadow-lg" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
-                                <span class="hidden items-center justify-center text-red-900 font-black text-[9px] sm:text-xs tracking-widest">OFF</span>`;
+                            textVal = `<span class="schedule-grid-off-holder">
+                                <img src="off.png" alt="OFF" class="schedule-grid-off-stamp" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+                                <span class="hidden items-center justify-center text-red-900 font-black text-[9px] sm:text-xs tracking-widest">OFF</span>
+                            </span>`;
                         } else {
                             textVal = `<span class="schedule-grid-team-holder schedule-grid-team-nonmember">${cellData.nama}</span>`;
                             bgClass = "bg-rose-50 border border-rose-200 text-slate-900 font-black shadow-inner text-center";
