@@ -22,6 +22,49 @@
         }
 </script>
 <style>
+        /* Tombol aksi Atur Member: rapi dan konsisten di layar HP */
+        #tabel-list-member .member-action-cell {
+            padding: .5rem .35rem !important;
+            vertical-align: middle;
+        }
+        #tabel-list-member .member-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: .3rem;
+            width: 100%;
+            min-width: 68px;
+        }
+        #tabel-list-member .member-actions button {
+            width: 68px;
+            min-height: 29px;
+            margin: 0 !important;
+            padding: .35rem .45rem !important;
+            border-radius: .55rem !important;
+            font-size: 10px !important;
+            line-height: 1;
+            font-weight: 900 !important;
+            box-shadow: 0 2px 5px rgba(15,23,42,.12);
+            transition: transform .12s ease, filter .12s ease;
+        }
+        #tabel-list-member .member-actions button:hover {
+            filter: brightness(.96);
+            transform: translateY(-1px);
+        }
+        @media (max-width: 640px) {
+            #tabel-list-member .member-actions {
+                min-width: 64px;
+                gap: .25rem;
+            }
+            #tabel-list-member .member-actions button {
+                width: 64px;
+                min-height: 28px;
+                padding: .32rem .35rem !important;
+                font-size: 9px !important;
+            }
+        }
+
         /* Default Background untuk Halaman Awal */
         /* Latar halaman dibuat fixed agar tetap diam saat konten di-scroll */
         html {
@@ -1629,21 +1672,27 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
 <label class="block text-xs font-bold mb-1 text-slate-900">Pilih Tanggal Main / Pelunasan</label>
 <input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="in-tgl" onchange="updateDropdownTimMasuk()" required="" type="date"/>
 <label class="block text-xs font-bold mb-1 text-slate-900">Pilih Tim / Keterangan</label>
-<select class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="in-tim" onchange="updateJamMainMasuk()" required="">
+<select class="w-full p-2 rounded mb-2 text-sm glass-input font-bold" id="in-tim" onchange="updateJamMainMasuk()" required="">
 <option value="">-- Pilih Tanggal Terlebih Dahulu --</option>
 </select>
+<input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold hidden" id="in-keterangan-manual" placeholder="Ketik keterangan / sumber pemasukan..." type="text"/>
 <label class="block text-xs font-bold mb-1 text-slate-900">Jam Main (Otomatis)</label>
 <input class="w-full p-2 rounded mb-3 text-sm glass-input bg-white/40 font-bold" id="in-jam-main" placeholder="Jam main akan otomatis terisi" readonly="" type="text"/>
+<div id="info-tagihan-tim" class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3"></div>
 <div class="p-3 rounded-xl border border-emerald-500/40 mb-3 space-y-3 bg-white/30">
 <label class="block text-xs font-black text-emerald-950">⚽ Opsi Tambahan Sewa (Opsional)</label>
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
 <label class="flex items-center gap-2 cursor-pointer bg-white/40 p-2 rounded-lg border border-white/30">
 <input class="w-4 h-4 rounded accent-emerald-600" id="in-sewa-bola" onchange="hitungOtomatisBiaya()" type="checkbox"/>
 <span class="text-xs text-slate-900 font-bold">Sewa Bola (Rp 25.000/jam)</span>
 </label>
 <label class="flex items-center gap-2 cursor-pointer bg-white/40 p-2 rounded-lg border border-white/30">
-<input class="w-4 h-4 rounded accent-emerald-600" id="in-sewa-rompi" onchange="hitungOtomatisBiaya()" type="checkbox"/>
-<span class="text-xs text-slate-900 font-bold">Sewa Rompi (Rp 30.000/jam)</span>
+<input class="w-4 h-4 rounded accent-emerald-600" id="in-sewa-rompi-1" onchange="hitungOtomatisBiaya()" type="checkbox"/>
+<span class="text-xs text-slate-900 font-bold">Rompi Tim 1 (Rp 30.000/jam)</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer bg-white/40 p-2 rounded-lg border border-white/30">
+<input class="w-4 h-4 rounded accent-emerald-600" id="in-sewa-rompi-2" onchange="hitungOtomatisBiaya()" type="checkbox"/>
+<span class="text-xs text-slate-900 font-bold">Rompi Tim 2 (Rp 30.000/jam)</span>
 </label>
 </div>
 <p class="text-[10px] text-amber-950 font-extrabold italic" id="info-biaya-tambahan">Biaya tambahan sewa: Rp 0</p>
@@ -1657,7 +1706,10 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
 </select>
 </div>
 <div class="p-3 rounded-xl border border-emerald-500/40 space-y-2 bg-white/30">
-<label class="block text-xs font-black text-emerald-950">Pembayaran Tim 2 (Opsional / Sparring)</label>
+<label class="block text-xs font-black text-emerald-950">Tim 2 · Lawan Sparring</label>
+<select class="w-full p-2 rounded text-sm glass-input font-bold" id="in-status-2" onchange="hitungOtomatisBiaya()">
+<option value="Non-Member">Non-Member</option><option value="Member">Member</option>
+</select>
 <input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-jumlah-2" placeholder="Nominal (Rp)" type="number"/>
 <select class="w-full p-2 rounded text-sm glass-input font-bold" id="in-metode-2" onchange="toggleFreePaymentInput(2)">
 <option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option><option value="Free">Free / Gratis</option>
@@ -2061,9 +2113,17 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
             let selectTim = document.getElementById('in-tim');
             if(!selectTim) return;
             selectTim.innerHTML = `<option value="">-- Pilih Tim yang Main --</option>`;
+            selectTim.innerHTML += `<option value="__manual__">✏️ Lainnya / Input Manual</option>`;
+            const manualInput = document.getElementById('in-keterangan-manual');
+            if(manualInput) {
+                manualInput.value = "";
+                manualInput.classList.add('hidden');
+                manualInput.required = false;
+            }
             document.getElementById('in-jam-main').value = "";
             document.getElementById('in-sewa-bola').checked = false;
-            document.getElementById('in-sewa-rompi').checked = false;
+            document.getElementById('in-sewa-rompi-1').checked = false;
+             document.getElementById('in-sewa-rompi-2').checked = false;
             document.getElementById('info-biaya-tambahan').innerText = "Biaya tambahan sewa: Rp 0";
 
             if(!tglInput) return;
@@ -2073,15 +2133,15 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
 
             listJam.forEach(jam => {
                 let cellData = (globalCache.member[jam] && globalCache.member[jam][hariName]) ? globalCache.member[jam][hariName] : null;
-                if(cellData && cellData.type !== 'off' && isMemberActiveOnDate(cellData, tglInput)) {
-                    timBertanding.push({ nama: cellData.nama, jam: jam });
+                if(cellData && cellData.type !== 'off' && isMemberScheduledOnDate(cellData, tglInput)) {
+                    timBertanding.push({ nama: cellData.nama, jam: jam, status: 'Member' });
                 }
             });
 
             Object.values(globalCache.booking).forEach(b => {
                 if(b.tgl && b.tgl.split('T')[0] === tglInput) {
                     let timePart = b.tgl.split('T')[1] ? b.tgl.split('T')[1].substring(0, 5) : "00:00";
-                    timBertanding.push({ nama: b.nama + " (Booking)", jam: timePart });
+                    timBertanding.push({ nama: b.nama + " (Booking)", jam: timePart, status: b.status || 'Non-Member' });
                 }
             });
 
@@ -2105,8 +2165,21 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
         window.updateJamMainMasuk = () => {
             let selectTim = document.getElementById('in-tim');
             let selectedOption = selectTim.options[selectTim.selectedIndex];
-            let jam = selectedOption ? selectedOption.getAttribute('data-jam') : "";
-            document.getElementById('in-jam-main').value = jam || "-";
+            let manualInput = document.getElementById('in-keterangan-manual');
+            const isManual = selectTim.value === '__manual__';
+
+            if(manualInput) {
+                manualInput.classList.toggle('hidden', !isManual);
+                manualInput.required = isManual;
+                if(isManual) manualInput.focus();
+            }
+
+            if(isManual) {
+                document.getElementById('in-jam-main').value = '-';
+            } else {
+                let jam = selectedOption ? selectedOption.getAttribute('data-jam') : "";
+                document.getElementById('in-jam-main').value = jam || "-";
+            }
             hitungOtomatisBiaya();
         }
 
@@ -2130,41 +2203,42 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
         };
 
         window.hitungOtomatisBiaya = () => {
-            let jamMainStr = document.getElementById('in-jam-main').value;
-            let durasiJam = 1;
-
-            if(jamMainStr && jamMainStr.includes('-')) {
-                let parts = jamMainStr.split('-');
-                if(parts.length === 2) {
-                    let startH = parseInt(parts[0].split(':')[0]);
-                    let endH = parseInt(parts[1].split(':')[0]);
-                    if(!isNaN(startH) && !isNaN(endH) && endH > startH) {
-                        durasiJam = endH - startH;
-                    }
-                }
+            const selectTim=document.getElementById('in-tim'), selectedOption=selectTim?.options[selectTim.selectedIndex];
+            const isManual=selectTim?.value==='__manual__', jamMainStr=document.getElementById('in-jam-main')?.value||'', tgl=document.getElementById('in-tgl')?.value||'';
+            const info=document.getElementById('info-tagihan-tim');
+            const pakaiBola=!!document.getElementById('in-sewa-bola')?.checked, pakaiRompi1=!!document.getElementById('in-sewa-rompi-1')?.checked, pakaiRompi2=!!document.getElementById('in-sewa-rompi-2')?.checked;
+            let durasiJam=1;
+            if(jamMainStr.includes('-')){const q=jamMainStr.split('-'),a=parseInt(q[0]),b=parseInt(q[1]);if(!isNaN(a)&&!isNaN(b)&&b>a)durasiJam=b-a;}
+            const selectedName=isManual?(document.getElementById('in-keterangan-manual')?.value||'Pemasukan Manual'):(selectedOption?.value||'');
+            const selectedStatus=isManual?'Non-Member':(selectedOption?.getAttribute('data-status')||'Non-Member');
+            const jam=jamMainStr&&jamMainStr!=='-'?jamMainStr.substring(0,5):'';
+            let second={nama:'Tim 2 / Sparring',status:(document.getElementById('in-status-2')?.value||'Non-Member'),dp:0};
+            if(tgl&&jam){
+                Object.values(globalCache.booking||{}).some(b=>{const bj=b.tgl?(b.tgl.split('T')[1]||'').substring(0,5):''; const bn=String(b.nama||'').trim(); const sn=String(selectedName||'').replace(/\s*\(Booking\)$/i,'').trim(); if(b.tgl?.split('T')[0]===tgl&&bj===jam&&bn&&bn!==sn){second={nama:bn,status:b.status||'Non-Member',dp:Number(b.dp||0),booking:b};return true;}return false;});
             }
-
-            let pakaiBola = document.getElementById('in-sewa-bola').checked;
-            let pakaiRompi = document.getElementById('in-sewa-rompi').checked;
-
-            let biayaBola = pakaiBola ? (25000 * durasiJam) : 0;
-            let biayaRompi = pakaiRompi ? (30000 * durasiJam) : 0;
-            let totalTambahan = biayaBola + biayaRompi;
-
-            let rincianTxt = [];
-            if(pakaiBola) rincianTxt.push(`Bola: Rp ${biayaBola.toLocaleString('id-ID')} (${durasiJam} jam)`);
-            if(pakaiRompi) rincianTxt.push(`Rompi: Rp ${biayaRompi.toLocaleString('id-ID')} (${durasiJam} jam)`);
-
-            let infoEl = document.getElementById('info-biaya-tambahan');
-            if(infoEl) {
-                if(rincianTxt.length > 0) {
-                    infoEl.innerText = `Biaya tambahan sewa (${durasiJam} jam): Rp ${totalTambahan.toLocaleString('id-ID')} [${rincianTxt.join(', ')}]`;
-                } else {
-                    infoEl.innerText = `Biaya tambahan sewa: Rp 0`;
-                }
-            }
-        }
-
+            // Tim 2 adalah lawan sparring: default selalu Non-Member.
+            // Status Member hanya berlaku jika admin memilihnya secara manual.
+            const status2El=document.getElementById('in-status-2');
+            const status2Dipilih=status2El?.value||'Non-Member';
+            second.status=status2Dipilih;
+            const hargaNormal=jam&&tgl?getHargaLapangan(tgl,jam,'Non-Member'):0;
+            let hargaTim1=Math.round(hargaNormal/2),hargaTim2=Math.round(hargaNormal/2);
+            const tim1Member=String(selectedStatus).toLowerCase()==='member';
+            const tim2Member=String(second.status).toLowerCase()==='member';
+            if(tim1Member) hargaTim1=Math.max(0,hargaTim1-50000);
+            // Jika Tim 1 dan Tim 2 sama-sama Member, potongan hanya Tim 1.
+            if(tim2Member && !tim1Member) hargaTim2=Math.max(0,hargaTim2-50000);
+            const biayaBola=pakaiBola?25000*durasiJam:0, biayaRompi=pakaiRompi?30000*durasiJam:0, bolaPerTim=pakaiBola?Math.ceil(biayaBola/2):0, rompiUntuk=rompiTim?.value==='2'?2:1;
+            const totalAkhir1=hargaTim1+bolaPerTim+(pakaiRompi1?biayaRompi:0), totalAkhir2=hargaTim2+bolaPerTim+(pakaiRompi2?biayaRompi:0);
+            let dp1=0,dp2=Number(second.dp||0);
+            const booking1=Object.values(globalCache.booking||{}).find(b=>{const bj=b.tgl?(b.tgl.split('T')[1]||'').substring(0,5):'';return b.tgl?.split('T')[0]===tgl&&bj===jam&&String(b.nama||'').trim()===String(selectedName).replace(/\s*\(Booking\)$/i,'').trim();});
+            dp1=Number(booking1?.dp||0);
+            Object.values(globalCache.pemasukan||{}).forEach(x=>{if(!x||x.tgl!==tgl)return;const m=String(x.ket||'').match(/\((\d{1,2}:\d{2})\)/);if(jam&&m&&m[1].substring(0,5)!==jam)return;const n=String(x.timNamaBersih||'').replace(/\s*\(Booking\)$/i,'').trim();const n1=String(selectedName).replace(/\s*\(Booking\)$/i,'').trim();if(n===n1)dp1+=Number(x.jumlah1??x.jumlah??0);if(n===String(second.nama).trim())dp2+=Number(x.jumlah2||0);});
+            const sisa1=Math.max(0,totalAkhir1-dp1),sisa2=Math.max(0,totalAkhir2-dp2);
+            if(info)info.innerHTML=`<div class="rounded-xl border border-blue-300 bg-blue-50 p-3 shadow-sm"><div class="text-[10px] font-black text-blue-700 uppercase">⚽ TIM 1 · ${selectedStatus}</div><div class="font-black text-slate-900 text-xs truncate">${selectedName||'Pilih tim'}</div><div class="text-[10px] text-slate-600">Harga: <b>${formatRupiah(hargaTim1)}</b> · DP: <b>${formatRupiah(dp1)}</b></div><div class="text-sm font-black text-blue-700">Sisa: ${formatRupiah(sisa1)}</div><div class="text-[10px] font-black text-blue-900 mt-1">TOTAL AKHIR: ${formatRupiah(totalAkhir1)}</div></div><div class="rounded-xl border border-amber-300 bg-amber-50 p-3 shadow-sm"><div class="text-[10px] font-black text-amber-700 uppercase">⚽ TIM 2 · ${second.status}</div><div class="font-black text-slate-900 text-xs truncate">${second.nama}</div><div class="text-[10px] text-slate-600">Harga: <b>${formatRupiah(hargaTim2)}</b> · DP: <b>${formatRupiah(dp2)}</b></div><div class="text-sm font-black text-amber-700">Sisa: ${formatRupiah(sisa2)}</div><div class="text-[10px] font-black text-amber-900 mt-1">TOTAL AKHIR: ${formatRupiah(totalAkhir2)}</div></div>`;
+            const infoSewa=document.getElementById('info-biaya-tambahan');if(infoSewa){let r=[];if(pakaiBola)r.push(`Bola ${formatRupiah(biayaBola)} → ${formatRupiah(bolaPerTim)}/tim`);if(pakaiRompi1)r.push(`Rompi ${formatRupiah(biayaRompi)} → Tim 1`);if(pakaiRompi2)r.push(`Rompi ${formatRupiah(biayaRompi)} → Tim 2`);infoSewa.innerText=r.length?`Tambahan: ${r.join(' · ')}`:'Biaya tambahan sewa: Rp 0';}
+            const j1=document.getElementById('in-jumlah-1'),j2=document.getElementById('in-jumlah-2');if(j1&&document.activeElement!==j1&&document.getElementById('in-metode-1')?.value!=='Free')j1.value=sisa1;if(j2&&document.activeElement!==j2&&document.getElementById('in-metode-2')?.value!=='Free')j2.value=sisa2;
+        };
 
         window.showSuccessPopup = (message = 'Data berhasil disimpan!') => {
             const old = document.getElementById('app-success-overlay');
@@ -2213,6 +2287,13 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
                 };
             } else if(type === 'pemasukan') {
                 let tim = document.getElementById('in-tim').value;
+                if(tim === '__manual__') {
+                    tim = document.getElementById('in-keterangan-manual').value.trim();
+                    if(!tim) {
+                        alert('Mohon isi keterangan / sumber pemasukan.');
+                        return;
+                    }
+                }
                 let jamMain = document.getElementById('in-jam-main').value;
                 let met1 = document.getElementById('in-metode-1').value;
                 let met2 = document.getElementById('in-metode-2').value;
@@ -2230,13 +2311,18 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
                     }
                 }
                 let pakaiBola = document.getElementById('in-sewa-bola').checked;
-                let pakaiRompi = document.getElementById('in-sewa-rompi').checked;
-                let tambahanSewa = (pakaiBola ? 25000 * durasiJam : 0) + (pakaiRompi ? 30000 * durasiJam : 0);
+                let pakaiRompi1 = document.getElementById('in-sewa-rompi-1').checked;
+                let pakaiRompi2 = document.getElementById('in-sewa-rompi-2').checked;
+                let biayaBola = pakaiBola ? 25000 * durasiJam : 0;
+                let biayaRompi = (pakaiRompi1 || pakaiRompi2) ? 30000 * durasiJam : 0;
+                let tambahanTim1 = (pakaiBola ? Math.ceil(biayaBola / 2) : 0) + (pakaiRompi1 ? biayaRompi : 0);
+                let tambahanTim2 = (pakaiBola ? Math.floor(biayaBola / 2) : 0) + (pakaiRompi2 ? biayaRompi : 0);
 
-                let totalTim1 = jml1 + tambahanSewa;
+                let totalTim1 = jml1;
                 let ketSewa = [];
-                if(pakaiBola) ketSewa.push(`Sewa Bola(${durasiJam}j)`);
-                if(pakaiRompi) ketSewa.push(`Sewa Rompi(${durasiJam}j)`);
+                if(pakaiBola) ketSewa.push(`Sewa Bola(${durasiJam}j, bagi 2)`);
+                if(pakaiRompi1) ketSewa.push(`Sewa Rompi Tim 1(${durasiJam}j)`);
+                if(pakaiRompi2) ketSewa.push(`Sewa Rompi Tim 2(${durasiJam}j)`);
                 let ketTambahanStr = ketSewa.length > 0 ? ` + ${ketSewa.join(', ')}` : "";
 
                 data = { 
@@ -2246,6 +2332,9 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
                     metode1: met1,
                     jumlah2: jml2,
                     metode2: met2,
+                    status2: document.getElementById('in-status-2')?.value || 'Non-Member',
+                    biayaTambahanTim1: tambahanTim1,
+                    biayaTambahanTim2: tambahanTim2,
                     jumlah: totalTim1 + jml2,
                     tgl: tgl
                 };
@@ -2315,6 +2404,113 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
                 console.error(error);
                 alert("Gagal menghentikan member: " + error.message);
             }
+        }
+
+        window.aturLiburMember = async (key) => {
+            const member = globalCache.member;
+            let nama = '';
+            let raw = null;
+            Object.values(member || {}).forEach(perHari => {
+                Object.values(perHari || {}).forEach(cell => {
+                    if(cell && cell.key === key) { nama = cell.nama || nama; raw = cell; }
+                });
+            });
+            if(!raw) { alert('Data member tidak ditemukan.'); return; }
+
+            // Tampilkan hanya tanggal yang jatuh pada hari jadwal member.
+            // Contoh: member Jumat -> pilihan hanya Jumat, bukan hari lain.
+            const namaHari = String(raw.hari || '').trim();
+            const hariIndex = {
+                'Minggu': 0, 'Senin': 1, 'Selasa': 2, 'Rabu': 3,
+                'Kamis': 4, 'Jumat': 5, 'Sabtu': 6
+            };
+            const targetDay = hariIndex[namaHari];
+            if(targetDay === undefined) {
+                alert(`Hari jadwal ${namaHari || '-'} tidak dikenali.`);
+                return;
+            }
+
+            const existing = raw.liburTanggal && !Array.isArray(raw.liburTanggal)
+                ? { ...raw.liburTanggal }
+                : Object.fromEntries((raw.liburTanggal || []).map(d => [d, true]));
+
+            const pad = n => String(n).padStart(2, '0');
+            const toDateString = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+            const hariNamaPendek = ['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+            const hariNamaPanjang = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            // Ambil 16 jadwal berikutnya yang benar-benar jatuh pada hari member.
+            // Hari ini ikut ditampilkan jika memang sesuai harinya.
+            const pilihan = [];
+            const cursor = new Date(today);
+            for(let i = 0; i < 140 && pilihan.length < 16; i++) {
+                if(cursor.getDay() === targetDay) {
+                    const value = toDateString(cursor);
+                    pilihan.push({ value, label: `${hariNamaPanjang[targetDay]}, ${pad(cursor.getDate())}-${pad(cursor.getMonth()+1)}-${cursor.getFullYear()}` });
+                }
+                cursor.setDate(cursor.getDate() + 1);
+            }
+
+            const options = pilihan.map(item => {
+                const isLibur = existing[item.value] === true;
+                return `<option value="${item.value}" ${isLibur ? 'data-libur="1"' : ''}>${item.label}${isLibur ? ' — SEDANG LIBUR' : ''}</option>`;
+            }).join('');
+
+            document.getElementById('modal-libur-member')?.remove();
+            const modal = document.createElement('div');
+            modal.id = 'modal-libur-member';
+            modal.className = 'fixed inset-0 z-[120] flex items-center justify-center p-3 bg-slate-900/70 backdrop-blur-sm';
+            modal.innerHTML = `
+                <div class="w-full max-w-md rounded-2xl border border-white/40 bg-white shadow-2xl p-5 text-slate-900">
+                    <div class="flex items-center justify-between mb-3">
+                        <div>
+                            <h3 class="font-black text-base sm:text-lg text-indigo-950">📅 ATUR LIBUR MEMBER</h3>
+                            <p class="text-xs text-slate-500 mt-1">${nama || 'Member'} • Jadwal setiap ${namaHari}</p>
+                        </div>
+                        <button type="button" id="btn-tutup-libur" class="text-slate-500 hover:text-slate-900 text-xl font-black">✕</button>
+                    </div>
+                    <label class="block text-xs font-black text-slate-700 mb-1">Pilih tanggal ${namaHari}</label>
+                    <select id="select-tanggal-libur" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        ${options}
+                    </select>
+                    <p class="text-[11px] text-slate-500 mt-2">Hanya tanggal ${namaHari} yang ditampilkan. Minggu berikutnya tetap masuk jadwal seperti biasa.</p>
+                    <div class="flex gap-2 mt-4">
+                        <button type="button" id="btn-batal-libur" class="flex-1 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2.5 text-xs font-black">BATAL</button>
+                        <button type="button" id="btn-simpan-libur" class="flex-1 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 text-xs font-black">SIMPAN LIBUR</button>
+                    </div>
+                </div>`;
+            document.body.appendChild(modal);
+
+            const close = () => modal.remove();
+            document.getElementById('btn-tutup-libur').onclick = close;
+            document.getElementById('btn-batal-libur').onclick = close;
+            modal.addEventListener('click', e => { if(e.target === modal) close(); });
+
+            document.getElementById('btn-simpan-libur').onclick = async () => {
+                const select = document.getElementById('select-tanggal-libur');
+                const tgl = select?.value;
+                if(!tgl) return;
+
+                const alreadyOff = existing[tgl] === true;
+                const next = { ...existing };
+                if(alreadyOff) delete next[tgl];
+                else next[tgl] = true;
+
+                try {
+                    await update(ref(db, 'member/' + key), { liburTanggal: next });
+                    close();
+                    if(alreadyOff) {
+                        alert(`${nama || 'Member'} kembali masuk jadwal pada ${tgl}.`);
+                    } else {
+                        alert(`${nama || 'Member'} diliburkan pada ${tgl}. Jadwal ${namaHari} berikutnya tetap berjalan.`);
+                    }
+                } catch(error) {
+                    console.error(error);
+                    alert('Gagal mengubah jadwal libur: ' + error.message);
+                }
+            };
         }
 
         window.hapusMember = async (key) => {
@@ -2574,6 +2770,19 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
             return true;
         }
 
+        // Libur hanya berlaku pada tanggal tertentu. Jadwal mingguan tetap berjalan
+        // pada Jumat berikutnya dan seterusnya.
+        function isMemberLiburOnDate(member, dateStr) {
+            if(!member || !dateStr) return false;
+            const daftarLibur = member.liburTanggal || {};
+            if(Array.isArray(daftarLibur)) return daftarLibur.includes(dateStr);
+            return daftarLibur[dateStr] === true;
+        }
+
+        function isMemberScheduledOnDate(member, dateStr) {
+            return isMemberActiveOnDate(member, dateStr) && !isMemberLiburOnDate(member, dateStr);
+        }
+
         function renderAll() {
             renderGridJadwal();
             renderTabelBooking();
@@ -2609,15 +2818,17 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
                             <td class="p-2 border border-slate-900/40">${m.jam}</td>
                             <td class="p-2 border border-slate-900/40 text-center">${mulai || '-'} </td>
                             <td class="p-2 border border-slate-900/40 text-center">${statusHtml}</td>
-                            <td class="p-2 border border-slate-900/40 text-center">
-                                ${(!berhenti && !isOff) ? `<button type="button" onclick="berhentiMember('${key}')" class="bg-amber-600 hover:bg-amber-700 text-white px-2 py-1 rounded text-[10px] font-black mr-1">Berhenti</button>` : ''}
-                                <button type="button" onclick="hapusMember('${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-[10px]">Hapus</button>
+                            <td class="p-2 border border-slate-900/40 text-center member-action-cell">
+                                <div class="member-actions">
+                                    ${(!berhenti && !isOff) ? `<button type="button" onclick="aturLiburMember('${key}')" class="bg-indigo-600 hover:bg-indigo-700 text-white">Libur</button><button type="button" onclick="berhentiMember('${key}')" class="bg-amber-600 hover:bg-amber-700 text-white">Berhenti</button>` : ''}
+                                    <button type="button" onclick="hapusMember('${key}')" class="bg-rose-700 hover:bg-rose-800 text-white">Hapus</button>
+                                </div>
                             </td>
                         </tr>`;
                     }
                     if(!globalCache.member[m.jam]) globalCache.member[m.jam] = {};
                     // Simpan metadata tanggal agar jadwal bisa berubah berdasarkan tanggal yang sedang dilihat.
-                    globalCache.member[m.jam][m.hari] = { nama: m.nama, type: isOff ? 'off' : 'member', mulai, berhenti, key };
+                    globalCache.member[m.jam][m.hari] = { nama: m.nama, hari: m.hari, jam: m.jam, type: isOff ? 'off' : 'member', mulai, berhenti, liburTanggal: m.liburTanggal || {}, key };
                 });
             }
             renderAll();
@@ -2697,7 +2908,7 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
             // Jadwal Member dari Firebase.
             Object.entries(globalCache.member || {}).forEach(([jam, perHari]) => {
                 const cell = perHari ? perHari[hariNama] : null;
-                if(!cell || !cell.nama || cell.type === 'off' || !isMemberActiveOnDate(cell, today)) return;
+                if(!cell || !cell.nama || cell.type === 'off' || !isMemberScheduledOnDate(cell, today)) return;
                 const jamKey = jam.substring(0, 5);
                 schedules[jamKey] = {
                     nama: cell.nama,
@@ -2872,7 +3083,7 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
                 const dateStr = currentWeekDates[hari] ? currentWeekDates[hari].dateStr : '';
                 listJam.forEach(jam => {
                     const cell = (globalCache.member[jam] && globalCache.member[jam][hari]) ? globalCache.member[jam][hari] : null;
-                    if(cell && cell.nama && isMemberActiveOnDate(cell, dateStr)) {
+                    if(cell && cell.nama && isMemberScheduledOnDate(cell, dateStr)) {
                         if(!matrix[jam]) matrix[jam] = {};
                         matrix[jam][hari] = { ...cell };
                     }
@@ -3295,7 +3506,7 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
 
                 listJam.forEach(jam => {
                     let cell = (globalCache.member[jam] && globalCache.member[jam][hName]) ? globalCache.member[jam][hName] : null;
-                    if(cell && cell.type !== 'off' && cell.nama && isMemberActiveOnDate(cell, info.dateStr)) {
+                    if(cell && cell.type !== 'off' && cell.nama && isMemberScheduledOnDate(cell, info.dateStr)) {
                         let cleanName = cell.nama.toUpperCase().trim();
                         info.scheduledSchedules.push({ nama: cleanName, jam: jam, source: 'member' });
                     }
