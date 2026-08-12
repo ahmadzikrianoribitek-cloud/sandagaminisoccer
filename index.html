@@ -912,10 +912,12 @@
              border-radius: .65rem;
              font-weight: 900 !important;
              line-height: 1;
-             white-space: nowrap;
+             white-space: normal;
              overflow: hidden;
+             overflow-wrap: anywhere;
+             word-break: break-word;
              text-overflow: clip;
-             font-size: clamp(4px, 1.8vw, 10px);
+             font-size: clamp(6px, 1.8vw, 10px);
              letter-spacing: -.03em;
              box-shadow: 0 2px 7px rgba(15,23,42,.10), inset 0 1px 0 rgba(255,255,255,.65);
         }
@@ -1295,6 +1297,406 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
 }
 </style>
 
+<style>
+#daily-cash-dashboard { scroll-margin-top: 1rem; }
+#daily-cash-dashboard .glass-input {
+    background: rgba(255,255,255,.82) !important;
+    border: 1px solid rgba(99,102,241,.25) !important;
+}
+#daily-cash-dashboard .glass-input:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(99,102,241,.12) !important;
+}
+@media (max-width:640px) {
+    #daily-cash-dashboard #daily-menu-grid .glass-btn {
+        min-height: 86px !important;
+        padding: .75rem !important;
+    }
+}
+</style>
+
+<style>
+/* =========================================================
+   MOBILE FIX — JADWAL ADMIN & BOOKING SCHEDULE
+   Fokus: teks tidak keluar kolom dan nama tim tidak terpotong.
+   Tidak mengubah data maupun fungsi JavaScript.
+   ========================================================= */
+
+/* ---------- JADWAL ADMIN JAGA ---------- */
+.admin-roster-toolbar {
+    min-width: 0;
+}
+
+.admin-month-title {
+    min-width: 0;
+    flex: 1 1 auto;
+    overflow-wrap: anywhere;
+}
+
+.admin-month-btn {
+    min-width: 0;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.15;
+}
+
+.admin-day {
+    min-width: 0;
+}
+
+.admin-shift {
+    min-width: 0;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.admin-shift small {
+    white-space: nowrap;
+}
+
+.admin-edit-btn {
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 640px) {
+    .admin-roster-toolbar {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, 1fr);
+        gap: 5px;
+        width: 100%;
+    }
+
+    .admin-month-btn {
+        width: 100%;
+        padding: 6px 3px;
+        font-size: 8px;
+        min-height: 34px;
+    }
+
+    .admin-month-title {
+        width: 100%;
+        font-size: 10px;
+        text-align: center;
+        line-height: 1.15;
+    }
+
+    .admin-calendar {
+        width: 100%;
+        gap: 3px;
+        min-width: 0;
+    }
+
+    .admin-cal-head {
+        min-width: 0;
+        overflow: hidden;
+        padding: 6px 1px;
+        font-size: 8px;
+        white-space: nowrap;
+    }
+
+    .admin-day {
+        min-width: 0;
+        min-height: 108px;
+        padding: 4px 3px;
+        gap: 4px;
+    }
+
+    .admin-day-num {
+        min-width: 0;
+        font-size: 9px;
+        gap: 2px;
+    }
+
+    .admin-today-badge {
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 6px;
+        padding: 2px 3px;
+    }
+
+    .admin-shift {
+        width: 100%;
+        padding: 5px 3px;
+        font-size: 8px;
+        line-height: 1.05;
+        text-align: center;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .admin-shift small {
+        font-size: 6.5px;
+        line-height: 1;
+        margin-bottom: 3px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .admin-edit-btn {
+        width: 100%;
+        padding: 5px 2px;
+        font-size: 8px;
+        line-height: 1;
+    }
+
+    .admin-roster-legend {
+        gap: 5px;
+        font-size: 8px;
+    }
+
+    .admin-legend-pill {
+        padding: 4px 6px;
+    }
+}
+
+/* ---------- BOOKING SCHEDULE ---------- */
+
+/* Jangan paksa nama tim satu baris. */
+#booking-schedule-grid-wrap .schedule-grid-team-holder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 1.55rem;
+    padding: .22rem .2rem;
+    line-height: .95;
+    white-space: normal;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    text-overflow: clip;
+    text-align: center;
+    font-size: clamp(6px, 1.85vw, 10px);
+    letter-spacing: -.04em;
+}
+
+@media (max-width: 640px) {
+    #booking-schedule-grid-wrap table {
+        table-layout: fixed !important;
+        width: 100% !important;
+    }
+
+    #booking-schedule-grid-wrap th,
+    #booking-schedule-grid-wrap td {
+        min-width: 0 !important;
+        max-width: none !important;
+    }
+
+    #booking-schedule-grid-wrap .schedule-grid-team-holder {
+        min-height: 1.45rem;
+        padding: .16rem .12rem;
+        border-radius: .45rem;
+        font-size: clamp(6px, 1.8vw, 8px);
+        line-height: .95;
+        white-space: normal !important;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    /* Beri nama tim sedikit lebih banyak ruang dari strip DONE. */
+    #booking-schedule-grid-wrap td > .flex > .schedule-grid-team-holder {
+        max-width: 100%;
+    }
+
+    /* Strip DONE tetap terlihat, tetapi tidak terlalu menutupi isi pada HP. */
+    #booking-schedule-grid-wrap td > div.absolute {
+        width: 34% !important;
+    }
+
+    #booking-schedule-grid-wrap td > div.absolute span {
+        font-size: 6px !important;
+        letter-spacing: .02em !important;
+    }
+
+    #booking-schedule-grid-wrap td {
+        height: 3.2rem !important;
+    }
+}
+</style>
+
+
+<style id="theme-admin-jaga-reference">
+/* =========================================================
+   JADWAL ADMIN JAGA — TEMA REFERENSI BIRU SLATE
+   Palette:
+   #0E2538  #163B55  #2E607A  #7B8F9E  #E9F0F4
+   Visual-only: tidak mengubah JS, ID, onclick, atau data.
+   ========================================================= */
+
+/* Kartu menu Admin Jaga di Beranda */
+.menu-admin-jaga {
+    background: linear-gradient(135deg, #0E2538 0%, #163B55 52%, #2E607A 100%) !important;
+    color: #fff !important;
+}
+.menu-admin-jaga:hover {
+    filter: brightness(1.06) saturate(1.03);
+    transform: translateY(-2px);
+}
+
+/* Panel utama Jadwal Admin Jaga */
+#page-admin-jaga {
+    background: linear-gradient(145deg, rgba(233,240,244,.98), rgba(255,255,255,.97)) !important;
+    border: 1px solid rgba(123,143,158,.42) !important;
+    box-shadow: 0 20px 55px rgba(14,37,56,.18) !important;
+    color: #0E2538 !important;
+}
+
+/* Judul */
+#page-admin-jaga > div:first-child h2 {
+    color: #0E2538 !important;
+    text-shadow: none !important;
+}
+#page-admin-jaga > div:first-child h2::after {
+    background: linear-gradient(90deg, #0E2538, #163B55, #2E607A) !important;
+    box-shadow: 0 2px 8px rgba(46,96,122,.22) !important;
+}
+
+/* Wrapper kalender */
+#page-admin-jaga .p-3.sm\:p-4.rounded-2xl {
+    background: rgba(233,240,244,.72) !important;
+    border-color: rgba(123,143,158,.38) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.75),
+                0 10px 28px rgba(14,37,56,.08) !important;
+}
+
+/* Toolbar bulan */
+#page-admin-jaga .admin-month-title {
+    color: #0E2538 !important;
+    font-weight: 950;
+}
+#page-admin-jaga .admin-month-btn {
+    background: #163B55 !important;
+    border: 1px solid #163B55 !important;
+    color: #fff !important;
+    box-shadow: 0 5px 14px rgba(14,37,56,.14) !important;
+}
+#page-admin-jaga .admin-month-btn:hover {
+    background: #2E607A !important;
+    border-color: #2E607A !important;
+}
+
+/* Tombol Bulan Ini */
+#page-admin-jaga button[onclick="kembaliKeBulanHariIniAdmin()"] {
+    background: linear-gradient(135deg, #2E607A, #163B55) !important;
+    color: #fff !important;
+    border: 1px solid rgba(255,255,255,.28) !important;
+    box-shadow: 0 7px 18px rgba(14,37,56,.16) !important;
+}
+#page-admin-jaga button[onclick="kembaliKeBulanHariIniAdmin()"]:hover {
+    filter: brightness(1.06);
+}
+
+/* Header hari */
+#page-admin-jaga .admin-cal-head {
+    background: #0E2538 !important;
+    color: #E9F0F4 !important;
+    border: 1px solid #163B55;
+    box-shadow: 0 3px 8px rgba(14,37,56,.10);
+}
+
+/* Sel tanggal */
+#page-admin-jaga .admin-day {
+    background: rgba(255,255,255,.92) !important;
+    border-color: rgba(123,143,158,.38) !important;
+    box-shadow: 0 4px 12px rgba(14,37,56,.045);
+}
+#page-admin-jaga .admin-day.muted {
+    background: rgba(123,143,158,.10) !important;
+    opacity: .55;
+}
+#page-admin-jaga .admin-day.today {
+    border: 2px solid #2E607A !important;
+    box-shadow: 0 0 0 3px rgba(46,96,122,.12),
+                0 7px 18px rgba(14,37,56,.10);
+}
+#page-admin-jaga .admin-day-num {
+    color: #0E2538 !important;
+}
+
+/* Badge hari ini */
+#page-admin-jaga .admin-today-badge {
+    background: #2E607A !important;
+    color: #fff !important;
+}
+
+/* Shift Pagi */
+#page-admin-jaga .admin-shift.pagi {
+    background: #E9F0F4 !important;
+    border: 1px solid #7B8F9E !important;
+    color: #0E2538 !important;
+}
+
+/* Shift Malam */
+#page-admin-jaga .admin-shift.malam {
+    background: #7B8F9E !important;
+    border: 1px solid #2E607A !important;
+    color: #0E2538 !important;
+}
+#page-admin-jaga .admin-shift small {
+    color: #163B55 !important;
+}
+
+/* Tombol Edit */
+#page-admin-jaga .admin-edit-btn {
+    background: #163B55 !important;
+    color: #fff !important;
+    box-shadow: 0 4px 10px rgba(14,37,56,.14);
+}
+#page-admin-jaga .admin-edit-btn:hover {
+    background: #2E607A !important;
+}
+
+/* Legenda */
+#page-admin-jaga .admin-roster-legend {
+    color: #0E2538 !important;
+}
+#page-admin-jaga .admin-legend-pagi {
+    background: #E9F0F4 !important;
+    color: #0E2538 !important;
+    border: 1px solid #7B8F9E;
+}
+#page-admin-jaga .admin-legend-malam {
+    background: #7B8F9E !important;
+    color: #0E2538 !important;
+    border: 1px solid #2E607A;
+}
+
+/* Back button agar menyatu dengan tema */
+body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="page-admin-jaga"] {
+    background: rgba(233,240,244,.90) !important;
+    border-color: rgba(123,143,158,.55) !important;
+    color: #0E2538 !important;
+    box-shadow: 0 10px 28px rgba(14,37,56,.16),
+                inset 0 1px 0 rgba(255,255,255,.9) !important;
+}
+body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="page-admin-jaga"]:hover {
+    background: #fff !important;
+    border-color: #2E607A !important;
+    color: #163B55 !important;
+}
+
+/* Mobile tetap ringan dan terbaca */
+@media (max-width:640px) {
+    #page-admin-jaga {
+        box-shadow: 0 12px 30px rgba(14,37,56,.14) !important;
+    }
+    #page-admin-jaga .admin-shift.malam {
+        background: #7B8F9E !important;
+    }
+}
+</style>
+
 </head>
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium"><button class="sticky-back-btn" data-back-context="page-keluar" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-minuman" onclick="showPage('home')" type="button">
@@ -1481,20 +1883,85 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
 <div class="flex justify-between items-center mb-4 border-b border-slate-900/20 pb-3">
 <h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm w-full text-center">📊 REKAP KEUANGAN HARIAN</h2>
 </div>
-<!-- 4 TOMBOL MENU UTAMA -->
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6" id="daily-menu-grid">
-<button class="glass-btn p-4 sm:p-6 rounded-2xl font-black shadow-lg transition text-sm sm:text-base flex flex-col items-center justify-center gap-2" onclick="showDailySub('lapangan')">
-<span class="text-2xl">⚽</span> UANG LAPANGAN
-                </button>
-<button class="glass-btn p-4 sm:p-6 rounded-2xl font-black shadow-lg transition text-sm sm:text-base flex flex-col items-center justify-center gap-2" onclick="showDailySub('minuman')">
-<span class="text-2xl">🥤</span> MINUMAN
-                </button>
-<button class="glass-btn p-4 sm:p-6 rounded-2xl font-black shadow-lg transition text-sm sm:text-base flex flex-col items-center justify-center gap-2" onclick="showDailySub('pengeluaran')">
-<span class="text-2xl">💸</span> PENGELUARAN
-                </button>
-<button class="glass-btn p-4 sm:p-6 rounded-2xl font-black shadow-lg transition text-sm sm:text-base flex flex-col items-center justify-center gap-2" onclick="showDailySub('ringkasan')">
-<span class="text-2xl">📌</span> RINGKASAN
-                </button>
+<!-- DASHBOARD KAS HARIAN -->
+<div id="daily-cash-dashboard" class="space-y-4 mb-5">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 sm:p-4 rounded-2xl border border-blue-500/30 bg-white/40 shadow-sm">
+        <div>
+            <p class="text-[10px] sm:text-xs font-black uppercase tracking-wider text-slate-500">Tanggal Rekap</p>
+            <p id="daily-dashboard-date" class="text-sm sm:text-base font-black text-slate-900">-</p>
+        </div>
+        <div class="flex items-center gap-2">
+            <label for="daily-dashboard-date-input" class="text-[10px] sm:text-xs font-black text-slate-600">Ganti tanggal</label>
+            <input id="daily-dashboard-date-input" type="date" class="p-2 rounded-xl text-xs glass-input font-bold text-center"
+                   onchange="syncFilterTanggal(this.value); renderRekapHarian()">
+        </div>
+    </div>
+
+    <section class="p-3 sm:p-5 rounded-2xl border border-emerald-500/35 bg-white/35 shadow-lg">
+        <div class="flex items-center justify-between gap-2 mb-3">
+            <div>
+                <p class="text-[10px] sm:text-xs font-black uppercase tracking-wider text-emerald-700">Kontrol Cepat</p>
+                <h3 class="text-base sm:text-lg font-black text-slate-900">💰 KAS HARI INI</h3>
+            </div>
+            <span id="daily-cash-status" class="px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-black bg-slate-100 text-slate-600">Belum dicek</span>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-2.5 sm:gap-3">
+            <div class="p-3 rounded-xl border border-blue-500/30 bg-white/70">
+                <p class="text-[10px] font-bold text-slate-500">Total Pemasukan</p>
+                <p id="daily-total-pemasukan" class="text-sm sm:text-lg font-black text-blue-800 mt-1">Rp 0</p>
+            </div>
+            <div class="p-3 rounded-xl border border-emerald-500/30 bg-white/70">
+                <p class="text-[10px] font-bold text-slate-500">Cash</p>
+                <p id="daily-total-cash" class="text-sm sm:text-lg font-black text-emerald-800 mt-1">Rp 0</p>
+            </div>
+            <div class="p-3 rounded-xl border border-sky-500/30 bg-white/70">
+                <p class="text-[10px] font-bold text-slate-500">QRIS / Transfer</p>
+                <p id="daily-total-qris" class="text-sm sm:text-lg font-black text-sky-800 mt-1">Rp 0</p>
+            </div>
+            <div class="p-3 rounded-xl border border-rose-500/30 bg-white/70">
+                <p class="text-[10px] font-bold text-slate-500">Pengeluaran</p>
+                <p id="daily-total-keluar" class="text-sm sm:text-lg font-black text-rose-800 mt-1">Rp 0</p>
+            </div>
+            <div class="p-3 rounded-xl border-2 border-emerald-600/50 bg-emerald-50/80 col-span-2 lg:col-span-1">
+                <p class="text-[10px] font-bold text-emerald-700">Cash Seharusnya</p>
+                <p id="daily-cash-seharusnya" class="text-base sm:text-xl font-black text-emerald-900 mt-1">Rp 0</p>
+            </div>
+        </div>
+
+        <div class="mt-4 grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3 items-end p-3 rounded-xl border border-indigo-500/25 bg-white/55">
+            <div>
+                <label for="daily-cash-fisik" class="block text-xs font-black text-slate-800 mb-1">💵 Uang Cash Fisik yang Dihitung</label>
+                <input id="daily-cash-fisik" type="number" min="0" step="1000" inputmode="numeric"
+                       placeholder="Masukkan jumlah cash fisik..."
+                       class="w-full p-3 rounded-xl glass-input font-black text-base"
+                       oninput="updateDailyCashCheck()">
+                <p class="text-[10px] text-slate-500 font-bold mt-1">Disimpan di browser ini berdasarkan tanggal, tidak mengubah data transaksi.</p>
+            </div>
+            <div class="sm:min-w-[220px] p-3 rounded-xl border border-indigo-500/25 bg-indigo-50/60 text-center">
+                <p class="text-[10px] font-bold text-slate-500">Selisih Cash</p>
+                <p id="daily-cash-selisih" class="text-lg sm:text-xl font-black text-slate-700 mt-1">-</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="p-3 rounded-2xl border border-slate-300/50 bg-white/35">
+        <p class="text-[10px] sm:text-xs font-black uppercase tracking-wider text-slate-500 mb-2 text-center">Buka Rincian</p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5" id="daily-menu-grid">
+            <button class="glass-btn p-3 sm:p-4 rounded-2xl font-black shadow-lg transition text-xs sm:text-sm flex flex-col items-center justify-center gap-1.5" onclick="showDailySub('lapangan')">
+                <span class="text-2xl">⚽</span> UANG LAPANGAN
+            </button>
+            <button class="glass-btn p-3 sm:p-4 rounded-2xl font-black shadow-lg transition text-xs sm:text-sm flex flex-col items-center justify-center gap-1.5" onclick="showDailySub('minuman')">
+                <span class="text-2xl">🥤</span> MINUMAN
+            </button>
+            <button class="glass-btn p-3 sm:p-4 rounded-2xl font-black shadow-lg transition text-xs sm:text-sm flex flex-col items-center justify-center gap-1.5" onclick="showDailySub('pengeluaran')">
+                <span class="text-2xl">💸</span> PENGELUARAN
+            </button>
+            <button class="glass-btn p-3 sm:p-4 rounded-2xl font-black shadow-lg transition text-xs sm:text-sm flex flex-col items-center justify-center gap-1.5" onclick="showDailySub('ringkasan')">
+                <span class="text-2xl">📌</span> RINGKASAN
+            </button>
+        </div>
+    </div>
 </div>
 <!-- KONTINOS SUB-MENU LAPANGAN -->
 <div class="space-y-6 hidden" id="sub-page-lapangan">
@@ -2184,7 +2651,7 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
             let todayStr = getLocalDateString();
             let todayYearMonth = todayStr.substring(0, 7);
             
-            ['filter-tanggal-lapangan', 'filter-tanggal-minuman', 'filter-tanggal-keluar', 'filter-tanggal-ringkasan'].forEach(id => {
+            ['filter-tanggal-lapangan', 'filter-tanggal-minuman', 'filter-tanggal-keluar', 'filter-tanggal-ringkasan', 'daily-dashboard-date-input'].forEach(id => {
                 let el = document.getElementById(id);
                 if(el) el.value = todayStr;
             });
@@ -2201,24 +2668,27 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
             if(document.getElementById('a-tanggal')) document.getElementById('a-tanggal').value = todayStr;
             if(document.getElementById('k-tgl')) document.getElementById('k-tgl').value = todayStr;
             if(document.getElementById('k-sumber-tgl')) document.getElementById('k-sumber-tgl').value = todayStr;
+            restoreDailyCashFisik(todayStr);
         }
 
         document.addEventListener("DOMContentLoaded", () => {
             setDefaultDates();
             initPeriodeDropdown();
             renderGridJadwal();
+            setTimeout(() => renderRekapHarian(), 0);
         });
 
         window.showDailySub = (sub) => {
-            document.getElementById('daily-menu-grid').classList.add('hidden');
             ['lapangan', 'minuman', 'pengeluaran', 'ringkasan'].forEach(s => {
                 let el = document.getElementById('sub-page-' + s);
                 if(el) el.classList.add('hidden');
             });
             let targetEl = document.getElementById('sub-page-' + sub);
             if(targetEl) targetEl.classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
             renderRekapHarian();
+            setTimeout(() => {
+                if(targetEl) targetEl.scrollIntoView({ top: 0, behavior: 'smooth' });
+            }, 50);
         }
 
         window.backToDailyMenu = () => {
@@ -2226,15 +2696,16 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
                 let el = document.getElementById('sub-page-' + s);
                 if(el) el.classList.add('hidden');
             });
-            document.getElementById('daily-menu-grid').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const dash = document.getElementById('daily-cash-dashboard');
+            if(dash) dash.scrollIntoView({ top: 0, behavior: 'smooth' });
         }
 
         window.syncFilterTanggal = (val) => {
-            ['filter-tanggal-lapangan', 'filter-tanggal-minuman', 'filter-tanggal-keluar', 'filter-tanggal-ringkasan'].forEach(id => {
+            ['filter-tanggal-lapangan', 'filter-tanggal-minuman', 'filter-tanggal-keluar', 'filter-tanggal-ringkasan', 'daily-dashboard-date-input'].forEach(id => {
                 let el = document.getElementById(id);
                 if(el) el.value = val;
             });
+            restoreDailyCashFisik(val);
         }
 
         window.showPage = (id) => {
@@ -3739,6 +4210,62 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
             });
         }
 
+        function formatRupiahDaily(nominal){
+            return `Rp ${Number(nominal || 0).toLocaleString('id-ID')}`;
+        }
+
+        function dailyCashStorageKey(tanggal){
+            return `sandaga_daily_cash_fisik_${tanggal}`;
+        }
+
+        window.restoreDailyCashFisik = (tanggal) => {
+            const input = document.getElementById('daily-cash-fisik');
+            if(!input) return;
+            const saved = localStorage.getItem(dailyCashStorageKey(tanggal));
+            input.value = saved !== null ? saved : '';
+            updateDailyCashCheck();
+        };
+
+        window.updateDailyCashCheck = () => {
+            const input = document.getElementById('daily-cash-fisik');
+            const selisihEl = document.getElementById('daily-cash-selisih');
+            const statusEl = document.getElementById('daily-cash-status');
+            if(!input || !selisihEl || !statusEl) return;
+
+            const tanggal = document.getElementById('filter-tanggal-lapangan')?.value || getLocalDateString();
+            const raw = input.value.trim();
+
+            if(raw === ''){
+                localStorage.removeItem(dailyCashStorageKey(tanggal));
+                selisihEl.textContent = '-';
+                selisihEl.className = 'text-lg sm:text-xl font-black text-slate-700 mt-1';
+                statusEl.textContent = 'Belum dicek';
+                statusEl.className = 'px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-black bg-slate-100 text-slate-600';
+                return;
+            }
+
+            const fisik = Number(raw || 0);
+            localStorage.setItem(dailyCashStorageKey(tanggal), String(fisik));
+
+            const seharusnya = Number(window.__dailyCashSeharusnya || 0);
+            const selisih = fisik - seharusnya;
+            selisihEl.textContent = `${selisih > 0 ? '+' : ''}${formatRupiahDaily(selisih)}`;
+
+            if(selisih === 0){
+                selisihEl.className = 'text-lg sm:text-xl font-black text-emerald-700 mt-1';
+                statusEl.textContent = '✓ CASH SESUAI';
+                statusEl.className = 'px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-black bg-emerald-100 text-emerald-800';
+            }else if(selisih < 0){
+                selisihEl.className = 'text-lg sm:text-xl font-black text-rose-700 mt-1';
+                statusEl.textContent = '⚠️ CASH KURANG';
+                statusEl.className = 'px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-black bg-rose-100 text-rose-800';
+            }else{
+                selisihEl.className = 'text-lg sm:text-xl font-black text-blue-700 mt-1';
+                statusEl.textContent = 'ℹ️ CASH LEBIH';
+                statusEl.className = 'px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-black bg-blue-100 text-blue-800';
+            }
+        };
+
         window.renderRekapHarian = () => {
             let filterTgl = document.getElementById('filter-tanggal-lapangan').value;
             if(!filterTgl) return;
@@ -3943,6 +4470,25 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
             if(document.getElementById('rekap-sisa-cash-lapangan')) document.getElementById('rekap-sisa-cash-lapangan').innerText = `Rp ${sisaCashLapangan.toLocaleString('id-ID')}`;
             if(document.getElementById('rekap-sisa-cash-minuman')) document.getElementById('rekap-sisa-cash-minuman').innerText = `Rp ${totalMinumanCash.toLocaleString('id-ID')}`;
             if(document.getElementById('rekap-total-sisa-cash')) document.getElementById('rekap-total-sisa-cash').innerText = `Rp ${totalSisaCash.toLocaleString('id-ID')}`;
+
+            const totalPemasukanHarian = totalLapangan + totalMinuman;
+            const totalCashHarian = totalLapanganCash + totalMinumanCash;
+            const totalQrisHarian = totalLapanganQrif + totalMinumanQrif;
+
+            const dashboardDate = document.getElementById('daily-dashboard-date');
+            if(dashboardDate) dashboardDate.textContent = formattedFullDate;
+
+            const dashboardInput = document.getElementById('daily-dashboard-date-input');
+            if(dashboardInput) dashboardInput.value = filterTgl;
+
+            if(document.getElementById('daily-total-pemasukan')) document.getElementById('daily-total-pemasukan').textContent = formatRupiahDaily(totalPemasukanHarian);
+            if(document.getElementById('daily-total-cash')) document.getElementById('daily-total-cash').textContent = formatRupiahDaily(totalCashHarian);
+            if(document.getElementById('daily-total-qris')) document.getElementById('daily-total-qris').textContent = formatRupiahDaily(totalQrisHarian);
+            if(document.getElementById('daily-total-keluar')) document.getElementById('daily-total-keluar').textContent = formatRupiahDaily(totalKeluar);
+            if(document.getElementById('daily-cash-seharusnya')) document.getElementById('daily-cash-seharusnya').textContent = formatRupiahDaily(totalSisaCash);
+
+            window.__dailyCashSeharusnya = totalSisaCash;
+            restoreDailyCashFisik(filterTgl);
         }
 
         window.renderMonthlyRecap = () => {
