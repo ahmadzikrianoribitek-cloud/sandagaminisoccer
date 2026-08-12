@@ -22,28 +22,43 @@
         }
 </script>
 <style>
-        /* Tombol aksi Atur Member: rapi dan konsisten di layar HP */
+        /* Tombol aksi Atur Member: seluruh kolom tetap terlihat di layar HP */
+        #tabel-list-member {
+            width: 100%;
+            table-layout: fixed;
+        }
+        #tabel-list-member th,
+        #tabel-list-member td {
+            box-sizing: border-box;
+        }
         #tabel-list-member .member-action-cell {
-            padding: .5rem .35rem !important;
+            padding: .45rem .2rem !important;
             vertical-align: middle;
+            width: 15% !important;
+            min-width: 74px;
+            overflow: visible !important;
+            background: rgba(255,255,255,.88);
         }
         #tabel-list-member .member-actions {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: .3rem;
+            gap: .25rem;
             width: 100%;
-            min-width: 68px;
+            min-width: 0;
         }
         #tabel-list-member .member-actions button {
+            display: block;
             width: 68px;
+            max-width: 100%;
             min-height: 29px;
             margin: 0 !important;
-            padding: .35rem .45rem !important;
+            padding: .34rem .28rem !important;
             border-radius: .55rem !important;
             font-size: 10px !important;
-            line-height: 1;
+            line-height: 1.05;
+            white-space: nowrap;
             font-weight: 900 !important;
             box-shadow: 0 2px 5px rgba(15,23,42,.12);
             transition: transform .12s ease, filter .12s ease;
@@ -53,14 +68,23 @@
             transform: translateY(-1px);
         }
         @media (max-width: 640px) {
+            #tabel-list-member th,
+            #tabel-list-member td {
+                padding-left: .3rem !important;
+                padding-right: .3rem !important;
+            }
+            #tabel-list-member .member-action-cell {
+                width: 18% !important;
+                min-width: 76px;
+                padding: .4rem .15rem !important;
+            }
             #tabel-list-member .member-actions {
-                min-width: 64px;
-                gap: .25rem;
+                gap: .22rem;
             }
             #tabel-list-member .member-actions button {
-                width: 64px;
+                width: 68px;
                 min-height: 28px;
-                padding: .32rem .35rem !important;
+                padding: .31rem .2rem !important;
                 font-size: 9px !important;
             }
         }
@@ -766,7 +790,9 @@
             box-shadow: 0 20px 55px rgba(15,23,42,.12), 0 4px 16px rgba(15,23,42,.06) !important;
             color: #0f172a;
         }
-        .sub-menu-modern::before { content:""; position:absolute; inset:0 0 auto 0; height:5px; background:linear-gradient(90deg,#2563eb 0%,#7c3aed 48%,#06b6d4 100%); pointer-events:none; }
+        .sub-menu-modern::before {
+    display:none !important;
+}
         .sub-menu-modern h2 { color:#0f172a !important; text-shadow:none !important; letter-spacing:.02em; }
         .sub-menu-modern .sticky-back-btn { background:rgba(255,255,255,.92) !important; border:1px solid #dbeafe !important; color:#1e3a8a !important; box-shadow:0 8px 24px rgba(15,23,42,.16) !important; }
         .sub-menu-modern .sticky-back-btn:hover { background:#eff6ff !important; border-color:#93c5fd !important; color:#1d4ed8 !important; }
@@ -975,6 +1001,7 @@ body:has(#page-daily-recap:not(.hidden)):has(#sub-page-ringkasan:not(.hidden)) >
 body:has(#page-monthly-recap:not(.hidden)) > .sticky-back-btn[data-back-context="page-monthly-recap"],
 body:has(#page-booking-history:not(.hidden)) > .sticky-back-btn[data-back-context="page-booking-history"],
 body:has(#page-atur-member:not(.hidden)) > .sticky-back-btn[data-back-context="page-atur-member"],
+body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="page-admin-jaga"],
 body:has(#page-booking:not(.hidden)) > .sticky-back-btn[data-back-context="page-booking"],
 body:has(#page-masuk:not(.hidden)) > .sticky-back-btn[data-back-context="page-masuk"],
 body:has(#page-minuman:not(.hidden)) > .sticky-back-btn[data-back-context="page-minuman"],
@@ -1143,12 +1170,138 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
 }
 </style>
 
+<style>
+.admin-roster-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.admin-month-title{font-size:1.05rem;font-weight:900;color:#3b0764;text-align:center;min-width:170px}
+.admin-month-btn{border:1px solid rgba(124,58,237,.35);background:rgba(255,255,255,.65);color:#4c1d95;border-radius:12px;padding:8px 12px;font-weight:900;font-size:12px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.admin-month-btn:hover{background:#f3e8ff}
+.admin-calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.admin-cal-head{padding:8px 3px;border-radius:10px;background:#111827;color:#fff;text-align:center;font-size:10px;font-weight:900}
+.admin-day{min-height:118px;border:1px solid rgba(100,116,139,.22);border-radius:12px;background:rgba(255,255,255,.72);padding:7px;display:flex;flex-direction:column;gap:5px;overflow:hidden}
+.admin-day.muted{opacity:.45;background:rgba(226,232,240,.35)}
+.admin-day.today{border:2px solid #7c3aed;box-shadow:0 0 0 2px rgba(124,58,237,.10)}
+.admin-day-num{font-size:11px;font-weight:1000;color:#111827;display:flex;justify-content:space-between;align-items:center}
+.admin-today-badge{font-size:8px;background:#7c3aed;color:white;padding:2px 5px;border-radius:999px;font-weight:900}
+.admin-shift{border-radius:9px;padding:6px 7px;font-size:9px;font-weight:900;line-height:1.2}
+.admin-shift.pagi{background:#dbeafe;border:1px solid #93c5fd;color:#1e3a8a}
+.admin-shift.malam{background:#ede9fe;border:1px solid #c4b5fd;color:#4c1d95}
+.admin-shift small{display:block;font-size:8px;opacity:.75;margin-bottom:2px;text-transform:uppercase}
+.admin-edit-btn{margin-top:auto;width:100%;border:0;border-radius:8px;background:#7c3aed;color:#fff;padding:5px;font-size:9px;font-weight:900;cursor:pointer}
+.admin-roster-legend{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px;font-size:10px;font-weight:900}
+.admin-legend-pill{padding:5px 8px;border-radius:999px}
+.admin-legend-pagi{background:#dbeafe;color:#1e3a8a}
+.admin-legend-malam{background:#ede9fe;color:#4c1d95}
+@media(max-width:640px){
+ .admin-calendar{gap:3px}
+ .admin-cal-head{font-size:8px;padding:6px 2px}
+ .admin-day{min-height:104px;padding:5px;border-radius:9px}
+ .admin-day-num{font-size:9px}
+ .admin-shift{font-size:8px;padding:5px}
+ .admin-shift small{font-size:7px}
+ .admin-edit-btn{font-size:8px;padding:4px}
+ .admin-month-title{font-size:.95rem}
+ .admin-month-btn{padding:7px 9px;font-size:10px}
+}
+</style>
+
+<style>
+/* Jadwal Admin Jaga - perbaikan tampilan */
+.menu-admin-jaga {
+    background: linear-gradient(135deg,#0f766e 0%,#0891b2 55%,#06b6d4 100%) !important;
+    color:#fff !important;
+}
+.menu-admin-jaga:hover { filter:brightness(.97); transform:translateY(-1px); }
+
+</style>
+
+
+<style>
+/* =========================================================
+   REVISI GARIS SUB-HEADER
+   Garis penuh di bagian atas sub-menu dihilangkan.
+   Diganti aksen pendek di bawah judul agar lebih clean.
+   Visual-only: tidak mengubah JS, ID, onclick, atau fungsi.
+   ========================================================= */
+
+.sub-menu-modern::before {
+    display: none !important;
+}
+
+/* Header yang memakai wrapper flex */
+.sub-menu-modern > div:first-child > h2 {
+    position: relative;
+    padding-bottom: .62rem !important;
+}
+
+/* Header yang langsung berupa h2 */
+.sub-menu-modern > h2 {
+    position: relative;
+    padding-bottom: .62rem !important;
+}
+
+/* Aksen pendek di bawah judul */
+.sub-menu-modern > div:first-child > h2::after,
+.sub-menu-modern > h2::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 58px;
+    height: 3px;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    background: linear-gradient(90deg, #2563eb 0%, #4f46e5 55%, #06b6d4 100%);
+    box-shadow: 0 2px 7px rgba(37, 99, 235, .16);
+}
+
+/* Untuk judul yang memang rata kiri, aksen tetap mengikuti sisi kiri */
+#page-atur-member > div:first-child > h2,
+#page-masuk > h2,
+#page-keluar > h2 {
+    padding-bottom: .62rem !important;
+}
+
+#page-atur-member > div:first-child > h2::after,
+#page-masuk > h2::after,
+#page-keluar > h2::after {
+    left: 0;
+    transform: none;
+}
+
+/* Rekap harian & bulanan sudah punya separator sendiri,
+   jadi tidak diberi aksen kedua. */
+#page-daily-recap > div:first-child > h2,
+#page-monthly-recap > div:first-child > h2 {
+    padding-bottom: 0 !important;
+}
+
+#page-daily-recap > div:first-child > h2::after,
+#page-monthly-recap > div:first-child > h2::after {
+    display: none !important;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+    .sub-menu-modern > div:first-child > h2,
+    .sub-menu-modern > h2 {
+        padding-bottom: .55rem !important;
+    }
+
+    .sub-menu-modern > div:first-child > h2::after,
+    .sub-menu-modern > h2::after {
+        width: 48px;
+        height: 2.5px;
+    }
+}
+</style>
+
 </head>
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium"><button class="sticky-back-btn" data-back-context="page-keluar" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-minuman" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-masuk" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-booking" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-atur-member" onclick="showPage('home')" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-admin-jaga" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-booking-history" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-monthly-recap" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="sub-page-ringkasan" onclick="backToDailyMenu()" type="button">
@@ -1191,6 +1344,11 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
 <button class="home-menu-card menu-indigo" onclick="showPage('atur-member')">
 <span class="menu-card-icon">⚙️</span>
 <span class="menu-card-copy"><strong>ATUR MEMBER</strong><small>Kelola jadwal member</small></span>
+<span class="menu-card-arrow">→</span>
+</button>
+<button class="home-menu-card menu-admin-jaga" onclick="showPage('admin-jaga')">
+<span class="menu-card-icon">🧑‍💼</span>
+<span class="menu-card-copy"><strong>JADWAL ADMIN JAGA</strong><small>Atur jadwal admin bertugas</small></span>
 <span class="menu-card-arrow">→</span>
 </button>
 <button class="home-menu-card menu-emerald" onclick="showPage('masuk')">
@@ -1255,6 +1413,30 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
 </button>
 </div>
 </section>
+</div>
+<!-- HALAMAN JADWAL ADMIN JAGA -->
+<div class="sub-menu-modern glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900" id="page-admin-jaga">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-base sm:text-lg font-black text-purple-950 w-full text-center">🧑‍💼 JADWAL ADMIN JAGA</h2>
+  </div>
+
+  <div class="p-3 sm:p-4 rounded-2xl border border-purple-500/30 bg-white/30 mb-4">
+    <div class="admin-roster-toolbar">
+      <button type="button" class="admin-month-btn" onclick="ubahBulanAdminJaga(-1)">← Bulan Sebelumnya</button>
+      <div class="admin-month-title" id="admin-month-title">Agustus 2026</div>
+      <button type="button" class="admin-month-btn" onclick="ubahBulanAdminJaga(1)">Bulan Berikutnya →</button>
+    </div>
+    <div class="flex justify-center mb-3">
+      <button type="button" class="bg-purple-700 hover:bg-purple-800 text-white px-4 py-2 rounded-xl text-xs font-black shadow" onclick="kembaliKeBulanHariIniAdmin()">📅 Bulan Ini</button>
+    </div>
+
+    <div class="admin-calendar" id="admin-calendar-grid"></div>
+    <div class="admin-roster-legend">
+      <span class="admin-legend-pill admin-legend-pagi">☀️ Pagi</span>
+      <span class="admin-legend-pill admin-legend-malam">🌙 Malam</span>
+    </div>
+  </div>
+
 </div>
 <!-- HALAMAN BOOKING SCHEDULE -->
 <div class="sub-menu-modern glass-panel p-3 sm:p-6 rounded-2xl hidden" id="page-booking-schedule">
@@ -1617,11 +1799,11 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
 <table class="w-full text-left text-xs table-auto font-bold text-slate-900 border-slate-900/40">
 <thead class="bg-slate-900 text-white border-b border-slate-900/40">
 <tr>
-<th class="p-2 border border-slate-900/40 w-[45%]">Tim / Keterangan</th>
-<th class="p-2 border border-slate-900/40 w-[20%]">Hari</th>
-<th class="p-2 border border-slate-900/40 w-[15%]">Jam</th>
-<th class="p-2 border border-slate-900/40 w-[20%]">Mulai</th>
-<th class="p-2 border border-slate-900/40 w-[25%]">Status</th>
+<th class="p-2 border border-slate-900/40 w-[28%]">Tim / Keterangan</th>
+<th class="p-2 border border-slate-900/40 w-[13%]">Hari</th>
+<th class="p-2 border border-slate-900/40 w-[14%]">Jam</th>
+<th class="p-2 border border-slate-900/40 w-[15%]">Mulai</th>
+<th class="p-2 border border-slate-900/40 w-[15%]">Status</th>
 <th class="p-2 border border-slate-900/40 text-center w-[15%]">Aksi</th>
 </tr>
 </thead>
@@ -1629,10 +1811,85 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
 </table>
 </div>
 </div>
+
+<style>
+/* Booking form - visual polish only */
+#page-booking .booking-form-title{
+  text-align:center;
+  text-transform:uppercase;
+  letter-spacing:.02em;
+  font-size:1.05rem;
+  font-weight:900;
+  color:#172554;
+  margin:0 0 1rem;
+}
+#page-booking form{
+  background:linear-gradient(145deg,rgba(255,255,255,.72),rgba(239,246,255,.58));
+  border:1px solid rgba(59,130,246,.22);
+  border-radius:20px;
+  padding:1rem;
+  box-shadow:0 12px 30px rgba(30,64,175,.10);
+}
+#page-booking form label{
+  color:#172554 !important;
+  font-weight:800;
+  letter-spacing:.01em;
+}
+#page-booking form input,
+#page-booking form select{
+  border:1px solid rgba(59,130,246,.22) !important;
+  background:rgba(255,255,255,.72) !important;
+  color:#0f172a;
+  min-height:44px;
+  border-radius:12px !important;
+  box-shadow:0 3px 10px rgba(30,64,175,.05);
+  transition:border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+#page-booking form input:focus,
+#page-booking form select:focus{
+  outline:none;
+  border-color:#3b82f6 !important;
+  box-shadow:0 0 0 3px rgba(59,130,246,.14),0 5px 14px rgba(30,64,175,.08);
+}
+#page-booking form > label{
+  display:block;
+  margin-top:.15rem;
+}
+#page-booking .booking-save-wrap{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  margin-top:.35rem;
+}
+#page-booking .booking-save-btn{
+  background:linear-gradient(135deg,#2563eb 0%,#4f46e5 55%,#7c3aed 100%) !important;
+  color:#fff !important;
+  border:1px solid rgba(255,255,255,.35) !important;
+  border-radius:12px !important;
+  padding:.65rem 1.35rem !important;
+  min-height:44px;
+  font-size:.875rem;
+  font-weight:900;
+  box-shadow:0 8px 18px rgba(37,99,235,.25);
+  transition:transform .18s ease, filter .18s ease, box-shadow .18s ease;
+}
+#page-booking .booking-save-btn:hover{
+  filter:brightness(1.04);
+  transform:translateY(-1px);
+  box-shadow:0 11px 22px rgba(37,99,235,.30);
+}
+#page-booking .booking-save-btn:active{transform:translateY(0) scale(.985);}
+@media(max-width:640px){
+  #page-booking form{padding:.85rem;border-radius:17px;}
+  #page-booking .booking-form-title{font-size:.98rem;}
+  #page-booking .booking-save-btn{width:auto;min-width:120px;}
+}
+</style>
+
 <!-- FORM BOOKING -->
 <div class="sub-menu-modern glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900" id="page-booking">
 
-<h2 class="text-base sm:text-lg font-black mb-4 text-blue-950">Form Booking / Jadwal Lapangan</h2>
+<h2 class="booking-form-title">FORM BOOKING / JADWAL LAPANGAN</h2>
 <form onsubmit="submitData(event, 'booking')">
 <label class="block text-xs font-bold mb-1 text-slate-900">Status Tim</label>
 <select class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="b-status">
@@ -1659,8 +1916,8 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
 <option value="QRIS">QRIS</option>
 <option value="Transfer">Transfer</option>
 </select>
-<div class="flex gap-2">
-<button class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded text-sm font-bold border border-blue-500/50 shadow" type="submit">Simpan</button>
+<div class="booking-save-wrap">
+<button class="booking-save-btn" type="submit">Simpan</button>
 </div>
 </form>
 </div>
@@ -1941,6 +2198,7 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
             }
             if(document.getElementById('m-tgl')) document.getElementById('m-tgl').value = todayStr;
             if(document.getElementById('m-mulai')) document.getElementById('m-mulai').value = todayStr;
+            if(document.getElementById('a-tanggal')) document.getElementById('a-tanggal').value = todayStr;
             if(document.getElementById('k-tgl')) document.getElementById('k-tgl').value = todayStr;
             if(document.getElementById('k-sumber-tgl')) document.getElementById('k-sumber-tgl').value = todayStr;
         }
@@ -1997,6 +2255,9 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
 
             if(id === 'keluar') {
                 cekSaldoSumberCash();
+            }
+            if(id === 'admin-jaga') {
+                renderJadwalAdmin();
             }
             if(id === 'masuk') {
                 updateDropdownTimMasuk();
@@ -2488,6 +2749,145 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
             showPage('home');
         }
 
+        const ADMIN_ROSTER_ANCHOR = '2026-08-12';
+        let adminRosterMonth = new Date('2026-08-12T00:00:00');
+        const ADMIN_NAMES = ['Zikri', 'Alfi'];
+
+        function adminDateKey(d){
+            const y=d.getFullYear();
+            const m=String(d.getMonth()+1).padStart(2,'0');
+            const day=String(d.getDate()).padStart(2,'0');
+            return `${y}-${m}-${day}`;
+        }
+        function adminMonthName(d){
+            return d.toLocaleDateString('id-ID',{month:'long',year:'numeric'});
+        }
+        function adminDayDiff(dateKey){
+            const a=new Date(ADMIN_ROSTER_ANCHOR+'T00:00:00');
+            const b=new Date(dateKey+'T00:00:00');
+            return Math.round((b-a)/86400000);
+        }
+        function defaultAdminShift(dateKey, shift){
+            const swapped = Math.abs(adminDayDiff(dateKey)) % 2 === 1;
+            if(shift === 'pagi') return swapped ? 'Alfi' : 'Zikri';
+            return swapped ? 'Zikri' : 'Alfi';
+        }
+        function getSavedAdminRoster(dateKey, shift){
+            const all=globalCache.adminJaga || {};
+            const found=Object.values(all).find(x => x && x.tanggal===dateKey && x.shift===shift);
+            return found?.nama || '';
+        }
+        function getAdminShiftName(dateKey, shift){
+            return getSavedAdminRoster(dateKey,shift) || defaultAdminShift(dateKey,shift);
+        }
+        function renderJadwalAdmin(){
+            const grid=document.getElementById('admin-calendar-grid');
+            const title=document.getElementById('admin-month-title');
+            if(!grid || !title) return;
+            title.textContent=adminMonthName(adminRosterMonth);
+            const year=adminRosterMonth.getFullYear(), month=adminRosterMonth.getMonth();
+            const first=new Date(year,month,1);
+            const last=new Date(year,month+1,0);
+            const mondayIndex=(first.getDay()+6)%7;
+            const today=getLocalDateString();
+            let html=['Sen','Sel','Rab','Kam','Jum','Sab','Min'].map(x=>`<div class="admin-cal-head">${x}</div>`).join('');
+            for(let i=0;i<mondayIndex;i++) html += `<div class="admin-day muted"></div>`;
+            for(let day=1;day<=last.getDate();day++){
+                const d=new Date(year,month,day), key=adminDateKey(d), isToday=key===today;
+                const pagi=getAdminShiftName(key,'pagi'), malam=getAdminShiftName(key,'malam');
+                html += `<div class="admin-day ${isToday?'today':''}">
+                    <div class="admin-day-num"><span>${day}</span>${isToday?'<span class="admin-today-badge">HARI INI</span>':''}</div>
+                    <div class="admin-shift pagi"><small>☀️ Pagi</small>${pagi}</div>
+                    <div class="admin-shift malam"><small>🌙 Malam</small>${malam}</div>
+                    <button type="button" class="admin-edit-btn" onclick="editJadwalAdminTanggal('${key}')">✏️ Ubah</button>
+                </div>`;
+            }
+            const totalCells=mondayIndex+last.getDate();
+            const trailing=(7-totalCells%7)%7;
+            for(let i=0;i<trailing;i++) html += `<div class="admin-day muted"></div>`;
+            grid.innerHTML=html;
+        }
+        window.ubahBulanAdminJaga=(offset)=>{
+            adminRosterMonth=new Date(adminRosterMonth.getFullYear(),adminRosterMonth.getMonth()+offset,1);
+            renderJadwalAdmin();
+        };
+        window.kembaliKeBulanHariIniAdmin=()=>{
+            const now=new Date();
+            adminRosterMonth=new Date(now.getFullYear(),now.getMonth(),1);
+            renderJadwalAdmin();
+        };
+        window.editJadwalAdminTanggal=async(dateKey)=>{
+            const pagiSekarang=getAdminShiftName(dateKey,'pagi');
+            const malamSekarang=getAdminShiftName(dateKey,'malam');
+            const html=`<div id="modal-admin-roster" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+              <div class="w-full max-w-sm bg-white rounded-2xl p-5 shadow-2xl text-slate-900">
+                <h3 class="font-black text-purple-950 text-base mb-1">Ubah Jadwal Admin</h3>
+                <p class="text-xs font-bold text-slate-500 mb-4">${formatTanggalAdmin(dateKey)}</p>
+                <label class="block text-xs font-black mb-1">☀️ Shift Pagi</label>
+                <select id="edit-admin-pagi" class="w-full p-2 rounded-lg border mb-3 text-sm font-bold">
+                  ${ADMIN_NAMES.map(n=>`<option ${n===pagiSekarang?'selected':''}>${n}</option>`).join('')}
+                </select>
+                <label class="block text-xs font-black mb-1">🌙 Shift Malam</label>
+                <select id="edit-admin-malam" class="w-full p-2 rounded-lg border mb-4 text-sm font-bold">
+                  ${ADMIN_NAMES.map(n=>`<option ${n===malamSekarang?'selected':''}>${n}</option>`).join('')}
+                </select>
+                <div class="flex gap-2">
+                  <button type="button" class="flex-1 bg-slate-200 text-slate-800 px-3 py-2 rounded-xl text-xs font-black" onclick="document.getElementById('modal-admin-roster')?.remove()">Batal</button>
+                  <button type="button" class="flex-1 bg-purple-700 text-white px-3 py-2 rounded-xl text-xs font-black" onclick="simpanPerubahanJadwalAdmin('${dateKey}')">Simpan</button>
+                </div>
+              </div>
+            </div>`;
+            document.getElementById('modal-admin-roster')?.remove();
+            document.body.insertAdjacentHTML('beforeend',html);
+        };
+        window.simpanPerubahanJadwalAdmin=async(dateKey)=>{
+            const pagi=document.getElementById('edit-admin-pagi')?.value;
+            const malam=document.getElementById('edit-admin-malam')?.value;
+            if(!pagi || !malam) return;
+            try{
+                const all=globalCache.adminJaga || {};
+                for(const [key,item] of Object.entries(all)){
+                    if(item?.tanggal===dateKey && (item.shift==='pagi'||item.shift==='malam')){
+                        await remove(ref(db,'adminJaga/'+key));
+                    }
+                }
+                await push(ref(db,'adminJaga'),{tanggal:dateKey,shift:'pagi',nama:pagi,keterangan:'Shift Pagi',timestamp:Date.now()});
+                await push(ref(db,'adminJaga'),{tanggal:dateKey,shift:'malam',nama:malam,keterangan:'Shift Malam',timestamp:Date.now()});
+                document.getElementById('modal-admin-roster')?.remove();
+                showSuccessPopup('Jadwal admin berhasil diperbarui.');
+            }catch(error){
+                console.error(error);
+                alert('Gagal menyimpan perubahan jadwal admin: '+error.message);
+            }
+        };
+        function formatTanggalAdmin(tgl){
+            if(!tgl) return '-';
+            const d=new Date(tgl+'T00:00:00');
+            if(isNaN(d.getTime())) return tgl;
+            return d.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
+        }
+
+        // Kompatibilitas dengan data jadwal admin versi lama.
+        window.simpanJadwalAdmin=async(e)=>{
+            e.preventDefault();
+            const tanggal=document.getElementById('a-tanggal')?.value;
+            const nama=document.getElementById('a-nama')?.value.trim();
+            const mulai=document.getElementById('a-mulai')?.value;
+            const selesai=document.getElementById('a-selesai')?.value;
+            const keterangan=document.getElementById('a-keterangan')?.value.trim();
+            if(!tanggal||!nama||!mulai||!selesai) return;
+            try{
+                await push(ref(db,'adminJaga'),{tanggal,nama,mulai,selesai,keterangan,timestamp:Date.now()});
+                showSuccessPopup('Jadwal admin jaga berhasil disimpan.');
+                document.getElementById('form-admin-jaga')?.reset();
+            }catch(error){ alert('Gagal menyimpan jadwal admin: '+error.message); }
+        };
+        window.hapusJadwalAdmin=async(key)=>{
+            if(!confirm('Hapus jadwal admin jaga ini?')) return;
+            try{ await remove(ref(db,'adminJaga/'+key)); showSuccessPopup('Jadwal admin jaga dihapus.'); }
+            catch(error){ alert('Gagal menghapus jadwal: '+error.message); }
+        };
+
         window.tambahMember = async (e) => {
             e.preventDefault();
             let nama = document.getElementById('m-nama').value.trim();
@@ -2869,7 +3269,7 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
         const listJam = ["07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00"];
         const listHariKey = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
 
-        let globalCache = { member: {}, booking: {}, pemasukan: {}, minuman: {}, pengeluaran: {} };
+        let globalCache = { member: {}, booking: {}, pemasukan: {}, minuman: {}, pengeluaran: {}, adminJaga: {} };
 
         function getNamaHari(dateStr) {
             let days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
@@ -2911,6 +3311,11 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
             renderMonthlyRecap();
             updateDropdownTimMasuk();
         }
+
+        onValue(ref(db, 'adminJaga'), (snapshot) => {
+            globalCache.adminJaga = snapshot.val() || {};
+            renderJadwalAdmin();
+        });
 
         onValue(ref(db, 'member'), (snapshot) => {
             globalCache.member = {};
