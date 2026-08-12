@@ -1007,7 +1007,8 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
 body:has(#page-booking:not(.hidden)) > .sticky-back-btn[data-back-context="page-booking"],
 body:has(#page-masuk:not(.hidden)) > .sticky-back-btn[data-back-context="page-masuk"],
 body:has(#page-minuman:not(.hidden)) > .sticky-back-btn[data-back-context="page-minuman"],
-body:has(#page-keluar:not(.hidden)) > .sticky-back-btn[data-back-context="page-keluar"] {
+body:has(#page-keluar:not(.hidden)) > .sticky-back-btn[data-back-context="page-keluar"],
+body:has(#page-sparring:not(.hidden)) > .sticky-back-btn[data-back-context="page-sparring"] {
     display: inline-flex !important;
 }
 
@@ -1526,6 +1527,47 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
 </style>
 
 
+<style id="theme-sparring">
+/* =========================================================
+   CATATAN SPARRING — TEMA BIRU SLATE REFERENSI ADMIN JAGA
+   ========================================================= */
+.menu-sparring { background: linear-gradient(135deg,#7B8F9E 0%,#2E607A 52%,#163B55 100%) !important; color:#fff !important; }
+.menu-sparring:hover { filter:brightness(1.06); transform:translateY(-2px); }
+#page-sparring { background:linear-gradient(145deg,rgba(233,240,244,.98),rgba(255,255,255,.98)) !important; border:1px solid rgba(123,143,158,.42) !important; box-shadow:0 20px 55px rgba(14,37,56,.16) !important; }
+#page-sparring > div:first-child h2, .text-sparring-dark { color:#0E2538 !important; }
+#page-sparring > div:first-child h2::after { content:""; display:block; width:58px; height:3px; margin:.45rem auto 0; border-radius:999px; background:linear-gradient(90deg,#0E2538,#163B55,#2E607A); }
+.sparring-summary-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.65rem; margin-bottom:1rem; }
+.sparring-summary-card { display:flex; align-items:center; gap:.7rem; padding:.8rem; border-radius:16px; background:rgba(233,240,244,.85); border:1px solid rgba(123,143,158,.4); box-shadow:0 8px 20px rgba(14,37,56,.07); color:#0E2538; }
+.sparring-summary-card.matched { background:rgba(46,96,122,.11); border-color:rgba(46,96,122,.28); }
+.sparring-summary-card > span { font-size:1.25rem; }
+.sparring-summary-card small { display:block; font-size:8px; letter-spacing:.08em; color:#7B8F9E; font-weight:900; }
+.sparring-summary-card strong { display:block; font-size:1.15rem; color:#163B55; }
+.sparring-form-wrap,.sparring-list-wrap { background:rgba(233,240,244,.62); border:1px solid rgba(123,143,158,.35); border-radius:18px; padding:1rem; margin-bottom:1rem; box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 8px 22px rgba(14,37,56,.06); }
+.sparring-label { display:block; margin-bottom:.3rem; font-size:10px; font-weight:900; color:#163B55; }
+.sparring-input,.sparring-filter { width:100%; min-height:40px; border:1px solid rgba(123,143,158,.45) !important; background:rgba(255,255,255,.88) !important; color:#0E2538 !important; border-radius:11px !important; padding:.55rem .7rem; font-size:.78rem; font-weight:800; outline:none; }
+.sparring-input:focus,.sparring-filter:focus { border-color:#2E607A !important; box-shadow:0 0 0 3px rgba(46,96,122,.12); }
+.sparring-booking-info { margin:.7rem 0; padding:.65rem .75rem; border-radius:11px; background:#E9F0F4; border:1px dashed #7B8F9E; color:#163B55; font-size:10px; font-weight:800; }
+.sparring-save-btn { background:linear-gradient(135deg,#0E2538,#163B55,#2E607A) !important; color:#fff !important; border:0; border-radius:11px; padding:.65rem 1rem; font-size:11px; font-weight:900; box-shadow:0 7px 16px rgba(14,37,56,.16); }
+.sparring-filter { min-width:120px; }
+.sparring-record { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:.65rem; align-items:center; padding:.8rem; border-radius:14px; background:rgba(255,255,255,.9); border:1px solid rgba(123,143,158,.3); box-shadow:0 5px 14px rgba(14,37,56,.05); }
+.sparring-record-main { min-width:0; }
+.sparring-record-meta { display:flex; flex-wrap:wrap; gap:5px; align-items:center; margin-bottom:4px; }
+.sparring-badge { display:inline-flex; align-items:center; padding:3px 7px; border-radius:999px; font-size:8px; font-weight:900; }
+.sparring-badge-date { background:#E9F0F4; color:#163B55; border:1px solid #7B8F9E; }
+.sparring-badge-pending { background:#7B8F9E; color:#0E2538; }
+.sparring-badge-matched { background:#2E607A; color:#fff; }
+.sparring-pair { font-size:13px; font-weight:950; color:#0E2538; line-height:1.3; }
+.sparring-pair .vs { color:#7B8F9E; font-size:10px; margin:0 4px; }
+.sparring-note { margin-top:3px; font-size:9px; color:#64748b; font-weight:700; }
+.sparring-actions { display:flex; gap:4px; }
+.sparring-action { border:0; border-radius:8px; padding:6px 8px; font-size:9px; font-weight:900; cursor:pointer; }
+.sparring-action-edit { background:#163B55; color:#fff; }
+.sparring-action-delete { background:#E9F0F4; color:#0E2538; border:1px solid #7B8F9E; }
+.sparring-empty { text-align:center; padding:1.3rem; color:#7B8F9E; font-size:11px; font-weight:800; }
+@media(max-width:640px){ .sparring-summary-card{padding:.65rem}.sparring-record{grid-template-columns:1fr}.sparring-actions{justify-content:flex-end}.sparring-filter{min-width:0}.sparring-pair{font-size:12px} }
+body:has(#page-sparring:not(.hidden)) > .sticky-back-btn[data-back-context="page-sparring"] { background:rgba(233,240,244,.94) !important; border-color:rgba(123,143,158,.55) !important; color:#0E2538 !important; }
+</style>
+
 <style id="theme-admin-jaga-reference">
 /* =========================================================
    JADWAL ADMIN JAGA — TEMA REFERENSI BIRU SLATE
@@ -1697,12 +1739,136 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
 }
 </style>
 
+<style>
+/* =========================================================
+   JADWAL ADMIN JAGA — MOBILE COMPACT
+   Shift dibuat satu baris: ikon + nama admin.
+   Tombol edit hanya ikon pensil.
+   ========================================================= */
+#page-admin-jaga .admin-day {
+    min-height: 108px;
+}
+
+#page-admin-jaga .admin-shift {
+    display: flex !important;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5px;
+    min-height: 29px;
+    padding: 5px 6px !important;
+    text-align: left !important;
+    line-height: 1 !important;
+    white-space: nowrap;
+}
+
+#page-admin-jaga .admin-shift-icon {
+    flex: 0 0 auto;
+    font-size: 12px;
+    line-height: 1;
+}
+
+#page-admin-jaga .admin-shift-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 9px;
+    font-weight: 900;
+}
+
+#page-admin-jaga .admin-shift small {
+    display: none !important;
+}
+
+#page-admin-jaga .admin-edit-btn {
+    align-self: flex-end;
+    width: 28px !important;
+    height: 25px;
+    min-height: 25px;
+    margin-top: auto;
+    padding: 0 !important;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px !important;
+    line-height: 1;
+    box-shadow: none !important;
+}
+
+@media (max-width: 640px) {
+    #page-admin-jaga {
+        padding-left: .75rem !important;
+        padding-right: .75rem !important;
+    }
+
+    #page-admin-jaga .admin-calendar {
+        gap: 3px;
+    }
+
+    #page-admin-jaga .admin-day {
+        min-height: 96px !important;
+        padding: 4px 3px !important;
+        gap: 3px !important;
+        border-radius: 10px !important;
+    }
+
+    #page-admin-jaga .admin-day-num {
+        font-size: 9px !important;
+        min-height: 14px;
+    }
+
+    #page-admin-jaga .admin-today-badge {
+        font-size: 5.5px !important;
+        padding: 2px 3px !important;
+    }
+
+    #page-admin-jaga .admin-shift {
+        min-height: 26px;
+        padding: 4px 4px !important;
+        gap: 3px;
+        border-radius: 8px !important;
+    }
+
+    #page-admin-jaga .admin-shift-icon {
+        font-size: 10px;
+    }
+
+    #page-admin-jaga .admin-shift-name {
+        font-size: 7.5px;
+    }
+
+    #page-admin-jaga .admin-edit-btn {
+        width: 24px !important;
+        height: 22px;
+        min-height: 22px;
+        border-radius: 7px;
+        font-size: 11px !important;
+    }
+}
+
+@media (max-width: 380px) {
+    #page-admin-jaga .admin-day {
+        min-height: 92px !important;
+    }
+
+    #page-admin-jaga .admin-shift-name {
+        font-size: 7px;
+    }
+
+    #page-admin-jaga .admin-shift-icon {
+        font-size: 9px;
+    }
+}
+</style>
+
 </head>
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium"><button class="sticky-back-btn" data-back-context="page-keluar" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-minuman" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-masuk" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-booking" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-atur-member" onclick="showPage('home')" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-sparring" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-admin-jaga" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-booking-history" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-monthly-recap" onclick="showPage('home')" type="button">
@@ -1751,6 +1917,11 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
 <button class="home-menu-card menu-admin-jaga" onclick="showPage('admin-jaga')">
 <span class="menu-card-icon">🧑‍💼</span>
 <span class="menu-card-copy"><strong>JADWAL ADMIN JAGA</strong><small>Atur jadwal admin bertugas</small></span>
+<span class="menu-card-arrow">→</span>
+</button>
+<button class="home-menu-card menu-sparring" onclick="showPage('sparring')">
+<span class="menu-card-icon">🤝</span>
+<span class="menu-card-copy"><strong>SPARRING</strong><small>Catat & cek lawan tim</small></span>
 <span class="menu-card-arrow">→</span>
 </button>
 <button class="home-menu-card menu-emerald" onclick="showPage('masuk')">
@@ -1839,6 +2010,87 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
     </div>
   </div>
 
+</div>
+<!-- HALAMAN SPARRING -->
+<div class="sub-menu-modern glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900" id="page-sparring">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-base sm:text-lg font-black w-full text-center">🤝 CATATAN SPARRING</h2>
+  </div>
+
+  <div class="sparring-summary-grid">
+    <div class="sparring-summary-card">
+      <span>🔎</span><div><small>MENCARI LAWAN</small><strong id="sparring-count-pending">0</strong></div>
+    </div>
+    <div class="sparring-summary-card matched">
+      <span>🤝</span><div><small>SUDAH DAPAT LAWAN</small><strong id="sparring-count-matched">0</strong></div>
+    </div>
+  </div>
+
+  <div class="sparring-form-wrap">
+    <div class="flex items-center justify-between gap-2 mb-3">
+      <div>
+        <h3 class="text-sm sm:text-base font-black text-sparring-dark" id="sparring-form-title">➕ Catat Permintaan Sparring</h3>
+        <p class="text-[10px] sm:text-xs text-slate-500 font-semibold">Pilih tim dari booking pada tanggal & jam yang sama, atau ketik manual.</p>
+      </div>
+      <button type="button" id="sparring-cancel-edit" onclick="batalEditSparring()" class="hidden px-3 py-2 rounded-xl bg-slate-200 text-slate-700 text-[10px] font-black">BATAL EDIT</button>
+    </div>
+
+    <form onsubmit="simpanSparring(event)">
+      <input type="hidden" id="sparring-edit-key" value="">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="sparring-label">Tanggal Main</label>
+          <input id="sparring-tanggal" type="date" required class="sparring-input">
+        </div>
+        <div>
+          <label class="sparring-label">Jam Main</label>
+          <select id="sparring-jam" required class="sparring-input">
+            <option value="07:00">07:00</option><option value="08:00">08:00</option><option value="09:00">09:00</option><option value="10:00">10:00</option>
+            <option value="11:00">11:00</option><option value="12:00">12:00</option><option value="13:00">13:00</option><option value="14:00">14:00</option>
+            <option value="15:00">15:00</option><option value="16:00">16:00</option><option value="17:00">17:00</option><option value="18:00">18:00</option>
+            <option value="19:00">19:00</option><option value="20:00">20:00</option><option value="21:00">21:00</option><option value="22:00">22:00</option>
+            <option value="23:00">23:00</option><option value="24:00">24:00</option>
+          </select>
+        </div>
+        <div>
+          <label class="sparring-label">Tim 1 / Tim yang Mencari Lawan</label>
+          <select id="sparring-tim-a" required class="sparring-input">
+            <option value="">Pilih tim dari jadwal booking</option>
+          </select>
+          <div class="mt-1 text-[9px] text-slate-500 font-semibold">Tim 1 otomatis diambil dari jadwal booking sesuai tanggal &amp; jam.</div>
+        </div>
+        <div>
+          <label class="sparring-label">Tim 2 / Lawan Sparring <span class="text-slate-400">(boleh dikosongkan)</span></label>
+          <input id="sparring-tim-b" class="sparring-input" placeholder="Ketik nama tim lawan; kosongkan jika belum dapat lawan">
+          <div class="mt-1 text-[9px] text-slate-500 font-semibold">Kosong = masih mencari lawan.</div>
+        </div>
+      </div>
+      <div id="sparring-booking-info" class="sparring-booking-info">Pilih tanggal dan jam untuk melihat tim yang sedang booking.</div>
+      <div>
+        <label class="sparring-label">Catatan</label>
+        <textarea id="sparring-catatan" rows="2" class="sparring-input" placeholder="Contoh: sudah konfirmasi via WhatsApp, minta jam 20.00, dll."></textarea>
+      </div>
+      <div class="flex justify-end mt-3">
+        <button type="submit" class="sparring-save-btn" id="sparring-save-btn">Simpan Catatan</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="sparring-list-wrap">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+      <div>
+        <h3 class="text-sm sm:text-base font-black text-sparring-dark">📋 Daftar Sparring</h3>
+        <p class="text-[10px] sm:text-xs text-slate-500 font-semibold">Cari nama tim untuk langsung mengetahui sudah punya lawan atau belum.</p>
+      </div>
+      <div class="flex gap-2">
+        <input id="sparring-filter-search" oninput="renderSparring()" class="sparring-filter" placeholder="Cari tim...">
+        <select id="sparring-filter-status" onchange="renderSparring()" class="sparring-filter">
+          <option value="all">Semua</option><option value="pending">Mencari Lawan</option><option value="matched">Sudah Dapat Lawan</option>
+        </select>
+      </div>
+    </div>
+    <div id="sparring-list" class="space-y-2"></div>
+  </div>
 </div>
 <!-- HALAMAN BOOKING SCHEDULE -->
 <div class="sub-menu-modern glass-panel p-3 sm:p-6 rounded-2xl hidden" id="page-booking-schedule">
@@ -2666,6 +2918,7 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
             if(document.getElementById('m-tgl')) document.getElementById('m-tgl').value = todayStr;
             if(document.getElementById('m-mulai')) document.getElementById('m-mulai').value = todayStr;
             if(document.getElementById('a-tanggal')) document.getElementById('a-tanggal').value = todayStr;
+            if(document.getElementById('sparring-tanggal')) document.getElementById('sparring-tanggal').value = todayStr;
             if(document.getElementById('k-tgl')) document.getElementById('k-tgl').value = todayStr;
             if(document.getElementById('k-sumber-tgl')) document.getElementById('k-sumber-tgl').value = todayStr;
             restoreDailyCashFisik(todayStr);
@@ -2674,6 +2927,11 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
         document.addEventListener("DOMContentLoaded", () => {
             setDefaultDates();
             initPeriodeDropdown();
+            const st=document.getElementById('sparring-tanggal');
+            const sj=document.getElementById('sparring-jam');
+            if(st) st.addEventListener('change', updateSparringBookingOptions);
+            if(sj) sj.addEventListener('change', updateSparringBookingOptions);
+            updateSparringBookingOptions();
             renderGridJadwal();
             setTimeout(() => renderRekapHarian(), 0);
         });
@@ -2729,6 +2987,10 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
             }
             if(id === 'admin-jaga') {
                 renderJadwalAdmin();
+            }
+            if(id === 'sparring') {
+                updateSparringBookingOptions();
+                renderSparring();
             }
             if(id === 'masuk') {
                 updateDropdownTimMasuk();
@@ -3268,9 +3530,9 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
                 const pagi=getAdminShiftName(key,'pagi'), malam=getAdminShiftName(key,'malam');
                 html += `<div class="admin-day ${isToday?'today':''}">
                     <div class="admin-day-num"><span>${day}</span>${isToday?'<span class="admin-today-badge">HARI INI</span>':''}</div>
-                    <div class="admin-shift pagi"><small>☀️ Pagi</small>${pagi}</div>
-                    <div class="admin-shift malam"><small>🌙 Malam</small>${malam}</div>
-                    <button type="button" class="admin-edit-btn" onclick="editJadwalAdminTanggal('${key}')">✏️ Ubah</button>
+                    <div class="admin-shift pagi" title="Shift Pagi"><span class="admin-shift-icon" aria-hidden="true">☀️</span><span class="admin-shift-name">${pagi}</span></div>
+                    <div class="admin-shift malam" title="Shift Malam"><span class="admin-shift-icon" aria-hidden="true">🌙</span><span class="admin-shift-name">${malam}</span></div>
+                    <button type="button" class="admin-edit-btn" aria-label="Edit jadwal ${key}" title="Edit jadwal" onclick="editJadwalAdminTanggal('${key}')">✏️</button>
                 </div>`;
             }
             const totalCells=mondayIndex+last.getDate();
@@ -3740,7 +4002,7 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
         const listJam = ["07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00"];
         const listHariKey = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
 
-        let globalCache = { member: {}, booking: {}, pemasukan: {}, minuman: {}, pengeluaran: {}, adminJaga: {} };
+        let globalCache = { member: {}, booking: {}, pemasukan: {}, minuman: {}, pengeluaran: {}, adminJaga: {}, sparring: {} };
 
         function getNamaHari(dateStr) {
             let days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
@@ -3833,6 +4095,14 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
         onValue(ref(db, 'booking'), (snapshot) => {
             globalCache.booking = snapshot.val() || {};
             renderAll();
+        });
+
+        onValue(ref(db, 'sparring'), (snapshot) => {
+            globalCache.sparring = snapshot.val() || {};
+            updateSparringBookingOptions();
+            renderSparring();
+            renderGridJadwal();
+            renderTabelBooking();
         });
 
         onValue(ref(db, 'pemasukan'), (snapshot) => {
@@ -4025,6 +4295,213 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
             }).join('');
         };
 
+        function escapeHtmlSparring(value) {
+            return String(value ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+        }
+
+        function sparringDateTime(item) {
+            const parts = String(item?.tgl || '').split('T');
+            return { date: parts[0] || '', jam: (parts[1] || '').substring(0,5) };
+        }
+
+        function getSparringForTeam(nama, tanggal, jam) {
+            const target = String(nama || '').trim().toLowerCase();
+            if(!target) return null;
+            return Object.entries(globalCache.sparring || {}).find(([key, item]) => {
+                if(!item) return false;
+                if(String(item.tanggal || '') !== String(tanggal || '') || String(item.jam || '') !== String(jam || '')) return false;
+                const a = String(item.timA || '').trim().toLowerCase();
+                const b = String(item.timB || '').trim().toLowerCase();
+                return a === target || b === target;
+            }) || null;
+        }
+
+        function getBookingTeamsForSparring(tanggal, jam) {
+            const names = [];
+            Object.values(globalCache.booking || {}).forEach(item => {
+                const dt = sparringDateTime(item);
+                if(dt.date === tanggal && dt.jam === jam && item.nama) {
+                    const name = String(item.nama).trim();
+                    if(name && !names.some(x => x.toLowerCase() === name.toLowerCase())) names.push(name);
+                }
+            });
+            return names.sort((a,b)=>a.localeCompare(b,'id'));
+        }
+
+        window.updateSparringBookingOptions = () => {
+            const tanggal = document.getElementById('sparring-tanggal')?.value || getLocalDateString();
+            const jam = document.getElementById('sparring-jam')?.value || '19:00';
+            const selectTimA = document.getElementById('sparring-tim-a');
+            const info = document.getElementById('sparring-booking-info');
+            if(!selectTimA) return;
+            const currentValue = selectTimA.value || '';
+            const teams = getBookingTeamsForSparring(tanggal, jam);
+            const editKey = document.getElementById('sparring-edit-key')?.value || '';
+            const currentEditTeam = editKey ? String(globalCache.sparring?.[editKey]?.timA || '').trim() : '';
+            const options = [...teams];
+            if(currentEditTeam && !options.some(x => x.toLowerCase() === currentEditTeam.toLowerCase())) options.unshift(currentEditTeam);
+            selectTimA.innerHTML = '<option value="">Pilih tim dari jadwal booking</option>' + options.map(n => `<option value="${escapeHtmlSparring(n)}">${escapeHtmlSparring(n)}</option>`).join('');
+            const desired = currentValue || currentEditTeam;
+            if(desired && options.some(x => x.toLowerCase() === desired.toLowerCase())) {
+                const found = options.find(x => x.toLowerCase() === desired.toLowerCase());
+                selectTimA.value = found;
+            }
+            if(info) {
+                info.innerHTML = teams.length
+                    ? `📅 Booking pada <b>${escapeHtmlSparring(tanggal.split('-').reverse().join('/'))}</b> · <b>${escapeHtmlSparring(jam)}</b>: ${teams.map(escapeHtmlSparring).join(', ')}`
+                    : `📅 Belum ada booking yang cocok pada <b>${escapeHtmlSparring(tanggal.split('-').reverse().join('/'))}</b> · <b>${escapeHtmlSparring(jam)}</b>. Pilih tanggal/jam yang sesuai dengan jadwal booking.`;
+            }
+        };
+
+        window.simpanSparring = async (e) => {
+            e.preventDefault();
+            const editKey = document.getElementById('sparring-edit-key')?.value || '';
+            const tanggal = document.getElementById('sparring-tanggal')?.value || '';
+            const jam = document.getElementById('sparring-jam')?.value || '';
+            const timA = document.getElementById('sparring-tim-a')?.value.trim() || '';
+            const timB = document.getElementById('sparring-tim-b')?.value.trim() || '';
+            const catatan = document.getElementById('sparring-catatan')?.value.trim() || '';
+            if(!tanggal || !jam || !timA) { alert('Tanggal, jam, dan Tim 1 wajib diisi. Pilih Tim 1 dari jadwal booking.'); return; }
+            if(timB && timA.toLowerCase() === timB.toLowerCase()) { alert('Tim A dan Tim B tidak boleh sama.'); return; }
+
+            const duplicate = Object.entries(globalCache.sparring || {}).find(([key,item]) => {
+                if(editKey && key === editKey) return false;
+                if(!item || item.tanggal !== tanggal || item.jam !== jam) return false;
+                const a = String(item.timA || '').trim().toLowerCase();
+                const b = String(item.timB || '').trim().toLowerCase();
+                const x = timA.toLowerCase(), y = timB.toLowerCase();
+                return (a === x || b === x || (y && (a === y || b === y))) && item.status === 'matched';
+            });
+            if(duplicate) {
+                const d = duplicate[1];
+                alert(`Tim tersebut sudah tercatat sparring pada ${tanggal} ${jam}: ${d.timA} vs ${d.timB}.`);
+                return;
+            }
+
+            const data = { tanggal, jam, timA, timB, status: timB ? 'matched' : 'pending', catatan, timestamp: Date.now() };
+            try {
+                if(editKey) {
+                    await update(ref(db, 'sparring/' + editKey), data);
+                } else if(timB) {
+                    // Jika salah satu tim sebelumnya sudah tercatat "mencari lawan",
+                    // gunakan record yang sama agar statusnya benar-benar sinkron dan
+                    // tidak muncul dua catatan berbeda untuk pertandingan yang sama.
+                    const pending = Object.entries(globalCache.sparring || {}).find(([key,item]) => {
+                        if(!item || item.status === 'matched' || item.tanggal !== tanggal || item.jam !== jam) return false;
+                        const existingTeam = String(item.timA || '').trim().toLowerCase();
+                        return existingTeam === timA.toLowerCase() || existingTeam === timB.toLowerCase();
+                    });
+                    if(pending) {
+                        const [pendingKey, pendingItem] = pending;
+                        const existingTeam = String(pendingItem.timA || '').trim();
+                        const otherTeam = existingTeam.toLowerCase() === timB.toLowerCase() ? timA : timB;
+                        await update(ref(db, 'sparring/' + pendingKey), {
+                            tanggal, jam, timA: existingTeam, timB: otherTeam,
+                            status:'matched',
+                            catatan: catatan || pendingItem.catatan || '',
+                            timestamp: Date.now()
+                        });
+                    } else {
+                        await push(ref(db, 'sparring'), data);
+                    }
+                } else {
+                    const duplicateRequest = Object.entries(globalCache.sparring || {}).find(([key,item]) => {
+                        if(!item || item.status === 'matched' || item.tanggal !== tanggal || item.jam !== jam) return false;
+                        return String(item.timA || '').trim().toLowerCase() === timA.toLowerCase();
+                    });
+                    if(duplicateRequest) {
+                        alert(`${timA} sudah tercatat sedang mencari lawan pada ${tanggal} ${jam}.`);
+                        return;
+                    }
+                    await push(ref(db, 'sparring'), data);
+                }
+                batalEditSparring();
+                showSuccessPopup(timB ? 'Pasangan sparring berhasil disimpan dan disinkronkan.' : 'Permintaan mencari lawan berhasil disimpan.');
+            } catch(error) {
+                console.error(error);
+                alert('Gagal menyimpan data sparring: ' + error.message);
+            }
+        };
+
+        window.editSparring = (key) => {
+            const item = globalCache.sparring?.[key];
+            if(!item) return;
+            document.getElementById('sparring-edit-key').value = key;
+            document.getElementById('sparring-tanggal').value = item.tanggal || getLocalDateString();
+            document.getElementById('sparring-jam').value = item.jam || '19:00';
+            document.getElementById('sparring-tim-b').value = item.timB || '';
+            document.getElementById('sparring-catatan').value = item.catatan || '';
+            document.getElementById('sparring-form-title').textContent = '✏️ Edit Catatan Sparring';
+            document.getElementById('sparring-save-btn').textContent = 'Simpan Perubahan';
+            document.getElementById('sparring-cancel-edit').classList.remove('hidden');
+            updateSparringBookingOptions();
+            document.getElementById('sparring-tim-a')?.scrollIntoView({behavior:'smooth',block:'center'});
+        };
+
+        window.batalEditSparring = () => {
+            const form = document.querySelector('#page-sparring form');
+            if(form) form.reset();
+            document.getElementById('sparring-edit-key').value = '';
+            document.getElementById('sparring-tanggal').value = getLocalDateString();
+            document.getElementById('sparring-jam').value = '19:00';
+            document.getElementById('sparring-form-title').textContent = '➕ Catat Permintaan Sparring';
+            document.getElementById('sparring-save-btn').textContent = 'Simpan Catatan';
+            document.getElementById('sparring-cancel-edit').classList.add('hidden');
+            updateSparringBookingOptions();
+        };
+
+        window.hapusSparring = async (key) => {
+            if(!await window.appConfirm('Yakin ingin menghapus catatan sparring ini?')) return;
+            try { await remove(ref(db, 'sparring/' + key)); showSuccessPopup('Catatan sparring dihapus.'); }
+            catch(error) { alert('Gagal menghapus catatan sparring: ' + error.message); }
+        };
+
+        window.renderSparring = () => {
+            const list = document.getElementById('sparring-list');
+            const pendingEl = document.getElementById('sparring-count-pending');
+            const matchedEl = document.getElementById('sparring-count-matched');
+            if(!list) return;
+            const search = (document.getElementById('sparring-filter-search')?.value || '').trim().toLowerCase();
+            const statusFilter = document.getElementById('sparring-filter-status')?.value || 'all';
+            const entries = Object.entries(globalCache.sparring || {}).sort((a,b)=>{
+                const x=a[1]||{}, y=b[1]||{};
+                return String(y.tanggal||'').localeCompare(String(x.tanggal||'')) || String(y.jam||'').localeCompare(String(x.jam||''));
+            });
+            const pendingCount = entries.filter(([k,x])=>x?.status !== 'matched').length;
+            const matchedCount = entries.filter(([k,x])=>x?.status === 'matched').length;
+            if(pendingEl) pendingEl.textContent = pendingCount;
+            if(matchedEl) matchedEl.textContent = matchedCount;
+
+            const filtered = entries.filter(([key,item])=>{
+                const hay = `${item?.timA||''} ${item?.timB||''} ${item?.catatan||''}`.toLowerCase();
+                if(search && !hay.includes(search)) return false;
+                if(statusFilter === 'pending' && item?.status === 'matched') return false;
+                if(statusFilter === 'matched' && item?.status !== 'matched') return false;
+                return true;
+            });
+            if(!filtered.length) { list.innerHTML = '<div class="sparring-empty">Belum ada data sparring yang cocok.</div>'; return; }
+            list.innerHTML = filtered.map(([key,item])=>{
+                const matched = item?.status === 'matched' && item?.timB;
+                const dateLabel = item?.tanggal ? item.tanggal.split('-').reverse().join('/') : '-';
+                const pair = matched ? `<span>${escapeHtmlSparring(item.timA)}</span><span class="vs">VS</span><span>${escapeHtmlSparring(item.timB)}</span>` : `<span>${escapeHtmlSparring(item.timA)}</span><span class="vs">VS</span><span class="text-slate-400">Belum ada lawan</span>`;
+                return `<div class="sparring-record">\n<div class="sparring-record-main">\n<div class="sparring-record-meta"><span class="sparring-badge sparring-badge-date">📅 ${dateLabel} · ${escapeHtmlSparring(item.jam||'-')}</span><span class="sparring-badge ${matched?'sparring-badge-matched':'sparring-badge-pending'}">${matched?'✓ SUDAH DAPAT LAWAN':'⌛ MENCARI LAWAN'}</span></div>\n<div class="sparring-pair">${pair}</div>\n${item.catatan ? `<div class="sparring-note">📝 ${escapeHtmlSparring(item.catatan)}</div>` : ''}\n</div>\n<div class="sparring-actions"><button type="button" class="sparring-action sparring-action-edit" onclick="editSparring('${key}')">Edit</button><button type="button" class="sparring-action sparring-action-delete" onclick="hapusSparring('${key}')">Hapus</button></div>\n</div>`;
+            }).join('');
+        };
+
+        function getOpponentLabelForBooking(item) {
+            const dt = sparringDateTime(item);
+            const rec = getSparringForTeam(item?.nama, dt.date, dt.jam);
+            if(!rec) return '';
+            const s = rec[1];
+            const a = String(s.timA||'').trim().toLowerCase();
+            const b = String(s.timB||'').trim();
+            const current = String(item?.nama||'').trim().toLowerCase();
+            if(s.status === 'matched' && b) {
+                return a === current ? b : (b.toLowerCase() === current ? String(s.timA||'').trim() : '');
+            }
+            return s.status === 'pending' ? 'Belum ada lawan' : '';
+        }
+
         window.renderGridJadwal = () => {
             let gridTbody = document.getElementById('grid-jadwal-gabung');
             let headerTr = document.getElementById('header-tabel-jadwal');
@@ -4099,7 +4576,8 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
                             let isMemberBooking = (b.status === 'Member');
                             matrix[jamFormat][hariName] = { 
                                 nama: b.nama + (isMemberBooking ? " (M)" : " (Non)"), 
-                                type: isMemberBooking ? 'member' : 'nonmember' 
+                                type: isMemberBooking ? 'member' : 'nonmember',
+                                bookingKey: Object.keys(globalCache.booking).find(k => globalCache.booking[k] === b) || ''
                             };
                         }
                     }
@@ -4175,7 +4653,10 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
                             <span class="inline-flex items-center justify-center px-2 py-1 rounded-lg bg-amber-500 text-white border border-amber-600 shadow-sm font-black text-[10px] sm:text-xs">⏰ ${item.tgl && item.tgl.split('T')[1] ? item.tgl.split('T')[1].substring(0,5).replace(':','.') : '-'}</span>
                         </div>
                     </td>
-                    <td class="p-1 sm:p-2 border border-slate-900/40 font-black break-words">${item.nama || '-'}</td>
+                    <td class="p-1 sm:p-2 border border-slate-900/40 font-black break-words">
+                        <div>${item.nama || '-'}</div>
+                        ${getOpponentLabelForBooking(item) ? `<div class="mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#E9F0F4] border border-[#7B8F9E] text-[#163B55] text-[8px] sm:text-[9px] font-black">🤝 Lawan: ${escapeHtmlSparring(getOpponentLabelForBooking(item))}</div>` : ''}
+                    </td>
                     <td class="p-1 sm:p-2 border border-slate-900/40 text-center">
                         ${String(item.status || '').toLowerCase() === 'member'
                             ? `<span class="status-badge-member" title="Member">M</span>`
