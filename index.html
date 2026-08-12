@@ -2039,6 +2039,94 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
 }
 </style>
 
+
+<style>
+/* ---------- JADWAL HARI INI — ADMIN JAGA ---------- */
+.admin-today-card {
+    border: 1px solid rgba(14,37,56,.18);
+    background: linear-gradient(135deg, rgba(255,255,255,.96), rgba(233,240,244,.92));
+    border-radius: 14px;
+    padding: 10px 12px;
+    box-shadow: 0 5px 16px rgba(15,23,42,.08);
+}
+.admin-today-card-title {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 900;
+    color: #0e2538;
+    letter-spacing: .04em;
+}
+.admin-today-card-date {
+    text-align: center;
+    margin-top: 2px;
+    margin-bottom: 7px;
+    font-size: 10px;
+    font-weight: 800;
+    color: #64748b;
+}
+.admin-today-shifts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 7px;
+}
+.admin-today-shift {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 800;
+}
+.admin-today-shift strong {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-left: auto;
+}
+.admin-today-pagi {
+    background: #fff7d6;
+    border: 1px solid #f4d35e;
+    color: #7a5b00;
+}
+.admin-today-malam {
+    background: #e8eef5;
+    border: 1px solid #9fb3c8;
+    color: #18344b;
+}
+.admin-today-icon {
+    flex: 0 0 auto;
+}
+.admin-today-label {
+    flex: 0 0 auto;
+    opacity: .78;
+}
+@media (max-width: 640px) {
+    .admin-today-card {
+        padding: 8px 9px;
+        border-radius: 11px;
+    }
+    .admin-today-card-title {
+        font-size: 9px;
+    }
+    .admin-today-card-date {
+        font-size: 8px;
+        margin-bottom: 5px;
+    }
+    .admin-today-shifts {
+        gap: 5px;
+    }
+    .admin-today-shift {
+        padding: 6px 6px;
+        gap: 3px;
+        font-size: 8px;
+        border-radius: 8px;
+    }
+}
+</style>
+
 </head>
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium"><button class="sticky-back-btn" data-back-context="page-keluar" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-minuman" onclick="showPage('home')" type="button">
@@ -2178,6 +2266,24 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
     </div>
     <div class="flex justify-center mb-3">
       <button type="button" class="bg-purple-700 hover:bg-purple-800 text-white px-4 py-2 rounded-xl text-xs font-black shadow" onclick="kembaliKeBulanHariIniAdmin()">📅 Bulan Ini</button>
+    </div>
+
+    <!-- JADWAL HARI INI -->
+    <div id="admin-today-card" class="admin-today-card mb-3">
+      <div class="admin-today-card-title">📌 JADWAL HARI INI</div>
+      <div class="admin-today-card-date" id="admin-today-date">-</div>
+      <div class="admin-today-shifts">
+        <div class="admin-today-shift admin-today-pagi">
+          <span class="admin-today-icon">☀️</span>
+          <span class="admin-today-label">Pagi</span>
+          <strong id="admin-today-pagi">-</strong>
+        </div>
+        <div class="admin-today-shift admin-today-malam">
+          <span class="admin-today-icon">🌙</span>
+          <span class="admin-today-label">Malam</span>
+          <strong id="admin-today-malam">-</strong>
+        </div>
+      </div>
     </div>
 
     <div class="admin-calendar" id="admin-calendar-grid"></div>
@@ -3681,6 +3787,18 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
             const last=new Date(year,month+1,0);
             const mondayIndex=(first.getDay()+6)%7;
             const today=getLocalDateString();
+
+            // Panel khusus jadwal hari ini, selalu mengambil jadwal tanggal hari ini.
+            const todayDate = new Date(today + 'T00:00:00');
+            const todayPagi = getAdminShiftName(today,'pagi');
+            const todayMalam = getAdminShiftName(today,'malam');
+            const todayDateEl = document.getElementById('admin-today-date');
+            const todayPagiEl = document.getElementById('admin-today-pagi');
+            const todayMalamEl = document.getElementById('admin-today-malam');
+            if(todayDateEl) todayDateEl.textContent = todayDate.toLocaleDateString('id-ID',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+            if(todayPagiEl) todayPagiEl.textContent = todayPagi || '-';
+            if(todayMalamEl) todayMalamEl.textContent = todayMalam || '-';
+
             let html=['Sen','Sel','Rab','Kam','Jum','Sab','Min'].map(x=>`<div class="admin-cal-head">${x}</div>`).join('');
             for(let i=0;i<mondayIndex;i++) html += `<div class="admin-day muted"></div>`;
             for(let day=1;day<=last.getDate();day++){
