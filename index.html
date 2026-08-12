@@ -496,6 +496,7 @@
         }
         .home-menu-card:active { transform: translateY(0); }
         .menu-blue { background: linear-gradient(135deg,#2563eb,#1e40af); }
+        .menu-indigo { background: linear-gradient(135deg,#7c3aed,#4c1d95); }
         .menu-emerald { background: linear-gradient(135deg,#10b981,#047857); }
         .menu-amber { background: linear-gradient(135deg,#f59e0b,#d97706); }
         .menu-rose { background: linear-gradient(135deg,#f43f5e,#be123c); }
@@ -831,19 +832,23 @@
 
         /* Booking Schedule grid - holder nama tim di dalam sel */
         #booking-schedule-grid-wrap .schedule-grid-team-holder {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            max-width: 96%;
-            min-height: 1.7rem;
-            padding: .28rem .55rem;
-            border-radius: .65rem;
-            font-weight: 900 !important;
-            line-height: 1.1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            box-shadow: 0 2px 7px rgba(15,23,42,.10), inset 0 1px 0 rgba(255,255,255,.65);
+             display: inline-flex;
+             align-items: center;
+             justify-content: center;
+             width: auto;
+             max-width: 100%;
+             min-width: 0;
+             min-height: 1.7rem;
+             padding: .28rem .35rem;
+             border-radius: .65rem;
+             font-weight: 900 !important;
+             line-height: 1;
+             white-space: nowrap;
+             overflow: hidden;
+             text-overflow: clip;
+             font-size: clamp(4px, 1.8vw, 10px);
+             letter-spacing: -.03em;
+             box-shadow: 0 2px 7px rgba(15,23,42,.10), inset 0 1px 0 rgba(255,255,255,.65);
         }
         #booking-schedule-grid-wrap .schedule-grid-team-member {
             color: #1e40af !important;
@@ -1100,7 +1105,7 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-minuman" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-masuk" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-booking" onclick="showPage('home')" type="button">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-atur-member" onclick="showPage('booking-schedule')" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-atur-member" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-booking-history" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-monthly-recap" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="sub-page-ringkasan" onclick="backToDailyMenu()" type="button">
@@ -1138,6 +1143,11 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
 <button class="home-menu-card menu-blue" onclick="showPage('booking')">
 <span class="menu-card-icon">⚽</span>
 <span class="menu-card-copy"><strong>BOOKING</strong><small>Tambah jadwal lapangan</small></span>
+<span class="menu-card-arrow">→</span>
+</button>
+<button class="home-menu-card menu-indigo" onclick="showPage('atur-member')">
+<span class="menu-card-icon">⚙️</span>
+<span class="menu-card-copy"><strong>ATUR MEMBER</strong><small>Kelola jadwal member</small></span>
 <span class="menu-card-arrow">→</span>
 </button>
 <button class="home-menu-card menu-emerald" onclick="showPage('masuk')">
@@ -1213,9 +1223,6 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
 <div class="flex items-center justify-center gap-2 p-1.5 rounded-xl border border-white/20 w-full sm:w-auto">
 <select class="p-1.5 rounded-lg text-xs glass-input font-bold text-center" id="filter-periode-jadwal" onchange="renderGridJadwal()">
 </select>
-</div>
-<div class="flex justify-center w-full">
-<button class="glass-btn px-4 py-2 rounded-xl text-xs font-bold shadow" onclick="showPage('atur-member')">⚙️ Atur Member</button>
 </div>
 </div>
 <div class="shadow-2xl rounded-xl border border-white/30 mb-4 overflow-hidden relative" id="booking-schedule-grid-wrap">
