@@ -3,7 +3,7 @@
 <html lang="id">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
 <title>SANDAGA MINISOCCER 2 - Dashboard &amp; Jadwal</title>
 <!-- Penghubung Manifest untuk Android/Chrome -->
 <link href="manifest.json" rel="manifest"/>
@@ -148,6 +148,31 @@
             background: #1e293b;
             color: #fff;
         }
+
+        /* Perbaikan zoom otomatis keyboard di HP (iOS/Android).
+           Input minimal 16px mencegah Safari melakukan auto-zoom saat fokus,
+           sehingga setelah tombol Back/keyboard ditutup skala halaman tetap normal. */
+        @media (max-width: 640px) {
+            input,
+            textarea,
+            select,
+            button {
+                font-size: 16px !important;
+            }
+            input[type="number"],
+            input[type="text"],
+            input[type="search"],
+            input[type="tel"],
+            input[type="email"],
+            input[type="date"],
+            input[type="time"],
+            input[type="datetime-local"],
+            textarea,
+            select {
+                font-size: 16px !important;
+            }
+        }
+
         /* Booking History compact untuk layar HP */
         #page-booking-history {
             overflow-x: hidden;
@@ -1126,6 +1151,66 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
 #daily-menu-grid .glass-btn:active {
     transform: translateY(0) scale(.985) !important;
 }
+
+/* Tombol terpilih: warna/background tetap seperti kondisi awal, hanya border yang menandai pilihan */
+#daily-menu-grid .glass-btn.is-selected {
+    transform: none !important;
+    filter: none !important;
+    border-width: 3px !important;
+    box-shadow: 0 0 0 2px rgba(255,255,255,.22), 0 0 12px var(--selected-glow), 0 16px 32px rgba(15,23,42,.18) !important;
+}
+
+/* Hilangkan warna/fokus ungu dari browser saat tombol dipilih. Background tetap warna asli tombol. */
+#daily-menu-grid .glass-btn:focus,
+#daily-menu-grid .glass-btn:focus-visible,
+#daily-menu-grid .glass-btn:active {
+    outline: none !important;
+    filter: none !important;
+}
+#daily-menu-grid .glass-btn.is-selected:hover {
+    filter: none !important;
+}
+
+/* Hover desktop: jangan ubah warna tombol menjadi ungu. Pertahankan warna asli masing-masing tombol. */
+#daily-menu-grid .glass-btn:hover,
+#daily-menu-grid .glass-btn:focus:hover,
+#daily-menu-grid .glass-btn:focus-visible:hover {
+    filter: none !important;
+}
+#daily-menu-grid .glass-btn:nth-child(1):hover,
+#daily-menu-grid .glass-btn:nth-child(1):focus:hover,
+#daily-menu-grid .glass-btn:nth-child(1):focus-visible:hover {
+    background:
+        radial-gradient(circle at 92% 18%, rgba(255,255,255,.20) 0 3px, transparent 4px),
+        linear-gradient(135deg, #2563eb 0%, #1d4ed8 55%, #3730a3 100%) !important;
+}
+#daily-menu-grid .glass-btn:nth-child(2):hover,
+#daily-menu-grid .glass-btn:nth-child(2):focus:hover,
+#daily-menu-grid .glass-btn:nth-child(2):focus-visible:hover {
+    background:
+        radial-gradient(circle at 92% 18%, rgba(255,255,255,.20) 0 3px, transparent 4px),
+        linear-gradient(135deg, #10b981 0%, #059669 55%, #047857 100%) !important;
+}
+#daily-menu-grid .glass-btn:nth-child(3):hover,
+#daily-menu-grid .glass-btn:nth-child(3):focus:hover,
+#daily-menu-grid .glass-btn:nth-child(3):focus-visible:hover {
+    background:
+        radial-gradient(circle at 92% 18%, rgba(255,255,255,.20) 0 3px, transparent 4px),
+        linear-gradient(135deg, #f59e0b 0%, #ea580c 55%, #c2410c 100%) !important;
+}
+#daily-menu-grid .glass-btn:nth-child(4):hover,
+#daily-menu-grid .glass-btn:nth-child(4):focus:hover,
+#daily-menu-grid .glass-btn:nth-child(4):focus-visible:hover {
+    background:
+        radial-gradient(circle at 92% 18%, rgba(255,255,255,.20) 0 3px, transparent 4px),
+        linear-gradient(135deg, #f43f5e 0%, #e11d48 55%, #be123c 100%) !important;
+}
+
+/* Warna border mengikuti warna masing-masing tombol */
+#daily-menu-grid .glass-btn:nth-child(1).is-selected { border-color: #60a5fa !important; --selected-glow: rgba(96,165,250,.55); }
+#daily-menu-grid .glass-btn:nth-child(2).is-selected { border-color: #34d399 !important; --selected-glow: rgba(52,211,153,.55); }
+#daily-menu-grid .glass-btn:nth-child(3).is-selected { border-color: #fbbf24 !important; --selected-glow: rgba(251,191,36,.55); }
+#daily-menu-grid .glass-btn:nth-child(4).is-selected { border-color: #fb7185 !important; --selected-glow: rgba(251,113,133,.55); }
 
 /* Mobile: 2 x 2 seperti quick-access card di beranda */
 @media (max-width: 640px) {
@@ -3551,6 +3636,14 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
                 let el = document.getElementById('sub-page-' + s);
                 if(el) el.classList.add('hidden');
             });
+
+            // Tandai tombol yang sedang dipilih tanpa mengubah warna/background tombol.
+            document.querySelectorAll('#daily-menu-grid .glass-btn').forEach(btn => {
+                btn.classList.remove('is-selected');
+            });
+            const selectedButton = document.querySelector(`#daily-menu-grid .glass-btn[onclick="showDailySub('${sub}')"]`);
+            if(selectedButton) selectedButton.classList.add('is-selected');
+
             let targetEl = document.getElementById('sub-page-' + sub);
             if(targetEl) targetEl.classList.remove('hidden');
             renderRekapHarian();
@@ -3563,6 +3656,9 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
             ['lapangan', 'minuman', 'pengeluaran', 'ringkasan'].forEach(s => {
                 let el = document.getElementById('sub-page-' + s);
                 if(el) el.classList.add('hidden');
+            });
+            document.querySelectorAll('#daily-menu-grid .glass-btn').forEach(btn => {
+                btn.classList.remove('is-selected');
             });
             const dash = document.getElementById('daily-cash-dashboard');
             if(dash) dash.scrollIntoView({ top: 0, behavior: 'smooth' });
