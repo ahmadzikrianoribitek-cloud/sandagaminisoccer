@@ -4875,6 +4875,58 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
             return 'Rp ' + Number(nominal || 0).toLocaleString('id-ID');
         }
 
+        // Klik Tim pada Jadwal Tim Hari Ini -> langsung buka Uang Masuk
+        // dengan tanggal, nama tim, dan jam main otomatis terpilih.
+        window.bukaUangMasukDariJadwal = (namaTim, jam, tanggal) => {
+            const nama = String(namaTim || '').trim();
+            const jamMain = String(jam || '').substring(0, 5);
+            const tgl = String(tanggal || '').substring(0, 10);
+            if(!nama || !tgl) return;
+
+            // Buka menu Uang Masuk terlebih dahulu. Handler showPage('masuk')
+            // akan mengisi ulang daftar tim berdasarkan tanggal yang sedang aktif.
+            showPage('masuk');
+
+            const tglInput = document.getElementById('in-tgl');
+            const selectTim = document.getElementById('in-tim');
+            if(!tglInput || !selectTim) return;
+
+            tglInput.value = tgl;
+            updateDropdownTimMasuk();
+
+            // Member menggunakan nama asli, sedangkan booking pada dropdown
+            // diberi akhiran " (Booking)". Cocokkan nama + jam agar tepat.
+            const targetNama = nama.toLowerCase();
+            let option = Array.from(selectTim.options).find(opt => {
+                const value = String(opt.value || '').trim().toLowerCase();
+                const dataJam = String(opt.getAttribute('data-jam') || '').substring(0, 5);
+                const valueTanpaBooking = value.replace(/\s*\(booking\)$/i, '').trim();
+                return valueTanpaBooking === targetNama && dataJam === jamMain;
+            });
+
+            // Fallback jika nama tim di dropdown memiliki format sedikit berbeda.
+            if(!option) {
+                option = Array.from(selectTim.options).find(opt => {
+                    const dataJam = String(opt.getAttribute('data-jam') || '').substring(0, 5);
+                    const value = String(opt.value || '').trim().toLowerCase();
+                    return dataJam === jamMain && (value === targetNama || value === `${targetNama} (booking)`);
+                });
+            }
+
+            if(option) {
+                selectTim.value = option.value;
+                updateJamMainMasuk();
+            } else {
+                // Jika data tim belum tersedia di dropdown, jangan memaksa pilihan
+                // yang salah; tampilkan tanggal/jam dan biarkan admin memilih tim.
+                const jamInput = document.getElementById('in-jam-main');
+                if(jamInput) jamInput.value = jamMain || '-';
+            }
+
+            // Kembalikan fokus ke bagian atas form Uang Masuk.
+            document.getElementById('page-masuk')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+
         window.renderTodaySchedule = () => {
             const listEl = document.getElementById('today-schedule-list');
             const dateEl = document.getElementById('today-schedule-date');
@@ -4990,7 +5042,7 @@ body:has(#page-admin-jaga:not(.hidden)) > .sticky-back-btn[data-back-context="pa
 
                 const namaTampil = item.nama || '-';
 
-                return `<div class="schedule-card rounded-xl border p-2.5 shadow-sm">
+                return `<div class="schedule-card rounded-xl border p-2.5 shadow-sm cursor-pointer" role="button" tabindex="0" title="Klik untuk mencatat uang masuk / pelunasan" onclick="bukaUangMasukDariJadwal(decodeURIComponent('${encodeURIComponent(String(item.nama || '')).replace("'", "%27")}'), '${jam}', '${today}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();bukaUangMasukDariJadwal(decodeURIComponent('${encodeURIComponent(String(item.nama || '')).replace("'", "%27")}'), '${jam}', '${today}')}">
                     <div class="flex items-center gap-2">
                         <span class="schedule-time shrink-0 inline-flex items-center justify-center px-2 py-1 rounded-lg border font-black text-xs sm:text-sm shadow-sm">⏰ ${jam.replace(':','.')}</span>
                         <div class="min-w-0 flex-1">
