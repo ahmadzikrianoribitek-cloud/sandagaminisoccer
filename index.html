@@ -2908,6 +2908,29 @@ body.sub-menu-active::before {
 }
 </style>
 
+
+<style id="fix-admin-jaga-double-frame">
+/* Hilangkan frame ganda di belakang kalender Jadwal Admin Jaga */
+#page-admin-jaga > .p-3.sm\:p-4.rounded-2xl {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+#page-admin-jaga .admin-roster-toolbar {
+  background: rgba(255,255,255,.18) !important;
+  border: 1px solid rgba(255,255,255,.28) !important;
+  border-radius: 16px !important;
+  padding: 10px !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+#page-admin-jaga .admin-day {
+  border-radius: 16px !important;
+  overflow: hidden !important;
+}
+</style>
+
 </head>
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium"><button class="sticky-back-btn" data-back-context="page-keluar" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-minuman" onclick="showPage('home')" type="button">
@@ -7167,5 +7190,42 @@ body.sub-menu-active::before {
 }
 </style>
 
+
+<style id="sparring-final-no-double-frame">
+/* SPARRING FINAL — satu frame utama seperti MINUMAN */
+#page-sparring .sparring-form-wrap,
+#page-sparring .sparring-list-wrap {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  padding: 0 !important;
+}
+#page-sparring .sparring-form-wrap::before,
+#page-sparring .sparring-form-wrap::after,
+#page-sparring .sparring-list-wrap::before,
+#page-sparring .sparring-list-wrap::after {
+  content: none !important;
+  display: none !important;
+}
+/* Jangan biarkan wrapper lain membuat bidang/frame abu-abu di belakang isi */
+#page-sparring .sparring-summary-grid,
+#page-sparring .sparring-form-wrap > form,
+#page-sparring .sparring-list-wrap > div:first-child {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+/* Kartu ringkasan dan input tetap sebagai elemen konten */
+#page-sparring .sparring-summary-card {
+  background: rgba(255,255,255,.22) !important;
+  border: 1px solid rgba(255,255,255,.55) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.68), 0 5px 14px rgba(14,37,56,.05) !important;
+}
+#page-sparring .sparring-input,
+#page-sparring .sparring-filter {
+  background: rgba(255,255,255,.82) !important;
+}
+</style>
 </body>
 </html>
