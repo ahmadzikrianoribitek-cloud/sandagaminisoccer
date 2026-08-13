@@ -3166,22 +3166,283 @@ html {
 }
 </style>
 
+<style>
+/* Perapihan timer pengingat Jadwal Hari Ini */
+.today-admin-reminder-timer {
+  display:flex !important; align-items:center; justify-content:space-between;
+  gap:6px; width:100%; box-sizing:border-box;
+  white-space:nowrap; overflow:hidden;
+}
+.today-admin-reminder-timer .reminder-countdown {
+  margin-left:auto; flex:0 0 auto;
+  padding:2px 6px; border-radius:6px;
+  background:rgba(255,255,255,.72);
+  font-variant-numeric:tabular-nums; letter-spacing:.02em;
+}
+@media (max-width:640px){
+ .today-admin-reminder-timer {font-size:8px !important; padding:5px 6px !important; gap:4px !important;}
+ .today-admin-reminder-timer .reminder-countdown {font-size:8px; padding:2px 5px;}
+}
+
+/* Tombol Ingatkan Jadwal Hari Ini: ikon WA asli, tanpa frame tambahan. */
+.today-remind-btn {
+  border:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  outline:none !important;
+  min-height:32px;
+  padding:4px 2px !important;
+  white-space:nowrap;
+  flex:0 0 auto;
+  cursor:pointer;
+}
+.today-remind-icon {
+  width:22px;
+  height:22px;
+  object-fit:contain;
+  display:block;
+  flex:0 0 22px;
+}
+.today-remind-btn span { line-height:1; }
+@media (max-width:640px){
+  .today-remind-btn { font-size:11px !important; min-height:34px; gap:5px !important; }
+  .today-remind-icon { width:24px; height:24px; flex-basis:24px; }
+}
+</style>
+
+<style>
+/* V33 — penyamaan tema Jadwal Hari Ini dengan tombol utama */
+#today-schedule-panel.today-schedule-modern {
+  background: rgba(255,255,255,.16) !important;
+  border: 1px solid rgba(255,255,255,.38) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 8px 28px rgba(15,23,42,.18) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+#today-schedule-panel .today-icon {
+  width: 40px !important; height: 40px !important; border-radius: 12px !important;
+  background: rgba(255,255,255,.28) !important;
+  border: 1px solid rgba(255,255,255,.45) !important;
+  box-shadow: 0 4px 14px rgba(15,23,42,.12) !important;
+}
+#today-schedule-panel .schedule-card {
+  background: rgba(255,255,255,.78) !important;
+  border: 1px solid rgba(255,255,255,.9) !important;
+  border-radius: 15px !important;
+  box-shadow: 0 5px 18px rgba(15,23,42,.10) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+#today-schedule-panel .schedule-card .schedule-time {
+  background: rgba(254,243,199,.95) !important;
+  border: 1px solid #fcd34d !important;
+  border-radius: 9px !important;
+  box-shadow: 0 2px 7px rgba(15,23,42,.07) !important;
+  font-weight: 900 !important;
+}
+#today-schedule-panel .schedule-card .schedule-team-member,
+#today-schedule-panel .schedule-card .schedule-team-nonmember {
+  border-radius: 10px !important;
+  box-shadow: 0 2px 7px rgba(15,23,42,.06) !important;
+}
+#today-schedule-panel .today-remind-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  min-height: 34px !important;
+  padding: 5px 10px !important;
+  border: 1px solid rgba(22,163,74,.28) !important;
+  border-radius: 10px !important;
+  background: rgba(220,252,231,.9) !important;
+  color: #15803d !important;
+  box-shadow: 0 3px 9px rgba(22,163,74,.12) !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  text-decoration: none !important;
+}
+#today-schedule-panel .today-remind-btn:hover {
+  background: rgba(187,247,208,.98) !important;
+  color: #166534 !important;
+}
+#today-schedule-panel .today-remind-icon {
+  width: 25px !important; height: 25px !important;
+  min-width: 25px !important;
+  object-fit: contain !important;
+}
+#today-schedule-panel .today-admin-reminder-timer {
+  border-radius: 10px !important;
+  border-width: 1px !important;
+  box-shadow: 0 2px 7px rgba(15,23,42,.05) !important;
+  min-height: 29px !important;
+}
+#today-schedule-panel .today-admin-reminder-timer .reminder-countdown {
+  border: 1px solid rgba(148,163,184,.25) !important;
+  background: rgba(255,255,255,.8) !important;
+  border-radius: 7px !important;
+  padding: 3px 7px !important;
+  font-weight: 900 !important;
+}
+#today-schedule-panel .schedule-money {
+  background: rgba(248,250,252,.88) !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 9px !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.8) !important;
+}
+@media (max-width:640px){
+  #today-schedule-panel.today-schedule-modern { padding: 10px !important; border-radius: 16px !important; }
+  #today-schedule-panel .schedule-card { padding: 10px !important; margin-bottom: 8px !important; }
+  #today-schedule-panel .today-remind-btn { min-height: 35px !important; padding: 5px 9px !important; font-size: 10px !important; }
+  #today-schedule-panel .today-remind-icon { width: 24px !important; height: 24px !important; }
+  #today-schedule-panel .schedule-card .mt-1 { gap: 5px !important; }
+  #today-schedule-panel .schedule-card .mt-1 > * { padding: 4px 6px !important; }
+}
+</style>
+
+<style>
+/* V34 — JADWAL HARI INI BERWARNA, SELARAS DENGAN TOMBOL MENU */
+#today-schedule-panel.today-schedule-modern {
+  background: linear-gradient(135deg, rgba(14,37,56,.96), rgba(22,101,52,.92)) !important;
+  border: 0 !important;
+  border-radius: 20px !important;
+  padding: 14px !important;
+  box-shadow: 0 10px 28px rgba(15,23,42,.22) !important;
+}
+#today-schedule-panel .today-schedule-head {
+  padding: 2px 2px 11px !important;
+  border-bottom: 1px solid rgba(255,255,255,.22) !important;
+  margin-bottom: 11px !important;
+}
+#today-schedule-panel .today-title-wrap h3 {
+  color: #fff !important;
+  font-size: 15px !important;
+  font-weight: 950 !important;
+  letter-spacing: .02em !important;
+}
+#today-schedule-panel .today-icon {
+  width: 38px !important; height: 38px !important;
+  display: inline-flex !important; align-items:center !important; justify-content:center !important;
+  border-radius: 12px !important;
+  background: linear-gradient(135deg,#06b6d4,#0e7490) !important;
+  border: 0 !important;
+  box-shadow: 0 4px 12px rgba(6,182,212,.25) !important;
+}
+#today-schedule-panel .today-date-badge {
+  background: rgba(255,255,255,.14) !important;
+  border: 1px solid rgba(255,255,255,.24) !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+}
+
+/* Kartu dibuat seperti tombol menu: warna cerah, namun isi tetap ringan. */
+#today-schedule-panel .schedule-card {
+  position: relative !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  border-radius: 16px !important;
+  color: #0f172a !important;
+  box-shadow: 0 7px 18px rgba(15,23,42,.14) !important;
+  transition: transform .16s ease, box-shadow .16s ease !important;
+}
+#today-schedule-panel .schedule-card::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 auto 0 0 !important;
+  width: 7px !important;
+  background: rgba(255,255,255,.78) !important;
+}
+#today-schedule-panel .schedule-card:nth-child(6n+1) { background: linear-gradient(135deg,#dbeafe,#eff6ff 58%,#ffffff) !important; }
+#today-schedule-panel .schedule-card:nth-child(6n+2) { background: linear-gradient(135deg,#dcfce7,#f0fdf4 58%,#ffffff) !important; }
+#today-schedule-panel .schedule-card:nth-child(6n+3) { background: linear-gradient(135deg,#fef3c7,#fffbeb 58%,#ffffff) !important; }
+#today-schedule-panel .schedule-card:nth-child(6n+4) { background: linear-gradient(135deg,#ffe4e6,#fff1f2 58%,#ffffff) !important; }
+#today-schedule-panel .schedule-card:nth-child(6n+5) { background: linear-gradient(135deg,#cffafe,#ecfeff 58%,#ffffff) !important; }
+#today-schedule-panel .schedule-card:nth-child(6n+6) { background: linear-gradient(135deg,#ede9fe,#f5f3ff 58%,#ffffff) !important; }
+
+#today-schedule-panel .schedule-card:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 10px 22px rgba(15,23,42,.18) !important;
+}
+#today-schedule-panel .schedule-card .schedule-time {
+  border: 0 !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+  min-width: 58px !important;
+  background: linear-gradient(135deg,#2563eb,#1e40af) !important;
+  box-shadow: 0 4px 10px rgba(37,99,235,.22) !important;
+}
+#today-schedule-panel .schedule-card:nth-child(6n+2) .schedule-time { background: linear-gradient(135deg,#10b981,#047857) !important; }
+#today-schedule-panel .schedule-card:nth-child(6n+3) .schedule-time { background: linear-gradient(135deg,#f59e0b,#d97706) !important; }
+#today-schedule-panel .schedule-card:nth-child(6n+4) .schedule-time { background: linear-gradient(135deg,#f43f5e,#be123c) !important; }
+#today-schedule-panel .schedule-card:nth-child(6n+5) .schedule-time { background: linear-gradient(135deg,#06b6d4,#0e7490) !important; }
+#today-schedule-panel .schedule-card:nth-child(6n+6) .schedule-time { background: linear-gradient(135deg,#7c3aed,#4c1d95) !important; }
+
+#today-schedule-panel .schedule-card .schedule-team-member,
+#today-schedule-panel .schedule-card .schedule-team-nonmember {
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #0f172a !important;
+  padding: 0 !important;
+}
+#today-schedule-panel .schedule-card .today-remind-btn {
+  min-height: 32px !important;
+  padding: 4px 10px !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  background: linear-gradient(135deg,#10b981,#047857) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 10px rgba(16,185,129,.22) !important;
+  font-size: 10px !important;
+  font-weight: 950 !important;
+}
+#today-schedule-panel .today-remind-btn:hover { filter: brightness(1.05) !important; }
+#today-schedule-panel .today-remind-icon { width: 24px !important; height: 24px !important; }
+#today-schedule-panel .today-admin-reminder-timer,
+#today-schedule-panel .today-late-timer {
+  border-radius: 9px !important;
+  box-shadow: none !important;
+  font-weight: 850 !important;
+}
+#today-schedule-panel .schedule-money {
+  background: rgba(255,255,255,.62) !important;
+  border: 1px solid rgba(148,163,184,.28) !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+#today-schedule-panel .schedule-total-label { color:#2563eb !important; }
+#today-schedule-panel .schedule-dp-label { color:#059669 !important; }
+#today-schedule-panel .schedule-sisa-label { color:#ea580c !important; }
+
+@media (max-width:640px) {
+  #today-schedule-panel.today-schedule-modern { padding: 10px !important; border-radius: 16px !important; }
+  #today-schedule-panel .today-schedule-head { margin-bottom: 8px !important; padding-bottom: 8px !important; }
+  #today-schedule-panel .today-title-wrap h3 { font-size: 13px !important; }
+  #today-schedule-panel .today-icon { width: 34px !important; height: 34px !important; border-radius: 10px !important; }
+  #today-schedule-panel .today-date-badge { font-size: 8px !important; padding: 4px 7px !important; }
+  #today-schedule-panel .schedule-card { padding: 9px !important; border-radius: 13px !important; margin-bottom: 7px !important; }
+  #today-schedule-panel .schedule-card::before { width: 5px !important; }
+  #today-schedule-panel .schedule-card .schedule-time { min-width: 52px !important; font-size: 9px !important; padding: 5px !important; }
+  #today-schedule-panel .schedule-card .today-remind-btn { min-height: 30px !important; padding: 3px 8px !important; font-size: 9px !important; }
+  #today-schedule-panel .today-remind-icon { width: 22px !important; height: 22px !important; }
+}
+</style>
+
 </head>
-<body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium"><button class="sticky-back-btn" data-back-context="page-keluar" onclick="showPage('home')" type="button">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-minuman" onclick="showPage('home')" type="button">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-masuk" onclick="showPage('home')" type="button">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-booking" onclick="showPage('home')" type="button">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-atur-member" onclick="showPage('home')" type="button">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-sparring" onclick="showPage('home')" type="button">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-admin-jaga" onclick="showPage('home')" type="button">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-booking-history" onclick="showPage('home')" type="button">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-monthly-recap" onclick="showPage('home')" type="button">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="sub-page-ringkasan" onclick="backToDailyMenu()" type="button">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="sub-page-pengeluaran" onclick="backToDailyMenu()" type="button">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="sub-page-minuman" onclick="backToDailyMenu()" type="button">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="sub-page-lapangan" onclick="backToDailyMenu()" type="button">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-daily-recap" onclick="showPage('home')" type="button">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-booking-schedule" onclick="showPage('home')" type="button">
+<body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium"><button class="sticky-back-btn" data-back-context="page-keluar" onclick="navigateBack()" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-minuman" onclick="navigateBack()" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-masuk" onclick="navigateBack()" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-booking" onclick="navigateBack()" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-atur-member" onclick="navigateBack()" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-sparring" onclick="navigateBack()" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-admin-jaga" onclick="navigateBack()" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-booking-history" onclick="navigateBack()" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-monthly-recap" onclick="navigateBack()" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="sub-page-ringkasan" onclick="navigateBack()" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="sub-page-pengeluaran" onclick="navigateBack()" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="sub-page-minuman" onclick="navigateBack()" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="sub-page-lapangan" onclick="navigateBack()" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-daily-recap" onclick="navigateBack()" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-booking-schedule" onclick="navigateBack()" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
 <!-- Header -->
 <header class="w-full max-w-6xl flex flex-col items-center justify-center gap-2 mb-6 text-center">
@@ -3205,8 +3466,7 @@ html {
 <div class="today-title-wrap">
 <span class="today-icon">📅</span>
 <div>
-<span class="home-section-kicker">AKTIVITAS HARI INI</span>
-<h3>Jadwal Tim Hari Ini</h3>
+<h3>JADWAL HARI INI</h3>
 </div>
 </div>
 <span class="today-date-badge" id="today-schedule-date"></span>
@@ -3429,7 +3689,7 @@ html {
             <h3 class="text-sm sm:text-base font-black text-slate-900">📱 Nomor WA Non-Member</h3>
             <p class="text-[10px] sm:text-xs font-bold text-slate-600 mt-0.5">Tambahkan atau ubah nomor WhatsApp langsung dari Booking Schedule.</p>
         </div>
-        <span class="text-[9px] sm:text-[10px] font-black px-2 py-1 rounded-lg bg-rose-100 text-rose-700 border border-rose-200">Dipakai tombol 🟢 Hubungi</span>
+        <span class="text-[9px] sm:text-[10px] font-black px-2 py-1 rounded-lg bg-rose-100 text-rose-700 border border-rose-200">Dipakai tombol 📲 Ingatkan</span>
     </div>
     <div id="booking-schedule-nonmember-wa-list" class="space-y-2"></div>
 </div>
@@ -4348,12 +4608,8 @@ html {
             if(targetEl) targetEl.classList.remove('hidden');
             renderRekapHarian();
 
-            // Buka submenu Daily Recap selalu dari bagian paling atas halaman.
-            setTimeout(() => {
-                window.scrollTo(0, 0);
-                document.documentElement.scrollTop = 0;
-                document.body.scrollTop = 0;
-            }, 50);
+            // Jangan mengubah posisi scroll saat berpindah submenu Daily Recap.
+            // Posisi paling atas hanya diterapkan ketika menu Daily Recap pertama kali dibuka.
         }
 
         window.backToDailyMenu = () => {
@@ -4364,10 +4620,7 @@ html {
             document.querySelectorAll('#daily-menu-grid .glass-btn').forEach(btn => {
                 btn.classList.remove('is-selected');
             });
-            // Kembali ke menu Daily Recap dari posisi paling atas halaman.
-            window.scrollTo(0, 0);
-            document.documentElement.scrollTop = 0;
-            document.body.scrollTop = 0;
+            // Kembali ke menu Daily Recap tanpa memaksa halaman scroll ke atas.
         }
 
         window.syncFilterTanggal = (val) => {
@@ -6017,9 +6270,15 @@ html {
             const digits = String(number || '').replace(/\D/g, '');
             if(!digits) return '';
             const intl = digits.startsWith('0') ? '62' + digits.slice(1) : digits;
-            const base = 'https://wa.me/' + intl;
-            return message ? base + '?text=' + encodeURIComponent(message) : base;
+            // Gunakan endpoint resmi WhatsApp dengan encodeURIComponent sekali saja.
+            // encodeURIComponent akan mengubah emoji UTF-16 JavaScript menjadi UTF-8
+            // percent-encoding (contoh 👋 -> %F0%9F%91%8B), sehingga WhatsApp
+            // menerima karakter asli, bukan karakter replacement "�".
+            const base = 'https://api.whatsapp.com/send?phone=' + intl;
+            if(!message) return base;
+            return base + '&text=' + encodeURIComponent(String(message));
         }
+
 
         // Satu sumber nomor WA untuk Jadwal Hari Ini. Urutan prioritas:
         // 1) WA yang diisi customer/admin pada data Booking (non-member maupun member booking)
@@ -6081,10 +6340,31 @@ html {
             return found;
         }
 
+        // Tombol Hubungi di JADWAL HARI INI.
+        // Dibuat sebagai fungsi terpisah agar klik tidak ikut memicu kartu jadwal.
+        window.hubungiJadwalHariIni = function(number, nama, jam) {
+            const url = getWhatsAppUrl(number, getScheduleWhatsAppMessage(nama, jam));
+            if(!url) {
+                alert('Nomor WhatsApp belum tersedia.');
+                return false;
+            }
+            window.open(url, '_blank', 'noopener,noreferrer');
+            return false;
+        };
+
         function getScheduleWhatsAppMessage(namaInput, jam) {
             const nama = String(namaInput || 'kak').trim() || 'kak';
             const jamText = String(jam || '').trim();
-            return `Halo kak 👋\n\nMau mengingatkan ya, jadwal main *${nama}* hari ini pukul *${jamText}*. ⚽\n\nBiar lebih santai dan nggak buru-buru, bisa datang sekitar *30 menit sebelum jadwal*. Kalau belum sempat, paling lambat *15 menit sebelum jam main* ya kak 🙏\n\nKalau sudah lewat *15 menit dari jadwal* dan tim belum datang, waktu main tetap mengikuti jadwal dan *timer otomatis mulai dihitung* ya kak.\n\nSampai ketemu di lapangan! 😊`;
+
+            // Dibuat dari Unicode code point saat runtime supaya file HTML
+            // tidak menyimpan emoji sebagai karakter rusak/encoding lama.
+            // Unicode escape dipakai agar source HTML hanya berisi ASCII untuk emoji.
+            const wave = '\u{1F44B}';
+            const ball = '\u{26BD}\u{FE0F}';
+            const pray = '\u{1F64F}';
+            const smile = '\u{1F60A}';
+
+            return `Halo kak ${wave}\n\nMau mengingatkan ya, jadwal main *${nama}* hari ini pukul *${jamText}*. ${ball}\n\nBiar lebih santai dan nggak buru-buru, bisa datang sekitar *30 menit sebelum jadwal*. Kalau belum sempat, paling lambat *15 menit sebelum jam main* ya kak ${pray}\n\nKalau sudah lewat *15 menit dari jadwal* dan tim belum datang, waktu main tetap mengikuti jadwal dan *timer otomatis mulai dihitung* ya kak.\n\nSampai ketemu di lapangan! ${smile}`;
         }
 
         function getScheduleStartInfo(today, jam) {
@@ -6153,15 +6433,15 @@ html {
             const now = new Date();
             const waText = hasWa ? '' : ' · WA belum ada';
             if(now < info.reminderIdeal) {
-                return `<div class="today-admin-reminder-timer mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-blue-50 text-blue-700 border border-blue-200 text-[9px] sm:text-[10px] font-black" data-reminder-today="${today}" data-reminder-jam="${jam}">🔔 Pengingat admin · ideal kirim 2 jam sebelum · <span>lagi ${formatCountdown((info.reminderIdeal-now)/1000)}</span>${waText}</div>`;
+                return `<div class="today-admin-reminder-timer mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-blue-50 text-blue-700 border border-blue-200 text-[9px] sm:text-[10px] font-black" data-reminder-today="${today}" data-reminder-jam="${jam}">🔔 Ingatkan <span class="reminder-countdown">${formatCountdown((info.reminderIdeal-now)/1000)}</span>${waText}</div>`;
             }
             if(now < info.reminderDeadline) {
-                return `<div class="today-admin-reminder-timer mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-amber-50 text-amber-700 border border-amber-200 text-[9px] sm:text-[10px] font-black" data-reminder-today="${today}" data-reminder-jam="${jam}">⚠️ Sebaiknya kirim pengingat sekarang · batas maksimal 1 jam sebelum · <span>${formatCountdown((info.reminderDeadline-now)/1000)}</span>${waText}</div>`;
+                return `<div class="today-admin-reminder-timer mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-amber-50 text-amber-700 border border-amber-200 text-[9px] sm:text-[10px] font-black" data-reminder-today="${today}" data-reminder-jam="${jam}">⚠️ Ingatkan sekarang <span class="reminder-countdown">${formatCountdown((info.reminderDeadline-now)/1000)}</span>${waText}</div>`;
             }
             if(now < info.start) {
-                return `<div class="today-admin-reminder-timer mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-rose-50 text-rose-700 border border-rose-200 text-[9px] sm:text-[10px] font-black" data-reminder-today="${today}" data-reminder-jam="${jam}">🚨 Pengingat belum dikirim / sudah melewati batas · jadwal mulai ${String(jam).substring(0,5)}</div>`;
+                return `<div class="today-admin-reminder-timer mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-rose-50 text-rose-700 border border-rose-200 text-[9px] sm:text-[10px] font-black" data-reminder-today="${today}" data-reminder-jam="${jam}">🚨 Belum diingatkan · mulai ${String(jam).substring(0,5)}</div>`;
             }
-            return `<div class="today-admin-reminder-timer mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-slate-100 text-slate-500 border border-slate-200 text-[9px] sm:text-[10px] font-black" data-reminder-today="${today}" data-reminder-jam="${jam}">📌 Jadwal sudah dimulai · pengingat 1 jam sebelumnya sudah terlewat</div>`;
+            return `<div class="today-admin-reminder-timer mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-slate-100 text-slate-500 border border-slate-200 text-[9px] sm:text-[10px] font-black" data-reminder-today="${today}" data-reminder-jam="${jam}">📌 Jadwal mulai · pengingat terlewat</div>`;
         }
 
         function updateTodayAdminReminderTimers() {
@@ -6172,16 +6452,16 @@ html {
                 const waText = el.textContent.includes('WA belum ada') ? ' · WA belum ada' : '';
                 if(now < info.reminderIdeal) {
                     el.className = 'today-admin-reminder-timer mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-blue-50 text-blue-700 border border-blue-200 text-[9px] sm:text-[10px] font-black';
-                    el.innerHTML = `🔔 Pengingat admin · ideal kirim 2 jam sebelum · <span>lagi ${formatCountdown((info.reminderIdeal-now)/1000)}</span>${waText}`;
+                    el.innerHTML = `🔔 Ingatkan <span class="reminder-countdown">${formatCountdown((info.reminderIdeal-now)/1000)}</span>${waText}`;
                 } else if(now < info.reminderDeadline) {
                     el.className = 'today-admin-reminder-timer mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-amber-50 text-amber-700 border border-amber-200 text-[9px] sm:text-[10px] font-black';
-                    el.innerHTML = `⚠️ Sebaiknya kirim pengingat sekarang · batas maksimal 1 jam sebelum · <span>${formatCountdown((info.reminderDeadline-now)/1000)}</span>${waText}`;
+                    el.innerHTML = `⚠️ Ingatkan sekarang <span class="reminder-countdown">${formatCountdown((info.reminderDeadline-now)/1000)}</span>${waText}`;
                 } else if(now < info.start) {
                     el.className = 'today-admin-reminder-timer mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-rose-50 text-rose-700 border border-rose-200 text-[9px] sm:text-[10px] font-black';
-                    el.innerHTML = `🚨 Pengingat belum dikirim / sudah melewati batas · jadwal mulai ${String(el.dataset.reminderJam).substring(0,5)}${waText}`;
+                    el.innerHTML = `🚨 Belum diingatkan · mulai ${String(el.dataset.reminderJam).substring(0,5)}${waText}`;
                 } else {
                     el.className = 'today-admin-reminder-timer mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-slate-100 text-slate-500 border border-slate-200 text-[9px] sm:text-[10px] font-black';
-                    el.innerHTML = `📌 Jadwal sudah dimulai · pengingat 1 jam sebelumnya sudah terlewat${waText}`;
+                    el.innerHTML = `📌 Jadwal mulai · pengingat terlewat${waText}`;
                 }
             });
         }
@@ -6190,9 +6470,6 @@ html {
             const info = getScheduleStartInfo(today, jam);
             if(!info) return '';
             const now = new Date();
-            if(now < info.graceEnd) {
-                return `<div class="today-late-timer mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-slate-100 text-slate-500 border border-slate-200 text-[9px] sm:text-[10px] font-black" data-timer-today="${today}" data-timer-jam="${jam}">⏳ Timer mulai otomatis setelah 15 menit keterlambatan</div>`;
-            }
             const elapsed = Math.max(0, Math.floor((now.getTime() - info.graceEnd.getTime()) / 1000));
             return `<div class="today-late-timer mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-rose-100 text-rose-700 border border-rose-200 text-[9px] sm:text-[10px] font-black" data-timer-today="${today}" data-timer-jam="${jam}">⏱️ Timer berjalan: <span>${formatCountdown(elapsed)}</span></div>`;
         }
@@ -6204,8 +6481,7 @@ html {
                 if(!info) return;
                 const now = new Date();
                 if(now < info.graceEnd) {
-                    el.className = 'today-late-timer mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-slate-100 text-slate-500 border border-slate-200 text-[9px] sm:text-[10px] font-black';
-                    el.innerHTML = '⏳ Timer mulai otomatis setelah 15 menit keterlambatan';
+                    el.remove();
                     return;
                 }
                 const elapsed = Math.max(0, Math.floor((now.getTime() - info.graceEnd.getTime()) / 1000));
@@ -6359,7 +6635,7 @@ html {
                         <div class="min-w-0 flex-1">
                             <div class="${isMember ? 'schedule-team-member' : 'schedule-team-nonmember'} font-black text-xs sm:text-sm truncate">${escapeHtmlSparing(namaTampil)}</div>
                             <div class="flex flex-wrap items-center gap-1 mt-1">${statusBadge}
-                                ${hasWa ? `<button type="button" onclick="event.stopPropagation(); window.open(getWhatsAppUrl('${escapeHtmlSparing(getScheduleWhatsApp(first))}', getScheduleWhatsAppMessage('${escapeHtmlSparing(first.nama || '')}', '${escapeHtmlSparing(aktif.map(x => x.jam.replace(':','.')).join(' & '))}')), '_blank')" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-green-600 hover:bg-green-700 text-white text-[9px] font-black shadow-sm">🟢 Hubungi</button>` : `<span class="px-2 py-1 rounded-lg bg-slate-200 text-slate-500 text-[9px] font-black">WA belum ada</span>`}
+                                ${hasWa ? `<button type="button" onclick="event.stopPropagation(); return hubungiJadwalHariIni(decodeURIComponent('${encodeURIComponent(String(getScheduleWhatsApp(first)))}'), decodeURIComponent('${encodeURIComponent(String(first.nama || ''))}'), decodeURIComponent('${encodeURIComponent(String(aktif.map(x => x.jam.replace(':','.')).join(' & ')))}'))" class="today-remind-btn inline-flex items-center gap-1.5 px-1 py-1 text-green-700 hover:text-green-800 text-[11px] font-black" aria-label="Ingatkan via WhatsApp" title="Ingatkan via WhatsApp"><img src="ikonwa.png" alt="WA" class="today-remind-icon"> <span>Ingatkan</span></button>` : `<span class="px-2 py-1 rounded-lg bg-slate-200 text-slate-500 text-[9px] font-black">WA belum ada</span>`}
                             </div>
                             ${isFirstConsecutiveTeamSchedule(schedules, jamList, jamPertama, first) ? getAdminReminderTimerHtml(today, jamPertama, hasWa) : ''}
                             ${lateTimers}
@@ -6829,7 +7105,7 @@ html {
                         <input id="edit-wa-nonmember-value" type="tel" inputmode="tel" autocomplete="tel"
                                value="${safe(item.wa || '')}" placeholder="Contoh: 081234567890"
                                class="w-full p-3 rounded-xl border border-slate-300 bg-white font-bold text-sm">
-                        <p class="text-[10px] text-slate-500 font-bold mt-2">Nomor ini akan dipakai otomatis pada tombol 🟢 Hubungi di Jadwal Hari Ini.</p>
+                        <p class="text-[10px] text-slate-500 font-bold mt-2">Nomor ini akan dipakai otomatis pada tombol 📲 Ingatkan di Jadwal Hari Ini.</p>
                         <div class="flex gap-2 mt-4">
                             <button type="button" onclick="simpanWANonMember('${safe(bookingKey)}')" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white px-4 py-2.5 rounded-xl text-sm font-black shadow">💾 Simpan WA</button>
                             <button type="button" onclick="tutupEditWANonMember()" class="bg-slate-200 hover:bg-slate-300 text-slate-900 px-4 py-2.5 rounded-xl text-sm font-black">Batal</button>
@@ -8938,6 +9214,152 @@ window.downloadDailyRecapJPG = async function() {
 })();
 </script>
 
+<script id="native-device-back-navigation">
+(function () {
+    // Navigasi terpadu: tombol Back HP + tombol Back di aplikasi.
+    // Setiap halaman/submenu memiliki 1 entry history sendiri.
+    const APP_STATE_KEY = 'sandagaAdminPage';
+    let applyingHistoryState = false;
+    let navigationReady = false;
+
+    function makeState(page, sub = null) {
+        return { [APP_STATE_KEY]: true, page: page || 'home', sub: sub || null };
+    }
+
+    function currentState() {
+        const visiblePage = Array.from(document.querySelectorAll('main > div'))
+            .find(el => !el.classList.contains('hidden'));
+        const page = visiblePage ? visiblePage.id.replace(/^page-/, '') : 'home';
+        if (page === 'daily-recap') {
+            const sub = ['lapangan','minuman','pengeluaran','ringkasan'].find(id => {
+                const el = document.getElementById('sub-page-' + id);
+                return el && !el.classList.contains('hidden');
+            });
+            return makeState(page, sub);
+        }
+        return makeState(page);
+    }
+
+    function applyState(state) {
+        const safe = state && state[APP_STATE_KEY] ? state : makeState('home');
+        applyingHistoryState = true;
+        try {
+            if (safe.page === 'daily-recap') {
+                window.showPage('daily-recap');
+                if (safe.sub && typeof window.showDailySub === 'function') {
+                    window.showDailySub(safe.sub);
+                } else if (typeof window.backToDailyMenu === 'function') {
+                    window.backToDailyMenu();
+                }
+            } else {
+                window.showPage(safe.page || 'home');
+            }
+        } finally {
+            applyingHistoryState = false;
+        }
+    }
+
+    // Simpan fungsi asli sebelum dibungkus.
+    const originalShowPage = window.showPage;
+    const originalShowDailySub = window.showDailySub;
+
+    if (typeof originalShowPage === 'function') {
+        window.showPage = function (id) {
+            originalShowPage.call(this, id);
+            if (navigationReady && !applyingHistoryState) {
+                const next = makeState(id);
+                const cur = history.state;
+                if (!cur || cur.page !== next.page || cur.sub !== next.sub) {
+                    history.pushState(next, '', location.href);
+                }
+            }
+        };
+    }
+
+    if (typeof originalShowDailySub === 'function') {
+        window.showDailySub = function (sub) {
+            originalShowDailySub.call(this, sub);
+            if (navigationReady && !applyingHistoryState) {
+                const next = makeState('daily-recap', sub);
+                const cur = history.state;
+                if (!cur || cur.page !== next.page || cur.sub !== next.sub) {
+                    history.pushState(next, '', location.href);
+                }
+            }
+        };
+    }
+
+    // Entry awal aplikasi = Beranda.
+    history.replaceState(makeState('home'), '', location.href);
+    navigationReady = true;
+
+    // Tombol Back di dalam aplikasi.
+    window.navigateBack = function () {
+        // Tentukan halaman yang sedang terlihat secara langsung. Ini menjadi
+        // fallback yang pasti bekerja walaupun browser belum memiliki entry
+        // history aplikasi (misalnya saat file HTML dibuka langsung).
+        const visiblePage = Array.from(document.querySelectorAll('main > div'))
+            .find(el => !el.classList.contains('hidden'));
+        const currentPage = visiblePage ? visiblePage.id.replace(/^page-/, '') : 'home';
+
+        // Daily Recap memiliki level submenu sendiri.
+        if (currentPage === 'daily-recap') {
+            const activeSub = ['lapangan','minuman','pengeluaran','ringkasan'].find(id => {
+                const el = document.getElementById('sub-page-' + id);
+                return el && !el.classList.contains('hidden');
+            });
+            if (activeSub) {
+                applyingHistoryState = true;
+                try {
+                    window.showPage('daily-recap');
+                    if (typeof window.backToDailyMenu === 'function') window.backToDailyMenu();
+                } finally {
+                    applyingHistoryState = false;
+                }
+                return false;
+            }
+        }
+
+        // Untuk halaman utama seperti Minuman, Booking, Sparring, dll.,
+        // tombol kembali selalu kembali ke Beranda.
+        applyingHistoryState = true;
+        try {
+            if (typeof originalShowPage === 'function') originalShowPage('home');
+            else if (typeof window.showPage === 'function') window.showPage('home');
+        } finally {
+            applyingHistoryState = false;
+        }
+
+        // Rapikan entry history agar Back HP berikutnya tidak mengembalikan
+        // pengguna ke halaman yang baru saja ditinggalkan.
+        history.replaceState(makeState('home'), '', location.href);
+        return false;
+    };
+
+    // Tombol Back bawaan HP/browser.
+    window.addEventListener('popstate', function (event) {
+        const state = event.state;
+        if (state && state[APP_STATE_KEY] === true) {
+            applyState(state);
+            return;
+        }
+        // Jangan biarkan browser menampilkan halaman kosong/keadaan aneh.
+        applyState(makeState('home'));
+        history.replaceState(makeState('home'), '', location.href);
+    });
+
+    // Pastikan semua tombol Back yang ada sekarang memakai fungsi yang sama,
+    // termasuk tombol yang dibuat dari markup lama.
+    document.querySelectorAll('.sticky-back-btn').forEach(btn => {
+        btn.type = 'button';
+        btn.onclick = function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            return window.navigateBack();
+        };
+    });
+})();
+</script>
 </body>
 </html>
 
@@ -8979,5 +9401,123 @@ window.downloadDailyRecapJPG = async function() {
 #page-admin-jaga .admin-day {
     position: relative;
     z-index: 1;
+}
+</style>
+
+<style>
+/* =========================================================
+   JADWAL HARI INI — MOBILE CLEAN V29
+   Visual-only: tidak mengubah data, ID, onclick, atau fungsi.
+   ========================================================= */
+@media (max-width: 640px) {
+  #today-schedule-panel {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding: 10px !important;
+    border-radius: 16px !important;
+  }
+
+  /* Judul dibuat ringkas agar area atas tidak penuh. */
+  #today-schedule-panel .schedule-section-title,
+  #today-schedule-panel h2,
+  #today-schedule-panel h3 {
+    line-height: 1.15 !important;
+  }
+
+  /* Setiap kartu jadwal dibuat padat dan tidak melebar. */
+  #today-schedule-panel .schedule-card {
+    padding: 9px !important;
+    border-radius: 13px !important;
+    margin-bottom: 7px !important;
+  }
+
+  #today-schedule-panel .schedule-card > .flex.items-start {
+    gap: 7px !important;
+    align-items: flex-start !important;
+  }
+
+  /* Area jam jangan mengambil terlalu banyak lebar. */
+  #today-schedule-panel .schedule-card .schedule-time {
+    min-width: 50px !important;
+    padding: 5px 6px !important;
+    font-size: 10px !important;
+    line-height: 1 !important;
+    border-radius: 8px !important;
+  }
+
+  #today-schedule-panel .schedule-card .schedule-team-member,
+  #today-schedule-panel .schedule-card .schedule-team-nonmember {
+    display: block !important;
+    max-width: 100% !important;
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  /* Status + Hubungi dibuat satu baris pendek. */
+  #today-schedule-panel .schedule-card .mt-1 {
+    margin-top: 4px !important;
+    gap: 4px !important;
+    flex-wrap: nowrap !important;
+    overflow: hidden !important;
+  }
+
+  #today-schedule-panel .schedule-card .mt-1 > * {
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+    font-size: 8px !important;
+    line-height: 1 !important;
+    padding: 4px 6px !important;
+    border-radius: 7px !important;
+  }
+
+  /* Tombol Hubungi tetap jelas tapi tidak mendominasi kartu. */
+  #today-schedule-panel .schedule-card button[onclick*="hubungiJadwalHariIni"] {
+    font-size: 8px !important;
+    padding: 4px 7px !important;
+    min-height: 24px !important;
+  }
+
+  /* Timer/reminder panjang dibuat lebih ringkas di HP. */
+  #today-schedule-panel .schedule-card .schedule-reminder,
+  #today-schedule-panel .schedule-card .schedule-late-timer,
+  #today-schedule-panel .schedule-card [class*="reminder"],
+  #today-schedule-panel .schedule-card [class*="late-timer"] {
+    font-size: 8px !important;
+    line-height: 1.2 !important;
+    padding: 4px 6px !important;
+    margin-top: 4px !important;
+    border-radius: 7px !important;
+  }
+
+  /* Nilai uang tetap 3 kolom, tetapi label dibuat super ringkas. */
+  #today-schedule-panel .schedule-card .grid.grid-cols-3 {
+    gap: 4px !important;
+    margin-top: 7px !important;
+    font-size: 9px !important;
+  }
+
+  #today-schedule-panel .schedule-card .grid.grid-cols-3 > div {
+    padding: 6px 3px !important;
+    min-width: 0 !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+  }
+
+  #today-schedule-panel .schedule-card .schedule-total-label,
+  #today-schedule-panel .schedule-card .schedule-dp-label,
+  #today-schedule-panel .schedule-card .schedule-sisa-label {
+    font-size: 7px !important;
+    line-height: 1 !important;
+    margin-bottom: 2px !important;
+  }
+
+  /* Sembunyikan teks bantuan panjang di kartu jika ada; fungsi timer tetap berjalan. */
+  #today-schedule-panel .schedule-card p {
+    font-size: 8px !important;
+    line-height: 1.2 !important;
+  }
 }
 </style>
