@@ -108,13 +108,40 @@
             overscroll-behavior-y: auto;
         }
 
-        /* Background untuk Sub Menu juga tetap fixed di viewport */
+        /* Semua halaman/sub-menu memakai latar yang sama dengan halaman awal.
+           HP: latar.png | Desktop: latardesktop.png */
         body.sub-menu-active {
-            background-image: url('latar1.png') !important;
+            background-image: url('latar.png') !important;
             background-size: cover !important;
             background-attachment: fixed !important;
             background-position: center center !important;
             background-repeat: no-repeat !important;
+        }
+
+        @media (min-width: 768px) {
+            body,
+            body.sub-menu-active {
+                background-image: url('latardesktop.png') !important;
+                background-size: cover !important;
+                background-attachment: fixed !important;
+                background-position: center center !important;
+                background-repeat: no-repeat !important;
+            }
+        }
+
+        /* Beri ruang napas pada seluruh isi sub-menu di layar HP. */
+        @media (max-width: 767px) {
+            .sub-menu-modern {
+                width: calc(100% - 24px) !important;
+                max-width: calc(100% - 24px) !important;
+                margin-left: 12px !important;
+                margin-right: 12px !important;
+                box-sizing: border-box !important;
+            }
+
+            .sub-menu-modern > * {
+                max-width: 100%;
+            }
         }
         
         /* Efek Liquid Glassmorphism */
@@ -2553,8 +2580,28 @@ body::before {
     background-repeat: no-repeat;
     pointer-events: none;
 }
+/* Sub-menu memakai latar yang sama dengan Home. */
 body.sub-menu-active::before {
-    background-image: url('latar1.png');
+    background-image: url('latar.png');
+}
+@media (min-width: 768px) {
+    body::before,
+    body.sub-menu-active::before {
+        background-image: url('latardesktop.png');
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+    }
+}
+/* Ruang kiri-kanan ekstra agar seluruh sub-menu lebih lega di HP. */
+@media (max-width: 767px) {
+    .sub-menu-modern {
+        width: calc(100% - 24px) !important;
+        max-width: calc(100% - 24px) !important;
+        margin-left: 12px !important;
+        margin-right: 12px !important;
+        box-sizing: border-box !important;
+    }
 }
 /* Hilangkan frame/panel luar menu utama */
 #page-home.home-dashboard {
@@ -3363,27 +3410,51 @@ html {
   transform: translateY(-1px) !important;
   box-shadow: 0 10px 22px rgba(15,23,42,.18) !important;
 }
+/* Jam booking mengikuti warna aksen masing-masing kartu. Tidak lagi hijau semua. */
 #today-schedule-panel .schedule-card .schedule-time {
-  border: 0 !important;
-  color: #fff !important;
-  border-radius: 10px !important;
-  min-width: 58px !important;
-  background: linear-gradient(135deg,#2563eb,#1e40af) !important;
-  box-shadow: 0 4px 10px rgba(37,99,235,.22) !important;
+  border: 1px solid currentColor !important;
+  color: #2563eb !important;
+  border-radius: 11px !important;
+  min-width: 62px !important;
+  background: rgba(255,255,255,.78) !important;
+  box-shadow: none !important;
+  font-weight: 950 !important;
 }
-#today-schedule-panel .schedule-card:nth-child(6n+2) .schedule-time { background: linear-gradient(135deg,#10b981,#047857) !important; }
-#today-schedule-panel .schedule-card:nth-child(6n+3) .schedule-time { background: linear-gradient(135deg,#f59e0b,#d97706) !important; }
-#today-schedule-panel .schedule-card:nth-child(6n+4) .schedule-time { background: linear-gradient(135deg,#f43f5e,#be123c) !important; }
-#today-schedule-panel .schedule-card:nth-child(6n+5) .schedule-time { background: linear-gradient(135deg,#06b6d4,#0e7490) !important; }
-#today-schedule-panel .schedule-card:nth-child(6n+6) .schedule-time { background: linear-gradient(135deg,#7c3aed,#4c1d95) !important; }
+#today-schedule-panel .schedule-card:nth-child(6n+2) .schedule-time { color: #059669 !important; }
+#today-schedule-panel .schedule-card:nth-child(6n+3) .schedule-time { color: #d97706 !important; }
+#today-schedule-panel .schedule-card:nth-child(6n+4) .schedule-time { color: #e11d48 !important; }
+#today-schedule-panel .schedule-card:nth-child(6n+5) .schedule-time { color: #0891b2 !important; }
+#today-schedule-panel .schedule-card:nth-child(6n+6) .schedule-time { color: #7c3aed !important; }
 
+/* Nama tim dibuat lebih tegas dan natural, tanpa terlihat seperti label yang terpisah. */
 #today-schedule-panel .schedule-card .schedule-team-member,
 #today-schedule-panel .schedule-card .schedule-team-nonmember {
+  display: block !important;
   background: transparent !important;
   box-shadow: none !important;
   color: #0f172a !important;
   padding: 0 !important;
+  margin: 1px 0 0 !important;
+  font-size: 15px !important;
+  line-height: 1.15 !important;
+  font-weight: 950 !important;
+  letter-spacing: -.15px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
 }
+#today-schedule-panel .schedule-card:nth-child(6n+1) .schedule-team-member,
+#today-schedule-panel .schedule-card:nth-child(6n+1) .schedule-team-nonmember { border-left: 3px solid #2563eb !important; padding-left: 8px !important; }
+#today-schedule-panel .schedule-card:nth-child(6n+2) .schedule-team-member,
+#today-schedule-panel .schedule-card:nth-child(6n+2) .schedule-team-nonmember { border-left: 3px solid #059669 !important; padding-left: 8px !important; }
+#today-schedule-panel .schedule-card:nth-child(6n+3) .schedule-team-member,
+#today-schedule-panel .schedule-card:nth-child(6n+3) .schedule-team-nonmember { border-left: 3px solid #d97706 !important; padding-left: 8px !important; }
+#today-schedule-panel .schedule-card:nth-child(6n+4) .schedule-team-member,
+#today-schedule-panel .schedule-card:nth-child(6n+4) .schedule-team-nonmember { border-left: 3px solid #e11d48 !important; padding-left: 8px !important; }
+#today-schedule-panel .schedule-card:nth-child(6n+5) .schedule-team-member,
+#today-schedule-panel .schedule-card:nth-child(6n+5) .schedule-team-nonmember { border-left: 3px solid #0891b2 !important; padding-left: 8px !important; }
+#today-schedule-panel .schedule-card:nth-child(6n+6) .schedule-team-member,
+#today-schedule-panel .schedule-card:nth-child(6n+6) .schedule-team-nonmember { border-left: 3px solid #7c3aed !important; padding-left: 8px !important; }
 #today-schedule-panel .schedule-card .today-remind-btn {
   min-height: 32px !important;
   padding: 4px 10px !important;
@@ -9436,21 +9507,27 @@ window.downloadDailyRecapJPG = async function() {
     align-items: flex-start !important;
   }
 
+  #today-schedule-panel .schedule-card > .flex.items-start > .min-w-0 {
+    padding-top: 1px !important;
+  }
+
   /* Area jam jangan mengambil terlalu banyak lebar. */
   #today-schedule-panel .schedule-card .schedule-time {
-    min-width: 50px !important;
-    padding: 5px 6px !important;
+    min-width: 54px !important;
+    padding: 6px 7px !important;
     font-size: 10px !important;
-    line-height: 1 !important;
-    border-radius: 8px !important;
+    line-height: 1.05 !important;
+    border-radius: 9px !important;
+    background: rgba(255,255,255,.82) !important;
   }
 
   #today-schedule-panel .schedule-card .schedule-team-member,
   #today-schedule-panel .schedule-card .schedule-team-nonmember {
-    display: block !important;
     max-width: 100% !important;
-    font-size: 11px !important;
-    line-height: 1.2 !important;
+    font-size: 13px !important;
+    line-height: 1.15 !important;
+    margin-top: 1px !important;
+    padding-left: 7px !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
