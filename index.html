@@ -1620,7 +1620,7 @@ body > .sticky-back-btn[data-back-context="page-daily-recap"] {
 
 <style id="theme-sparring">
 /* =========================================================
-   CATATAN SPARRING — TEMA BIRU SLATE REFERENSI ADMIN JAGA
+   CATATAN SPARING — TEMA BIRU SLATE REFERENSI ADMIN JAGA
    ========================================================= */
 .menu-sparring { background: linear-gradient(135deg,#7B8F9E 0%,#2E607A 52%,#163B55 100%) !important; color:#fff !important; }
 .menu-sparring:hover { filter:brightness(1.06); transform:translateY(-2px); }
@@ -3011,7 +3011,7 @@ body.sub-menu-active::before {
 </button>
 <button class="home-menu-card menu-sparring" onclick="showPage('sparring')">
 <span class="menu-card-icon">🤝</span>
-<span class="menu-card-copy"><strong>SPARRING</strong><small>Catat &amp; cek lawan tim</small></span>
+<span class="menu-card-copy"><strong>SPARING</strong><small>Catat &amp; cek lawan tim</small></span>
 <span class="menu-card-arrow">→</span>
 </button>
 <button class="home-menu-card menu-admin-jaga" onclick="showPage('admin-jaga')">
@@ -3089,10 +3089,10 @@ body.sub-menu-active::before {
   </div>
 
 </div>
-<!-- HALAMAN SPARRING -->
+<!-- HALAMAN SPARING -->
 <div class="sub-menu-modern glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900" id="page-sparring">
   <div class="flex justify-between items-center mb-4">
-    <h2 class="text-base sm:text-lg font-black w-full text-center">🤝 CATATAN SPARRING</h2>
+    <h2 class="text-base sm:text-lg font-black w-full text-center">🤝 CATATAN SPARING</h2>
   </div>
 
   <div class="sparring-summary-grid">
@@ -3107,31 +3107,27 @@ body.sub-menu-active::before {
   <div class="sparring-form-wrap">
     <div class="flex items-center justify-between gap-2 mb-3">
       <div>
-        <h3 class="text-sm sm:text-base font-black text-sparring-dark" id="sparring-form-title">➕ Catat Permintaan Sparring</h3>
-        <p class="text-[10px] sm:text-xs text-slate-500 font-semibold">Pilih tim langsung dari jadwal booking. Tanggal dan jam akan tersinkron otomatis.</p>
+        <h3 class="text-sm sm:text-base font-black text-sparring-dark" id="sparring-form-title">➕ Catat Permintaan Sparing</h3>
       </div>
-      <button type="button" id="sparring-cancel-edit" onclick="batalEditSparring()" class="hidden px-3 py-2 rounded-xl bg-slate-200 text-slate-700 text-[10px] font-black">BATAL EDIT</button>
+      <button type="button" id="sparring-cancel-edit" onclick="batalEditSparing()" class="hidden px-3 py-2 rounded-xl bg-slate-200 text-slate-700 text-[10px] font-black">BATAL EDIT</button>
     </div>
 
-    <form onsubmit="simpanSparring(event)">
+    <form onsubmit="simpanSparing(event)">
       <input type="hidden" id="sparring-edit-key" value="">
       <input type="hidden" id="sparring-tanggal" value="">
       <input type="hidden" id="sparring-jam" value="">
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label class="sparring-label">Tim 1 / Tim yang Mencari Lawan</label>
-          <select id="sparring-tim-a" required class="sparring-input" onchange="updateSparringBookingOptions()">
+          <select id="sparring-tim-a" required class="sparring-input" onchange="updateSparingBookingOptions()">
             <option value="">Pilih tim dari jadwal booking</option>
           </select>
-          <div class="mt-1 text-[9px] text-slate-500 font-semibold">Tanggal &amp; jam otomatis mengikuti booking tim yang dipilih.</div>
         </div>
         <div>
-          <label class="sparring-label">Tim 2 / Lawan Sparring <span class="text-slate-400">(boleh dikosongkan)</span></label>
+          <label class="sparring-label">Tim 2 / Lawan Sparing <span class="text-slate-400">(boleh dikosongkan)</span></label>
           <input id="sparring-tim-b" class="sparring-input" placeholder="Ketik nama tim lawan; kosongkan jika belum dapat lawan">
-          <div class="mt-1 text-[9px] text-slate-500 font-semibold">Kosong = masih mencari lawan.</div>
         </div>
       </div>
-      <div id="sparring-booking-info" class="sparring-booking-info">Pilih tim dari jadwal booking untuk mengisi tanggal dan jam otomatis.</div>
       <div>
         <label class="sparring-label">Catatan</label>
         <textarea id="sparring-catatan" rows="2" class="sparring-input" placeholder="Contoh: sudah konfirmasi via WhatsApp, minta jam 20.00, dll."></textarea>
@@ -3145,12 +3141,11 @@ body.sub-menu-active::before {
   <div class="sparring-list-wrap">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
       <div>
-        <h3 class="text-sm sm:text-base font-black text-sparring-dark">📋 Daftar Sparring</h3>
-        <p class="text-[10px] sm:text-xs text-slate-500 font-semibold">Cari nama tim untuk langsung mengetahui sudah punya lawan atau belum.</p>
+        <h3 class="text-sm sm:text-base font-black text-sparring-dark">📋 Daftar Sparing</h3>
       </div>
       <div class="flex gap-2">
-        <input id="sparring-filter-search" oninput="renderSparring()" class="sparring-filter" placeholder="Cari tim...">
-        <select id="sparring-filter-status" onchange="renderSparring()" class="sparring-filter">
+        <input id="sparring-filter-search" oninput="renderSparing()" class="sparring-filter" placeholder="Cari tim...">
+        <select id="sparring-filter-status" onchange="renderSparing()" class="sparring-filter">
           <option value="all">Semua</option><option value="pending">Mencari Lawan</option><option value="matched">Sudah Dapat Lawan</option>
         </select>
       </div>
@@ -3787,7 +3782,7 @@ body.sub-menu-active::before {
 </select>
 </div>
 <div class="p-3 rounded-xl border border-emerald-500/40 space-y-2 bg-white/30">
-<label class="block text-xs font-black text-emerald-950">Tim 2 · Lawan Sparring</label>
+<label class="block text-xs font-black text-emerald-950">Tim 2 · Lawan Sparing</label>
 <select class="w-full p-2 rounded text-sm glass-input font-bold" id="in-status-2" onchange="hitungOtomatisBiaya()">
 <option value="Non-Member">Non-Member</option><option value="Member">Member</option>
 </select>
@@ -3797,7 +3792,12 @@ body.sub-menu-active::before {
 </select>
 </div>
 </div>
+<input type="hidden" id="in-jadwal-source-key" value="">
+<input type="hidden" id="in-jadwal-source-type" value="">
+<input type="hidden" id="in-jadwal-source-tgl" value="">
+<input type="hidden" id="in-jadwal-source-jam" value="">
 <div class="flex justify-end gap-2">
+<button type="button" id="btn-hapus-dari-jadwal" onclick="hapusJadwalHariIniDariPembayaran()" class="hidden bg-rose-700 hover:bg-rose-800 text-white px-4 py-2 rounded text-sm font-bold border border-rose-500/50 shadow">🗑️ Hapus Jadwal</button>
 <button class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded text-sm font-bold border border-emerald-500/50 shadow" type="submit">Simpan</button>
 </div>
 </form>
@@ -4031,7 +4031,7 @@ body.sub-menu-active::before {
         document.addEventListener("DOMContentLoaded", () => {
             setDefaultDates();
             initPeriodeDropdown();
-            updateSparringBookingOptions();
+            updateSparingBookingOptions();
             renderGridJadwal();
             setTimeout(() => renderRekapHarian(), 0);
         });
@@ -4100,8 +4100,8 @@ body.sub-menu-active::before {
                 renderJadwalAdmin();
             }
             if(id === 'sparring') {
-                updateSparringBookingOptions();
-                renderSparring();
+                updateSparingBookingOptions();
+                renderSparing();
             }
             if(id === 'masuk') {
                 updateDropdownTimMasuk();
@@ -4339,7 +4339,7 @@ body.sub-menu-active::before {
             // Tim 2 adalah lawan sparring. Default NON-MEMBER dan hanya berubah
             // menjadi Member jika admin memilihnya secara manual.
             let second = {
-                nama: 'Tim 2 / Sparring',
+                nama: 'Tim 2 / Sparing',
                 status: document.getElementById('in-status-2')?.value || 'Non-Member',
                 dp: 0
             };
@@ -4369,9 +4369,10 @@ body.sub-menu-active::before {
             const tim1Member = String(selectedStatus).toLowerCase() === 'member';
             const tim2Member = String(second.status).toLowerCase() === 'member';
 
-            // Potongan member Rp50.000. Jika dua-duanya Member, potongan hanya Tim 1.
+            // Potongan member Rp50.000 berlaku untuk masing-masing tim secara independen.
+            // Jadi Tim 2 tetap mendapat potongan Rp50.000 walaupun Tim 1 juga Member.
             if (tim1Member) hargaTim1 = Math.max(0, hargaTim1 - 50000);
-            if (tim2Member && !tim1Member) hargaTim2 = Math.max(0, hargaTim2 - 50000);
+            if (tim2Member) hargaTim2 = Math.max(0, hargaTim2 - 50000);
 
             // Biaya tambahan.
             const biayaBola = pakaiBola ? 25000 * durasiJam : 0;
@@ -4406,8 +4407,14 @@ body.sub-menu-active::before {
                 const nama1 = String(selectedName || '').replace(/\s*\(Booking\)$/i, '').trim();
                 const nama2 = String(second.nama || '').replace(/\s*\(Booking\)$/i, '').trim();
 
-                if (namaData === nama1) pembayaranTim1 += Number(x.jumlah1 ?? x.jumlah ?? 0);
-                if (namaData === nama2) pembayaranTim2 += Number(x.jumlah2 || 0);
+                // Satu record pelunasan menyimpan pembayaran Tim 1 dan Tim 2 sekaligus.
+                // timNamaBersih adalah nama Tim 1, jadi pembayaran Tim 2 harus ikut
+                // dihitung dari record yang sama; sebelumnya pembayaran Tim 2 terlewat
+                // sehingga setelah disimpan sisa tagihan Tim 2 muncul lagi Rp50.000.
+                if (namaData === nama1) {
+                    pembayaranTim1 += Number(x.jumlah1 ?? x.jumlah ?? 0);
+                    pembayaranTim2 += Number(x.jumlah2 || 0);
+                }
             });
 
             const totalTerbayar1 = dp1 + pembayaranTim1;
@@ -4435,7 +4442,7 @@ body.sub-menu-active::before {
                     <div class="rounded-xl border-2 border-amber-300 bg-amber-50 p-3 shadow-md">
                         <div class="flex items-center justify-between gap-2 mb-1">
                             <div class="text-[10px] font-black text-amber-700 uppercase">⚽ TIM 2 · ${second.status}</div>
-                            <div class="text-[9px] font-black bg-amber-500 text-white px-2 py-1 rounded-full">SPARRING</div>
+                            <div class="text-[9px] font-black bg-amber-500 text-white px-2 py-1 rounded-full">SPARING</div>
                         </div>
                         <div class="font-black text-slate-900 text-xs truncate mb-2">${second.nama}</div>
                         <div class="grid grid-cols-2 gap-1 text-[10px]">
@@ -5001,16 +5008,54 @@ body.sub-menu-active::before {
             }
 
             try {
-                await update(ref(db, 'booking/' + key), {
+                // Update record yang SAMA (key booking tidak berubah).
+                // Edit tanggal/jam berarti memindahkan booking, bukan membuat record baru.
+                const updatedBooking = {
                     nama,
                     tgl: tanggal + 'T' + jam,
                     status,
                     dp,
                     tglDp: tanggalDp,
                     metode
-                });
+                };
+
+                // Simpan booking menggunakan KEY YANG SAMA.
+                // Jadi edit tanggal/jam selalu berarti MEMINDAHKAN booking,
+                // bukan membuat booking baru.
+                await update(ref(db, 'booking/' + key), updatedBooking);
+
+                if(!globalCache.booking) globalCache.booking = {};
+
+                // Buang kemungkinan record duplikat yang memiliki tim + tanggal + jam
+                // SAMA dengan booking yang sedang diedit. Ini hanya menghapus duplikat
+                // yang benar-benar identik; booking lain pada jam berbeda tetap aman.
+                const duplicateKeys = Object.entries(globalCache.booking)
+                    .filter(([otherKey, other]) => {
+                        if(otherKey === key || !other) return false;
+                        return String(other.nama || '').trim().toLowerCase() === String(updatedBooking.nama || '').trim().toLowerCase()
+                            && String(other.tgl || '') === String(updatedBooking.tgl || '');
+                    })
+                    .map(([otherKey]) => otherKey);
+
+                if(duplicateKeys.length) {
+                    await Promise.all(duplicateKeys.map(otherKey => remove(ref(db, 'booking/' + otherKey))));
+                    duplicateKeys.forEach(otherKey => delete globalCache.booking[otherKey]);
+                }
+
+                // Ganti isi record cache yang sama, bukan menambah record baru.
+                globalCache.booking[key] = {
+                    ...(globalCache.booking[key] || {}),
+                    ...updatedBooking
+                };
+
+                // Render SATU KALI setelah semua perubahan selesai.
+                // Dengan ini slot lama tidak tertinggal dan booking hanya muncul
+                // pada tanggal + jam yang baru.
+                renderAll();
+                updateDropdownTimMasuk();
+
                 tutupEditBooking();
-                alert('Booking berhasil diperbarui!');
+                showSuccessPopup('Booking berhasil diperbarui. Jadwal otomatis pindah ke tanggal/jam baru tanpa menjadi ganda.');
             } catch(error) {
                 console.error(error);
                 alert('Gagal memperbarui booking: ' + error.message);
@@ -5222,8 +5267,8 @@ body.sub-menu-active::before {
 
         onValue(ref(db, 'sparring'), (snapshot) => {
             globalCache.sparring = snapshot.val() || {};
-            updateSparringBookingOptions();
-            renderSparring();
+            updateSparingBookingOptions();
+            renderSparing();
             renderGridJadwal();
             renderTabelBooking();
         });
@@ -5318,6 +5363,50 @@ body.sub-menu-active::before {
                 });
             }
 
+            // Simpan sumber jadwal yang diklik agar tombol Hapus bisa menghapus
+            // booking atau hanya meliburkan jadwal member pada HARI INI.
+            const sourceKeyEl = document.getElementById('in-jadwal-source-key');
+            const sourceTypeEl = document.getElementById('in-jadwal-source-type');
+            const sourceTglEl = document.getElementById('in-jadwal-source-tgl');
+            const sourceJamEl = document.getElementById('in-jadwal-source-jam');
+            const deleteBtn = document.getElementById('btn-hapus-dari-jadwal');
+            let sourceKey = '';
+            let sourceType = '';
+
+            // Prioritaskan booking yang tepat pada tanggal + jam + nama.
+            const bookingEntry = Object.entries(globalCache.booking || {}).find(([key, item]) => {
+                if(!item || !item.tgl) return false;
+                return String(item.nama || '').trim().toLowerCase() === targetNama &&
+                    String(item.tgl).split('T')[0] === tgl &&
+                    String(item.tgl).split('T')[1]?.substring(0,5) === jamMain;
+            });
+            if(bookingEntry) {
+                sourceKey = bookingEntry[0];
+                sourceType = 'booking';
+            } else {
+                // Jika yang diklik adalah jadwal member, cari key member berdasarkan
+                // nama + hari + jam. Hapus hanya tanggal hari ini melalui liburTanggal.
+                outerMember:
+                for(const [jamKey, perHari] of Object.entries(globalCache.member || {})) {
+                    if(String(jamKey).substring(0,5) !== jamMain) continue;
+                    const cell = perHari ? perHari[hariNama] : null;
+                    if(cell && String(cell.nama || '').trim().toLowerCase() === targetNama && cell.key) {
+                        sourceKey = cell.key;
+                        sourceType = 'member';
+                        break outerMember;
+                    }
+                }
+            }
+
+            if(sourceKeyEl) sourceKeyEl.value = sourceKey;
+            if(sourceTypeEl) sourceTypeEl.value = sourceType;
+            if(sourceTglEl) sourceTglEl.value = tgl;
+            if(sourceJamEl) sourceJamEl.value = jamMain;
+            if(deleteBtn) {
+                deleteBtn.classList.toggle('hidden', !sourceKey);
+                deleteBtn.textContent = sourceType === 'member' ? '🗑️ Hapus Hari Ini' : '🗑️ Hapus Booking';
+            }
+
             if(option) {
                 selectTim.value = option.value;
                 updateJamMainMasuk();
@@ -5330,6 +5419,50 @@ body.sub-menu-active::before {
 
             // Kembalikan fokus ke bagian atas form Uang Masuk.
             document.getElementById('page-masuk')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+
+        window.hapusJadwalHariIniDariPembayaran = async () => {
+            const key = document.getElementById('in-jadwal-source-key')?.value || '';
+            const type = document.getElementById('in-jadwal-source-type')?.value || '';
+            const tgl = document.getElementById('in-jadwal-source-tgl')?.value || getLocalDateString();
+            const jam = document.getElementById('in-jadwal-source-jam')?.value || '';
+            const nama = document.getElementById('in-tim')?.value || '';
+            if(!key || !type) {
+                alert('Jadwal ini tidak memiliki data yang bisa dihapus.');
+                return;
+            }
+
+            const pesan = type === 'member'
+                ? `Hapus jadwal ${nama || 'tim'} pada ${tgl.split('-').reverse().join('/')} jam ${jam}?\n\nJadwal member hanya dihapus untuk tanggal ini. Jadwal minggu berikutnya tetap berjalan.`
+                : `Hapus booking ${nama || 'tim'} pada ${tgl.split('-').reverse().join('/')} jam ${jam}?\n\nData booking ini akan dihapus.`;
+            if(!(await window.appConfirm(pesan))) return;
+
+            try {
+                if(type === 'booking') {
+                    await remove(ref(db, 'booking/' + key));
+                } else {
+                    // Jangan menghapus record member permanen. Tandai hanya tanggal
+                    // ini sebagai libur agar jadwal rutin berikutnya tetap ada.
+                    let raw = null;
+                    Object.values(globalCache.member || {}).forEach(perHari => {
+                        Object.values(perHari || {}).forEach(cell => {
+                            if(cell && cell.key === key) raw = cell;
+                        });
+                    });
+                    const existing = raw?.liburTanggal && !Array.isArray(raw.liburTanggal)
+                        ? { ...raw.liburTanggal }
+                        : Object.fromEntries((raw?.liburTanggal || []).map(d => [d, true]));
+                    existing[tgl] = true;
+                    await update(ref(db, 'member/' + key), { liburTanggal: existing });
+                }
+
+                // Kembali ke halaman awal; listener Firebase akan menyegarkan jadwal.
+                showPage('home');
+                showSuccessPopup(type === 'member' ? 'Jadwal hari ini berhasil dihapus.' : 'Booking berhasil dihapus.');
+            } catch(error) {
+                console.error(error);
+                alert('Gagal menghapus jadwal: ' + error.message);
+            }
         };
 
         window.renderTodaySchedule = () => {
@@ -5470,7 +5603,7 @@ body.sub-menu-active::before {
             }).join('');
         };
 
-        function escapeHtmlSparring(value) {
+        function escapeHtmlSparing(value) {
             return String(value ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
         }
 
@@ -5479,7 +5612,7 @@ body.sub-menu-active::before {
             return { date: parts[0] || '', jam: (parts[1] || '').substring(0,5) };
         }
 
-        function getSparringForTeam(nama, tanggal, jam) {
+        function getSparingForTeam(nama, tanggal, jam) {
             const target = String(nama || '').trim().toLowerCase();
             if(!target) return null;
             return Object.entries(globalCache.sparring || {}).find(([key, item]) => {
@@ -5491,7 +5624,7 @@ body.sub-menu-active::before {
             }) || null;
         }
 
-        function getBookingTeamsForSparring(tanggal, jam) {
+        function getBookingTeamsForSparing(tanggal, jam) {
             const names = [];
             Object.values(globalCache.booking || {}).forEach(item => {
                 const dt = sparringDateTime(item);
@@ -5503,16 +5636,16 @@ body.sub-menu-active::before {
             return names.sort((a,b)=>a.localeCompare(b,'id'));
         }
 
-        // Dropdown Tim 1 SPARRING mengambil gabungan jadwal MEMBER dan BOOKING
+        // Dropdown Tim 1 SPARING mengambil gabungan jadwal MEMBER dan BOOKING
         // untuk hari ini sampai maksimal 30 hari ke depan.
-        function formatTanggalSparring(tanggal) {
+        function formatTanggalSparing(tanggal) {
             if(!tanggal) return '-';
             const d = new Date(tanggal + 'T00:00:00');
             if(isNaN(d.getTime())) return tanggal;
             return d.toLocaleDateString('id-ID', { day:'2-digit', month:'2-digit', year:'numeric' });
         }
 
-        function getSparringDateRange() {
+        function getSparingDateRange() {
             const startStr = getLocalDateString();
             const start = new Date(startStr + 'T00:00:00');
             const end = new Date(start);
@@ -5521,14 +5654,14 @@ body.sub-menu-active::before {
             return { startStr, endStr, start, end };
         }
 
-        function isSparringDateInRange(tanggal) {
-            const {startStr, endStr} = getSparringDateRange();
+        function isSparingDateInRange(tanggal) {
+            const {startStr, endStr} = getSparingDateRange();
             return String(tanggal || '') >= startStr && String(tanggal || '') <= endStr;
         }
 
-        function getMemberOptionsForSparring() {
+        function getMemberOptionsForSparing() {
             const options = [];
-            const {start, end} = getSparringDateRange();
+            const {start, end} = getSparingDateRange();
 
             for(let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
                 const tanggal = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
@@ -5552,12 +5685,12 @@ body.sub-menu-active::before {
             return options;
         }
 
-        function getBookingOptionsForSparring() {
+        function getBookingOptionsForSparing() {
             const options = [];
             Object.entries(globalCache.booking || {}).forEach(([key, item]) => {
                 if(!item || !item.nama || !item.tgl) return;
                 const dt = sparringDateTime(item);
-                if(!dt.date || !dt.jam || !isSparringDateInRange(dt.date)) return;
+                if(!dt.date || !dt.jam || !isSparingDateInRange(dt.date)) return;
                 options.push({
                     source:'Booking',
                     key:`booking|${key}`,
@@ -5570,9 +5703,9 @@ body.sub-menu-active::before {
             return options;
         }
 
-        function getSparringTeamOptions() {
-            const bookingOptions = getBookingOptionsForSparring();
-            const memberOptions = getMemberOptionsForSparring();
+        function getSparingTeamOptions() {
+            const bookingOptions = getBookingOptionsForSparing();
+            const memberOptions = getMemberOptionsForSparing();
             const merged = [];
             const seen = new Map();
 
@@ -5600,7 +5733,7 @@ body.sub-menu-active::before {
             });
         }
 
-        window.updateSparringBookingOptions = () => {
+        window.updateSparingBookingOptions = () => {
             const selectTimA = document.getElementById('sparring-tim-a');
             const info = document.getElementById('sparring-booking-info');
             const tanggal = document.getElementById('sparring-tanggal');
@@ -5613,10 +5746,10 @@ body.sub-menu-active::before {
             const currentDate = String(currentItem?.tanggal || '');
             const currentJam = String(currentItem?.jam || '');
             const currentValue = selectTimA.value || '';
-            const options = getSparringTeamOptions();
+            const options = getSparingTeamOptions();
 
             selectTimA.innerHTML = '<option value="">Pilih tim dari jadwal</option>' + options.map(item =>
-                `<option value="${escapeHtmlSparring(item.key)}" data-source="${escapeHtmlSparring(item.source)}" data-booking-key="${escapeHtmlSparring(item.bookingKey || '')}" data-tanggal="${escapeHtmlSparring(item.tanggal)}" data-jam="${escapeHtmlSparring(item.jam)}">${escapeHtmlSparring(item.nama)} · ${escapeHtmlSparring(formatTanggalSparring(item.tanggal))} · ${escapeHtmlSparring(item.jam)}${item.source === 'Member' ? ' · Member' : ' · Booking'}</option>`
+                `<option value="${escapeHtmlSparing(item.key)}" data-source="${escapeHtmlSparing(item.source)}" data-booking-key="${escapeHtmlSparing(item.bookingKey || '')}" data-tanggal="${escapeHtmlSparing(item.tanggal)}" data-jam="${escapeHtmlSparing(item.jam)}">${escapeHtmlSparing(item.nama)} · ${escapeHtmlSparing(formatTanggalSparing(item.tanggal))} · ${escapeHtmlSparing(item.jam)}${item.source === 'Member' ? ' · Member' : ' · Booking'}</option>`
             ).join('');
 
             let selected = null;
@@ -5632,7 +5765,7 @@ body.sub-menu-active::before {
                 selectTimA.value = selected.key;
                 if(tanggal) tanggal.value = selected.tanggal;
                 if(jam) jam.value = selected.jam;
-                if(info) info.innerHTML = `🔗 <b>${escapeHtmlSparring(selected.nama)}</b> · ${escapeHtmlSparring(formatTanggalSparring(selected.tanggal))} · ${escapeHtmlSparring(selected.jam)} · ${selected.source === 'Member' ? 'Jadwal Member' : 'Booking'}`;
+                if(info) info.innerHTML = `🔗 <b>${escapeHtmlSparing(selected.nama)}</b> · ${escapeHtmlSparing(formatTanggalSparing(selected.tanggal))} · ${escapeHtmlSparing(selected.jam)} · ${selected.source === 'Member' ? 'Jadwal Member' : 'Booking'}`;
             } else {
                 if(tanggal) tanggal.value = '';
                 if(jam) jam.value = '';
@@ -5642,7 +5775,7 @@ body.sub-menu-active::before {
             }
         };
 
-        window.simpanSparring = async (e) => {
+        window.simpanSparing = async (e) => {
             e.preventDefault();
             const editKey = document.getElementById('sparring-edit-key')?.value || '';
             const selectedValue = document.getElementById('sparring-tim-a')?.value || '';
@@ -5706,7 +5839,7 @@ body.sub-menu-active::before {
                     }
                     await push(ref(db, 'sparring'), data);
                 }
-                batalEditSparring();
+                batalEditSparing();
                 showSuccessPopup(timB ? 'Pasangan sparring berhasil disimpan dan disinkronkan.' : 'Permintaan mencari lawan berhasil disimpan.');
             } catch(error) {
                 console.error(error);
@@ -5714,38 +5847,38 @@ body.sub-menu-active::before {
             }
         };
 
-        window.editSparring = (key) => {
+        window.editSparing = (key) => {
             const item = globalCache.sparring?.[key];
             if(!item) return;
             document.getElementById('sparring-edit-key').value = key;
             document.getElementById('sparring-tim-b').value = item.timB || '';
             document.getElementById('sparring-catatan').value = item.catatan || '';
-            document.getElementById('sparring-form-title').textContent = '✏️ Edit Catatan Sparring';
+            document.getElementById('sparring-form-title').textContent = '✏️ Edit Catatan Sparing';
             document.getElementById('sparring-save-btn').textContent = 'Simpan Perubahan';
             document.getElementById('sparring-cancel-edit').classList.remove('hidden');
-            updateSparringBookingOptions();
+            updateSparingBookingOptions();
             document.getElementById('sparring-tim-a')?.scrollIntoView({behavior:'smooth',block:'center'});
         };
 
-        window.batalEditSparring = () => {
+        window.batalEditSparing = () => {
             const form = document.querySelector('#page-sparring form');
             if(form) form.reset();
             document.getElementById('sparring-edit-key').value = '';
             document.getElementById('sparring-tanggal').value = '';
             document.getElementById('sparring-jam').value = '';
-            document.getElementById('sparring-form-title').textContent = '➕ Catat Permintaan Sparring';
+            document.getElementById('sparring-form-title').textContent = '➕ Catat Permintaan Sparing';
             document.getElementById('sparring-save-btn').textContent = 'Simpan Catatan';
             document.getElementById('sparring-cancel-edit').classList.add('hidden');
-            updateSparringBookingOptions();
+            updateSparingBookingOptions();
         };
 
-        window.hapusSparring = async (key) => {
+        window.hapusSparing = async (key) => {
             if(!await window.appConfirm('Yakin ingin menghapus catatan sparring ini?')) return;
             try { await remove(ref(db, 'sparring/' + key)); showSuccessPopup('Catatan sparring dihapus.'); }
             catch(error) { alert('Gagal menghapus catatan sparring: ' + error.message); }
         };
 
-        window.renderSparring = () => {
+        window.renderSparing = () => {
             const list = document.getElementById('sparring-list');
             const pendingEl = document.getElementById('sparring-count-pending');
             const matchedEl = document.getElementById('sparring-count-matched');
@@ -5772,14 +5905,14 @@ body.sub-menu-active::before {
             list.innerHTML = filtered.map(([key,item])=>{
                 const matched = item?.status === 'matched' && item?.timB;
                 const dateLabel = item?.tanggal ? item.tanggal.split('-').reverse().join('/') : '-';
-                const pair = matched ? `<span>${escapeHtmlSparring(item.timA)}</span><span class="vs">VS</span><span>${escapeHtmlSparring(item.timB)}</span>` : `<span>${escapeHtmlSparring(item.timA)}</span><span class="vs">VS</span><span class="text-slate-400">Belum ada lawan</span>`;
-                return `<div class="sparring-record">\n<div class="sparring-record-main">\n<div class="sparring-record-meta"><span class="sparring-badge sparring-badge-date">📅 ${dateLabel} · ${escapeHtmlSparring(item.jam||'-')}</span><span class="sparring-badge ${matched?'sparring-badge-matched':'sparring-badge-pending'}">${matched?'✓ SUDAH DAPAT LAWAN':'⌛ MENCARI LAWAN'}</span></div>\n<div class="sparring-pair">${pair}</div>\n${item.catatan ? `<div class="sparring-note">📝 ${escapeHtmlSparring(item.catatan)}</div>` : ''}\n</div>\n<div class="sparring-actions"><button type="button" class="sparring-action sparring-action-edit" onclick="editSparring('${key}')">Edit</button><button type="button" class="sparring-action sparring-action-delete" onclick="hapusSparring('${key}')">Hapus</button></div>\n</div>`;
+                const pair = matched ? `<span>${escapeHtmlSparing(item.timA)}</span><span class="vs">VS</span><span>${escapeHtmlSparing(item.timB)}</span>` : `<span>${escapeHtmlSparing(item.timA)}</span><span class="vs">VS</span><span class="text-slate-400">Belum ada lawan</span>`;
+                return `<div class="sparring-record">\n<div class="sparring-record-main">\n<div class="sparring-record-meta"><span class="sparring-badge sparring-badge-date">📅 ${dateLabel} · ${escapeHtmlSparing(item.jam||'-')}</span><span class="sparring-badge ${matched?'sparring-badge-matched':'sparring-badge-pending'}">${matched?'✓ SUDAH DAPAT LAWAN':'⌛ MENCARI LAWAN'}</span></div>\n<div class="sparring-pair">${pair}</div>\n${item.catatan ? `<div class="sparring-note">📝 ${escapeHtmlSparing(item.catatan)}</div>` : ''}\n</div>\n<div class="sparring-actions"><button type="button" class="sparring-action sparring-action-edit" onclick="editSparing('${key}')">Edit</button><button type="button" class="sparring-action sparring-action-delete" onclick="hapusSparing('${key}')">Hapus</button></div>\n</div>`;
             }).join('');
         };
 
         function getOpponentLabelForBooking(item) {
             const dt = sparringDateTime(item);
-            const rec = getSparringForTeam(item?.nama, dt.date, dt.jam);
+            const rec = getSparingForTeam(item?.nama, dt.date, dt.jam);
             if(!rec) return '';
             const s = rec[1];
             const a = String(s.timA||'').trim().toLowerCase();
@@ -5838,39 +5971,66 @@ body.sub-menu-active::before {
             headerTr.innerHTML = headerHtml;
 
             // Bentuk matrix member berdasarkan tanggal masing-masing hari.
-            // Dengan ini member baru tidak muncul sebelum tanggal mulai dan member berhenti
-            // tidak muncul lagi mulai tanggal berhenti, tanpa menghapus histori tanggal sebelumnya.
+            //
+            // PENTING: jadwal member adalah sumber terpisah dari data booking.
+            // Jika sebuah tim sudah mempunyai booking pada tanggal tersebut,
+            // jadwal member rutinnya untuk tanggal yang sama harus disembunyikan.
+            // Kalau tidak, saat booking dipindah misalnya 20:00 -> 21:00,
+            // slot member 20:00 tetap terlihat sehingga seolah-olah booking menjadi double.
+            const bookedTeamDateKeys = new Set();
+            Object.values(globalCache.booking || {}).forEach(b => {
+                if(!b || !b.tgl || !b.nama) return;
+                const datePart = String(b.tgl).split('T')[0];
+                if(!datePart) return;
+                const teamName = String(b.nama).trim().toLowerCase();
+                if(teamName) bookedTeamDateKeys.add(`${datePart}|${teamName}`);
+            });
+
             let matrix = {};
             listHariKey.forEach(hari => {
                 const dateStr = currentWeekDates[hari] ? currentWeekDates[hari].dateStr : '';
                 listJam.forEach(jam => {
                     const cell = (globalCache.member[jam] && globalCache.member[jam][hari]) ? globalCache.member[jam][hari] : null;
                     if(cell && cell.nama && isMemberScheduledOnDate(cell, dateStr)) {
+                        const memberTeamKey = `${dateStr}|${String(cell.nama).trim().toLowerCase()}`;
+                        // Booking pada tanggal yang sama menjadi sumber utama untuk tim ini.
+                        if(bookedTeamDateKeys.has(memberTeamKey)) return;
                         if(!matrix[jam]) matrix[jam] = {};
                         matrix[jam][hari] = { ...cell };
                     }
                 });
             });
 
-            Object.values(globalCache.booking).forEach(b => {
-                if(b.tgl) {
-                    let datePart = b.tgl.split('T')[0];
-                    let timePart = b.tgl.split('T')[1];
-                    if(timePart) {
-                        let jamFormat = timePart.substring(0, 5);
-                        let hariName = getNamaHari(datePart);
-                        
-                        if(currentWeekDates[hariName] && currentWeekDates[hariName].dateStr === datePart) {
-                            if(!matrix[jamFormat]) matrix[jamFormat] = {};
-                            let isMemberBooking = (b.status === 'Member');
-                            matrix[jamFormat][hariName] = { 
-                                nama: b.nama, 
-                                type: isMemberBooking ? 'member' : 'nonmember',
-                                bookingKey: Object.keys(globalCache.booking).find(k => globalCache.booking[k] === b) || ''
-                            };
-                        }
-                    }
-                }
+            // Ambil booking dari cache TERKINI. Karena edit memakai key Firebase
+            // yang sama, record lama tidak ikut dirender lagi setelah tanggal/jam berubah.
+            // Satu slot hanya boleh memiliki satu tampilan booking agar tidak double.
+            const bookingSlotKeys = new Set();
+
+            Object.entries(globalCache.booking || {}).forEach(([bookingKey, b]) => {
+                if(!b || !b.tgl) return;
+
+                const datePart = String(b.tgl).split('T')[0];
+                const timePart = String(b.tgl).split('T')[1] || '';
+                if(!timePart) return;
+
+                const jamFormat = timePart.substring(0, 5);
+                const hariName = getNamaHari(datePart);
+
+                if(!(currentWeekDates[hariName] && currentWeekDates[hariName].dateStr === datePart)) return;
+
+                const slotKey = `${datePart}|${jamFormat}`;
+                if(bookingSlotKeys.has(slotKey)) return;
+
+                bookingSlotKeys.add(slotKey);
+
+                if(!matrix[jamFormat]) matrix[jamFormat] = {};
+                const isMemberBooking = (b.status === 'Member');
+
+                matrix[jamFormat][hariName] = {
+                    nama: b.nama,
+                    type: isMemberBooking ? 'member' : 'nonmember',
+                    bookingKey
+                };
             });
 
             listJam.forEach((jam, rowIndex) => {
@@ -5948,7 +6108,7 @@ body.sub-menu-active::before {
                     </td>
                     <td class="p-1 sm:p-2 border border-slate-900/40 font-black break-words">
                         <div>${item.nama || '-'}</div>
-                        ${getOpponentLabelForBooking(item) ? `<div class="mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#E9F0F4] border border-[#7B8F9E] text-[#163B55] text-[8px] sm:text-[9px] font-black">🤝 Lawan: ${escapeHtmlSparring(getOpponentLabelForBooking(item))}</div>` : ''}
+                        ${getOpponentLabelForBooking(item) ? `<div class="mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#E9F0F4] border border-[#7B8F9E] text-[#163B55] text-[8px] sm:text-[9px] font-black">🤝 Lawan: ${escapeHtmlSparing(getOpponentLabelForBooking(item))}</div>` : ''}
                     </td>
                     <td class="p-1 sm:p-2 border border-slate-900/40 text-center">
                         ${String(item.status || '').toLowerCase() === 'member'
@@ -6926,7 +7086,7 @@ body.sub-menu-active::before {
 </style>
 
 <style id="sparring-match-minuman-glass">
-/* SPARRING — samakan struktur visual dengan MINUMAN yang sudah final.
+/* SPARING — samakan struktur visual dengan MINUMAN yang sudah final.
    Frame utama tetap glass navy, frame dalam dihilangkan, input tetap putih. */
 #page-sparring.sub-menu-modern {
     position:relative !important;
@@ -7192,7 +7352,7 @@ body.sub-menu-active::before {
 
 
 <style id="sparring-final-no-double-frame">
-/* SPARRING FINAL — satu frame utama seperti MINUMAN */
+/* SPARING FINAL — satu frame utama seperti MINUMAN */
 #page-sparring .sparring-form-wrap,
 #page-sparring .sparring-list-wrap {
   background: transparent !important;
