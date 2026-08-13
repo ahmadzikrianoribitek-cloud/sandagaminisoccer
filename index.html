@@ -2784,6 +2784,130 @@ body.sub-menu-active::before {
     }
 }
 </style>
+
+<style id="uang-masuk-match-minuman-glass">
+/* UANG MASUK — samakan struktur visual dengan MINUMAN yang sudah final.
+   Frame form bagian dalam dihilangkan agar tidak terlihat double.
+   Input tetap putih transparan supaya mudah dibaca. */
+#page-masuk.sub-menu-modern > form {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+#page-masuk.sub-menu-modern > form .glass-input {
+    background: rgba(255,255,255,.82) !important;
+    color: #172033 !important;
+    border: 1px solid rgba(203,213,225,.78) !important;
+    box-shadow: inset 0 1px 2px rgba(15,23,42,.04), 0 2px 8px rgba(15,23,42,.04) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+}
+#page-masuk.sub-menu-modern > form .glass-input:focus {
+    background: rgba(255,255,255,.94) !important;
+    border-color: rgba(203,213,225,.95) !important;
+    box-shadow: 0 0 0 3px rgba(16,185,129,.10), inset 0 1px 2px rgba(15,23,42,.04) !important;
+}
+#page-masuk.sub-menu-modern > form label { color:#172033 !important; }
+</style>
+
+<style id="booking-match-minuman-glass">
+/* BOOKING — samakan dengan MINUMAN: frame utama glass berwarna biru,
+   frame form bagian dalam dihilangkan, input tetap putih transparan. */
+#page-booking.sub-menu-modern {
+    position: relative !important;
+    isolation: isolate !important;
+    overflow: hidden !important;
+    background:
+        radial-gradient(circle at 12% 8%, rgba(255,255,255,.50), transparent 30%),
+        radial-gradient(circle at 88% 92%, rgba(37,99,235,.18), transparent 34%),
+        linear-gradient(135deg, rgba(255,255,255,.24), rgba(37,99,235,.14) 48%, rgba(30,64,175,.12)) !important;
+    background-color: rgba(37,99,235,.13) !important;
+    backdrop-filter: blur(22px) saturate(145%) contrast(103%) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(145%) contrast(103%) !important;
+    border: 1px solid rgba(59,130,246,.38) !important;
+    box-shadow:
+        0 24px 60px rgba(30,64,175,.14),
+        0 8px 28px rgba(37,99,235,.12),
+        inset 0 1px 0 rgba(255,255,255,.82),
+        inset 0 0 0 1px rgba(255,255,255,.20) !important;
+}
+#page-booking.sub-menu-modern::before {
+    content:"" !important;
+    display:block !important;
+    position:absolute !important;
+    inset:0 !important;
+    z-index:-1 !important;
+    pointer-events:none !important;
+    background:
+        linear-gradient(115deg, rgba(255,255,255,.42) 0%, rgba(255,255,255,.10) 24%, transparent 42%),
+        radial-gradient(circle at 50% -10%, rgba(255,255,255,.40), transparent 38%),
+        linear-gradient(180deg, rgba(37,99,235,.10), transparent 45%, rgba(30,64,175,.08)) !important;
+    border-radius:inherit !important;
+}
+#page-booking.sub-menu-modern::after {
+    content:"" !important;
+    position:absolute !important;
+    top:-35% !important;
+    left:-18% !important;
+    width:58% !important;
+    height:170% !important;
+    transform:rotate(14deg) !important;
+    pointer-events:none !important;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.16), transparent) !important;
+    filter:blur(10px) !important;
+    opacity:.85 !important;
+    z-index:0 !important;
+}
+#page-booking.sub-menu-modern > * { position:relative; z-index:1; }
+
+/* Hilangkan frame putih/berlapis di dalam, seperti MINUMAN */
+#page-booking.sub-menu-modern > form {
+    background:transparent !important;
+    border:0 !important;
+    box-shadow:none !important;
+    padding:0 !important;
+}
+
+/* Frame teks/input tetap putih seperti MINUMAN */
+#page-booking.sub-menu-modern > form input.glass-input,
+#page-booking.sub-menu-modern > form select.glass-input,
+#page-booking.sub-menu-modern > form input,
+#page-booking.sub-menu-modern > form select {
+    background:rgba(255,255,255,.82) !important;
+    color:#172033 !important;
+    border:1px solid rgba(203,213,225,.78) !important;
+    box-shadow:
+        inset 0 1px 2px rgba(15,23,42,.04),
+        0 2px 8px rgba(15,23,42,.04) !important;
+    backdrop-filter:blur(8px) !important;
+    -webkit-backdrop-filter:blur(8px) !important;
+}
+#page-booking.sub-menu-modern > form input.glass-input:focus,
+#page-booking.sub-menu-modern > form select.glass-input:focus,
+#page-booking.sub-menu-modern > form input:focus,
+#page-booking.sub-menu-modern > form select:focus {
+    background:rgba(255,255,255,.94) !important;
+    border-color:rgba(203,213,225,.95) !important;
+    box-shadow:0 0 0 3px rgba(37,99,235,.10), inset 0 1px 2px rgba(15,23,42,.04) !important;
+}
+#page-booking.sub-menu-modern > form label { color:#172033 !important; }
+#page-booking .booking-form-title {
+    color:#1e40af !important;
+    text-shadow:0 1px 1px rgba(255,255,255,.55) !important;
+}
+#page-booking .booking-save-btn {
+    background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 55%,#1e40af 100%) !important;
+}
+@media(max-width:640px){
+    #page-booking.sub-menu-modern {
+        background-color:rgba(37,99,235,.14) !important;
+        backdrop-filter:blur(18px) saturate(140%) !important;
+        -webkit-backdrop-filter:blur(18px) saturate(140%) !important;
+    }
+}
+</style>
+
 </head>
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium"><button class="sticky-back-btn" data-back-context="page-keluar" onclick="showPage('home')" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-minuman" onclick="showPage('home')" type="button">
@@ -6564,5 +6688,484 @@ body.sub-menu-active::before {
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&root.classList.contains('is-open')) close(false);});
 })();
 </script>
+
+<style id="all-submenus-liquid-glass">
+/* =========================================================
+   SEMUA SUB MENU — LIQUID GLASS SESUAI WARNA TOMBOL
+   Frame utama berwarna transparan sesuai tombol masing-masing.
+   Isi/form dibuat putih transparan agar tetap mudah dibaca.
+   ========================================================= */
+
+#page-booking.sub-menu-modern,
+#page-masuk.sub-menu-modern,
+#page-keluar.sub-menu-modern,
+#page-sparring.sub-menu-modern,
+#page-admin-jaga.sub-menu-modern,
+#page-atur-member.sub-menu-modern,
+#page-booking-schedule.sub-menu-modern,
+#page-booking-history.sub-menu-modern,
+#page-daily-recap.sub-menu-modern,
+#page-monthly-recap.sub-menu-modern {
+    position: relative !important;
+    isolation: isolate !important;
+    overflow: hidden !important;
+    border-radius: 24px !important;
+    backdrop-filter: blur(20px) saturate(145%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(145%) !important;
+    color: #0f172a !important;
+    box-shadow: 0 20px 55px rgba(15,23,42,.14), inset 0 1px 0 rgba(255,255,255,.78), inset 0 0 0 1px rgba(255,255,255,.22) !important;
+}
+
+#page-booking.sub-menu-modern::before,
+#page-masuk.sub-menu-modern::before,
+#page-keluar.sub-menu-modern::before,
+#page-sparring.sub-menu-modern::before,
+#page-admin-jaga.sub-menu-modern::before,
+#page-atur-member.sub-menu-modern::before,
+#page-booking-schedule.sub-menu-modern::before,
+#page-booking-history.sub-menu-modern::before,
+#page-daily-recap.sub-menu-modern::before,
+#page-monthly-recap.sub-menu-modern::before {
+    content:"" !important;
+    position:absolute !important;
+    inset:0 !important;
+    z-index:-2 !important;
+    pointer-events:none !important;
+    background:
+        radial-gradient(circle at 12% 8%, rgba(255,255,255,.50), transparent 27%),
+        radial-gradient(circle at 88% 92%, rgba(255,255,255,.20), transparent 30%),
+        linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.04)) !important;
+    border-radius:inherit !important;
+}
+
+#page-booking.sub-menu-modern::after,
+#page-masuk.sub-menu-modern::after,
+#page-keluar.sub-menu-modern::after,
+#page-sparring.sub-menu-modern::after,
+#page-admin-jaga.sub-menu-modern::after,
+#page-atur-member.sub-menu-modern::after,
+#page-booking-schedule.sub-menu-modern::after,
+#page-booking-history.sub-menu-modern::after,
+#page-daily-recap.sub-menu-modern::after,
+#page-monthly-recap.sub-menu-modern::after {
+    content:"" !important;
+    position:absolute !important;
+    top:-38% !important;
+    left:-16% !important;
+    width:58% !important;
+    height:42% !important;
+    border-radius:50% !important;
+    background:linear-gradient(135deg, rgba(255,255,255,.55), rgba(255,255,255,0)) !important;
+    filter:blur(10px) !important;
+    opacity:.82 !important;
+    transform:rotate(-10deg) !important;
+    z-index:-1 !important;
+    pointer-events:none !important;
+}
+
+#page-booking.sub-menu-modern > *,
+#page-masuk.sub-menu-modern > *,
+#page-keluar.sub-menu-modern > *,
+#page-sparring.sub-menu-modern > *,
+#page-admin-jaga.sub-menu-modern > *,
+#page-atur-member.sub-menu-modern > *,
+#page-booking-schedule.sub-menu-modern > *,
+#page-booking-history.sub-menu-modern > *,
+#page-daily-recap.sub-menu-modern > *,
+#page-monthly-recap.sub-menu-modern > * { position:relative; z-index:1; }
+
+/* WARNA FRAME UTAMA */
+#page-booking.sub-menu-modern { background:linear-gradient(145deg,rgba(37,99,235,.18),rgba(30,64,175,.10)) !important; border:1px solid rgba(37,99,235,.28) !important; }
+#page-masuk.sub-menu-modern { background:linear-gradient(145deg,rgba(16,185,129,.20),rgba(4,120,87,.10)) !important; border:1px solid rgba(16,185,129,.30) !important; }
+#page-keluar.sub-menu-modern { background:linear-gradient(145deg,rgba(244,63,94,.18),rgba(190,18,60,.09)) !important; border:1px solid rgba(244,63,94,.28) !important; }
+#page-sparring.sub-menu-modern { background:linear-gradient(145deg,rgba(14,37,56,.18),rgba(22,59,85,.10)) !important; border:1px solid rgba(14,37,56,.30) !important; }
+#page-admin-jaga.sub-menu-modern { background:linear-gradient(145deg,rgba(14,37,56,.18),rgba(22,59,85,.10)) !important; border:1px solid rgba(14,37,56,.30) !important; }
+#page-atur-member.sub-menu-modern { background:linear-gradient(145deg,rgba(124,58,237,.18),rgba(76,29,149,.09)) !important; border:1px solid rgba(124,58,237,.28) !important; }
+#page-booking-schedule.sub-menu-modern { background:linear-gradient(145deg,rgba(6,182,212,.18),rgba(14,116,144,.09)) !important; border:1px solid rgba(6,182,212,.28) !important; }
+#page-booking-history.sub-menu-modern { background:linear-gradient(145deg,rgba(249,115,22,.18),rgba(194,65,12,.09)) !important; border:1px solid rgba(249,115,22,.28) !important; }
+#page-daily-recap.sub-menu-modern { background:linear-gradient(145deg,rgba(132,204,22,.18),rgba(77,124,15,.09)) !important; border:1px solid rgba(132,204,22,.28) !important; }
+#page-monthly-recap.sub-menu-modern { background:linear-gradient(145deg,rgba(217,70,239,.18),rgba(162,28,175,.09)) !important; border:1px solid rgba(217,70,239,.28) !important; }
+
+/* FRAME-FRAME ISI: PUTIH TRANSPARAN, BUKAN PUTIH SOLID */
+#page-booking .glass-input,
+#page-masuk .glass-input,
+#page-keluar .glass-input,
+#page-sparring input,
+#page-sparring select,
+#page-sparring textarea,
+#page-admin-jaga .p-3.sm\\:p-4.rounded-2xl,
+#page-atur-member form,
+#page-booking-schedule #filter-periode-jadwal,
+#page-booking-history .overflow-x-auto,
+#page-daily-recap .rounded-xl,
+#page-monthly-recap .rounded-xl {
+    background:rgba(255,255,255,.62) !important;
+    backdrop-filter:blur(12px) saturate(120%) !important;
+    -webkit-backdrop-filter:blur(12px) saturate(120%) !important;
+    border-color:rgba(255,255,255,.70) !important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.72), 0 5px 18px rgba(15,23,42,.05) !important;
+}
+
+/* Judul tetap mengikuti warna tombol */
+#page-booking h2 { color:#1e40af !important; }
+#page-masuk h2 { color:#047857 !important; }
+#page-keluar h2 { color:#be123c !important; }
+#page-sparring h2, #page-admin-jaga h2 { color:#0e2538 !important; }
+#page-atur-member h2 { color:#4c1d95 !important; }
+#page-booking-schedule h2 { color:#0e7490 !important; }
+#page-booking-history h2 { color:#c2410c !important; }
+#page-daily-recap h2 { color:#4d7c0f !important; }
+#page-monthly-recap h2 { color:#a21caf !important; }
+
+@media (max-width:640px){
+    #page-booking.sub-menu-modern,
+    #page-masuk.sub-menu-modern,
+    #page-keluar.sub-menu-modern,
+    #page-sparring.sub-menu-modern,
+    #page-admin-jaga.sub-menu-modern,
+    #page-atur-member.sub-menu-modern,
+    #page-booking-schedule.sub-menu-modern,
+    #page-booking-history.sub-menu-modern,
+    #page-daily-recap.sub-menu-modern,
+    #page-monthly-recap.sub-menu-modern {
+        border-radius:20px !important;
+        backdrop-filter:blur(18px) saturate(140%) !important;
+        -webkit-backdrop-filter:blur(18px) saturate(140%) !important;
+    }
+}
+</style>
+
+<style id="uang-keluar-match-minuman-glass">
+/* UANG KELUAR — hilangkan frame dalam agar sama seperti MINUMAN */
+#page-keluar > form {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+#page-keluar > form > .p-3.rounded-xl.border {
+    background: rgba(255,255,255,.62) !important;
+    backdrop-filter: blur(12px) saturate(120%) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(120%) !important;
+    border-color: rgba(255,255,255,.70) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.72), 0 5px 18px rgba(15,23,42,.05) !important;
+}
+
+
+/* Booking Schedule - remove inner white frame and keep rounded glass table */
+#page-booking-schedule #booking-schedule-grid-wrap {
+    background: rgba(255,255,255,.12) !important;
+    border: 1px solid rgba(255,255,255,.42) !important;
+    border-radius: 1rem !important;
+    overflow: hidden !important;
+    backdrop-filter: blur(14px) saturate(125%) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(125%) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.58), 0 12px 30px rgba(15,23,42,.10) !important;
+}
+
+#page-booking-schedule #booking-schedule-grid-wrap table {
+    width: 100% !important;
+    margin: 0 !important;
+    border-radius: .95rem !important;
+    overflow: hidden !important;
+    background: rgba(255,255,255,.10) !important;
+    color: #0f172a !important;
+    border: 0 !important;
+}
+
+#page-booking-schedule #booking-schedule-grid-wrap tbody,
+#page-booking-schedule #booking-schedule-grid-wrap tbody tr,
+#page-booking-schedule #booking-schedule-grid-wrap tbody td {
+    background: rgba(255,255,255,.16) !important;
+}
+
+#page-booking-schedule #booking-schedule-grid-wrap tbody td {
+    border-color: rgba(148,163,184,.24) !important;
+}
+
+#page-booking-schedule #booking-schedule-grid-wrap thead th {
+    border-color: rgba(255,255,255,.16) !important;
+}
+
+#page-booking-schedule #booking-schedule-grid-wrap .schedule-time {
+    background: rgba(255,255,255,.52) !important;
+    border-color: rgba(255,255,255,.65) !important;
+    border-radius: .45rem !important;
+}
+
+@media (max-width:640px) {
+    #page-booking-schedule #booking-schedule-grid-wrap,
+    #page-booking-schedule #booking-schedule-grid-wrap table {
+        border-radius: .7rem !important;
+    }
+}
+</style>
+
+<style id="sparring-match-minuman-glass">
+/* SPARRING — samakan struktur visual dengan MINUMAN yang sudah final.
+   Frame utama tetap glass navy, frame dalam dihilangkan, input tetap putih. */
+#page-sparring.sub-menu-modern {
+    position:relative !important;
+    isolation:isolate !important;
+    overflow:hidden !important;
+    background:
+        radial-gradient(circle at 12% 8%, rgba(255,255,255,.50), transparent 30%),
+        radial-gradient(circle at 88% 92%, rgba(14,37,56,.20), transparent 34%),
+        linear-gradient(135deg, rgba(255,255,255,.22), rgba(14,37,56,.18) 48%, rgba(22,59,85,.14)) !important;
+    background-color:rgba(14,37,56,.16) !important;
+    backdrop-filter:blur(22px) saturate(145%) contrast(103%) !important;
+    -webkit-backdrop-filter:blur(22px) saturate(145%) contrast(103%) !important;
+    border:1px solid rgba(14,37,56,.34) !important;
+    box-shadow:
+        0 24px 60px rgba(14,37,56,.16),
+        0 8px 28px rgba(14,37,56,.12),
+        inset 0 1px 0 rgba(255,255,255,.82),
+        inset 0 0 0 1px rgba(255,255,255,.20) !important;
+}
+#page-sparring.sub-menu-modern::before {
+    background:
+        linear-gradient(115deg, rgba(255,255,255,.42) 0%, rgba(255,255,255,.10) 24%, transparent 42%),
+        radial-gradient(circle at 50% -10%, rgba(255,255,255,.40), transparent 38%),
+        linear-gradient(180deg, rgba(14,37,56,.12), transparent 45%, rgba(22,59,85,.10)) !important;
+}
+#page-sparring.sub-menu-modern::after {
+    content:"" !important;
+    position:absolute !important;
+    top:-35% !important; left:-18% !important;
+    width:58% !important; height:170% !important;
+    transform:rotate(14deg) !important;
+    pointer-events:none !important;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.16), transparent) !important;
+    filter:blur(10px) !important; opacity:.85 !important; z-index:0 !important;
+}
+#page-sparring.sub-menu-modern > * { position:relative; z-index:1; }
+
+/* Hilangkan frame-frame pembungkus dalam agar tidak terlihat double */
+#page-sparring .sparring-form-wrap,
+#page-sparring .sparring-list-wrap {
+    background:transparent !important;
+    border:0 !important;
+    box-shadow:none !important;
+    padding:0 !important;
+}
+
+/* Kartu ringkasan tetap ringan, bukan frame putih besar */
+#page-sparring .sparring-summary-card {
+    background:rgba(255,255,255,.22) !important;
+    backdrop-filter:blur(10px) saturate(120%) !important;
+    -webkit-backdrop-filter:blur(10px) saturate(120%) !important;
+    border-color:rgba(255,255,255,.55) !important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.68), 0 5px 14px rgba(14,37,56,.05) !important;
+}
+#page-sparring .sparring-input,
+#page-sparring .sparring-filter {
+    background:rgba(255,255,255,.82) !important;
+    color:#172033 !important;
+    border:1px solid rgba(203,213,225,.78) !important;
+    box-shadow:inset 0 1px 2px rgba(15,23,42,.04), 0 2px 8px rgba(15,23,42,.04) !important;
+    backdrop-filter:blur(8px) !important;
+    -webkit-backdrop-filter:blur(8px) !important;
+}
+#page-sparring .sparring-input:focus,
+#page-sparring .sparring-filter:focus {
+    background:rgba(255,255,255,.94) !important;
+    border-color:rgba(203,213,225,.95) !important;
+    box-shadow:0 0 0 3px rgba(14,37,56,.10), inset 0 1px 2px rgba(15,23,42,.04) !important;
+}
+#page-sparring .sparring-booking-info {
+    background:rgba(255,255,255,.62) !important;
+    border-color:rgba(14,37,56,.25) !important;
+    backdrop-filter:blur(8px) !important;
+    -webkit-backdrop-filter:blur(8px) !important;
+}
+#page-sparring .sparring-record {
+    background:rgba(255,255,255,.62) !important;
+    border-color:rgba(255,255,255,.70) !important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.72), 0 5px 18px rgba(14,37,56,.05) !important;
+    backdrop-filter:blur(10px) !important;
+    -webkit-backdrop-filter:blur(10px) !important;
+}
+@media(max-width:640px){
+    #page-sparring.sub-menu-modern {
+        backdrop-filter:blur(18px) saturate(140%) !important;
+        -webkit-backdrop-filter:blur(18px) saturate(140%) !important;
+    }
+}
+</style>
+
+
+<style id="admin-member-history-match-minuman-glass">
+/* =========================================================
+   JADWAL ADMIN JAGA + ATUR MEMBER + BOOKING HISTORY
+   Samakan struktur dengan MINUMAN:
+   frame utama = glass berwarna, frame pembungkus dalam dihilangkan,
+   input/tabel = putih transparan.
+   ========================================================= */
+
+/* JADWAL ADMIN JAGA — frame utama glass navy */
+#page-admin-jaga.sub-menu-modern {
+    background:
+        radial-gradient(circle at 12% 8%, rgba(255,255,255,.42), transparent 30%),
+        radial-gradient(circle at 88% 92%, rgba(14,37,56,.18), transparent 34%),
+        linear-gradient(135deg, rgba(255,255,255,.16), rgba(14,37,56,.20) 48%, rgba(22,59,85,.14)) !important;
+    background-color: rgba(14,37,56,.16) !important;
+    backdrop-filter: blur(22px) saturate(145%) contrast(103%) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(145%) contrast(103%) !important;
+    border: 1px solid rgba(14,37,56,.34) !important;
+    box-shadow:
+        0 24px 60px rgba(14,37,56,.16),
+        0 8px 28px rgba(14,37,56,.10),
+        inset 0 1px 0 rgba(255,255,255,.78),
+        inset 0 0 0 1px rgba(255,255,255,.18) !important;
+}
+#page-admin-jaga.sub-menu-modern::before {
+    background:
+        linear-gradient(115deg, rgba(255,255,255,.38) 0%, rgba(255,255,255,.08) 24%, transparent 42%),
+        radial-gradient(circle at 50% -10%, rgba(255,255,255,.34), transparent 38%),
+        linear-gradient(180deg, rgba(14,37,56,.10), transparent 45%, rgba(22,59,85,.10)) !important;
+}
+#page-admin-jaga > div:first-child h2,
+#page-admin-jaga > div:first-child h2::after { color:#0e2538 !important; }
+#page-admin-jaga > div:first-child h2::after {
+    background:linear-gradient(90deg,#0e2538,#2e607a,#6b8fa3) !important;
+    box-shadow:0 2px 10px rgba(14,37,56,.24) !important;
+}
+/* Hilangkan frame pembungkus kalender yang membuat tampilan dobel */
+#page-admin-jaga .p-3.sm\:p-4.rounded-2xl {
+    background:transparent !important;
+    border:0 !important;
+    box-shadow:none !important;
+    padding-left:0 !important;
+    padding-right:0 !important;
+}
+/* Isi kalender tetap terlihat seperti kaca putih */
+#page-admin-jaga .admin-calendar,
+#page-admin-jaga .admin-cal-grid,
+#page-admin-jaga .admin-month-toolbar {
+    backdrop-filter:blur(10px) !important;
+    -webkit-backdrop-filter:blur(10px) !important;
+}
+#page-admin-jaga .admin-day {
+    background:rgba(255,255,255,.80) !important;
+    border-color:rgba(203,213,225,.70) !important;
+}
+
+/* ATUR MEMBER — frame utama glass indigo */
+#page-atur-member.sub-menu-modern {
+    background:
+        radial-gradient(circle at 12% 8%, rgba(255,255,255,.48), transparent 30%),
+        radial-gradient(circle at 88% 92%, rgba(124,58,237,.18), transparent 34%),
+        linear-gradient(135deg, rgba(255,255,255,.18), rgba(124,58,237,.18) 48%, rgba(76,29,149,.12)) !important;
+    background-color:rgba(124,58,237,.16) !important;
+    backdrop-filter:blur(22px) saturate(145%) contrast(103%) !important;
+    -webkit-backdrop-filter:blur(22px) saturate(145%) contrast(103%) !important;
+    border:1px solid rgba(124,58,237,.32) !important;
+    box-shadow:
+        0 24px 60px rgba(76,29,149,.14),
+        0 8px 28px rgba(124,58,237,.10),
+        inset 0 1px 0 rgba(255,255,255,.82),
+        inset 0 0 0 1px rgba(255,255,255,.18) !important;
+}
+#page-atur-member.sub-menu-modern::before {
+    background:
+        linear-gradient(115deg, rgba(255,255,255,.42) 0%, rgba(255,255,255,.10) 24%, transparent 42%),
+        radial-gradient(circle at 50% -10%, rgba(255,255,255,.38), transparent 38%),
+        linear-gradient(180deg, rgba(124,58,237,.10), transparent 45%, rgba(76,29,149,.08)) !important;
+}
+#page-atur-member > div:first-child h2 { color:#4c1d95 !important; }
+/* Hilangkan frame putih pembungkus form */
+#page-atur-member > form {
+    background:transparent !important;
+    border:0 !important;
+    box-shadow:none !important;
+    padding:0 !important;
+}
+#page-atur-member > form .glass-input {
+    background:rgba(255,255,255,.82) !important;
+    color:#172033 !important;
+    border:1px solid rgba(203,213,225,.78) !important;
+    box-shadow:inset 0 1px 2px rgba(15,23,42,.04),0 2px 8px rgba(15,23,42,.04) !important;
+    backdrop-filter:blur(8px) !important;
+    -webkit-backdrop-filter:blur(8px) !important;
+}
+#page-atur-member > form .glass-input:focus {
+    background:rgba(255,255,255,.94) !important;
+    border-color:rgba(203,213,225,.95) !important;
+    box-shadow:0 0 0 3px rgba(124,58,237,.10),inset 0 1px 2px rgba(15,23,42,.04) !important;
+}
+/* Frame tabel member menyatu dengan kaca utama */
+#page-atur-member .shadow.rounded-xl.border,
+#page-atur-member .shadow.rounded-xl {
+    background:transparent !important;
+    border:0 !important;
+    box-shadow:none !important;
+}
+#page-atur-member table {
+    background:rgba(255,255,255,.18) !important;
+    backdrop-filter:blur(10px) !important;
+    -webkit-backdrop-filter:blur(10px) !important;
+    border-radius:16px !important;
+    overflow:hidden !important;
+}
+#page-atur-member table td { background:rgba(255,255,255,.78) !important; }
+#page-atur-member table tbody tr:nth-child(even) td { background:rgba(248,250,252,.70) !important; }
+
+/* BOOKING HISTORY — frame utama glass orange */
+#page-booking-history.sub-menu-modern {
+    background:
+        radial-gradient(circle at 12% 8%, rgba(255,255,255,.48), transparent 30%),
+        radial-gradient(circle at 88% 92%, rgba(249,115,22,.18), transparent 34%),
+        linear-gradient(135deg, rgba(255,255,255,.18), rgba(249,115,22,.18) 48%, rgba(194,65,12,.12)) !important;
+    background-color:rgba(249,115,22,.16) !important;
+    backdrop-filter:blur(22px) saturate(145%) contrast(103%) !important;
+    -webkit-backdrop-filter:blur(22px) saturate(145%) contrast(103%) !important;
+    border:1px solid rgba(249,115,22,.32) !important;
+    box-shadow:
+        0 24px 60px rgba(154,52,18,.14),
+        0 8px 28px rgba(249,115,22,.10),
+        inset 0 1px 0 rgba(255,255,255,.82),
+        inset 0 0 0 1px rgba(255,255,255,.18) !important;
+}
+#page-booking-history.sub-menu-modern::before {
+    background:
+        linear-gradient(115deg, rgba(255,255,255,.42) 0%, rgba(255,255,255,.10) 24%, transparent 42%),
+        radial-gradient(circle at 50% -10%, rgba(255,255,255,.38), transparent 38%),
+        linear-gradient(180deg, rgba(249,115,22,.10), transparent 45%, rgba(194,65,12,.08)) !important;
+}
+#page-booking-history > div:first-child h2 { color:#c2410c !important; }
+/* Hilangkan frame putih pembungkus tabel */
+#page-booking-history .overflow-x-auto,
+#page-booking-history .overflow-x-auto.rounded-xl,
+#page-booking-history .shadow.rounded-xl.border {
+    background:transparent !important;
+    border:0 !important;
+    box-shadow:none !important;
+}
+#page-booking-history table {
+    background:rgba(255,255,255,.18) !important;
+    border-radius:16px !important;
+    overflow:hidden !important;
+    backdrop-filter:blur(10px) !important;
+    -webkit-backdrop-filter:blur(10px) !important;
+}
+#page-booking-history table td {
+    background:rgba(255,255,255,.80) !important;
+    border-color:rgba(203,213,225,.68) !important;
+}
+#page-booking-history table tbody tr:nth-child(even) td {
+    background:rgba(248,250,252,.72) !important;
+}
+
+@media (max-width:640px){
+    #page-admin-jaga.sub-menu-modern,
+    #page-atur-member.sub-menu-modern,
+    #page-booking-history.sub-menu-modern {
+        backdrop-filter:blur(18px) saturate(140%) !important;
+        -webkit-backdrop-filter:blur(18px) saturate(140%) !important;
+    }
+}
+</style>
+
 </body>
 </html>
