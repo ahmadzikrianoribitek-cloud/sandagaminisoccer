@@ -3905,6 +3905,1265 @@ html {
 }
 </style>
 
+
+<style id="jadwal-hari-ini-v3-final">
+/* V3: nama tim + status satu baris, tombol Ingatkan aman di dalam card */
+#today-schedule-panel .schedule-card{
+  position:relative !important;
+  overflow:hidden !important;
+  box-sizing:border-box !important;
+}
+
+#today-schedule-panel .today-schedule-main-row{
+  position:relative !important;
+  display:flex !important;
+  align-items:flex-start !important;
+  gap:7px !important;
+  width:100% !important;
+  min-width:0 !important;
+  box-sizing:border-box !important;
+  padding-right:48px !important;
+}
+
+#today-schedule-panel .today-schedule-times{
+  flex:0 0 auto !important;
+  display:flex !important;
+  flex-wrap:wrap !important;
+  align-items:flex-start !important;
+  gap:4px !important;
+  max-width:42% !important;
+  min-width:0 !important;
+}
+
+#today-schedule-panel .today-schedule-info{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+}
+
+#today-schedule-panel .today-schedule-name-row{
+  display:flex !important;
+  align-items:center !important;
+  flex-wrap:nowrap !important;
+  gap:6px !important;
+  width:100% !important;
+  min-width:0 !important;
+}
+
+#today-schedule-panel .today-schedule-name-row .schedule-team-member,
+#today-schedule-panel .today-schedule-name-row .schedule-team-nonmember{
+  flex:0 1 auto !important;
+  width:auto !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  display:block !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  padding:5px 7px !important;
+  margin:0 !important;
+}
+
+/* Label status benar-benar berada di samping nama tim */
+#today-schedule-panel .today-status-badge{
+  flex:0 0 auto !important;
+  white-space:nowrap !important;
+  font-size:9px !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+  letter-spacing:.02em !important;
+  background:transparent !important;
+  border:0 !important;
+  padding:2px 0 !important;
+}
+#today-schedule-panel .today-status-member{ color:#2563eb !important; }
+#today-schedule-panel .today-status-nonmember{ color:#dc2626 !important; }
+
+/* Tombol tidak boleh keluar dari card */
+#today-schedule-panel .today-schedule-main-row > .today-remind-btn{
+  position:absolute !important;
+  top:0 !important;
+  right:2px !important;
+  width:38px !important;
+  min-width:38px !important;
+  max-width:38px !important;
+  height:34px !important;
+  min-height:34px !important;
+  margin:0 !important;
+  padding:3px !important;
+  box-sizing:border-box !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  overflow:hidden !important;
+  border:1px solid #cbd5e1 !important;
+  border-radius:9px !important;
+  background:#f8fafc !important;
+  color:#475569 !important;
+  box-shadow:0 2px 7px rgba(15,23,42,.08) !important;
+  z-index:10 !important;
+}
+#today-schedule-panel .today-schedule-main-row > .today-remind-btn .today-remind-icon{
+  width:22px !important;
+  height:22px !important;
+  flex:0 0 22px !important;
+  object-fit:contain !important;
+}
+#today-schedule-panel .today-schedule-main-row > .today-remind-btn span{
+  display:none !important;
+}
+
+/* Timer/status tetap mengikuti lebar info, tidak mendorong tombol */
+#today-schedule-panel .today-schedule-info .today-admin-reminder-timer,
+#today-schedule-panel .today-schedule-info .today-late-timer{
+  width:100% !important;
+  max-width:100% !important;
+  box-sizing:border-box !important;
+  margin-top:7px !important;
+}
+
+@media (max-width:640px){
+  #today-schedule-panel .schedule-card{
+    padding:8px !important;
+    border-radius:13px !important;
+  }
+  #today-schedule-panel .today-schedule-main-row{
+    gap:5px !important;
+    padding-right:43px !important;
+  }
+  #today-schedule-panel .today-schedule-times{
+    gap:3px !important;
+    max-width:43% !important;
+  }
+  #today-schedule-panel .today-schedule-name-row{
+    gap:4px !important;
+  }
+  #today-schedule-panel .today-schedule-name-row .schedule-team-member,
+  #today-schedule-panel .today-schedule-name-row .schedule-team-nonmember{
+    font-size:9.5px !important;
+    padding:5px 6px !important;
+  }
+  #today-schedule-panel .today-status-badge{
+    font-size:8px !important;
+  }
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn{
+    top:0 !important;
+    right:0 !important;
+    width:36px !important;
+    min-width:36px !important;
+    max-width:36px !important;
+    height:32px !important;
+    min-height:32px !important;
+    border-radius:8px !important;
+  }
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn .today-remind-icon{
+    width:21px !important;
+    height:21px !important;
+    flex-basis:21px !important;
+  }
+}
+
+@media (max-width:380px){
+  #today-schedule-panel .today-schedule-main-row{
+    padding-right:40px !important;
+  }
+  #today-schedule-panel .today-schedule-name-row .schedule-team-member,
+  #today-schedule-panel .today-schedule-name-row .schedule-team-nonmember{
+    font-size:8.8px !important;
+    padding:4px 5px !important;
+  }
+  #today-schedule-panel .today-status-badge{
+    font-size:7.5px !important;
+  }
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn{
+    width:34px !important;
+    min-width:34px !important;
+    max-width:34px !important;
+    height:30px !important;
+    min-height:30px !important;
+  }
+}
+</style>
+
+
+<style id="jadwal-hari-ini-v5-final">
+/* =========================================================
+   JADWAL HARI INI — FINAL CARD POLISH V5
+   - MEMBER biru / NON MEMBER merah
+   - jam mengikuti warna aksen card
+   - angka jam mengikuti warna aksen card
+   - strip putih kiri dihilangkan
+   - tombol WA + "Ingatkan" menjadi satu tombol
+   ========================================================= */
+
+/* Hilangkan strip putih vertikal di kiri card */
+#today-schedule-panel .schedule-card::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* Warna aksen tiap card */
+#today-schedule-panel .schedule-card:nth-child(6n+1) {
+  --schedule-accent: #2563eb;
+  --schedule-accent-soft: #dbeafe;
+  --schedule-time-bg: rgba(239,246,255,.92);
+}
+#today-schedule-panel .schedule-card:nth-child(6n+2) {
+  --schedule-accent: #059669;
+  --schedule-accent-soft: #bbf7d0;
+  --schedule-time-bg: rgba(236,253,245,.92);
+}
+#today-schedule-panel .schedule-card:nth-child(6n+3) {
+  --schedule-accent: #d97706;
+  --schedule-accent-soft: #fde68a;
+  --schedule-time-bg: rgba(255,251,235,.94);
+}
+#today-schedule-panel .schedule-card:nth-child(6n+4) {
+  --schedule-accent: #e11d48;
+  --schedule-accent-soft: #fecdd3;
+  --schedule-time-bg: rgba(255,241,242,.94);
+}
+#today-schedule-panel .schedule-card:nth-child(6n+5) {
+  --schedule-accent: #0891b2;
+  --schedule-accent-soft: #a5f3fc;
+  --schedule-time-bg: rgba(236,254,255,.94);
+}
+#today-schedule-panel .schedule-card:nth-child(6n+6) {
+  --schedule-accent: #7c3aed;
+  --schedule-accent-soft: #ddd6fe;
+  --schedule-time-bg: rgba(245,243,255,.94);
+}
+
+/* Frame + angka jam mengikuti warna card */
+#today-schedule-panel .schedule-card .schedule-time {
+  color: var(--schedule-accent) !important;
+  border: 1px solid var(--schedule-accent) !important;
+  background: var(--schedule-time-bg) !important;
+  box-shadow: 0 1px 4px rgba(15,23,42,.04) !important;
+  font-weight: 950 !important;
+  text-shadow: none !important;
+}
+
+/* Status harus benar-benar biru/merah */
+#today-schedule-panel .today-status-badge {
+  flex: 0 0 auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  white-space: nowrap !important;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 2px 0 !important;
+  margin: 0 !important;
+  line-height: 1 !important;
+  font-size: 9px !important;
+  font-weight: 950 !important;
+  letter-spacing: .02em !important;
+}
+#today-schedule-panel .today-status-badge.today-status-member {
+  color: #2563eb !important;
+}
+#today-schedule-panel .today-status-badge.today-status-nonmember {
+  color: #dc2626 !important;
+}
+
+/* Nama tim tetap netral; status di sampingnya yang membawa warna tipe */
+#today-schedule-panel .today-schedule-name-row .schedule-team-member,
+#today-schedule-panel .today-schedule-name-row .schedule-team-nonmember {
+  color: #0f172a !important;
+  background: transparent !important;
+  border-left: 0 !important;
+  padding-left: 0 !important;
+}
+
+/* Sediakan ruang yang cukup untuk tombol kanan */
+#today-schedule-panel .today-schedule-main-row {
+  padding-right: 112px !important;
+}
+
+/* Tombol WhatsApp + Ingatkan = SATU tombol */
+#today-schedule-panel .today-schedule-main-row > .today-remind-btn {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  z-index: 20 !important;
+
+  width: auto !important;
+  min-width: 94px !important;
+  max-width: 108px !important;
+  height: 36px !important;
+  min-height: 36px !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px !important;
+
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 4px 8px !important;
+
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 10px !important;
+  background: #ffffff !important;
+  color: #334155 !important;
+  box-shadow: 0 3px 9px rgba(15,23,42,.10) !important;
+  font-size: 10px !important;
+  font-weight: 950 !important;
+}
+
+/* Ikon WA tetap hijau, tombolnya sendiri netral */
+#today-schedule-panel .today-schedule-main-row > .today-remind-btn .today-remind-icon {
+  display: block !important;
+  width: 23px !important;
+  height: 23px !important;
+  min-width: 23px !important;
+  flex: 0 0 23px !important;
+  object-fit: contain !important;
+}
+
+/* Kembalikan tulisan "Ingatkan" di samping ikon */
+#today-schedule-panel .today-schedule-main-row > .today-remind-btn span {
+  display: inline !important;
+  line-height: 1 !important;
+  color: #334155 !important;
+}
+
+/* Jangan biarkan timer mendorong tombol */
+#today-schedule-panel .today-schedule-info {
+  min-width: 0 !important;
+}
+#today-schedule-panel .today-schedule-info .today-admin-reminder-timer,
+#today-schedule-panel .today-schedule-info .today-late-timer {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* HP */
+@media (max-width: 640px) {
+  #today-schedule-panel .today-schedule-main-row {
+    padding-right: 100px !important;
+  }
+
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn {
+    min-width: 88px !important;
+    max-width: 96px !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    padding: 3px 6px !important;
+    gap: 4px !important;
+    border-radius: 9px !important;
+    font-size: 8.5px !important;
+  }
+
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn .today-remind-icon {
+    width: 21px !important;
+    height: 21px !important;
+    min-width: 21px !important;
+    flex-basis: 21px !important;
+  }
+
+  #today-schedule-panel .today-status-badge {
+    font-size: 8px !important;
+  }
+
+  #today-schedule-panel .today-schedule-name-row {
+    gap: 4px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  #today-schedule-panel .today-schedule-main-row {
+    padding-right: 91px !important;
+  }
+
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn {
+    min-width: 82px !important;
+    max-width: 86px !important;
+    height: 30px !important;
+    min-height: 30px !important;
+    padding: 3px 5px !important;
+    font-size: 8px !important;
+  }
+
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn .today-remind-icon {
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+    flex-basis: 20px !important;
+  }
+
+  #today-schedule-panel .today-status-badge {
+    font-size: 7.5px !important;
+  }
+}
+</style>
+
+
+<style id="jadwal-hari-ini-v6-sparing">
+/* Card sparing: matchup lebih menonjol */
+#today-schedule-panel .schedule-team-sparing {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  min-width: 0 !important;
+  width: auto !important;
+  max-width: 100% !important;
+  padding: 5px 8px !important;
+  margin: 0 !important;
+  color: #111827 !important;
+  background: transparent !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  line-height: 1.15 !important;
+}
+
+#today-schedule-panel .sparing-vs-label {
+  flex: 0 0 auto !important;
+  color: #7c3aed !important;
+  font-size: .85em !important;
+  font-weight: 950 !important;
+  padding: 0 2px !important;
+}
+
+@media (max-width: 640px) {
+  #today-schedule-panel .schedule-team-sparing {
+    gap: 4px !important;
+    padding: 5px 6px !important;
+    font-size: 9.5px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  #today-schedule-panel .schedule-team-sparing {
+    font-size: 9px !important;
+  }
+}
+</style>
+
+
+<style id="team-logo-base64-v7">
+/* =========================================================
+   LOGO TIM — placeholder Jadwal Hari Ini + editor Base64
+   ========================================================= */
+#today-schedule-panel .today-schedule-main-row {
+  position: relative !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 7px !important;
+  min-width: 0 !important;
+}
+
+#today-schedule-panel .today-schedule-logo {
+  flex: 0 0 42px !important;
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  border-radius: 11px !important;
+  border: 1px solid rgba(148,163,184,.55) !important;
+  background: rgba(255,255,255,.72) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 7px rgba(15,23,42,.08) !important;
+}
+
+#today-schedule-panel .today-schedule-logo img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  padding: 4px !important;
+  box-sizing: border-box !important;
+}
+
+#today-schedule-panel .today-schedule-logo > span {
+  font-size: 18px !important;
+  line-height: 1 !important;
+  opacity: .55 !important;
+}
+
+#today-schedule-panel .today-schedule-logo-sparing {
+  gap: 2px !important;
+}
+
+#today-schedule-panel .today-schedule-logo-sparing img,
+#today-schedule-panel .today-schedule-logo-sparing > span {
+  width: 50% !important;
+  flex: 0 0 50% !important;
+  height: 100% !important;
+  padding: 3px !important;
+  object-fit: contain !important;
+  box-sizing: border-box !important;
+}
+
+#today-schedule-panel .today-schedule-times {
+  flex: 0 0 auto !important;
+}
+
+#today-schedule-panel .today-schedule-info {
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+}
+
+#today-schedule-panel .action-logo {
+  background: #6366f1 !important;
+  color: white !important;
+  border-color: #4f46e5 !important;
+}
+
+#today-schedule-panel .action-logo:hover {
+  background: #4f46e5 !important;
+}
+
+/* Preview modal */
+.team-logo-editor-preview {
+  width: 54px;
+  height: 54px;
+  min-width: 54px;
+  border-radius: 14px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(15,23,42,.08);
+}
+.team-logo-editor-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 5px;
+  box-sizing: border-box;
+}
+.team-logo-editor-preview span {
+  font-size: 22px;
+  opacity: .55;
+}
+
+@media (max-width: 640px) {
+  #today-schedule-panel .today-schedule-logo {
+    flex-basis: 36px !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    border-radius: 10px !important;
+  }
+
+  #today-schedule-panel .today-schedule-logo > span {
+    font-size: 15px !important;
+  }
+
+  #today-schedule-panel .today-schedule-main-row {
+    gap: 5px !important;
+  }
+}
+</style>
+
+
+<style id="atur-member-grouped-v8">
+.member-group-row {
+    vertical-align: top;
+}
+.member-schedule-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.member-day-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+.member-day-label {
+    min-width: 52px;
+    padding: 4px 7px;
+    border-radius: 7px;
+    background: #e0e7ff;
+    color: #3730a3;
+    font-size: 9px;
+    font-weight: 950;
+}
+.member-day-times {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+.member-schedule-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 3px 4px 3px 7px;
+    border-radius: 7px;
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+    font-size: 9px;
+    font-weight: 950;
+}
+.member-schedule-chip.stopped {
+    background: #f1f5f9;
+    color: #64748b;
+    border-color: #cbd5e1;
+}
+.member-schedule-delete {
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    border: 0;
+    border-radius: 5px;
+    background: rgba(220,38,38,.10);
+    color: #dc2626;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 950;
+    cursor: pointer;
+}
+.member-schedule-delete:hover {
+    background: #dc2626;
+    color: #fff;
+}
+#tabel-list-member .member-group-row td {
+    background: rgba(255,255,255,.18);
+}
+@media (max-width: 640px) {
+    .member-day-group {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 3px;
+    }
+    .member-day-label {
+        min-width: 0;
+        font-size: 8px;
+        padding: 3px 6px;
+    }
+    .member-schedule-chip {
+        font-size: 8px;
+        padding-left: 6px;
+    }
+}
+</style>
+
+
+<style id="fixed-background-v9">
+/* =========================================================
+   FIX BACKGROUND — TETAP DI TEMPAT SAAT HALAMAN DI-SCROLL
+   Background visual mengikuti viewport, bukan isi halaman.
+   ========================================================= */
+
+/* Lapisan background tetap */
+html {
+    min-height: 100%;
+    background-attachment: fixed !important;
+}
+
+body {
+    min-height: 100vh !important;
+    background-attachment: fixed !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+}
+
+/* Jangan gunakan attachment scroll pada pseudo-element background */
+body::before,
+body::after {
+    background-attachment: fixed !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+}
+
+/* Konten tetap normal; hanya background yang dikunci */
+body > * {
+    position: relative;
+}
+
+/* Mobile: tetap mengikuti viewport */
+@media (max-width: 768px) {
+    html,
+    body {
+        background-attachment: fixed !important;
+        background-position: center center !important;
+        background-size: cover !important;
+    }
+}
+</style>
+
+
+<style id="jadwal-logo-90pct-v10">
+/* Logo tim: 90% tinggi card, tetap 1:1 */
+#today-schedule-panel .schedule-card {
+  --team-logo-space: 0px;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+#today-schedule-panel .today-schedule-main-row {
+  position: static !important;
+  padding-left: var(--team-logo-space) !important;
+  box-sizing: border-box !important;
+}
+
+/* Logo ditempatkan relatif terhadap seluruh card, bukan hanya baris atas */
+#today-schedule-panel .today-schedule-main-row > .today-schedule-logo {
+  position: absolute !important;
+  left: 8px !important;
+  top: 5% !important;
+  width: var(--team-logo-size, 42px) !important;
+  height: var(--team-logo-size, 42px) !important;
+  min-width: var(--team-logo-size, 42px) !important;
+  min-height: var(--team-logo-size, 42px) !important;
+  max-width: var(--team-logo-size, 42px) !important;
+  max-height: var(--team-logo-size, 42px) !important;
+  aspect-ratio: 1 / 1 !important;
+  box-sizing: border-box !important;
+  z-index: 3 !important;
+}
+
+/* Isi logo tetap mempertahankan rasio gambar */
+#today-schedule-panel .today-schedule-main-row > .today-schedule-logo img,
+#today-schedule-panel .today-schedule-main-row > .today-schedule-logo > span {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+}
+
+/* Total / DP / Sisa ikut digeser ke kanan agar tidak tertimpa logo */
+#today-schedule-panel .schedule-card > .grid.grid-cols-3 {
+  margin-left: var(--team-logo-space) !important;
+  width: calc(100% - var(--team-logo-space)) !important;
+  box-sizing: border-box !important;
+}
+
+/* Tombol WA tetap di kanan atas card */
+#today-schedule-panel .today-schedule-main-row > .today-remind-btn {
+  position: absolute !important;
+  top: 8px !important;
+  right: 8px !important;
+  z-index: 20 !important;
+}
+
+/* Untuk sparing, dua logo tetap berbagi satu kotak 1:1 */
+#today-schedule-panel .today-schedule-logo-sparing {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 2px !important;
+}
+
+/* Placeholder tetap proporsional */
+#today-schedule-panel .today-schedule-logo > span {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* HP: logo tetap 90% tinggi card */
+@media (max-width: 640px) {
+  #today-schedule-panel .today-schedule-main-row {
+    padding-left: var(--team-logo-space) !important;
+  }
+
+  #today-schedule-panel .today-schedule-main-row > .today-schedule-logo {
+    left: 7px !important;
+  }
+
+  #today-schedule-panel .schedule-card > .grid.grid-cols-3 {
+    margin-left: var(--team-logo-space) !important;
+    width: calc(100% - var(--team-logo-space)) !important;
+  }
+
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn {
+    top: 7px !important;
+    right: 7px !important;
+  }
+}
+</style>
+
+
+<style id="team-logo-status-v11">
+.member-team-identity,
+.booking-team-identity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+.member-team-logo-indicator,
+.booking-team-logo-indicator {
+    flex: 0 0 auto;
+}
+.member-list-team-logo,
+.booking-history-team-logo {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+    border-radius: 9px !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    background: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: 0 2px 6px rgba(15,23,42,.08) !important;
+}
+.member-list-team-logo img,
+.booking-history-team-logo img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    display: block !important;
+}
+.member-list-team-logo span,
+.booking-history-team-logo span {
+    font-size: 18px !important;
+    line-height: 1 !important;
+    opacity: .55 !important;
+}
+@media (max-width: 640px) {
+    .member-team-identity,
+    .booking-team-identity {
+        gap: 5px;
+    }
+    .member-list-team-logo,
+    .booking-history-team-logo {
+        width: 30px !important;
+        height: 30px !important;
+        min-width: 30px !important;
+        min-height: 30px !important;
+        border-radius: 7px !important;
+    }
+    .member-list-team-logo span,
+    .booking-history-team-logo span {
+        font-size: 14px !important;
+    }
+}
+</style>
+
+
+<style id="sparing-logo-sync-v12">
+.sparing-team-display {
+    display: flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    min-width: 0 !important;
+}
+.sparing-team-logo {
+    flex: 0 0 auto !important;
+}
+.sparing-team-logo-image,
+.sparing-team-logo-placeholder {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    min-height: 34px !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    background: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+}
+.sparing-team-logo-image img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    display: block !important;
+}
+.sparing-team-logo-placeholder {
+    font-size: 16px !important;
+    opacity: .55 !important;
+}
+@media (max-width: 640px) {
+    .sparing-team-display {
+        gap: 5px !important;
+    }
+    .sparing-team-logo-image,
+    .sparing-team-logo-placeholder {
+        width: 28px !important;
+        height: 28px !important;
+        min-width: 28px !important;
+        min-height: 28px !important;
+        border-radius: 7px !important;
+    }
+    .sparing-team-logo-placeholder {
+        font-size: 13px !important;
+    }
+}
+</style>
+
+
+<style id="sparing-logo-sync-v13">
+/* Logo sparing memakai sumber teamLogos yang sama dengan
+   Atur Member, Booking History, dan Jadwal Hari Ini. */
+.sparing-pair-team {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+}
+.sparing-pair-team-name {
+    min-width: 0;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.sparring-record-logo {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+    flex: 0 0 38px !important;
+    border-radius: 9px !important;
+    overflow: hidden !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    background: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+}
+.sparring-record-logo img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    display: block !important;
+}
+.sparring-record-logo.sparing-team-logo-placeholder {
+    font-size: 17px !important;
+    opacity: .55 !important;
+}
+@media (max-width: 640px) {
+    .sparring-pair-team {
+        gap: 5px;
+    }
+    .sparring-record-logo {
+        width: 30px !important;
+        height: 30px !important;
+        min-width: 30px !important;
+        min-height: 30px !important;
+        flex-basis: 30px !important;
+        border-radius: 7px !important;
+    }
+    .sparring-record-logo.sparing-team-logo-placeholder {
+        font-size: 13px !important;
+    }
+    .sparring-pair-team-name {
+        max-width: 110px;
+        font-size: 10px;
+    }
+}
+</style>
+
+
+<style id="sparing-two-logo-edit-v14">
+/* =========================================================
+   SPARING — 2 LOGO (TIM KIRI & TIM KANAN)
+   Logo mengambil sumber teamLogos yang sama dengan Member
+   dan Booking History. Jika kosong, tampil tombol Edit Logo.
+   ========================================================= */
+
+.sparring-pair {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    min-width: 0 !important;
+}
+
+.sparring-pair-team {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px !important;
+    min-width: 0 !important;
+    max-width: 42% !important;
+}
+
+.sparring-team-logo-wrap {
+    position: relative !important;
+    flex: 0 0 auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.sparring-record-logo {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    flex: 0 0 44px !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    background: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+}
+
+.sparring-record-logo img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    display: block !important;
+}
+
+.sparring-team-logo-placeholder {
+    font-size: 19px !important;
+    opacity: .55 !important;
+}
+
+.sparring-logo-edit-btn {
+    position: absolute !important;
+    left: 50% !important;
+    bottom: -7px !important;
+    transform: translateX(-50%) !important;
+    z-index: 3 !important;
+    border: 1px solid #c7d2fe !important;
+    border-radius: 999px !important;
+    background: #ffffff !important;
+    color: #4338ca !important;
+    padding: 2px 6px !important;
+    font-size: 7px !important;
+    line-height: 1.1 !important;
+    font-weight: 950 !important;
+    white-space: nowrap !important;
+    box-shadow: 0 2px 6px rgba(15,23,42,.12) !important;
+    cursor: pointer !important;
+}
+
+.sparring-logo-edit-btn:hover {
+    background: #eef2ff !important;
+}
+
+.sparring-pair-team-name {
+    min-width: 0 !important;
+    max-width: 170px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    font-weight: 950 !important;
+}
+
+.sparring-pair-team-empty {
+    opacity: .9 !important;
+}
+
+@media (max-width: 640px) {
+    .sparring-pair {
+        gap: 7px !important;
+    }
+
+    .sparring-pair-team {
+        gap: 5px !important;
+        max-width: 44% !important;
+    }
+
+    .sparring-record-logo {
+        width: 34px !important;
+        height: 34px !important;
+        min-width: 34px !important;
+        min-height: 34px !important;
+        flex-basis: 34px !important;
+        border-radius: 8px !important;
+    }
+
+    .sparring-team-logo-placeholder {
+        font-size: 15px !important;
+    }
+
+    .sparring-pair-team-name {
+        max-width: 105px !important;
+        font-size: 9px !important;
+    }
+
+    .sparring-logo-edit-btn {
+        font-size: 6.5px !important;
+        padding: 2px 5px !important;
+        bottom: -6px !important;
+    }
+}
+</style>
+
+
+<style id="logo-card-fit-v15">
+/* Logo sedikit dipendekkan dari versi sebelumnya.
+   Jarak atas dan posisi horizontal tetap. */
+#today-schedule-panel .today-schedule-main-row > .today-schedule-logo {
+    top: 5% !important;
+    aspect-ratio: 1 / 1 !important;
+}
+</style>
+
+
+<style id="team-name-card-sync-v17">
+/* =========================================================
+   NAMA TIM — WARNA FRAME MENGIKUTI AKSEN CARD
+   ========================================================= */
+#today-schedule-panel .schedule-card:nth-child(6n+1) {
+  --card-accent: #2563eb;
+}
+#today-schedule-panel .schedule-card:nth-child(6n+2) {
+  --card-accent: #059669;
+}
+#today-schedule-panel .schedule-card:nth-child(6n+3) {
+  --card-accent: #d97706;
+}
+#today-schedule-panel .schedule-card:nth-child(6n+4) {
+  --card-accent: #e11d48;
+}
+#today-schedule-panel .schedule-card:nth-child(6n+5) {
+  --card-accent: #0891b2;
+}
+#today-schedule-panel .schedule-card:nth-child(6n+6) {
+  --card-accent: #7c3aed;
+}
+
+#today-schedule-panel .schedule-card .schedule-team-member,
+#today-schedule-panel .schedule-card .schedule-team-nonmember,
+#today-schedule-panel .schedule-card .schedule-team-sparing {
+  border-left: 3px solid var(--card-accent) !important;
+  color: var(--card-accent) !important;
+  text-transform: uppercase !important;
+  font-weight: 950 !important;
+}
+
+/* Frame jam juga mengambil warna aksen card yang sama. */
+#today-schedule-panel .schedule-card .schedule-time {
+  color: var(--card-accent) !important;
+  border-color: var(--card-accent) !important;
+}
+
+/* Badge MEMBER/NON MEMBER tetap mengikuti aturan biru/merah. */
+#today-schedule-panel .schedule-card .schedule-team-member + *,
+#today-schedule-panel .schedule-card .schedule-team-nonmember + * {
+  text-transform: uppercase;
+}
+
+/* Sparing tetap kapital tetapi VS mengikuti aksen card. */
+#today-schedule-panel .schedule-card .sparing-vs-label {
+  color: var(--card-accent) !important;
+}
+
+/* Nama tim pada logo/card juga kapital secara visual. */
+#today-schedule-panel .today-schedule-name-row {
+  text-transform: uppercase !important;
+}
+
+@media (max-width:640px) {
+  #today-schedule-panel .schedule-card .schedule-team-member,
+  #today-schedule-panel .schedule-card .schedule-team-nonmember,
+  #today-schedule-panel .schedule-card .schedule-team-sparing {
+    letter-spacing: .05px !important;
+  }
+}
+</style>
+
+
+<style id="jadwal-hari-ini-card-color-sync-v18">
+/* =========================================================
+   JADWAL HARI INI V18
+   Jam + frame jam + frame/nama tim mengikuti warna card.
+   Tidak mengubah fungsi/JS/ID.
+   ========================================================= */
+
+/* Palet mengikuti warna background masing-masing card */
+#today-schedule-panel .schedule-card:nth-child(6n+1) {
+  --card-accent: #2563eb;
+  --card-soft: #dbeafe;
+  --card-time-bg: rgba(239,246,255,.96);
+}
+#today-schedule-panel .schedule-card:nth-child(6n+2) {
+  --card-accent: #059669;
+  --card-soft: #dcfce7;
+  --card-time-bg: rgba(236,253,245,.96);
+}
+#today-schedule-panel .schedule-card:nth-child(6n+3) {
+  --card-accent: #d97706;
+  --card-soft: #fef3c7;
+  --card-time-bg: rgba(255,251,235,.97);
+}
+#today-schedule-panel .schedule-card:nth-child(6n+4) {
+  --card-accent: #e11d48;
+  --card-soft: #ffe4e6;
+  --card-time-bg: rgba(255,241,242,.97);
+}
+#today-schedule-panel .schedule-card:nth-child(6n+5) {
+  --card-accent: #0891b2;
+  --card-soft: #cffafe;
+  --card-time-bg: rgba(236,254,255,.97);
+}
+#today-schedule-panel .schedule-card:nth-child(6n+6) {
+  --card-accent: #7c3aed;
+  --card-soft: #ede9fe;
+  --card-time-bg: rgba(245,243,255,.97);
+}
+
+/* ANGKA JAM + FRAME JAM = warna aksen card */
+#today-schedule-panel .schedule-card .schedule-time {
+  color: var(--card-accent) !important;
+  border: 1.5px solid var(--card-accent) !important;
+  background: var(--card-time-bg) !important;
+  font-weight: 950 !important;
+  text-shadow: none !important;
+  box-shadow: 0 1px 4px rgba(15,23,42,.04) !important;
+}
+
+/* FRAME NAMA TIM = satu warna dengan card.
+   Border dibuat penuh, bukan hanya garis kiri. */
+#today-schedule-panel .schedule-card .schedule-team-member,
+#today-schedule-panel .schedule-card .schedule-team-nonmember,
+#today-schedule-panel .schedule-card .schedule-team-sparing {
+  color: var(--card-accent) !important;
+  background: var(--card-soft) !important;
+  border: 1.5px solid var(--card-accent) !important;
+  border-left: 1.5px solid var(--card-accent) !important;
+  box-shadow: 0 2px 7px rgba(15,23,42,.05) !important;
+  font-weight: 950 !important;
+  text-transform: uppercase !important;
+}
+
+/* Status MEMBER / NON MEMBER tetap mempertahankan warna identitasnya */
+#today-schedule-panel .today-status-badge.today-status-member {
+  color: #2563eb !important;
+}
+#today-schedule-panel .today-status-badge.today-status-nonmember {
+  color: #dc2626 !important;
+}
+
+/* Sparing: VS tetap mengikuti warna card */
+#today-schedule-panel .schedule-card .sparing-vs-label {
+  color: var(--card-accent) !important;
+}
+
+/* HP: frame tetap proporsional dan tidak mengubah layout */
+@media (max-width: 640px) {
+  #today-schedule-panel .schedule-card .schedule-time {
+    border-width: 1.5px !important;
+  }
+
+  #today-schedule-panel .schedule-card .schedule-team-member,
+  #today-schedule-panel .schedule-card .schedule-team-nonmember,
+  #today-schedule-panel .schedule-card .schedule-team-sparing {
+    border-width: 1.5px !important;
+    border-left-width: 1.5px !important;
+  }
+}
+</style>
 </head>
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium"><button class="sticky-back-btn" data-back-context="page-keluar" onclick="navigateBack()" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-minuman" onclick="navigateBack()" type="button">
@@ -4619,8 +5878,7 @@ html {
 <thead class="bg-slate-900 text-white border-b border-slate-900/40">
 <tr>
 <th class="p-2 border border-slate-900/40 w-[28%]">Tim / Keterangan</th>
-<th class="p-2 border border-slate-900/40 w-[13%]">Hari</th>
-<th class="p-2 border border-slate-900/40 w-[14%]">Jam</th>
+<th class="p-2 border border-slate-900/40 w-[28%]" colspan="2">Jadwal</th>
 <th class="p-2 border border-slate-900/40 w-[12%]">Mulai</th>
 <th class="p-2 border border-slate-900/40 w-[16%]">WA</th>
 <th class="p-2 border border-slate-900/40 w-[13%]">Status</th>
@@ -5110,23 +6368,41 @@ html {
         }
 
         window.showPage = (id) => {
+            // Simpan posisi scroll BERANDA sebelum berpindah ke submenu.
+            // Hanya disimpan ketika meninggalkan Home, sehingga posisi terakhir
+            // Home tetap utuh walaupun submenu dirender ulang.
+            if (id !== 'home') {
+                window.__homeScrollPosition = Math.max(
+                    window.scrollY || 0,
+                    document.documentElement.scrollTop || 0,
+                    document.body.scrollTop || 0
+                );
+            }
+
             document.querySelectorAll('main > div').forEach(div => div.classList.add('hidden'));
             const targetPage = document.getElementById('page-' + id);
             if(targetPage) targetPage.classList.remove('hidden');
 
-            // Setiap kali membuka submenu, selalu mulai dari posisi paling atas.
-            // Pakai instant agar tidak terjadi efek "ter-scroll kembali ke bawah"
-            // akibat render/restore posisi scroll sebelumnya.
-            const resetScrollTop = () => {
-                window.scrollTo(0, 0);
-                document.documentElement.scrollTop = 0;
-                document.body.scrollTop = 0;
-            };
-            resetScrollTop();
-            requestAnimationFrame(() => {
-                resetScrollTop();
-                setTimeout(resetScrollTop, 80);
-            });
+            // Jangan paksa scroll ke atas saat masuk submenu.
+            // Saat kembali ke Home, pulihkan posisi Home terakhir.
+            if (id === 'home') {
+                const restoreHomeScroll = () => {
+                    const y = Number.isFinite(window.__homeScrollPosition)
+                        ? window.__homeScrollPosition
+                        : 0;
+
+                    window.scrollTo({ top: y, left: 0, behavior: 'instant' });
+                    document.documentElement.scrollTop = y;
+                    document.body.scrollTop = y;
+                };
+
+                // Restore setelah DOM kembali terlihat agar tinggi halaman sudah stabil.
+                requestAnimationFrame(() => {
+                    restoreHomeScroll();
+                    requestAnimationFrame(restoreHomeScroll);
+                    setTimeout(restoreHomeScroll, 80);
+                });
+            }
 
             if(id === 'minuman') {
                 setTimeout(() => { setDefaultMinumanHistoryDate(); renderMinumanHistory(); }, 60);
@@ -5134,12 +6410,6 @@ html {
 
             if(id === 'daily-recap') {
                 backToDailyMenu();
-                // backToDailyMenu() melakukan scroll ke dashboard Daily Recap;
-                // paksa kembali ke awal halaman setelah render selesai.
-                requestAnimationFrame(() => {
-                    resetScrollTop();
-                    setTimeout(resetScrollTop, 100);
-                });
             }
 
             // Mengganti Background Body Berdasarkan Halaman yang Aktif
@@ -6407,7 +7677,7 @@ html {
         const listJam = ["07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00"];
         const listHariKey = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
 
-        let globalCache = { member: {}, booking: {}, pemasukan: {}, minuman: {}, pengeluaran: {}, adminJaga: {}, sparring: {} };
+        let globalCache = { member: {}, booking: {}, pemasukan: {}, minuman: {}, pengeluaran: {}, adminJaga: {}, sparring: {}, teamLogos: {} };
 
         function getNamaHari(dateStr) {
             let days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
@@ -6495,47 +7765,208 @@ html {
             }
         };
 
+        onValue(ref(db, 'teamLogos'), (snapshot) => {
+            globalCache.teamLogos = snapshot.val() || {};
+            renderTodaySchedule();
+            renderTabelBooking();
+            refreshTeamLogoIndicators();
+            if (typeof renderSparing === 'function') renderSparing();
+        });
+
         onValue(ref(db, 'member'), (snapshot) => {
             globalCache.member = {};
             let listTbody = document.getElementById('tabel-list-member');
             if (listTbody) listTbody.innerHTML = "";
-            
-            // Jadwal Member hanya mengambil data yang benar-benar tersimpan di Firebase.
-            // Tidak ada lagi data default yang ditanam di kode, sehingga tim yang tidak
-            // tercatat di daftar Member tidak akan muncul sebagai Member (biru).
+
+            // =========================================================
+            // ATUR MEMBER — GABUNGKAN SEMUA JADWAL DENGAN NAMA TIM SAMA
+            // Contoh:
+            // DALPA | Jumat 07:00, 08:00, 09:00
+            // tidak lagi dibuat menjadi 3 baris/card terpisah.
+            // =========================================================
+            const memberGroups = new Map();
+            const memberRawEntries = [];
 
             if (snapshot.exists()) {
                 snapshot.forEach((child) => {
-                    let m = child.val();
-                    let key = child.key;
-                    const isOff = String(m.nama || '').toUpperCase() === 'OFF';
+                    const m = child.val() || {};
+                    const key = child.key;
+                    const nama = String(m.nama || '').trim();
+                    const nameKey = nama.toLowerCase();
+                    const isOff = nama.toUpperCase() === 'OFF';
                     const mulai = m.mulai || '';
                     const berhenti = m.berhenti || '';
-                    const statusHtml = berhenti
-                        ? `<span class="inline-flex items-center px-2 py-1 rounded bg-slate-300 text-slate-700 text-[10px] font-black">BERHENTI ${berhenti}</span>`
-                        : `<span class="inline-flex items-center px-2 py-1 rounded bg-emerald-600 text-white text-[10px] font-black">AKTIF</span>`;
-                    if(listTbody) {
-                        listTbody.innerHTML += `<tr class="border-b border-slate-900/40">
-                            <td class="p-2 border border-slate-900/40 font-bold">${m.nama}</td>
-                            <td class="p-2 border border-slate-900/40">${m.hari}</td>
-                            <td class="p-2 border border-slate-900/40">${m.jam}</td>
-                            <td class="p-2 border border-slate-900/40 text-center">${mulai || '-'} </td>
-                            <td class="p-2 border border-slate-900/40 text-center">${m.wa ? `<span class="text-xs font-black">${m.wa}</span>` : '<span class="text-slate-400">-</span>'}</td>
-                            <td class="p-2 border border-slate-900/40 text-center">${statusHtml}</td>
-                            <td class="p-2 border border-slate-900/40 text-center member-action-cell">
-                                <div class="member-actions">
-                                    ${(!isOff) ? `<button type="button" onclick="editWaMember('${key}')" class="bg-emerald-600 hover:bg-emerald-700 text-white">${m.wa ? 'Edit WA' : 'Tambah WA'}</button>` : ''}
-                                    ${(!berhenti && !isOff) ? `<button type="button" onclick="aturLiburMember('${key}')" class="bg-indigo-600 hover:bg-indigo-700 text-white">Libur</button><button type="button" onclick="berhentiMember('${key}')" class="bg-amber-600 hover:bg-amber-700 text-white">Berhenti</button>` : ''}
-                                    <button type="button" onclick="hapusMember('${key}')" class="bg-rose-700 hover:bg-rose-800 text-white">Hapus</button>
-                                </div>
-                            </td>
-                        </tr>`;
+
+                    const entry = {
+                        ...m,
+                        key,
+                        nama,
+                        isOff,
+                        mulai,
+                        berhenti,
+                        hari: String(m.hari || '-'),
+                        jam: String(m.jam || '-'),
+                        wa: String(m.wa || '').trim()
+                    };
+
+                    memberRawEntries.push(entry);
+
+                    if (!memberGroups.has(nameKey)) {
+                        memberGroups.set(nameKey, {
+                            nama: nama || '-',
+                            entries: []
+                        });
                     }
-                    if(!globalCache.member[m.jam]) globalCache.member[m.jam] = {};
-                    // Simpan metadata tanggal agar jadwal bisa berubah berdasarkan tanggal yang sedang dilihat.
-                    globalCache.member[m.jam][m.hari] = { nama: m.nama, wa: m.wa || '', hari: m.hari, jam: m.jam, type: isOff ? 'off' : 'member', mulai, berhenti, liburTanggal: m.liburTanggal || {}, key };
+                    memberGroups.get(nameKey).entries.push(entry);
                 });
             }
+
+            if (listTbody) {
+                const hariUrutan = {
+                    'Senin': 1,
+                    'Selasa': 2,
+                    'Rabu': 3,
+                    'Kamis': 4,
+                    'Jumat': 5,
+                    'Sabtu': 6,
+                    'Minggu': 7
+                };
+
+                const groups = Array.from(memberGroups.values()).sort((a, b) =>
+                    String(a.nama).localeCompare(String(b.nama), 'id', { sensitivity: 'base' })
+                );
+
+                listTbody.innerHTML = groups.map(group => {
+                    const entries = [...group.entries].sort((a, b) => {
+                        const hd = (hariUrutan[a.hari] || 99) - (hariUrutan[b.hari] || 99);
+                        if (hd !== 0) return hd;
+                        return String(a.jam).localeCompare(String(b.jam));
+                    });
+
+                    const firstActive = entries.find(e => !e.isOff) || entries[0];
+                    const waEntry = entries.find(e => e.wa) || firstActive;
+                    const hasWa = entries.some(e => !!e.wa);
+
+                    const aktifCount = entries.filter(e => !e.berhenti && !e.isOff).length;
+                    const berhentiCount = entries.filter(e => !!e.berhenti).length;
+
+                    let statusHtml = '';
+                    if (entries.every(e => e.isOff)) {
+                        statusHtml = `<span class="inline-flex items-center px-2 py-1 rounded bg-slate-300 text-slate-700 text-[10px] font-black">OFF</span>`;
+                    } else if (berhentiCount === entries.length) {
+                        statusHtml = `<span class="inline-flex items-center px-2 py-1 rounded bg-slate-300 text-slate-700 text-[10px] font-black">BERHENTI</span>`;
+                    } else if (berhentiCount > 0) {
+                        statusHtml = `<span class="inline-flex items-center px-2 py-1 rounded bg-amber-100 text-amber-700 border border-amber-200 text-[10px] font-black">${aktifCount} AKTIF · ${berhentiCount} BERHENTI</span>`;
+                    } else {
+                        statusHtml = `<span class="inline-flex items-center px-2 py-1 rounded bg-emerald-600 text-white text-[10px] font-black">AKTIF</span>`;
+                    }
+
+                    // Kelompokkan jam berdasarkan hari agar tetap ringkas.
+                    const perHari = new Map();
+                    entries.forEach(e => {
+                        if (!perHari.has(e.hari)) perHari.set(e.hari, []);
+                        perHari.get(e.hari).push(e);
+                    });
+
+                    const jadwalHtml = Array.from(perHari.entries()).map(([hari, dayEntries]) => {
+                        const jamHtml = dayEntries.map(e => {
+                            const stateClass = e.berhenti
+                                ? 'member-schedule-chip stopped'
+                                : 'member-schedule-chip';
+                            const stopTitle = e.berhenti
+                                ? `Berhenti ${e.berhenti}`
+                                : 'Jadwal aktif';
+
+                            return `
+                                <span class="${stateClass}" title="${stopTitle}">
+                                    <span>${escapeHtmlSparing(String(e.jam).replace(':','.'))}</span>
+                                    <button type="button"
+                                            class="member-schedule-delete"
+                                            title="Hapus jadwal ${escapeHtmlSparing(e.hari)} ${escapeHtmlSparing(e.jam)}"
+                                            onclick="event.stopPropagation(); hapusMember('${e.key}')">×</button>
+                                </span>
+                            `;
+                        }).join('');
+
+                        return `
+                            <div class="member-day-group">
+                                <span class="member-day-label">${escapeHtmlSparing(hari)}</span>
+                                <span class="member-day-times">${jamHtml}</span>
+                            </div>
+                        `;
+                    }).join('');
+
+                    const waButton = firstActive && !firstActive.isOff
+                        ? `<button type="button"
+                                   onclick="editWaMember('${(waEntry || firstActive).key}')"
+                                   class="bg-emerald-600 hover:bg-emerald-700 text-white">
+                               ${hasWa ? 'Edit WA' : 'Tambah WA'}
+                           </button>`
+                        : '';
+
+                    const logoButton = !group.nama || group.nama === '-'
+                        ? ''
+                        : `<button type="button"
+                                   onclick="openTeamLogoEditor(decodeURIComponent('${encodeURIComponent(String(group.nama))}'),'member')"
+                                   class="bg-indigo-700 hover:bg-indigo-800 text-white">
+                               Logo
+                           </button>`;
+
+                    return `
+                        <tr class="border-b border-slate-900/40 member-group-row">
+                            <td class="p-2 border border-slate-900/40 align-top">
+                                <div class="member-team-identity">
+                                    <div class="member-team-logo-indicator"
+                                         data-team-logo-name="${escapeAttrLogo(encodeURIComponent(String(group.nama)))}">
+                                        ${renderTeamLogoHtml(group.nama, 'member-list-team-logo')}
+                                    </div>
+                                    <div class="min-w-0">
+                                        <div class="font-black text-xs sm:text-sm truncate">${escapeHtmlSparing(group.nama)}</div>
+                                        <div class="text-[9px] text-slate-500 mt-1">${entries.length} jadwal digabung</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="p-2 border border-slate-900/40 align-top" colspan="2">
+                                <div class="member-schedule-groups">${jadwalHtml}</div>
+                            </td>
+                            <td class="p-2 border border-slate-900/40 text-center align-top">
+                                ${escapeHtmlSparing(firstActive?.mulai || entries[0]?.mulai || '-')}
+                            </td>
+                            <td class="p-2 border border-slate-900/40 text-center align-top">
+                                ${hasWa
+                                    ? `<span class="text-[10px] sm:text-xs font-black">${escapeHtmlSparing(entries.find(e => e.wa)?.wa || '')}</span>`
+                                    : '<span class="text-slate-400">-</span>'}
+                            </td>
+                            <td class="p-2 border border-slate-900/40 text-center align-top">${statusHtml}</td>
+                            <td class="p-2 border border-slate-900/40 text-center align-top member-action-cell">
+                                <div class="member-actions">
+                                    ${waButton}
+                                    ${logoButton}
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            // Tetap bangun cache member per jam/hari seperti sebelumnya.
+            // Jadi penggabungan hanya mengubah tampilan Atur Member,
+            // bukan struktur data atau logika jadwal yang dipakai fitur lain.
+            memberRawEntries.forEach(m => {
+                if(!globalCache.member[m.jam]) globalCache.member[m.jam] = {};
+                globalCache.member[m.jam][m.hari] = {
+                    nama: m.nama,
+                    wa: m.wa || '',
+                    hari: m.hari,
+                    jam: m.jam,
+                    type: m.isOff ? 'off' : 'member',
+                    mulai: m.mulai,
+                    berhenti: m.berhenti,
+                    liburTanggal: m.liburTanggal || {},
+                    key: m.key
+                };
+            });
+
             renderAll();
         });
 
@@ -6972,6 +8403,260 @@ html {
             window.__todayLateTimerInterval = setInterval(updateTodayLateTimers, 1000);
         }
 
+
+        // =========================================================
+        // LOGO TIM — disimpan sebagai TEKS Base64 di Firebase.
+        // Firebase tidak menyimpan file gambar; yang disimpan hanya
+        // string data:image/...;base64,...
+        // =========================================================
+        function normalizeTeamLogoName(value) {
+            return String(value || '').trim().toLowerCase();
+        }
+
+        function getTeamLogoKey(nama) {
+            return encodeURIComponent(normalizeTeamLogoName(nama)).replace(/\./g, '%2E');
+        }
+
+        function getTeamLogo(nama) {
+            const key = getTeamLogoKey(nama);
+            return String(globalCache.teamLogos?.[key]?.logo || '').trim();
+        }
+
+        function logoToDataUrl(value) {
+            const raw = String(value || '').trim();
+            if(!raw) return '';
+            if(/^data:image\/[a-zA-Z0-9.+-]+;base64,/i.test(raw)) return raw;
+            // Jika admin menempelkan string Base64 tanpa prefix, anggap PNG.
+            if(/^[A-Za-z0-9+/=\r\n]+$/.test(raw.replace(/\s/g,''))) {
+                return 'data:image/png;base64,' + raw.replace(/\s/g,'');
+            }
+            return raw;
+        }
+
+        function escapeAttrLogo(value) {
+            return String(value || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        }
+
+
+        function renderSparingTeamLogoHtml(nama, extraClass='') {
+            const teamName = String(nama || '').trim();
+            if (!teamName) {
+                return `<div class="${extraClass} sparing-team-logo-placeholder" aria-label="Logo belum ada">⚽</div>`;
+            }
+
+            const rawLogo = getTeamLogo(teamName);
+            if (rawLogo) {
+                return `<div class="${extraClass} sparing-team-logo-image"><img src="${escapeAttrLogo(rawLogo)}" alt="Logo ${escapeHtmlSparing(teamName)}"></div>`;
+            }
+
+            return `<div class="${extraClass} sparing-team-logo-placeholder" title="Logo belum diupload" aria-label="Logo belum diupload">⚽</div>`;
+        }
+
+        function refreshTeamLogoIndicators() {
+            document.querySelectorAll('[data-team-logo-name]').forEach(holder => {
+                const encoded = holder.getAttribute('data-team-logo-name') || '';
+                let nama = '';
+                try { nama = decodeURIComponent(encoded); } catch(e) { nama = encoded; }
+                if(!nama) return;
+                const cls = holder.classList.contains('member-team-logo-indicator')
+                    ? 'member-list-team-logo'
+                    : 'booking-history-team-logo';
+                holder.innerHTML = renderTeamLogoHtml(nama, cls);
+            });
+        }
+
+        function renderTeamLogoHtml(nama, extraClass='') {
+            const logo = getTeamLogo(nama);
+            const safeLogo = escapeAttrLogo(logo);
+            if(logo) {
+                return `<div class="today-schedule-logo ${extraClass}" title="Logo ${escapeHtmlSparing(nama)}"><img src="${safeLogo}" alt="Logo ${escapeHtmlSparing(nama)}" onerror="this.parentElement.classList.add('logo-error');this.style.display='none';"></div>`;
+            }
+            return `<div class="today-schedule-logo ${extraClass}" title="Belum ada logo tim"><span>⚽</span></div>`;
+        }
+
+        function renderSparingLogoHtml(timA, timB) {
+            const logoA = getTeamLogo(timA);
+            const logoB = getTeamLogo(timB);
+            if(!logoA && !logoB) return renderTeamLogoHtml(timA, 'today-schedule-logo-sparing');
+            return `<div class="today-schedule-logo today-schedule-logo-sparing" title="Logo ${escapeHtmlSparing(timA)} vs ${escapeHtmlSparing(timB)}">
+                ${logoA ? `<img src="${escapeAttrLogo(logoA)}" alt="Logo ${escapeHtmlSparing(timA)}" onerror="this.style.display='none';">` : '<span>⚽</span>'}
+                ${logoB ? `<img src="${escapeAttrLogo(logoB)}" alt="Logo ${escapeHtmlSparing(timB)}" onerror="this.style.display='none';">` : '<span>⚽</span>'}
+            </div>`;
+        }
+
+        function fileToBase64DataUrl(file, callback) {
+            if(!file || !String(file.type || '').startsWith('image/')) {
+                alert('File yang dipilih harus berupa gambar.');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = () => callback(String(reader.result || ''));
+            reader.onerror = () => alert('Gagal membaca file gambar.');
+            reader.readAsDataURL(file);
+        }
+
+        window.handleTeamLogoFile = (inputId, textareaId) => {
+            const input = document.getElementById(inputId);
+            const textarea = document.getElementById(textareaId);
+            const file = input?.files?.[0];
+            if(!file || !textarea) return;
+            fileToBase64DataUrl(file, dataUrl => {
+                textarea.value = dataUrl;
+                textarea.dispatchEvent(new Event('input', {bubbles:true}));
+            });
+        };
+
+        window.handleTeamLogoPaste = (event, textareaId) => {
+            const items = Array.from(event.clipboardData?.items || []);
+            const imageItem = items.find(item => String(item.type || '').startsWith('image/'));
+            if(!imageItem) return; // teks biasa tetap boleh dipaste.
+            event.preventDefault();
+            const textarea = document.getElementById(textareaId);
+            const file = imageItem.getAsFile();
+            if(!file || !textarea) return;
+            fileToBase64DataUrl(file, dataUrl => {
+                textarea.value = dataUrl;
+                textarea.dispatchEvent(new Event('input', {bubbles:true}));
+            });
+        };
+
+        window.openTeamLogoEditor = (nama, contextType='team') => {
+            const teamName = String(nama || '').trim();
+            if(!teamName) return;
+            const logo = getTeamLogo(teamName);
+            const modalId = 'modal-team-logo-editor';
+            document.getElementById(modalId)?.remove();
+
+            const safeName = escapeHtmlSparing(teamName);
+            const textareaId = 'team-logo-base64-input';
+            const fileId = 'team-logo-file-input';
+
+            document.body.insertAdjacentHTML('beforeend', `
+                <div id="${modalId}" class="fixed inset-0 z-[160] flex items-center justify-center p-3 bg-slate-950/70 backdrop-blur-sm">
+                    <div class="w-full max-w-xl rounded-2xl border border-white/50 bg-white/95 shadow-2xl p-4 sm:p-5 text-slate-900">
+                        <div class="flex items-start justify-between gap-3 mb-4">
+                            <div class="min-w-0">
+                                <h3 class="font-black text-base sm:text-lg text-indigo-950">⚽ LOGO TIM</h3>
+                                <p class="text-[10px] sm:text-xs text-slate-500 font-bold mt-1 truncate">${safeName}</p>
+                            </div>
+                            <button type="button" onclick="closeTeamLogoEditor()" class="shrink-0 text-slate-500 hover:text-slate-900 text-xl font-black">✕</button>
+                        </div>
+
+                        <div class="flex items-center gap-3 mb-3">
+                            <div id="team-logo-preview" class="team-logo-editor-preview">
+                                ${logo ? `<img src="${escapeAttrLogo(logo)}" alt="Preview logo" onerror="this.style.display='none';">` : '<span>⚽</span>'}
+                            </div>
+                            <div class="min-w-0">
+                                <div class="text-xs font-black text-slate-800">Upload / Paste Logo</div>
+                                <div class="text-[9px] sm:text-[10px] text-slate-500 font-bold mt-1">Gambar otomatis diubah menjadi teks Base64 sebelum disimpan ke Firebase.</div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-2 mb-2">
+                            <label for="${fileId}" class="cursor-pointer inline-flex items-center justify-center px-3 py-2 rounded-xl bg-indigo-700 hover:bg-indigo-800 text-white text-[10px] sm:text-xs font-black shadow">
+                                📁 Upload Gambar
+                            </label>
+                            <input id="${fileId}" type="file" accept="image/*" class="hidden" onchange="handleTeamLogoFile('${fileId}','${textareaId}')">
+                            <button type="button" onclick="document.getElementById('${textareaId}')?.focus()" class="px-3 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-[10px] sm:text-xs font-black">
+                                📋 Paste ke Kotak
+                            </button>
+                            ${logo ? `<button type="button" onclick="clearTeamLogoEditor()" class="px-3 py-2 rounded-xl bg-rose-100 hover:bg-rose-200 text-rose-700 text-[10px] sm:text-xs font-black">🗑️ Hapus Logo</button>` : ''}
+                        </div>
+
+                        <textarea id="${textareaId}" class="w-full min-h-[130px] p-3 rounded-xl border border-slate-300 bg-white font-mono text-[9px] text-slate-700 resize-y" placeholder="Paste gambar langsung di sini. Jika clipboard berisi gambar, otomatis dikonversi ke Base64.&#10;&#10;Atau paste kode Base64 / data:image/...;base64,...">${escapeHtmlSparing(logo)}</textarea>
+                        <p class="text-[9px] text-slate-500 font-bold mt-1">Firebase hanya menerima teks: yang tersimpan adalah string Base64, bukan file gambar.</p>
+
+                        <div class="flex gap-2 mt-4">
+                            <button type="button" onclick="saveTeamLogoEditor('${encodeURIComponent(teamName)}')" class="flex-1 bg-indigo-700 hover:bg-indigo-800 text-white px-4 py-2.5 rounded-xl text-sm font-black shadow">💾 Simpan Logo</button>
+                            <button type="button" onclick="closeTeamLogoEditor()" class="bg-slate-200 hover:bg-slate-300 text-slate-900 px-4 py-2.5 rounded-xl text-sm font-black">Batal</button>
+                        </div>
+                    </div>
+                </div>
+            `);
+
+            const textarea = document.getElementById(textareaId);
+            textarea?.addEventListener('paste', e => handleTeamLogoPaste(e, textareaId));
+            textarea?.addEventListener('input', () => {
+                const val = logoToDataUrl(textarea.value.trim());
+                const preview = document.getElementById('team-logo-preview');
+                if(!preview) return;
+                preview.innerHTML = val ? `<img src="${escapeAttrLogo(val)}" alt="Preview logo" onerror="this.style.display='none';">` : '<span>⚽</span>';
+            });
+        };
+
+        window.clearTeamLogoEditor = () => {
+            const textarea = document.getElementById('team-logo-base64-input');
+            if(textarea) {
+                textarea.value = '';
+                textarea.dispatchEvent(new Event('input', {bubbles:true}));
+            }
+        };
+
+        window.closeTeamLogoEditor = () => {
+            document.getElementById('modal-team-logo-editor')?.remove();
+        };
+
+        window.saveTeamLogoEditor = async (encodedName) => {
+            const teamName = decodeURIComponent(encodedName || '');
+            const textarea = document.getElementById('team-logo-base64-input');
+            if(!teamName || !textarea) return;
+
+            const raw = textarea.value.trim();
+            const logo = logoToDataUrl(raw);
+            if(logo && !/^data:image\//i.test(logo)) {
+                alert('Format logo tidak valid. Upload gambar atau paste gambar langsung ke kotak.');
+                return;
+            }
+
+            const key = getTeamLogoKey(teamName);
+            try {
+                if(logo) {
+                    await update(ref(db, 'teamLogos/' + key), {
+                        nama: teamName,
+                        logo,
+                        updatedAt: Date.now()
+                    });
+                    showSuccessPopup(`Logo ${teamName} berhasil disimpan.`);
+                } else {
+                    await remove(ref(db, 'teamLogos/' + key));
+                    showSuccessPopup(`Logo ${teamName} dihapus.`);
+                }
+                closeTeamLogoEditor();
+            } catch(error) {
+                console.error(error);
+                alert('Gagal menyimpan logo tim: ' + error.message);
+            }
+        };
+
+        function fitTodayScheduleLogos() {
+            const panel = document.getElementById('today-schedule-panel');
+            if (!panel) return;
+
+            panel.querySelectorAll('.schedule-card').forEach(card => {
+                const logo = card.querySelector('.today-schedule-logo');
+                if (!logo) return;
+
+                const cardHeight = card.getBoundingClientRect().height;
+                if (!cardHeight || cardHeight < 1) return;
+
+                // Logo dibuat 90% dari tinggi card agar tetap berada di dalam card.
+                // Posisi atas tetap 5%, jadi jarak atas tetap seperti sebelumnya.
+                // Lebar = tinggi agar rasio logo tetap 1:1.
+                const size = Math.max(36, Math.round(cardHeight * 0.90));
+                const space = size + 14;
+
+                card.style.setProperty('--team-logo-size', `${size}px`);
+                card.style.setProperty('--team-logo-space', `${space}px`);
+            });
+        }
+
+        if (!window.__todayScheduleLogoResizeBound) {
+            window.__todayScheduleLogoResizeBound = true;
+            window.addEventListener('resize', () => {
+                requestAnimationFrame(fitTodayScheduleLogos);
+            });
+        }
+
         window.renderTodaySchedule = () => {
             const listEl = document.getElementById('today-schedule-list');
             const dateEl = document.getElementById('today-schedule-date');
@@ -7046,8 +8731,8 @@ html {
                 const first = slots[0];
                 const isMember = slots.every(item => String(item.status || '').toLowerCase() === 'member');
                 const statusBadge = isMember
-                    ? `<span class="px-1.5 py-0.5 rounded bg-blue-600 text-white text-[9px] font-black">MEMBER</span>`
-                    : `<span class="px-1.5 py-0.5 rounded bg-rose-600 text-white text-[9px] font-black">NON-MEMBER</span>`;
+                    ? `<span class="today-status-badge today-status-member" style="color:#2563eb !important;">MEMBER</span>`
+                    : `<span class="today-status-badge today-status-nonmember" style="color:#dc2626 !important;">NON MEMBER</span>`;
 
                 let totalGabungan = 0;
                 let dpGabungan = 0;
@@ -7101,23 +8786,45 @@ html {
                 totalGabungan = aktif.reduce((sum, x) => sum + x.total, 0);
                 dpGabungan = aktif.reduce((sum, x) => sum + x.dp, 0);
                 const sisaGabungan = Math.max(0, aktif.reduce((sum, x) => sum + x.sisa, 0));
-                const namaTampil = group.nama || '-';
+                const namaTampil = String(group.nama || '-').trim().toUpperCase();
                 const hasWa = !!getScheduleWhatsApp(first);
                 const jamPertama = aktif[0].jam;
+
+                // Jika slot ini sedang tercatat sebagai sparing, tampilkan
+                // pasangan pertandingan "Tim A vs Tim B" pada card.
+                const sparingItem = getSparingForTeam(first.nama, today, jamPertama)?.[1] || null;
+                const isSparing = !!(
+                    sparingItem &&
+                    String(sparingItem.status || '').toLowerCase() === 'matched' &&
+                    String(sparingItem.timA || '').trim() &&
+                    String(sparingItem.timB || '').trim()
+                );
+                const sparingTimA = String(sparingItem?.timA || '').trim().toUpperCase();
+                const sparingTimB = String(sparingItem?.timB || '').trim().toUpperCase();
+                const sparingLabel = isSparing
+                    ? `${escapeHtmlSparing(sparingTimA)} <span class="sparing-vs-label">VS</span> ${escapeHtmlSparing(sparingTimB)}`
+                    : escapeHtmlSparing(namaTampil);
+
+                // Untuk sparing, nama card diganti dengan matchup dan badge
+                // MEMBER/NON MEMBER tidak ditampilkan agar fokus ke pertandingan.
+                const cardStatusBadge = isSparing ? '' : statusBadge;
+
                 const jamChips = aktif.map(item => `<span class="schedule-time shrink-0 inline-flex items-center justify-center px-2 py-1 rounded-lg border font-black text-xs sm:text-sm shadow-sm">⏰ ${String(item.jam).replace(':','.')}</span>`).join('');
                 const lateTimers = aktif.map(item => getLateTimerHtml(today, item.jam)).join('');
 
                 return `<div class="schedule-card rounded-xl border p-2.5 shadow-sm cursor-pointer" role="button" tabindex="0" title="Klik untuk mencatat uang masuk / pelunasan" onclick="bukaUangMasukDariJadwal(decodeURIComponent('${encodeURIComponent(String(first.nama || '')).replace("'", "%27")}'), '${jamPertama}', '${today}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();bukaUangMasukDariJadwal(decodeURIComponent('${encodeURIComponent(String(first.nama || '')).replace("'", "%27")}'), '${jamPertama}', '${today}')}"">
-                    <div class="flex items-start gap-2">
-                        <div class="flex flex-wrap gap-1 shrink-0 max-w-[42%]">${jamChips}</div>
-                        <div class="min-w-0 flex-1">
-                            <div class="${isMember ? 'schedule-team-member' : 'schedule-team-nonmember'} font-black text-xs sm:text-sm truncate">${escapeHtmlSparing(namaTampil)}</div>
-                            <div class="flex flex-wrap items-center gap-1 mt-1">${statusBadge}
-                                ${hasWa ? `<button type="button" onclick="event.stopPropagation(); return hubungiJadwalHariIni(decodeURIComponent('${encodeURIComponent(String(getScheduleWhatsApp(first)))}'), decodeURIComponent('${encodeURIComponent(String(first.nama || ''))}'), decodeURIComponent('${encodeURIComponent(String(aktif.map(x => x.jam.replace(':','.')).join(' & ')))}'))" class="today-remind-btn inline-flex items-center gap-1.5 px-1 py-1 text-green-700 hover:text-green-800 text-[11px] font-black" aria-label="Ingatkan via WhatsApp" title="Ingatkan via WhatsApp"><img src="ikonwa.png" alt="WA" class="today-remind-icon"> <span>Ingatkan</span></button>` : `<span class="px-2 py-1 rounded-lg bg-slate-200 text-slate-500 text-[9px] font-black">WA belum ada</span>`}
+                    <div class="today-schedule-main-row">
+                        ${isSparing ? renderSparingLogoHtml(sparingItem.timA, sparingItem.timB) : renderTeamLogoHtml(namaTampil)}
+                        <div class="today-schedule-times">${jamChips}</div>
+                        <div class="today-schedule-info">
+                            <div class="today-schedule-name-row">
+                                <div class="${isSparing ? 'schedule-team-sparing' : (isMember ? 'schedule-team-member' : 'schedule-team-nonmember')} font-black text-xs sm:text-sm truncate">${sparingLabel}</div>
+                                ${cardStatusBadge}
                             </div>
                             ${isFirstConsecutiveTeamSchedule(schedules, jamList, jamPertama, first) ? getAdminReminderTimerHtml(today, jamPertama, hasWa) : ''}
                             ${lateTimers}
                         </div>
+                        ${hasWa ? `<button type="button" onclick="event.stopPropagation(); return hubungiJadwalHariIni(decodeURIComponent('${encodeURIComponent(String(getScheduleWhatsApp(first)))}'), decodeURIComponent('${encodeURIComponent(String(first.nama || ''))}'), decodeURIComponent('${encodeURIComponent(String(aktif.map(x => x.jam.replace(':','.')).join(' & ')))}'))" class="today-remind-btn" aria-label="Ingatkan via WhatsApp" title="Ingatkan via WhatsApp"><img src="ikonwa.png" alt="WA" class="today-remind-icon"><span>Ingatkan</span></button>` : ''}
                     </div>
                     <div class="grid grid-cols-3 gap-1.5 mt-2 text-center text-[9px] sm:text-[10px] font-black">
                         <div class="schedule-money rounded-lg border p-1.5">
@@ -7132,6 +8839,12 @@ html {
                     </div>
                 </div>`;
             }).join('');
+
+            // Ukuran logo mengikuti 90% tinggi card setelah layout selesai.
+            requestAnimationFrame(() => {
+                fitTodayScheduleLogos();
+                requestAnimationFrame(fitTodayScheduleLogos);
+            });
         };
 
         function escapeHtmlSparing(value) {
@@ -7531,7 +9244,36 @@ html {
             list.innerHTML = filtered.map(([key,item])=>{
                 const matched = item?.status === 'matched' && item?.timB;
                 const dateLabel = item?.tanggal ? item.tanggal.split('-').reverse().join('/') : '-';
-                const pair = matched ? `<span>${escapeHtmlSparing(item.timA)}</span><span class="vs">VS</span><span>${escapeHtmlSparing(item.timB)}</span>` : `<span>${escapeHtmlSparing(item.timA)}</span><span class="vs">VS</span><span class="text-slate-400">Belum ada lawan</span>`;
+                const buildSparingTeamSide = (teamName, isOpponent=false) => {
+                    const name = String(teamName || '').trim();
+                    if(!name) {
+                        return `<div class="sparring-pair-team sparring-pair-team-empty">
+                            <div class="sparring-record-logo sparring-team-logo-placeholder" title="Belum ada lawan">⚽</div>
+                            <span class="text-slate-400 sparring-pair-team-name">Belum ada lawan</span>
+                        </div>`;
+                    }
+
+                    const hasLogo = !!getTeamLogo(name);
+                    const editButton = !hasLogo
+                        ? `<button type="button"
+                                   class="sparring-logo-edit-btn"
+                                   onclick="event.stopPropagation(); openTeamLogoEditor(decodeURIComponent('${encodeURIComponent(name)}'),'sparring')"
+                                   title="Upload logo ${escapeAttrLogo(name)}"
+                                   aria-label="Upload logo ${escapeAttrLogo(name)}">Edit Logo</button>`
+                        : '';
+
+                    return `<div class="sparring-pair-team">
+                        <div class="sparring-team-logo-wrap">
+                            ${renderSparingTeamLogoHtml(name, 'sparring-record-logo')}
+                            ${editButton}
+                        </div>
+                        <span class="sparring-pair-team-name">${escapeHtmlSparing(name)}</span>
+                    </div>`;
+                };
+
+                const pair = matched
+                    ? `${buildSparingTeamSide(item.timA)}<span class="vs">VS</span>${buildSparingTeamSide(item.timB)}`
+                    : `${buildSparingTeamSide(item.timA)}<span class="vs">VS</span>${buildSparingTeamSide('')}`;
                 const waRaw = String(item?.wa || '').trim();
                 const waDigits = waRaw.replace(/\D/g, '');
                 const waIntl = waDigits ? (waDigits.startsWith('0') ? '62' + waDigits.slice(1) : waDigits) : '';
@@ -7864,8 +9606,16 @@ html {
                         </div>
                     </td>
                     <td class="p-1 sm:p-2 border border-slate-900/40 font-black break-words">
-                        <div>${item.nama || '-'}</div>
-                        ${getOpponentLabelForBooking(item) ? `<div class="mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#E9F0F4] border border-[#7B8F9E] text-[#163B55] text-[8px] sm:text-[9px] font-black">🤝 Lawan: ${escapeHtmlSparing(getOpponentLabelForBooking(item))}</div>` : ''}
+                        <div class="booking-team-identity">
+                            <div class="booking-team-logo-indicator"
+                                 data-team-logo-name="${escapeAttrLogo(encodeURIComponent(String(item.nama || '')))}">
+                                ${renderTeamLogoHtml(item.nama || '-', 'booking-history-team-logo')}
+                            </div>
+                            <div class="min-w-0">
+                                <div class="truncate">${escapeHtmlSparing(item.nama || '-')}</div>
+                                ${getOpponentLabelForBooking(item) ? `<div class="mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#E9F0F4] border border-[#7B8F9E] text-[#163B55] text-[8px] sm:text-[9px] font-black">🤝 Lawan: ${escapeHtmlSparing(getOpponentLabelForBooking(item))}</div>` : ''}
+                            </div>
+                        </div>
                     </td>
                     <td class="p-1 sm:p-2 border border-slate-900/40 text-center">
                         ${String(item.status || '').toLowerCase() === 'member'
@@ -7881,6 +9631,7 @@ html {
                     <td class="p-1 sm:p-2 border border-slate-900/40 text-[9px] sm:text-[10px]">${item.metode || 'Cash'}</td>
                     <td class="p-1 sm:p-2 border border-slate-900/40 text-center whitespace-nowrap">
                         <div class="flex items-center justify-center gap-1">
+                            <button type="button" onclick="openTeamLogoEditor(decodeURIComponent('${encodeURIComponent(String(item.nama || ''))}'),'booking')" class="action-icon action-logo" title="Upload logo tim" aria-label="Upload logo tim">⚽</button>
                             <button type="button" onclick="editBooking('${key}')" class="action-icon action-edit" title="Edit booking" aria-label="Edit booking">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 3.487a2.1 2.1 0 012.97 2.97L7.5 18.79 3 20l1.21-4.5L16.862 3.487z"/><path stroke-linecap="round" stroke-linejoin="round" d="M14.5 5.85l3.65 3.65"/></svg>
                             </button>
