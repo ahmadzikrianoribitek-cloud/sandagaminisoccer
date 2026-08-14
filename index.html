@@ -3148,6 +3148,144 @@ body > *, main, #app, .app, .page, .page-content {
 }
 </style>
 
+<style id="daily-report-jpg-mobile-minimal-v1">
+/* DAILY RECAP JPG — desain minimalis & mudah dibaca di HP.
+   Hanya memengaruhi kanvas hasil download, tidak mengubah tampilan aplikasi. */
+#daily-report-jpg-canvas {
+    width:820px !important;
+    padding:24px !important;
+    background:#f5f7fa !important;
+    color:#172033 !important;
+    font-family:Arial,Helvetica,sans-serif !important;
+}
+#daily-report-jpg-canvas .report-admin-header {
+    background:#ffffff !important;
+    border:1px solid #e5e7eb !important;
+    border-radius:16px !important;
+    padding:22px 18px !important;
+    margin-bottom:14px !important;
+    box-shadow:0 2px 8px rgba(15,23,42,.05) !important;
+}
+#daily-report-jpg-canvas .report-admin-header h2 {
+    font-size:32px !important;
+    letter-spacing:.3px !important;
+    line-height:1.1 !important;
+}
+#daily-report-jpg-canvas .report-admin-header .report-date {
+    margin-top:7px !important;
+    font-size:17px !important;
+    color:#64748b !important;
+}
+#daily-report-jpg-canvas .report-admin-header .report-made-by {
+    margin-top:8px !important;
+    font-size:15px !important;
+    line-height:1.3 !important;
+    color:#475569 !important;
+}
+#daily-report-jpg-canvas .report-section {
+    background:#fff !important;
+    border:1px solid #e5e7eb !important;
+    border-radius:16px !important;
+    padding:14px !important;
+    margin-bottom:12px !important;
+    box-shadow:0 2px 8px rgba(15,23,42,.045) !important;
+}
+#daily-report-jpg-canvas .report-section h3 {
+    margin:0 0 10px !important;
+    font-size:19px !important;
+    line-height:1.2 !important;
+    color:#172033 !important;
+}
+/* Hilangkan frame dekoratif berlapis dari submenu asli. */
+#daily-report-jpg-canvas .report-source > section {
+    border-radius:12px !important;
+    border:1px solid #e2e8f0 !important;
+    box-shadow:none !important;
+    padding:12px !important;
+    background:#fff !important;
+}
+#daily-report-jpg-canvas .report-source {
+    font-size:16px !important;
+    line-height:1.4 !important;
+    color:#172033 !important;
+}
+#daily-report-jpg-canvas .report-source .text-\[10px\],
+#daily-report-jpg-canvas .report-source .text-\[11px\],
+#daily-report-jpg-canvas .report-source .text-xs {
+    font-size:15px !important;
+    line-height:1.35 !important;
+}
+#daily-report-jpg-canvas .report-source .text-sm {
+    font-size:16px !important;
+    line-height:1.35 !important;
+}
+#daily-report-jpg-canvas .report-source .text-base {
+    font-size:17px !important;
+    line-height:1.35 !important;
+}
+#daily-report-jpg-canvas .report-source .font-black,
+#daily-report-jpg-canvas .report-source .font-extrabold,
+#daily-report-jpg-canvas .report-source .font-bold,
+#daily-report-jpg-canvas .report-source .font-semibold {
+    line-height:1.3 !important;
+}
+/* Judul di dalam section sudah diwakili oleh heading luar. */
+#daily-report-jpg-canvas .report-source [id^="title-"] {
+    font-size:20px !important;
+    margin-bottom:5px !important;
+}
+#daily-report-jpg-canvas .report-source table {
+    width:100% !important;
+    table-layout:fixed !important;
+    font-size:15px !important;
+    border-collapse:collapse !important;
+}
+#daily-report-jpg-canvas .report-source th,
+#daily-report-jpg-canvas .report-source td {
+    padding:10px 8px !important;
+    line-height:1.35 !important;
+    vertical-align:middle !important;
+    word-break:break-word !important;
+}
+#daily-report-jpg-canvas .report-source table thead th {
+    font-size:14px !important;
+    padding:9px 7px !important;
+}
+/* Ringkasan minuman: dua kolom tetap nyaman dibaca. */
+#daily-report-jpg-canvas #ringkasan-minuman-box {
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:8px !important;
+}
+#daily-report-jpg-canvas #ringkasan-minuman-box > * {
+    min-height:54px !important;
+    padding:9px 8px !important;
+    border-radius:10px !important;
+    font-size:15px !important;
+}
+/* Ringkasan keuangan dibuat 2 kolom dengan angka lebih tegas. */
+#daily-report-jpg-canvas .report-source .grid {
+    gap:8px !important;
+}
+#daily-report-jpg-canvas .report-source .grid > div {
+    min-height:58px !important;
+    padding:9px !important;
+    border-radius:10px !important;
+    justify-content:center !important;
+}
+#daily-report-jpg-canvas .report-source .grid > div > div {
+    font-size:15px !important;
+    line-height:1.3 !important;
+}
+#daily-report-jpg-canvas .report-source .grid > div .font-black,
+#daily-report-jpg-canvas .report-source .grid > div .font-extrabold {
+    font-size:18px !important;
+}
+#daily-report-jpg-canvas .report-footer {
+    font-size:13px !important;
+    padding:3px !important;
+    color:#64748b !important;
+}
+</style>
 
 <style id="daily-report-jpg-top-style">
 .daily-recap-download-area{display:flex;justify-content:flex-end;width:100%;margin:0 0 16px}
@@ -5656,40 +5794,61 @@ body > * {
 }
 </style>
 
-<style id="daily-report-desktop-export-v2">
-/* Export Daily Recap selalu memakai layout desktop, walaupun tombol ditekan dari HP. */
+<style id="daily-report-desktop-export-v3-fixed-width">
+/* FIX EXPORT DAILY RECAP: satu kanvas tetap, semua isi wajib berada di dalamnya. */
 #daily-report-jpg-canvas {
-  width:1080px !important; min-width:1080px !important; max-width:1080px !important;
+  width:820px !important;
+  min-width:820px !important;
+  max-width:820px !important;
+  box-sizing:border-box !important;
+  overflow:hidden !important;
 }
-#daily-report-jpg-canvas .report-source { width:100% !important; }
-#daily-report-jpg-canvas .report-source .grid.grid-cols-2 {
-  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+#daily-report-jpg-canvas .report-source,
+#daily-report-jpg-canvas .report-section,
+#daily-report-jpg-canvas .report-source > section {
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  box-sizing:border-box !important;
 }
-#daily-report-jpg-canvas .report-source .grid.grid-cols-2.sm\:grid-cols-4 {
-  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
-}
+#daily-report-jpg-canvas .report-source .grid.grid-cols-2,
+#daily-report-jpg-canvas .report-source .grid.grid-cols-2.sm\:grid-cols-4,
 #daily-report-jpg-canvas .report-source .grid.grid-cols-1.sm\:grid-cols-2 {
   grid-template-columns:repeat(2,minmax(0,1fr)) !important;
 }
 #daily-report-jpg-canvas .report-source .flex.flex-col.sm\:flex-row,
 #daily-report-jpg-canvas .report-source .flex.flex-col.sm\:flex-row.sm\:items-center.sm\:justify-between {
   flex-direction:row !important;
+  min-width:0 !important;
 }
 #daily-report-jpg-canvas .report-source table {
-  display:table !important; width:100% !important; table-layout:auto !important;
-  border-collapse:collapse !important; font-size:12px !important;
+  display:table !important;
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  table-layout:fixed !important;
+  border-collapse:collapse !important;
+  font-size:12px !important;
 }
 #daily-report-jpg-canvas .report-source thead { display:table-header-group !important; }
 #daily-report-jpg-canvas .report-source tbody { display:table-row-group !important; }
 #daily-report-jpg-canvas .report-source tr { display:table-row !important; }
 #daily-report-jpg-canvas .report-source th,
 #daily-report-jpg-canvas .report-source td {
-  display:table-cell !important; padding:8px 7px !important; white-space:normal !important;
-  vertical-align:middle !important; word-break:normal !important; overflow-wrap:anywhere !important;
+  display:table-cell !important;
+  box-sizing:border-box !important;
+  padding:8px 6px !important;
+  white-space:normal !important;
+  vertical-align:middle !important;
+  word-break:break-word !important;
+  overflow-wrap:anywhere !important;
 }
 #daily-report-jpg-canvas .report-source .overflow-x-auto,
 #daily-report-jpg-canvas .report-source .overflow-auto {
-  overflow:visible !important; width:100% !important;
+  overflow:hidden !important;
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
 }
 #daily-report-jpg-canvas .report-source .text-\[10px\] { font-size:10px !important; }
 #daily-report-jpg-canvas .report-source .text-\[11px\] { font-size:11px !important; }
@@ -6661,6 +6820,9 @@ body > * {
 <div class="flex flex-col items-center justify-center text-center border-b border-emerald-500/20 pb-3 gap-1">
 <h3 class="font-black text-sm sm:text-base text-emerald-950 flex items-center justify-center gap-2 text-center w-full" id="title-ringkasan-total">📌 RINGKASAN TOTAL KEUANGAN</h3>
 <p class="text-xs font-bold text-emerald-900" id="label-tanggal-ringkasan"></p>
+<p id="rekap-alur-pengeluaran" class="text-[11px] sm:text-xs font-black text-slate-700 bg-white/60 border border-emerald-200 rounded-xl px-3 py-2 mt-2 text-center">
+Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomatis mengambil dari Cash Minuman.
+</p>
 </div>
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 font-bold text-center">
 <div class="p-3 sm:p-4 rounded-xl border border-blue-600/50 text-center shadow bg-white/30">
@@ -6680,19 +6842,31 @@ body > * {
 <p class="text-base sm:text-lg font-black text-teal-800 text-center" id="rekap-minuman-qrif">Rp 0</p>
 </div>
 <div class="p-3 sm:p-4 rounded-xl border border-rose-600/50 text-center shadow bg-white/30">
-<p class="text-xs text-slate-900 font-bold mb-1 text-center">Pengeluaran (Dipotong dari Cash Lapangan)</p>
+<p class="text-xs text-slate-900 font-bold mb-1 text-center">Total Pengeluaran</p>
 <p class="text-base sm:text-lg font-black text-rose-700 text-center" id="rekap-keluar">Rp 0</p>
 </div>
 <div class="p-3 sm:p-4 rounded-xl border border-indigo-600/50 text-center shadow bg-white/30">
-<p class="text-xs text-slate-900 font-bold mb-1 text-center">Sisa Cash Lapangan</p>
+<p class="text-xs text-slate-900 font-bold mb-1 text-center">Sisa Cash Lapangan Setelah Pengeluaran</p>
 <p class="text-base sm:text-lg font-black text-indigo-800 text-center" id="rekap-sisa-cash-lapangan">Rp 0</p>
 </div>
 <div class="p-3 sm:p-4 rounded-xl border border-purple-600/50 text-center shadow bg-white/30">
-<p class="text-xs text-slate-900 font-bold mb-1 text-center">Sisa Cash Minuman</p>
+<p class="text-xs text-slate-900 font-bold mb-1 text-center">Sisa Cash Minuman Setelah Pengeluaran</p>
 <p class="text-base sm:text-lg font-black text-purple-800 text-center" id="rekap-sisa-cash-minuman">Rp 0</p>
 </div>
+<div class="p-3 sm:p-4 rounded-xl border border-blue-600/50 text-center shadow bg-white/30">
+<p class="text-xs text-slate-900 font-bold mb-1 text-center">Pengeluaran dari Cash Lapangan</p>
+<p class="text-base sm:text-lg font-black text-blue-900 text-center" id="rekap-pengeluaran-dari-lapangan">Rp 0</p>
+</div>
+<div class="p-3 sm:p-4 rounded-xl border border-purple-600/50 text-center shadow bg-white/30">
+<p class="text-xs text-slate-900 font-bold mb-1 text-center">Pengeluaran dari Cash Minuman</p>
+<p class="text-base sm:text-lg font-black text-purple-800 text-center" id="rekap-pengeluaran-dari-minuman">Rp 0</p>
+</div>
+<div class="p-3 sm:p-4 rounded-xl border border-red-600/50 text-center shadow bg-white/30">
+<p class="text-xs text-slate-900 font-bold mb-1 text-center">Cash Tidak Tercover</p>
+<p class="text-base sm:text-lg font-black text-red-700 text-center" id="rekap-kekurangan-cash">Rp 0</p>
+</div>
 <div class="p-3 sm:p-4 rounded-xl border border-emerald-600/50 text-center shadow bg-white/30">
-<p class="text-xs text-slate-900 font-bold mb-1 text-center">Total Sisa Cash</p>
+<p class="text-xs text-slate-900 font-bold mb-1 text-center">Total Cash Tersisa</p>
 <p class="text-base sm:text-lg font-black text-emerald-700 text-center" id="rekap-total-sisa-cash">Rp 0</p>
 </div>
 </div>
@@ -7082,6 +7256,13 @@ body > * {
       <label class="block text-xs font-bold mb-1">Periode</label>
       <input id="pm-bulan" type="month" class="w-full p-2 rounded-xl text-sm glass-input font-bold" onchange="renderPelunasanMember()">
     </div>
+    <div>
+      <label class="block text-xs font-bold mb-1">Tanggal Jadwal yang Dilunasi</label>
+      <select id="pm-tanggal-jadwal" class="w-full p-2 rounded-xl text-sm glass-input font-bold" onchange="updatePelunasanMemberPreview()">
+        <option value="">-- Pilih Tanggal Jadwal --</option>
+      </select>
+      <p class="text-[10px] text-slate-500 mt-1">Hanya tanggal yang memang masuk jadwal member yang ditampilkan. Tanggal besok dan seterusnya tetap boleh dipilih.</p>
+    </div>
   </div>
   <div id="pm-summary" class="mb-3"></div>
   <div id="pm-tagihan" class="space-y-2 mb-4"></div>
@@ -7172,6 +7353,13 @@ body > * {
 <input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold hidden" id="in-keterangan-manual" placeholder="Ketik keterangan / sumber pemasukan..." type="text"/>
 <label class="block text-xs font-bold mb-1 text-slate-900">Jam Main (Otomatis)</label>
 <input class="w-full p-2 rounded mb-3 text-sm glass-input bg-white/40 font-bold" id="in-jam-main" placeholder="Jam main akan otomatis terisi" readonly="" type="text"/>
+<label class="block text-xs font-bold mb-1 text-slate-900">Tambahan Waktu</label>
+<select class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="in-tambahan-waktu" onchange="hitungOtomatisBiaya()">
+<option value="0">Tidak ada perubahan</option>
+<option value="30">+ 30 menit</option>
+<option value="-30">− 30 menit</option>
+</select>
+<p class="text-[10px] font-black text-emerald-800 -mt-1 mb-3">+30 menit = tambah ½ tarif jam berikutnya · −30 menit = kurangi ½ tarif dari jam terakhir.</p>
 <label class="block text-xs font-bold mb-1 text-slate-900">Jenis Pembayaran</label>
 <select class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="in-jenis-pembayaran" onchange="hitungOtomatisBiaya()">
 <option value="internal">🏠 Tim Internal · 1 Tim Bayar</option>
@@ -7803,6 +7991,10 @@ body > * {
                 manualInput.required = false;
             }
             document.getElementById('in-jam-main').value = "";
+            document.getElementById('in-jam-main')?.removeAttribute('data-base-jam-main');
+            const tambahanWaktuEl = document.getElementById('in-tambahan-waktu');
+            if (tambahanWaktuEl) tambahanWaktuEl.value = "0";
+            window.__pelunasanCalc = null;
             document.getElementById('in-sewa-bola').checked = false;
             document.getElementById('in-sewa-rompi-1').checked = false;
              document.getElementById('in-sewa-rompi-2').checked = false;
@@ -7857,11 +8049,15 @@ body > * {
                 if(isManual) manualInput.focus();
             }
 
+            const jamMainEl = document.getElementById('in-jam-main');
             if(isManual) {
-                document.getElementById('in-jam-main').value = '-';
+                jamMainEl.value = '-';
+                jamMainEl.removeAttribute('data-base-jam-main');
             } else {
                 let jam = selectedOption ? selectedOption.getAttribute('data-jam') : "";
-                document.getElementById('in-jam-main').value = jam || "-";
+                jamMainEl.value = jam || "-";
+                if(jam) jamMainEl.setAttribute('data-base-jam-main', jam);
+                else jamMainEl.removeAttribute('data-base-jam-main');
             }
             hitungOtomatisBiaya();
         }
@@ -7890,7 +8086,8 @@ body > * {
             const selectTim = document.getElementById('in-tim');
             const selectedOption = selectTim?.options[selectTim.selectedIndex];
             const isManual = selectTim?.value === '__manual__';
-            const jamMainStr = document.getElementById('in-jam-main')?.value || '';
+            const jamMainEl = document.getElementById('in-jam-main');
+            const jamMainStr = jamMainEl?.getAttribute('data-base-jam-main') || jamMainEl?.value || '';
             const tgl = document.getElementById('in-tgl')?.value || '';
             const info = document.getElementById('info-tagihan-tim');
             const pakaiBola = !!document.getElementById('in-sewa-bola')?.checked;
@@ -7904,6 +8101,8 @@ body > * {
                 const b = parseInt(q[1]);
                 if (!isNaN(a) && !isNaN(b) && b > a) durasiJam = b - a;
             }
+            const tambahanMenit = Number(document.getElementById('in-tambahan-waktu')?.value || 0);
+            const tambahanJam = tambahanMenit / 60;
 
             const selectedName = isManual
                 ? (document.getElementById('in-keterangan-manual')?.value || 'Pemasukan Manual')
@@ -7912,22 +8111,54 @@ body > * {
             const jam = jamMainStr && jamMainStr !== '-' ? jamMainStr.substring(0, 5) : '';
             const nama1 = String(selectedName || '').replace(/\s*\(Booking\)$/i, '').trim();
 
-            // Cari seluruh slot booking dari bookingGroupId yang sama.
+            // Cari seluruh slot booking untuk transaksi ini.
+            // Prioritas: bookingGroupId. Fallback: rentang jam yang berurutan
+            // dengan nama tim + tanggal yang sama, supaya booking lama yang
+            // belum mempunyai bookingGroupId tetap dihitung multi-jam.
             let bookingGroupId = '';
             let bookingSlots = [];
             if (tgl && jam && !isManual) {
-                const firstBooking = Object.values(globalCache.booking || {}).find(b => {
-                    const bj = b.tgl ? (b.tgl.split('T')[1] || '').substring(0,5) : '';
-                    const bn = String(b.nama || '').trim().toLowerCase();
-                    return b.tgl?.split('T')[0] === tgl && bj === jam && bn === nama1;
+                const allBookingsToday = Object.values(globalCache.booking || {}).filter(b => {
+                    const btgl = String(b?.tgl || '').split('T')[0];
+                    const bjam = String(b?.tgl || '').split('T')[1]?.substring(0,5) || '';
+                    const bnama = String(b?.nama || '').trim().toLowerCase();
+                    return btgl === tgl && bjam && bnama === nama1.toLowerCase();
+                }).sort((a,b) => String(a.tgl).localeCompare(String(b.tgl)));
+
+                const firstBooking = allBookingsToday.find(b => {
+                    const bj = String(b.tgl || '').split('T')[1]?.substring(0,5) || '';
+                    return bj === jam;
                 });
                 bookingGroupId = String(firstBooking?.bookingGroupId || '');
+
                 if (bookingGroupId) {
-                    bookingSlots = Object.values(globalCache.booking || {})
-                        .filter(b => String(b.bookingGroupId || '') === bookingGroupId && b.tgl?.split('T')[0] === tgl)
-                        .sort((a,b) => String(a.tgl).localeCompare(String(b.tgl)));
-                    if (bookingSlots.length > 1) durasiJam = bookingSlots.length;
+                    bookingSlots = allBookingsToday.filter(b => String(b.bookingGroupId || '') === bookingGroupId);
+                } else if (jamMainStr.includes('-')) {
+                    const parts = jamMainStr.split('-');
+                    const startH = parseInt(String(parts[0]).split(':')[0], 10);
+                    const endH = parseInt(String(parts[1]).split(':')[0], 10);
+                    if (Number.isFinite(startH) && Number.isFinite(endH) && endH > startH) {
+                        bookingSlots = allBookingsToday.filter(b => {
+                            const h = parseInt(String(b.tgl || '').split('T')[1]?.substring(0,2), 10);
+                            return Number.isFinite(h) && h >= startH && h < endH;
+                        });
+                    }
                 }
+
+                // Jika card hanya mengirim jam awal, kumpulkan slot berurutan
+                // dari jam awal selama nama tim yang sama masih mempunyai booking.
+                if (!bookingSlots.length && firstBooking) {
+                    const byHour = new Map(allBookingsToday.map(b => [parseInt(String(b.tgl || '').split('T')[1]?.substring(0,2), 10), b]));
+                    const startH = parseInt(jam.substring(0,2), 10);
+                    if (Number.isFinite(startH)) {
+                        for (let h = startH; ; h++) {
+                            const slot = byHour.get(h);
+                            if (!slot) break;
+                            bookingSlots.push(slot);
+                        }
+                    }
+                }
+                if (bookingSlots.length > 1) durasiJam = bookingSlots.length;
             }
 
             // Admin memilih secara eksplisit: Tim Internal hanya 1 tim yang bayar,
@@ -7954,22 +8185,61 @@ body > * {
             second.status = document.getElementById('in-status-2')?.value || 'Non-Member';
 
             // Harga booking normal = JUMLAH seluruh jam. Bukan harga satu jam.
+            // Tambahan 30 menit = 50% tarif pada jam berikutnya.
             let hargaTotalLapangan = 0;
+            let jamAkhirBooking = '';
             if (bookingSlots.length) {
                 hargaTotalLapangan = bookingSlots.reduce((sum, b) => {
                     const bj = (b.tgl.split('T')[1] || '').substring(0,5);
                     return sum + getHargaLapangan(tgl, bj, selectedStatus);
                 }, 0);
+                const lastJam = String(bookingSlots[bookingSlots.length - 1]?.tgl || '').split('T')[1]?.substring(0,5) || '';
+                if (lastJam) jamAkhirBooking = `${String((parseInt(lastJam.split(':')[0]) + 1) % 24).padStart(2,'0')}:00`;
             } else if (jam && tgl) {
-                hargaTotalLapangan = getHargaLapangan(tgl, jam, 'Non-Member');
+                hargaTotalLapangan = getHargaLapangan(tgl, jam, selectedStatus);
+                jamAkhirBooking = `${String((parseInt(jam.split(':')[0]) + 1) % 24).padStart(2,'0')}:00`;
+            }
+            let biayaTambahanWaktu = 0;
+            if (tambahanMenit > 0 && tgl && jamAkhirBooking) {
+                // +30 menit = 50% tarif jam setelah booking terakhir.
+                const tarifJamBerikutnya = getHargaLapangan(tgl, jamAkhirBooking, selectedStatus);
+                biayaTambahanWaktu = Math.round(tarifJamBerikutnya * tambahanJam);
+            } else if (tambahanMenit < 0 && tgl && bookingSlots.length) {
+                // -30 menit = kurangi 50% tarif dari jam terakhir yang dipesan.
+                const lastSlot = bookingSlots[bookingSlots.length - 1];
+                const lastJam = (lastSlot?.tgl ? String(lastSlot.tgl).split('T')[1]?.substring(0,5) : '') || '';
+                if(lastJam) {
+                    const tarifJamTerakhir = getHargaLapangan(tgl, lastJam, selectedStatus);
+                    biayaTambahanWaktu = -Math.round(tarifJamTerakhir * Math.abs(tambahanJam));
+                }
+            } else if (tambahanMenit < 0 && tgl && jam) {
+                // Booking satu jam: -30 menit berarti bayar setengah tarif jam tersebut.
+                const tarifJam = getHargaLapangan(tgl, jam, selectedStatus);
+                biayaTambahanWaktu = -Math.round(tarifJam * Math.abs(tambahanJam));
+            }
+            hargaTotalLapangan += biayaTambahanWaktu;
+
+            // Tampilkan rentang waktu yang sudah disesuaikan, tetapi simpan rentang
+            // asli di data-base-jam-main agar proses simpan tidak menghitung pengurangan dua kali.
+            if (jamMainEl && jamMainStr.includes('-')) {
+                const partsDisplay = jamMainStr.split('-');
+                const startHDisplay = parseInt(String(partsDisplay[0]).split(':')[0], 10);
+                const endHDisplay = parseInt(String(partsDisplay[1]).split(':')[0], 10);
+                if(Number.isFinite(startHDisplay) && Number.isFinite(endHDisplay)) {
+                    let adjustedEndMinutes = endHDisplay * 60 + tambahanMenit;
+                    const maxStart = startHDisplay * 60;
+                    if(adjustedEndMinutes > maxStart) {
+                        const hh = Math.floor(adjustedEndMinutes / 60) % 24;
+                        const mm = adjustedEndMinutes % 60;
+                        jamMainEl.value = `${String(startHDisplay).padStart(2,'0')}:00-${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;
+                    }
+                }
             }
 
             let hargaTim1 = hargaTotalLapangan;
             let hargaTim2 = 0;
             if (isSparingPayment) {
-                const hargaNormalPerJam = bookingSlots.length
-                    ? bookingSlots.reduce((sum, b) => sum + getHargaLapangan(tgl, (b.tgl.split('T')[1] || '').substring(0,5), 'Non-Member'), 0)
-                    : getHargaLapangan(tgl, jam, 'Non-Member');
+                const hargaNormalPerJam = hargaTotalLapangan;
                 const hargaDasarPerTim = Math.round(hargaNormalPerJam / 2);
                 hargaTim1 = hargaDasarPerTim;
                 hargaTim2 = hargaDasarPerTim;
@@ -7979,14 +8249,31 @@ body > * {
                 else { if (tim1Member) hargaTim1 = Math.max(0, hargaTim1 - 50000); if (tim2Member) hargaTim2 = Math.max(0, hargaTim2 - 50000); }
             }
 
-            const biayaBola = pakaiBola ? 25000 * durasiJam : 0;
-            const biayaRompi = 30000 * durasiJam;
+            const durasiEfektif = durasiJam + tambahanJam;
+            const biayaBola = pakaiBola ? 25000 * durasiEfektif : 0;
+            const biayaRompi = 30000 * durasiEfektif;
             const bolaTim1 = pakaiBola ? (isSparingPayment ? Math.ceil(biayaBola / 2) : biayaBola) : 0;
             const bolaTim2 = pakaiBola && isSparingPayment ? Math.floor(biayaBola / 2) : 0;
             const rompiTim1 = pakaiRompi1 ? biayaRompi : 0;
             const rompiTim2 = isSparingPayment && pakaiRompi2 ? biayaRompi : 0;
             const totalAkhir1 = hargaTim1 + bolaTim1 + rompiTim1;
             const totalAkhir2 = hargaTim2 + bolaTim2 + rompiTim2;
+
+            // Simpan hasil perhitungan terakhir agar submitData() dapat
+            // mengambil total tagihan yang benar tanpa menghitung ulang
+            // dan tanpa mengubah nominal yang sudah diedit admin.
+            window.__pelunasanCalc = {
+                totalAkhir1,
+                totalAkhir2,
+                durasiJam,
+                tambahanMenit,
+                durasiEfektif,
+                hargaTotalLapangan,
+                jamMain: jamMainStr,
+                tgl,
+                nama1,
+                selectedStatus
+            };
 
             let dp1 = 0;
             const booking1 = Object.values(globalCache.booking || {}).find(b => {
@@ -8022,11 +8309,11 @@ body > * {
                     <div class="rounded-xl border-2 border-blue-300 bg-blue-50 p-3 shadow-md">
                         <div class="flex items-center justify-between gap-2 mb-1">
                             <div class="text-[10px] font-black text-blue-700 uppercase">⚽ TIM 1 · ${selectedStatus}</div>
-                            <div class="text-[9px] font-black bg-blue-600 text-white px-2 py-1 rounded-full">${isSparingPayment ? 'SPARING' : (durasiJam > 1 ? `BOOKING ${durasiJam} JAM` : 'BOOKING')}</div>
+                            <div class="text-[9px] font-black bg-blue-600 text-white px-2 py-1 rounded-full">${isSparingPayment ? 'SPARING' : (durasiEfektif > 1 ? `BOOKING ${durasiEfektif % 1 ? durasiEfektif.toLocaleString('id-ID') : durasiEfektif} JAM` : 'BOOKING')}</div>
                         </div>
                         <div class="font-black text-slate-900 text-xs truncate mb-2">${selectedName || 'Pilih tim'}</div>
                         <div class="grid grid-cols-2 gap-1 text-[10px]">
-                            <div class="bg-white/70 rounded-lg p-1.5"><div class="text-slate-500">Harga ${durasiJam > 1 ? `Total ${durasiJam} Jam` : 'Booking'}</div><b class="text-slate-900">${formatRupiah(totalAkhir1)}</b></div>
+                            <div class="bg-white/70 rounded-lg p-1.5"><div class="text-slate-500">Harga ${durasiEfektif > 1 ? `Total ${durasiEfektif % 1 ? durasiEfektif.toLocaleString('id-ID') : durasiEfektif} Jam` : 'Booking'}</div><b class="text-slate-900">${formatRupiah(totalAkhir1)}</b></div>
                             <div class="bg-white/70 rounded-lg p-1.5"><div class="text-slate-500">DP</div><b class="text-slate-900">${formatRupiah(dp1)}</b></div>
                         </div>
                         <div class="mt-2 flex items-center justify-between rounded-lg bg-blue-600 text-white px-2 py-1.5"><span class="text-[10px] font-bold">SISA TAGIHAN</span><b class="text-sm">${formatRupiah(sisa1)}</b></div>
@@ -8040,6 +8327,7 @@ body > * {
                 if (pakaiBola) r.push(`Bola ${formatRupiah(biayaBola)}`);
                 if (pakaiRompi1) r.push(`Rompi Tim 1 ${formatRupiah(rompiTim1)}`);
                 if (isSparingPayment && pakaiRompi2) r.push(`Rompi Tim 2 ${formatRupiah(rompiTim2)}`);
+                if (tambahanMenit > 0) r.push(`Tambah ${tambahanMenit} menit ${formatRupiah(biayaTambahanWaktu)}`);
                 infoSewa.innerText = r.length ? `Tambahan: ${r.join(' · ')}` : 'Biaya tambahan sewa: Rp 0';
             }
 
@@ -8147,7 +8435,8 @@ body > * {
                         return;
                     }
                 }
-                let jamMain = document.getElementById('in-jam-main').value;
+                const jamMainElSubmit = document.getElementById('in-jam-main');
+                let jamMain = jamMainElSubmit?.getAttribute('data-base-jam-main') || jamMainElSubmit?.value || '';
                 let met1 = document.getElementById('in-metode-1').value;
                 let met2 = document.getElementById('in-metode-2').value;
                 let jenisPembayaran = document.getElementById('in-jenis-pembayaran')?.value || 'internal';
@@ -8165,20 +8454,26 @@ body > * {
                         if(!isNaN(startH) && !isNaN(endH) && endH > startH) durasiJam = endH - startH;
                     }
                 }
+                const tambahanMenit = Number(document.getElementById('in-tambahan-waktu')?.value || 0);
+                const tambahanJam = tambahanMenit / 60;
+                const durasiEfektif = durasiJam + tambahanJam;
                 let pakaiBola = document.getElementById('in-sewa-bola').checked;
                 let pakaiRompi1 = document.getElementById('in-sewa-rompi-1').checked;
                 let pakaiRompi2 = document.getElementById('in-sewa-rompi-2').checked;
-                let biayaBola = pakaiBola ? 25000 * durasiJam : 0;
-                let biayaRompi = (pakaiRompi1 || pakaiRompi2) ? 30000 * durasiJam : 0;
+                let biayaBola = pakaiBola ? 25000 * durasiEfektif : 0;
+                let biayaRompi = (pakaiRompi1 || pakaiRompi2) ? 30000 * durasiEfektif : 0;
                 let tambahanTim1 = (pakaiBola ? Math.ceil(biayaBola / 2) : 0) + (pakaiRompi1 ? biayaRompi : 0);
                 let tambahanTim2 = (pakaiBola ? Math.floor(biayaBola / 2) : 0) + (pakaiRompi2 ? biayaRompi : 0);
 
                 let totalTim1 = jml1;
                 let ketSewa = [];
-                if(pakaiBola) ketSewa.push(`Sewa Bola(${durasiJam}j, bagi 2)`);
-                if(pakaiRompi1) ketSewa.push(`Sewa Rompi Tim 1(${durasiJam}j)`);
-                if(pakaiRompi2) ketSewa.push(`Sewa Rompi Tim 2(${durasiJam}j)`);
+                if(pakaiBola) ketSewa.push(`Sewa Bola(${durasiEfektif}j, bagi 2)`);
+                if(pakaiRompi1) ketSewa.push(`Sewa Rompi Tim 1(${durasiEfektif}j)`);
+                if(pakaiRompi2) ketSewa.push(`Sewa Rompi Tim 2(${durasiEfektif}j)`);
                 let ketTambahanStr = ketSewa.length > 0 ? ` + ${ketSewa.join(', ')}` : "";
+
+                const totalTagihanPenyesuaian = Number(window.__pelunasanCalc?.totalAkhir1 || 0);
+                const totalTagihanPenyesuaianTim2 = Number(window.__pelunasanCalc?.totalAkhir2 || 0);
 
                 data = { 
                     ket: `Pelunasan ${tim} (${jamMain})${ketTambahanStr}`, 
@@ -8193,6 +8488,29 @@ body > * {
                     status2: document.getElementById('in-status-2')?.value || 'Non-Member',
                     biayaTambahanTim1: tambahanTim1,
                     biayaTambahanTim2: tambahanTim2,
+                    tambahanWaktuMenit: tambahanMenit,
+                    durasiEfektifJam: durasiEfektif,
+                    // Simpan total tagihan setelah penyesuaian waktu.
+                    // Khusus -30 menit, nominal yang dibayar sesuai total ini
+                    // dianggap LUNAS walaupun lebih kecil dari total booking asli.
+                    totalTagihanSetelahPenyesuaian: totalTagihanPenyesuaian,
+                    totalTagihanSetelahPenyesuaianTim2: totalTagihanPenyesuaianTim2,
+                    // Penanda eksplisit untuk -30 menit. DP + pembayaran saat ini
+                    // dibandingkan dengan tagihan setelah penyesuaian agar Jadwal
+                    // Hari Ini bisa langsung menandai seluruh booking multi-jam lunas.
+                    lunasSetelahPenyesuaian: (() => {
+                        if(tambahanMenit !== -30 || totalTagihanPenyesuaian <= 0) return false;
+                        const namaBayar = String(tim || '').replace(/\s*\(Booking\)$/i, '').trim().toLowerCase();
+                        const dpBayar = Object.values(globalCache.booking || {}).reduce((maxDp, b) => {
+                            const btgl = String(b?.tgl || '').split('T')[0];
+                            const bjam = String(b?.tgl || '').split('T')[1]?.substring(0,5) || '';
+                            const bnama = String(b?.nama || '').trim().toLowerCase();
+                            return (btgl === tgl && bjam === String(jamMain || '').substring(0,5) && bnama === namaBayar)
+                                ? Math.max(maxDp, Number(b?.dp || 0)) : maxDp;
+                        }, 0);
+                        const dibayarSekarang = Number(document.getElementById('in-jumlah-1')?.value || 0);
+                        return dpBayar + dibayarSekarang >= totalTagihanPenyesuaian;
+                    })(),
                     jumlah: totalTim1 + jml2,
                     tgl: tgl
                 };
@@ -9278,8 +9596,9 @@ body > * {
 
             for(let d = new Date(start); d <= end; d.setDate(d.getDate()+1)) {
                 const dateStr = getLocalDateString(d);
-                // Jangan membuat tagihan untuk hari yang belum dimainkan.
-                if(dateStr > today) continue;
+                // Tanggal mendatang tetap dihitung jika memang masuk jadwal member.
+                // Admin boleh melunasi jadwal besok dan seterusnya.
+                // Batasnya tetap mengikuti periode yang dipilih dan status aktif/libur member.
                 const hari = getNamaHari(dateStr);
                 Object.entries(globalCache.member || {}).forEach(([jam, perHari]) => {
                     const cell = perHari?.[hari];
@@ -9313,6 +9632,40 @@ body > * {
             return dues.map(d => ({...d, terbayar:Math.min(d.nominal, allocated[d.id] || 0), sisa:Math.max(0,d.nominal-(allocated[d.id]||0))}));
         }
 
+        function formatTanggalPelunasanOption(dateStr) {
+            if(!dateStr) return '-';
+            const d = new Date(dateStr + 'T00:00:00');
+            if(isNaN(d.getTime())) return dateStr;
+            return d.toLocaleDateString('id-ID', {weekday:'long', day:'2-digit', month:'long', year:'numeric'});
+        }
+
+        function refreshPelunasanTanggalSelect(dues) {
+            const select = document.getElementById('pm-tanggal-jadwal');
+            if(!select) return;
+            const current = select.value;
+            const list = (dues || [])
+                .filter(d => Number(d.sisa || 0) > 0)
+                .sort((a,b)=>(a.tanggal+a.jam).localeCompare(b.tanggal+b.jam));
+
+            const seen = new Set();
+            const dates = [];
+            list.forEach(d => {
+                if(!seen.has(d.tanggal)) {
+                    seen.add(d.tanggal);
+                    dates.push(d.tanggal);
+                }
+            });
+
+            select.innerHTML = '<option value="">-- Pilih Tanggal Jadwal --</option>' +
+                dates.map(t => `<option value="${t}">${formatTanggalPelunasanOption(t)}</option>`).join('');
+
+            if(dates.includes(current)) {
+                select.value = current;
+            } else if(dates.length) {
+                select.value = dates[0];
+            }
+        }
+
         function refreshPelunasanMemberSelect() {
             const select = document.getElementById('pm-member');
             if(!select) return;
@@ -9333,12 +9686,15 @@ body > * {
             const history = document.getElementById('pm-riwayat');
             if(!box || !summary) return;
             if(!nama) {
+                const tanggalSelect = document.getElementById('pm-tanggal-jadwal');
+                if(tanggalSelect) tanggalSelect.innerHTML='<option value="">-- Pilih Tanggal Jadwal --</option>';
                 summary.innerHTML='<div class="rounded-xl bg-slate-100 p-3 text-xs text-slate-500">Pilih member untuk melihat tagihan.</div>';
                 box.innerHTML='';
                 if(history) history.innerHTML='';
                 return;
             }
             const dues = getOpenDuesForMember(nama, month);
+            refreshPelunasanTanggalSelect(dues);
             const total = dues.reduce((s,d)=>s+d.nominal,0);
             const paid = dues.reduce((s,d)=>s+d.terbayar,0);
             const outstanding = dues.reduce((s,d)=>s+d.sisa,0);
@@ -9349,7 +9705,7 @@ body > * {
                 box.innerHTML = dues.map(d=>`<div class="flex items-center justify-between gap-3 rounded-xl border ${d.sisa>0?'border-amber-300 bg-amber-50':'border-emerald-300 bg-emerald-50'} p-3"><div><div class="text-xs font-black">${formatTanggalFull(d.tanggal)} · ${d.jam}</div><div class="text-[10px] text-slate-500">Tagihan ${formatRupiah(d.nominal)}</div></div><div class="text-right"><div class="text-xs font-black ${d.sisa>0?'text-rose-700':'text-emerald-700'}">${d.sisa>0?'Sisa '+formatRupiah(d.sisa):'LUNAS'}</div><div class="text-[10px] text-slate-500">Bayar ${formatRupiah(d.terbayar)}</div></div></div>`).join('');
             }
             const records = Object.entries(globalCache.pelunasanMember || {}).filter(([_,r])=>String(r.member||'').trim().toLowerCase()===nama.trim().toLowerCase()).sort((a,b)=>Number(b.timestamp||0)-Number(a.timestamp||0));
-            if(history) history.innerHTML = records.length ? `<table class="w-full text-xs"><thead><tr class="border-b"><th class="text-left p-2">Tanggal</th><th class="text-left p-2">Bayar</th><th class="text-left p-2">Metode</th><th class="text-left p-2">Alokasi</th></tr></thead><tbody>${records.slice(0,20).map(([k,r])=>`<tr class="border-b"><td class="p-2">${formatTanggalFull(r.tanggalBayar || '')}</td><td class="p-2 font-black">${formatRupiah(r.jumlah)}</td><td class="p-2">${r.metode||'-'}</td><td class="p-2">${(r.alokasi||[]).map(a=>`${a.tanggal} ${a.jam}: ${formatRupiah(a.amount)}`).join('<br>')||'-'}</td></tr>`).join('')}</tbody></table>` : '<div class="text-xs text-slate-500 p-2">Belum ada riwayat pelunasan.</div>';
+            if(history) history.innerHTML = records.length ? `<table class="w-full text-xs"><thead><tr class="border-b"><th class="text-left p-2">Tanggal</th><th class="text-left p-2">Bayar</th><th class="text-left p-2">Metode</th><th class="text-left p-2">Alokasi</th></tr></thead><tbody>${records.slice(0,20).map(([k,r])=>`<tr class="border-b"><td class="p-2">${formatTanggalFull(r.tanggalBayar || '')}</td><td class="p-2 font-black">${formatRupiah(r.jumlah)}</td><td class="p-2">${r.metode||'-'}</td><td class="p-2">${r.tanggalJadwalDipilih ? formatTanggalFull(r.tanggalJadwalDipilih) + '<br>' : ''}${(r.alokasi||[]).map(a=>`${a.tanggal} ${a.jam}: ${formatRupiah(a.amount)}`).join('<br>')||'-'}</td></tr>`).join('')}</tbody></table>` : '<div class="text-xs text-slate-500 p-2">Belum ada riwayat pelunasan.</div>';
             updatePelunasanMemberPreview();
         };
 
@@ -9359,8 +9715,12 @@ body > * {
             const nama = document.getElementById('pm-member')?.value || '';
             const month = getPelunasanMonth();
             const amount = Number(document.getElementById('pm-jumlah')?.value || 0);
-            if(!nama || amount<=0) { el.textContent='Pilih member dan masukkan jumlah pembayaran.'; return; }
-            const dues = getOpenDuesForMember(nama, month).filter(d=>d.sisa>0);
+            if(!nama || amount<=0) { el.textContent='Pilih member, tanggal jadwal, dan masukkan jumlah pembayaran.'; return; }
+            const selectedDate = document.getElementById('pm-tanggal-jadwal')?.value || '';
+            let dues = getOpenDuesForMember(nama, month).filter(d=>d.sisa>0);
+            if(selectedDate) {
+                dues = dues.filter(d=>d.tanggal >= selectedDate);
+            }
             const totalOpen = dues.reduce((s,d)=>s+d.sisa,0);
             let remain = amount;
             const allocations=[];
@@ -9374,15 +9734,18 @@ body > * {
             const month = getPelunasanMonth();
             const jumlah = Number(document.getElementById('pm-jumlah')?.value || 0);
             const metode = document.getElementById('pm-metode')?.value || 'Cash';
+            const selectedDate = document.getElementById('pm-tanggal-jadwal')?.value || '';
             if(!nama) return alert('Pilih member terlebih dahulu.');
+            if(!selectedDate) return alert('Pilih tanggal jadwal yang akan dilunasi.');
             if(jumlah<=0) return alert('Jumlah pembayaran harus lebih dari Rp 0.');
-            const dues = getOpenDuesForMember(nama, month).filter(d=>d.sisa>0);
-            if(!dues.length) return alert('Tidak ada tagihan yang belum lunas untuk member ini.');
+            let dues = getOpenDuesForMember(nama, month).filter(d=>d.sisa>0);
+            if(selectedDate) dues = dues.filter(d=>d.tanggal >= selectedDate);
+            if(!dues.length) return alert('Tidak ada tagihan yang belum lunas mulai dari tanggal jadwal yang dipilih.');
             let remain = jumlah;
             const alokasi=[];
             for(const d of dues) { if(remain<=0) break; const x=Math.min(remain,d.sisa); alokasi.push({dueId:d.id,tanggal:d.tanggal,jam:d.jam,amount:x}); remain-=x; }
             try {
-                await push(ref(db,'pelunasanMember'), {member:nama, periode:month, tanggalBayar:getLocalDateString(), jumlah, metode, alokasi, saldoLebih:remain, timestamp:Date.now()});
+                await push(ref(db,'pelunasanMember'), {member:nama, periode:month, tanggalJadwalDipilih:selectedDate, tanggalBayar:getLocalDateString(), jumlah, metode, alokasi, saldoLebih:remain, timestamp:Date.now()});
                 document.getElementById('pm-jumlah').value='';
                 showSuccessPopup(`Pelunasan ${nama} berhasil disimpan. ${remain>0?'Saldo lebih '+formatRupiah(remain)+' disimpan.':''}`);
                 renderPelunasanMember();
@@ -9839,6 +10202,64 @@ body > * {
                 const jamInput = document.getElementById('in-jam-main');
                 if(jamInput) jamInput.value = jamMain || '-';
             }
+
+            // Untuk booking multi-jam, tampilkan seluruh rentang jam di menu
+            // pembayaran. Jangan hanya bergantung pada bookingGroupId karena
+            // booking lama bisa saja belum mempunyai field tersebut.
+            const allPaymentBookings = Object.values(globalCache.booking || {})
+                .filter(b => {
+                    const btgl = String(b?.tgl || '').split('T')[0];
+                    const bnama = String(b?.nama || '').trim().toLowerCase();
+                    return btgl === tgl && bnama === targetNama;
+                })
+                .sort((a,b) => String(a.tgl).localeCompare(String(b.tgl)));
+
+            const firstBookingForPayment = allPaymentBookings.find(b => {
+                const bjam = String(b?.tgl || '').split('T')[1]?.substring(0,5) || '';
+                return bjam === jamMain;
+            });
+
+            let paymentSlots = [];
+            if(firstBookingForPayment) {
+                const groupId = String(firstBookingForPayment.bookingGroupId || '');
+                if(groupId) {
+                    paymentSlots = allPaymentBookings
+                        .filter(b => String(b?.bookingGroupId || '') === groupId)
+                        .map(b => String(b.tgl).split('T')[1]?.substring(0,5) || '')
+                        .filter(Boolean);
+                } else {
+                    // Fallback untuk booking lama: ambil slot yang berurutan
+                    // mulai dari jam yang diklik.
+                    const byHour = new Map(allPaymentBookings.map(b => [parseInt(String(b.tgl).split('T')[1]?.substring(0,2), 10), b]));
+                    const startH = parseInt(jamMain.substring(0,2), 10);
+                    if(Number.isFinite(startH)) {
+                        for(let h = startH; ; h++) {
+                            const slot = byHour.get(h);
+                            if(!slot) break;
+                            paymentSlots.push(String(slot.tgl).split('T')[1]?.substring(0,5) || '');
+                        }
+                    }
+                }
+            }
+            paymentSlots = [...new Set(paymentSlots)].sort();
+
+            if(paymentSlots.length > 1) {
+                const firstHour = parseInt(paymentSlots[0].split(':')[0], 10);
+                const lastHour = parseInt(paymentSlots[paymentSlots.length - 1].split(':')[0], 10);
+                const jamInputFull = document.getElementById('in-jam-main');
+                if(jamInputFull && Number.isFinite(firstHour) && Number.isFinite(lastHour)) {
+                    jamInputFull.value = `${String(firstHour).padStart(2,'0')}:00-${String(lastHour + 1).padStart(2,'0')}:00`;
+                }
+            }
+
+            // Dari kartu Jadwal Hari Ini, default metode adalah Cash dan nominal
+            // otomatis terisi sebesar SISA TAGIHAN. Admin tetap bisa mengeditnya.
+            const metodePembayaran1 = document.getElementById('in-metode-1');
+            if(metodePembayaran1) {
+                metodePembayaran1.value = 'Cash';
+                toggleFreePaymentInput(1);
+            }
+            hitungOtomatisBiaya();
 
             // Kembalikan fokus ke bagian atas form Uang Masuk.
             document.getElementById('page-masuk')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -10408,7 +10829,40 @@ body > * {
                     belumBayar = true;
                     return;
                 }
-                dibayar += Number(pay.jumlah1 ?? pay.jumlah ?? 0);
+
+                const nilaiBayar = Number(pay.jumlah1 ?? pay.jumlah ?? 0);
+                const penyesuaianWaktu = Number(pay.tambahanWaktuMenit || 0);
+                const totalSetelahPenyesuaian = Number(pay.totalTagihanSetelahPenyesuaian || 0);
+
+                // Penanda eksplisit dari transaksi -30 menit. Jika transaksi
+                // sudah mencapai tagihan setelah penyesuaian, langsung anggap
+                // seluruh booking multi-jam lunas.
+                if(penyesuaianWaktu === -30 && pay.lunasSetelahPenyesuaian === true) {
+                    dibayar = Math.max(dibayar, Number(totalTagihan || 0));
+                    return;
+                }
+
+                // Jika admin memilih -30 menit, booking dianggap LUNAS ketika
+                // nominal yang dibayar sudah melunasi tagihan setelah pengurangan
+                // 30 menit. Contoh: booking 3 jam Rp300.000, -30 menit menjadi
+                // Rp250.000; bayar Rp250.000 => LUNAS, bukan masih kurang Rp50.000.
+                if(penyesuaianWaktu === -30 && totalSetelahPenyesuaian > 0) {
+                    const namaBooking = String(pay.timNamaBersih || '').trim().toLowerCase();
+                    const dpBooking = Object.values(globalCache.booking || {}).reduce((maxDp, b) => {
+                        const btgl = String(b?.tgl || '').split('T')[0];
+                        const bjam = String(b?.tgl || '').split('T')[1]?.substring(0,5) || '';
+                        const bnama = String(b?.nama || '').trim().toLowerCase();
+                        return (btgl === getLocalDateString() && bnama === namaBooking && bjam === jamTarget)
+                            ? Math.max(maxDp, Number(b?.dp || 0))
+                            : maxDp;
+                    }, 0);
+                    if(dpBooking + nilaiBayar >= totalSetelahPenyesuaian) {
+                        dibayar = Math.max(dibayar, Number(totalTagihan || 0));
+                        return;
+                    }
+                }
+
+                dibayar += nilaiBayar;
             });
 
             return { free, belumBayar, adaCatatan, dibayar, sisa: Math.max(0, Number(totalTagihan || 0) - dibayar) };
@@ -10508,7 +10962,20 @@ body > * {
                 // sebagai SATU booking: harga dijumlahkan sekali dan DP/pelunasan
                 // tidak pernah dikalikan berdasarkan jumlah slot.
                 const bookingGroupId = first.booking ? String(first.bookingGroupId || '') : '';
-                const isMultiHourBooking = !!bookingGroupId && slots.some(x => x.bookingGroupId === bookingGroupId);
+                // Multi-jam tidak boleh bergantung pada bookingGroupId. Booking lama
+                // bisa tidak mempunyai groupId, tetapi beberapa slot berurutan dengan
+                // nama tim yang sama tetap merupakan satu booking (mis. 15,16,17).
+                const bookingSlotsBySequence = slots
+                    .filter(x => x.booking)
+                    .sort((a,b) => String(a.jam).localeCompare(String(b.jam)));
+                const isConsecutiveMultiHour = bookingSlotsBySequence.length > 1 &&
+                    bookingSlotsBySequence.every((x, i, arr) => {
+                        if(i === 0) return true;
+                        const prevH = parseInt(String(arr[i-1].jam).substring(0,2), 10);
+                        const curH = parseInt(String(x.jam).substring(0,2), 10);
+                        return Number.isFinite(prevH) && Number.isFinite(curH) && curH === prevH + 1;
+                    });
+                const isMultiHourBooking = !!bookingGroupId || isConsecutiveMultiHour;
 
                 const hitungPembayaran = (item, total, jamUntukMatch) => {
                     const summary = getTodayPaymentSummary(item.nama, jamUntukMatch, total);
@@ -10516,16 +10983,28 @@ body > * {
                 };
 
                 if(isMultiHourBooking) {
-                    const bookingSlots = slots.filter(x => String(x.bookingGroupId || '') === bookingGroupId)
-                        .sort((a,b) => String(a.jam).localeCompare(String(b.jam)));
+                    const bookingSlots = bookingGroupId
+                        ? slots.filter(x => String(x.bookingGroupId || '') === bookingGroupId)
+                            .sort((a,b) => String(a.jam).localeCompare(String(b.jam)))
+                        : bookingSlotsBySequence;
                     const firstBooking = bookingSlots[0];
                     const total = bookingSlots.reduce((sum, x) => sum + getHargaLapangan(today, x.jam, x.status), 0);
                     const dp = Number(firstBooking.dp || 0);
-                    const paymentSummary = getTodayPaymentSummary(firstBooking.nama, firstBooking.jam, total);
+                    // Untuk booking multi-jam, status FREE cukup ditemukan pada satu
+                    // transaksi pelunasan yang mewakili booking tersebut (biasanya jam
+                    // pertama). Jangan mengecek setiap slot sebagai tagihan terpisah.
+                    const paymentSummaries = bookingSlots.map(slot =>
+                        getTodayPaymentSummary(firstBooking.nama, slot.jam, total)
+                    );
+                    const paymentSummary = paymentSummaries.find(x => x.free) ||
+                        paymentSummaries.find(x => x.adaCatatan) ||
+                        getTodayPaymentSummary(firstBooking.nama, firstBooking.jam, total);
+                    const freeMultiHour = paymentSummaries.some(x => x.free);
                     const totalTerbayar = dp + paymentSummary.dibayar;
                     const sisa = Math.max(0, total - totalTerbayar);
-                    // FREE selalu dianggap lunas dan tidak boleh muncul lagi di Jadwal Hari Ini.
-                    const sudahLunas = paymentSummary.free || (total > 0 && sisa <= 0);
+                    // FREE pada booking multi-jam berarti SELURUH booking lunas.
+                    // Karena itu semua slot 15/16/17 harus hilang sekaligus.
+                    const sudahLunas = freeMultiHour || paymentSummary.free || (total > 0 && sisa <= 0);
                     slotDetails.push({ ...firstBooking, jam: firstBooking.jam, durasiBooking: bookingSlots.length, total, dp, sisa, sudahLunas, free: paymentSummary.free, belumBayar: paymentSummary.belumBayar, bookingGroupId });
                 } else {
                     slots.forEach(item => {
@@ -11828,8 +12307,22 @@ body > * {
                 }
             });
 
-            let sisaCashLapangan = totalLapanganCash - totalKeluar;
-            let totalSisaCash = sisaCashLapangan + totalMinumanCash;
+            // Alokasi pengeluaran:
+            // 1. Utamakan Cash Lapangan.
+            // 2. Jika pengeluaran lebih besar dari Cash Lapangan,
+            //    kekurangannya otomatis diambil dari Cash Minuman.
+            // 3. Sisa Cash masing-masing sumber tidak boleh dihitung negatif.
+            const pengeluaranDariLapangan = Math.min(totalKeluar, totalLapanganCash);
+            const pengeluaranDariMinuman = Math.min(
+                Math.max(0, totalKeluar - pengeluaranDariLapangan),
+                totalMinumanCash
+            );
+            const totalPengeluaranTercover = pengeluaranDariLapangan + pengeluaranDariMinuman;
+            const kekuranganCash = Math.max(0, totalKeluar - totalPengeluaranTercover);
+
+            const sisaCashLapangan = Math.max(0, totalLapanganCash - pengeluaranDariLapangan);
+            const sisaCashMinuman = Math.max(0, totalMinumanCash - pengeluaranDariMinuman);
+            const totalSisaCash = sisaCashLapangan + sisaCashMinuman;
 
             // Render Subtotals
             let subtotalLap = document.getElementById('subtotal-lapangan');
@@ -11838,8 +12331,8 @@ body > * {
                     <span class="bg-white/60 border border-blue-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalLapangan.toLocaleString('id-ID')}</span>
                     <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp ${totalLapanganCash.toLocaleString('id-ID')}</span>
                     <span class="bg-white/60 border border-sky-500/40 px-2.5 py-1 rounded-lg text-sky-800 shadow font-black">QRIS/TF: Rp ${totalLapanganQrif.toLocaleString('id-ID')}</span>
-                    <span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg text-rose-800 shadow font-black">Pengeluaran: Rp ${totalKeluar.toLocaleString('id-ID')}</span>
-                    <span class="bg-white/60 border border-indigo-500/40 px-2.5 py-1 rounded-lg text-indigo-800 shadow font-black">Sisa Cash: Rp ${sisaCashLapangan.toLocaleString('id-ID')}</span>
+                    <span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg text-rose-800 shadow font-black">Dipakai Pengeluaran: Rp ${pengeluaranDariLapangan.toLocaleString('id-ID')}</span>
+                    <span class="bg-white/60 border border-indigo-500/40 px-2.5 py-1 rounded-lg text-indigo-800 shadow font-black">Sisa Cash Lapangan Setelah Pengeluaran: Rp ${sisaCashLapangan.toLocaleString('id-ID')}</span>
                 `;
             }
 
@@ -11849,13 +12342,18 @@ body > * {
                     <span class="bg-white/60 border border-amber-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalMinuman.toLocaleString('id-ID')}</span>
                     <span class="bg-white/60 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-emerald-800 shadow font-black">Cash: Rp ${totalMinumanCash.toLocaleString('id-ID')}</span>
                     <span class="bg-white/60 border border-sky-500/40 px-2.5 py-1 rounded-lg text-sky-800 shadow font-black">QRIS/TF: Rp ${totalMinumanQrif.toLocaleString('id-ID')}</span>
+                    <span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg text-rose-800 shadow font-black">Dipakai Pengeluaran: Rp ${pengeluaranDariMinuman.toLocaleString('id-ID')}</span>
+                    <span class="bg-white/60 border border-purple-500/40 px-2.5 py-1 rounded-lg text-purple-800 shadow font-black">Sisa Cash Minuman Setelah Pengeluaran: Rp ${sisaCashMinuman.toLocaleString('id-ID')}</span>
                 `;
             }
 
             let subtotalKel = document.getElementById('subtotal-keluar');
             if(subtotalKel) {
                 subtotalKel.innerHTML = `
-                    <span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total: Rp ${totalKeluar.toLocaleString('id-ID')}</span>
+                    <span class="bg-white/60 border border-rose-500/40 px-2.5 py-1 rounded-lg shadow font-black">Total Pengeluaran: Rp ${totalKeluar.toLocaleString('id-ID')}</span>
+                    <span class="bg-white/60 border border-blue-500/40 px-2.5 py-1 rounded-lg text-blue-800 shadow font-black">Dari Lapangan: Rp ${pengeluaranDariLapangan.toLocaleString('id-ID')}</span>
+                    <span class="bg-white/60 border border-purple-500/40 px-2.5 py-1 rounded-lg text-purple-800 shadow font-black">Dari Minuman: Rp ${pengeluaranDariMinuman.toLocaleString('id-ID')}</span>
+                    ${kekuranganCash > 0 ? `<span class="bg-white/60 border border-red-600/50 px-2.5 py-1 rounded-lg text-red-800 shadow font-black">Cash Tidak Tercover: Rp ${kekuranganCash.toLocaleString('id-ID')}</span>` : ''}
                 `;
             }
 
@@ -11866,8 +12364,13 @@ body > * {
             if(document.getElementById('rekap-minuman-qrif')) document.getElementById('rekap-minuman-qrif').innerText = `Rp ${totalMinumanQrif.toLocaleString('id-ID')}`;
             if(document.getElementById('rekap-keluar')) document.getElementById('rekap-keluar').innerText = `Rp ${totalKeluar.toLocaleString('id-ID')}`;
             if(document.getElementById('rekap-sisa-cash-lapangan')) document.getElementById('rekap-sisa-cash-lapangan').innerText = `Rp ${sisaCashLapangan.toLocaleString('id-ID')}`;
-            if(document.getElementById('rekap-sisa-cash-minuman')) document.getElementById('rekap-sisa-cash-minuman').innerText = `Rp ${totalMinumanCash.toLocaleString('id-ID')}`;
+            if(document.getElementById('rekap-sisa-cash-minuman')) document.getElementById('rekap-sisa-cash-minuman').innerText = `Rp ${sisaCashMinuman.toLocaleString('id-ID')}`;
             if(document.getElementById('rekap-total-sisa-cash')) document.getElementById('rekap-total-sisa-cash').innerText = `Rp ${totalSisaCash.toLocaleString('id-ID')}`;
+
+            // Elemen tambahan untuk menjelaskan sumber dana pengeluaran.
+            if(document.getElementById('rekap-pengeluaran-dari-lapangan')) document.getElementById('rekap-pengeluaran-dari-lapangan').innerText = `Rp ${pengeluaranDariLapangan.toLocaleString('id-ID')}`;
+            if(document.getElementById('rekap-pengeluaran-dari-minuman')) document.getElementById('rekap-pengeluaran-dari-minuman').innerText = `Rp ${pengeluaranDariMinuman.toLocaleString('id-ID')}`;
+            if(document.getElementById('rekap-kekurangan-cash')) document.getElementById('rekap-kekurangan-cash').innerText = `Rp ${kekuranganCash.toLocaleString('id-ID')}`;
 
             const totalPemasukanHarian = totalLapangan + totalMinuman;
             const totalCashHarian = totalLapanganCash + totalMinumanCash;
@@ -12914,13 +13417,21 @@ window.downloadDailyRecapJPG = async function() {
     document.body.appendChild(root);
 
     try {
+        // Ambil ukuran AKTUAL root setelah seluruh clone selesai dirender.
+        // Ini mencegah sisi kanan terpotong karena width canvas berbeda dengan width elemen.
+        const exportWidth = Math.ceil(root.getBoundingClientRect().width);
+        const exportHeight = Math.ceil(root.scrollHeight);
+
         const canvas = await html2canvas(root, {
-            scale:2,
-            backgroundColor:'#f1f5f9',
-            useCORS:true,
-            logging:false,
-            width:1080,
-            height: root.scrollHeight
+            scale: 2,
+            backgroundColor: '#f1f5f9',
+            useCORS: true,
+            logging: false,
+            width: exportWidth,
+            height: exportHeight,
+            windowWidth: exportWidth,
+            scrollX: 0,
+            scrollY: 0
         });
 
         const link = document.createElement('a');
@@ -13886,6 +14397,424 @@ window.downloadDailyRecapJPG = async function() {
   #today-schedule-panel .today-schedule-info .today-late-timer,
   #today-schedule-panel .today-schedule-main-row > .today-remind-btn{height:29px !important;min-height:29px !important;}
   #today-schedule-panel .schedule-card > .grid.grid-cols-3{gap:6px !important;margin-top:7px !important;}
+}
+</style>
+
+
+<style id="jadwal-hari-ini-v8-true-grid-final">
+/* =========================================================
+   V8 — TRUE 3-COLUMN GRID ALIGNMENT
+   TOTAL / DP / SISA menjadi acuan seluruh elemen.
+   Desktop: 2 kolom card tetap stabil.
+   Mobile: 1 kolom, susunan yang sudah pas dipertahankan.
+   ========================================================= */
+
+#today-schedule-panel .schedule-card{
+  position:relative !important;
+  box-sizing:border-box !important;
+  overflow:hidden !important;
+  --schedule-gap:10px;
+}
+
+/* LOGO: tidak memakai frame */
+#today-schedule-panel .today-schedule-main-row > .today-schedule-logo{
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  padding:0 !important;
+}
+#today-schedule-panel .today-schedule-main-row > .today-schedule-logo img,
+#today-schedule-panel .today-schedule-main-row > .today-schedule-logo > span{
+  object-fit:contain !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+
+/* ========================= DESKTOP ========================= */
+@media (min-width:641px){
+  #today-schedule-panel .schedule-card{
+    padding:14px !important;
+    margin:0 !important;
+    border-radius:16px !important;
+    display:block !important;
+  }
+
+  #today-schedule-panel .today-schedule-main-row{
+    position:relative !important;
+    display:block !important;
+    width:100% !important;
+    height:174px !important;
+    min-height:174px !important;
+    max-height:174px !important;
+    padding:0 !important;
+    margin:0 0 10px 0 !important;
+    box-sizing:border-box !important;
+    overflow:visible !important;
+  }
+
+  /* TOTAL column = 30%; DP + SISA = 70% */
+  #today-schedule-panel .today-schedule-main-row > .today-schedule-logo{
+    position:absolute !important;
+    left:0 !important;
+    top:0 !important;
+    width:30% !important;
+    height:174px !important;
+    min-width:0 !important;
+    max-width:30% !important;
+    min-height:174px !important;
+    max-height:174px !important;
+    margin:0 !important;
+    border-radius:12px !important;
+    overflow:hidden !important;
+    transform:none !important;
+    z-index:2 !important;
+  }
+
+  #today-schedule-panel .today-schedule-main-row > .today-schedule-logo img,
+  #today-schedule-panel .today-schedule-main-row > .today-schedule-logo > span{
+    width:100% !important;
+    height:100% !important;
+    max-width:100% !important;
+    max-height:100% !important;
+    padding:6px !important;
+    object-fit:contain !important;
+    box-sizing:border-box !important;
+  }
+
+  /* Jam booking = area kanan penuh */
+  #today-schedule-panel .today-schedule-times{
+    position:absolute !important;
+    left:31% !important;
+    right:0 !important;
+    top:0 !important;
+    width:69% !important;
+    height:38px !important;
+    min-height:38px !important;
+    max-height:38px !important;
+    display:flex !important;
+    align-items:flex-start !important;
+    flex-wrap:wrap !important;
+    gap:8px !important;
+    margin:0 !important;
+    padding:0 !important;
+    overflow:hidden !important;
+    box-sizing:border-box !important;
+  }
+
+  #today-schedule-panel .today-schedule-times .schedule-time{
+    margin:0 !important;
+    padding:8px 11px !important;
+    min-height:34px !important;
+    height:34px !important;
+    box-sizing:border-box !important;
+    line-height:1 !important;
+    border-radius:10px !important;
+    font-size:11px !important;
+  }
+
+  /* Nama tim = seluruh area DP + SISA */
+  #today-schedule-panel .today-schedule-info{
+    position:absolute !important;
+    left:31% !important;
+    right:0 !important;
+    top:48px !important;
+    width:69% !important;
+    height:116px !important;
+    min-height:116px !important;
+    max-height:116px !important;
+    margin:0 !important;
+    padding:0 !important;
+    box-sizing:border-box !important;
+    overflow:visible !important;
+  }
+
+  #today-schedule-panel .today-schedule-name-row{
+    position:absolute !important;
+    left:0 !important;
+    top:0 !important;
+    width:100% !important;
+    height:40px !important;
+    min-height:40px !important;
+    max-height:40px !important;
+    margin:0 !important;
+    padding:0 10px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:8px !important;
+    box-sizing:border-box !important;
+    overflow:hidden !important;
+    border-radius:11px !important;
+  }
+
+  #today-schedule-panel .today-schedule-name-row .schedule-team-member,
+  #today-schedule-panel .today-schedule-name-row .schedule-team-nonmember,
+  #today-schedule-panel .today-schedule-name-row .schedule-team-sparing{
+    flex:1 1 auto !important;
+    min-width:0 !important;
+    max-width:none !important;
+    width:auto !important;
+    margin:0 !important;
+    padding:0 !important;
+    font-size:12px !important;
+    line-height:1.1 !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+  }
+
+  #today-schedule-panel .today-status-badge{
+    flex:0 0 auto !important;
+    font-size:9px !important;
+    line-height:1 !important;
+    margin:0 !important;
+    padding:0 !important;
+  }
+
+  /* TIMER = DP, INGATKAN = SISA, satu baris */
+  #today-schedule-panel .today-schedule-info .today-admin-reminder-timer,
+  #today-schedule-panel .today-schedule-info .today-late-timer{
+    position:absolute !important;
+    left:0 !important;
+    top:54px !important;
+    width:calc(50% - 5px) !important;
+    max-width:calc(50% - 5px) !important;
+    height:40px !important;
+    min-height:40px !important;
+    max-height:40px !important;
+    margin:0 !important;
+    padding:8px 6px !important;
+    box-sizing:border-box !important;
+    border-radius:11px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    line-height:1 !important;
+    font-size:11px !important;
+  }
+
+  #today-schedule-panel .today-admin-reminder-timer .reminder-countdown{
+    font-size:11px !important;
+    line-height:1 !important;
+  }
+
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn{
+    position:absolute !important;
+    left:calc(31% + (69% / 2) + 5px) !important;
+    right:0 !important;
+    top:102px !important;
+    width:calc(34.5% - 5px) !important;
+    min-width:0 !important;
+    max-width:none !important;
+    height:40px !important;
+    min-height:40px !important;
+    max-height:40px !important;
+    margin:0 !important;
+    padding:6px 10px !important;
+    box-sizing:border-box !important;
+    border-radius:11px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:6px !important;
+    z-index:20 !important;
+    overflow:hidden !important;
+  }
+
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn .today-remind-icon{
+    width:21px !important;
+    height:21px !important;
+    min-width:21px !important;
+    flex:0 0 21px !important;
+  }
+
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn span{
+    display:inline !important;
+    font-size:9px !important;
+    line-height:1 !important;
+  }
+
+  /* TOTAL / DP / SISA: tiga kolom identik */
+  #today-schedule-panel .schedule-card > .grid.grid-cols-3{
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:10px !important;
+    width:100% !important;
+    margin:0 !important;
+    padding:0 !important;
+    box-sizing:border-box !important;
+  }
+
+  #today-schedule-panel .schedule-card > .grid.grid-cols-3 > div{
+    width:100% !important;
+    min-width:0 !important;
+    height:62px !important;
+    min-height:62px !important;
+    margin:0 !important;
+    padding:9px 6px !important;
+    box-sizing:border-box !important;
+    border-radius:11px !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    text-align:center !important;
+  }
+}
+
+/* ========================= MOBILE ========================= */
+@media (max-width:640px){
+  /* HP: pertahankan susunan 1 kolom yang sudah benar,
+     tetapi samakan semua gap dan alignment. */
+  #today-schedule-panel .schedule-card{
+    padding:7px !important;
+    margin:0 0 8px 0 !important;
+    gap:0 !important;
+  }
+
+  #today-schedule-panel .today-schedule-main-row{
+    height:100px !important;
+    min-height:100px !important;
+    max-height:100px !important;
+    margin:0 0 7px 0 !important;
+    padding:0 !important;
+  }
+
+  #today-schedule-panel .today-schedule-main-row > .today-schedule-logo{
+    left:0 !important;
+    top:50% !important;
+    width:24% !important;
+    height:92px !important;
+    min-height:92px !important;
+    max-height:92px !important;
+    transform:translateY(-50%) !important;
+    border-radius:10px !important;
+  }
+
+  #today-schedule-panel .today-schedule-main-row > .today-schedule-logo img,
+  #today-schedule-panel .today-schedule-main-row > .today-schedule-logo > span{
+    padding:4px !important;
+  }
+
+  #today-schedule-panel .today-schedule-times{
+    left:26% !important;
+    width:74% !important;
+    right:0 !important;
+    top:0 !important;
+    height:27px !important;
+    min-height:27px !important;
+    max-height:27px !important;
+    gap:4px !important;
+    margin:0 !important;
+  }
+
+  #today-schedule-panel .today-schedule-times .schedule-time{
+    margin:0 !important;
+    padding:5px 7px !important;
+    height:27px !important;
+    min-height:27px !important;
+    font-size:8.5px !important;
+  }
+
+  #today-schedule-panel .today-schedule-info{
+    left:26% !important;
+    width:74% !important;
+    right:0 !important;
+    top:31px !important;
+    height:62px !important;
+    min-height:62px !important;
+    max-height:62px !important;
+  }
+
+  #today-schedule-panel .today-schedule-name-row{
+    left:0 !important;
+    top:0 !important;
+    width:100% !important;
+    height:28px !important;
+    min-height:28px !important;
+    max-height:28px !important;
+    padding:3px 6px !important;
+    margin:0 !important;
+    gap:4px !important;
+    border-radius:8px !important;
+  }
+
+  #today-schedule-panel .today-schedule-name-row .schedule-team-member,
+  #today-schedule-panel .today-schedule-name-row .schedule-team-nonmember,
+  #today-schedule-panel .today-schedule-name-row .schedule-team-sparing{
+    font-size:9px !important;
+    padding:0 !important;
+    margin:0 !important;
+  }
+
+  #today-schedule-panel .today-status-badge{font-size:6.5px !important;}
+
+  #today-schedule-panel .today-schedule-info .today-admin-reminder-timer,
+  #today-schedule-panel .today-schedule-info .today-late-timer{
+    left:0 !important;
+    top:32px !important;
+    width:calc(50% - 2px) !important;
+    max-width:calc(50% - 2px) !important;
+    height:27px !important;
+    min-height:27px !important;
+    max-height:27px !important;
+    margin:0 !important;
+    padding:4px !important;
+    font-size:7.5px !important;
+  }
+
+  #today-schedule-panel .today-admin-reminder-timer .reminder-countdown{font-size:8px !important;}
+
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn{
+    left:calc(26% + 37% + 2px) !important;
+    right:0 !important;
+    top:63px !important;
+    width:calc(37% - 2px) !important;
+    min-width:0 !important;
+    max-width:none !important;
+    height:27px !important;
+    min-height:27px !important;
+    max-height:27px !important;
+    margin:0 !important;
+    padding:2px 4px !important;
+    border-radius:8px !important;
+  }
+
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn .today-remind-icon{
+    width:17px !important;
+    height:17px !important;
+    min-width:17px !important;
+    flex-basis:17px !important;
+  }
+
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn span{font-size:6.8px !important;}
+
+  #today-schedule-panel .schedule-card > .grid.grid-cols-3{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:5px !important;
+    margin:0 !important;
+  }
+
+  #today-schedule-panel .schedule-card > .grid.grid-cols-3 > div{
+    height:43px !important;
+    min-height:43px !important;
+    margin:0 !important;
+    padding:4px 3px !important;
+    border-radius:8px !important;
+  }
+}
+
+@media (max-width:380px){
+  #today-schedule-panel .schedule-card{padding:6px !important;margin-bottom:7px !important;}
+  #today-schedule-panel .today-schedule-main-row{height:94px !important;min-height:94px !important;max-height:94px !important;margin-bottom:6px !important;}
+  #today-schedule-panel .today-schedule-main-row > .today-schedule-logo{width:24% !important;height:86px !important;min-height:86px !important;max-height:86px !important;}
+  #today-schedule-panel .today-schedule-times,#today-schedule-panel .today-schedule-info{left:26% !important;width:74% !important;}
+  #today-schedule-panel .today-schedule-info{top:29px !important;}
+  #today-schedule-panel .today-schedule-name-row{height:26px !important;min-height:26px !important;max-height:26px !important;}
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn{top:59px !important;height:25px !important;min-height:25px !important;max-height:25px !important;}
+  #today-schedule-panel .today-schedule-info .today-admin-reminder-timer,#today-schedule-panel .today-schedule-info .today-late-timer{top:30px !important;height:25px !important;min-height:25px !important;max-height:25px !important;}
+  #today-schedule-panel .schedule-card > .grid.grid-cols-3 > div{height:40px !important;min-height:40px !important;}
 }
 </style>
 
@@ -16858,5 +17787,83 @@ window.downloadDailyRecapJPG = async function() {
   #today-schedule-panel .today-schedule-info .today-admin-reminder-timer,
   #today-schedule-panel .today-schedule-info .today-late-timer{top:30px !important;height:25px !important;min-height:25px !important;max-height:25px !important;}
   #today-schedule-panel .schedule-card > .grid.grid-cols-3 > div{height:40px !important;min-height:40px !important;}
+}
+</style>
+
+<style id="jadwal-standalone-glass-final">
+/* FINAL — JADWAL HARI INI: judul dan card berdiri sendiri.
+   Tidak ada frame besar yang membungkus semuanya. */
+#today-schedule-panel.today-schedule-modern {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+/* Judul punya frame kaca sendiri. */
+#today-schedule-panel .today-schedule-head {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  width: 100% !important;
+  margin: 0 0 12px !important;
+  padding: 9px 12px !important;
+  border: 1px solid rgba(255,255,255,.48) !important;
+  border-radius: 16px !important;
+  background: rgba(255,255,255,.22) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 8px 22px rgba(15,23,42,.12) !important;
+  backdrop-filter: blur(14px) saturate(130%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(130%) !important;
+  border-bottom: 1px solid rgba(255,255,255,.48) !important;
+}
+#today-schedule-panel .today-title-wrap h3 {
+  color: #064e3b !important;
+  text-shadow: 0 1px 2px rgba(255,255,255,.65) !important;
+}
+
+/* List hanyalah grid transparan; tidak menjadi frame kedua. */
+#today-schedule-panel #today-schedule-list.today-schedule-list-modern {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Setiap jadwal adalah glass card mandiri. */
+#today-schedule-panel #today-schedule-list.today-schedule-list-modern > .schedule-card,
+#today-schedule-panel #today-schedule-list.today-schedule-list-modern > div.schedule-card {
+  background: rgba(255,255,255,.26) !important;
+  border: 1px solid rgba(255,255,255,.55) !important;
+  border-radius: 16px !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.42), 0 8px 22px rgba(15,23,42,.12) !important;
+  backdrop-filter: blur(14px) saturate(125%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(125%) !important;
+}
+
+/* Card internal sections remain separate but visually consistent. */
+#today-schedule-panel .schedule-card .grid.grid-cols-3 > div {
+  background: rgba(255,255,255,.48) !important;
+  border-color: rgba(110,231,183,.62) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.45) !important;
+}
+
+@media (max-width: 640px) {
+  #today-schedule-panel .today-schedule-head {
+    margin-bottom: 9px !important;
+    padding: 7px 9px !important;
+    border-radius: 13px !important;
+  }
+  #today-schedule-panel #today-schedule-list.today-schedule-list-modern {
+    gap: 8px !important;
+  }
+  #today-schedule-panel #today-schedule-list.today-schedule-list-modern > .schedule-card {
+    border-radius: 13px !important;
+  }
 }
 </style>
