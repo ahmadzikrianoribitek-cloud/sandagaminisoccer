@@ -6143,6 +6143,61 @@ body > * {
   .home-menu-card .menu-card-copy small { font-size: 6.5px !important; }
 }
 </style>
+
+<style id="daily-report-jpg-readability-mobile-v2">
+/* =========================================================
+   DAILY RECAP JPG — READABILITY / MOBILE VIEW
+   Layout tetap sama; hanya memperbesar teks, merapikan
+   vertical alignment, dan mengurangi ruang kosong.
+   ========================================================= */
+#daily-report-jpg-canvas .report-section{
+    padding:16px 18px !important;
+    margin-bottom:12px !important;
+}
+#daily-report-jpg-canvas .report-section h3{
+    margin:0 0 9px !important;
+    font-size:28px !important;
+    line-height:1.15 !important;
+}
+#daily-report-jpg-canvas .report-source{
+    font-size:15px !important;
+    line-height:1.35 !important;
+}
+#daily-report-jpg-canvas .report-source .text-\[10px\]{font-size:14px !important;line-height:1.3 !important;}
+#daily-report-jpg-canvas .report-source .text-\[11px\]{font-size:15px !important;line-height:1.3 !important;}
+#daily-report-jpg-canvas .report-source .text-xs{font-size:15px !important;line-height:1.3 !important;}
+#daily-report-jpg-canvas .report-source .text-sm{font-size:16px !important;line-height:1.3 !important;}
+#daily-report-jpg-canvas .report-source .text-base{font-size:17px !important;line-height:1.3 !important;}
+#daily-report-jpg-canvas .report-source table{font-size:14px !important;}
+#daily-report-jpg-canvas .report-source th,
+#daily-report-jpg-canvas .report-source td{
+    padding:9px 8px !important;
+    line-height:1.3 !important;
+    vertical-align:middle !important;
+}
+/* Elemen ber-frame: teks dipusatkan secara vertikal agar tidak mepet bawah. */
+#daily-report-jpg-canvas .report-source .grid > div{
+    display:flex !important;
+    flex-direction:column !important;
+    justify-content:center !important;
+}
+/* Frame ringkasan tetap padat, tidak mengubah susunan kolom. */
+#daily-report-jpg-canvas .report-source .grid > div > div{
+    line-height:1.3 !important;
+}
+/* Beri ukuran baca yang nyaman untuk angka/nilai utama. */
+#daily-report-jpg-canvas .report-source .font-black,
+#daily-report-jpg-canvas .report-source .font-extrabold,
+#daily-report-jpg-canvas .report-source .font-bold,
+#daily-report-jpg-canvas .report-source .font-semibold{
+    line-height:1.25 !important;
+}
+#daily-report-jpg-canvas .report-footer{
+    font-size:16px !important;
+    padding:4px !important;
+}
+</style>
+
 </head>
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium"><button class="sticky-back-btn" data-back-context="page-keluar" onclick="navigateBack()" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-minuman" onclick="navigateBack()" type="button">
@@ -6790,41 +6845,23 @@ body > * {
 <div class="flex justify-between items-center mb-4">
 <h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm w-full text-center">📋 DAFTAR RIWAYAT BOOKING</h2>
 </div>
+
 <!-- BOOKING SUDAH DP -->
-<div class="mb-5">
+<div class="mb-5 booking-history-section">
 <h3 class="font-black text-sm sm:text-base text-emerald-900 text-center mb-2 p-2 rounded-xl border border-emerald-500/40 bg-emerald-500/10">💰 SUDAH DP</h3>
-<div class="shadow-2xl rounded-xl border border-white/30 overflow-hidden">
-<table class="w-full text-center border-collapse text-[10px] sm:text-xs bg-white/20 backdrop-blur-md table-auto font-bold text-slate-900 border-slate-900/40">
-<thead><tr class="bg-slate-900 text-white font-bold text-center">
-<th class="p-2 border border-slate-900/40 text-center">Waktu</th><th class="p-2 border border-slate-900/40 text-center">Tim</th><th class="p-2 border border-slate-900/40 text-center">Status</th><th class="p-2 border border-slate-900/40 text-center">DP</th><th class="p-2 border border-slate-900/40 text-center">Metode</th><th class="p-2 border border-slate-900/40 text-center">Aksi</th>
-</tr></thead>
-<tbody class="text-center" id="tabel-booking-dp"></tbody>
-</table>
+<div id="tabel-booking-dp" class="booking-history-cards-grid"></div>
 </div>
-</div>
+
 <!-- BOOKING TANPA DP -->
-<div class="mb-5">
+<div class="mb-5 booking-history-section">
 <h3 class="font-black text-sm sm:text-base text-amber-900 text-center mb-2 p-2 rounded-xl border border-amber-500/40 bg-amber-500/10">📝 TIDAK ADA DP (DP Rp0)</h3>
-<div class="shadow-2xl rounded-xl border border-white/30 overflow-hidden">
-<table class="w-full text-center border-collapse text-[10px] sm:text-xs bg-white/20 backdrop-blur-md table-auto font-bold text-slate-900 border-slate-900/40">
-<thead><tr class="bg-slate-900 text-white font-bold text-center">
-<th class="p-2 border border-slate-900/40 text-center">Waktu</th><th class="p-2 border border-slate-900/40 text-center">Tim</th><th class="p-2 border border-slate-900/40 text-center">Status</th><th class="p-2 border border-slate-900/40 text-center">DP</th><th class="p-2 border border-slate-900/40 text-center">Metode</th><th class="p-2 border border-slate-900/40 text-center">Aksi</th>
-</tr></thead>
-<tbody class="text-center" id="tabel-booking-nodp"></tbody>
-</table>
+<div id="tabel-booking-nodp" class="booking-history-cards-grid"></div>
 </div>
-</div>
+
 <!-- BOOKING TANGGAL SUDAH LEWAT -->
-<div class="mb-5">
+<div class="mb-5 booking-history-section">
 <h3 class="font-black text-sm sm:text-base text-slate-900 text-center mb-2 p-2 rounded-xl border border-slate-500/40 bg-slate-500/10">✅ TANGGAL SUDAH LEWAT (SELESAI)</h3>
-<div class="shadow-2xl rounded-xl border border-white/30 overflow-hidden">
-<table class="w-full text-center border-collapse text-[10px] sm:text-xs bg-white/20 backdrop-blur-md table-auto font-bold text-slate-900 border-slate-900/40">
-<thead><tr class="bg-slate-900 text-white font-bold text-center">
-<th class="p-2 border border-slate-900/40 text-center">Waktu</th><th class="p-2 border border-slate-900/40 text-center">Tim</th><th class="p-2 border border-slate-900/40 text-center">Status</th><th class="p-2 border border-slate-900/40 text-center">DP</th><th class="p-2 border border-slate-900/40 text-center">Metode</th><th class="p-2 border border-slate-900/40 text-center">Aksi</th>
-</tr></thead>
-<tbody class="text-center" id="tabel-booking-selesai"></tbody>
-</table>
-</div>
+<div id="tabel-booking-selesai" class="booking-history-cards-grid"></div>
 </div>
 </div>
 <!-- FORM KELOLA / TAMBAH MEMBER -->
@@ -6861,6 +6898,204 @@ body > * {
 <div id="tabel-list-member" class="member-cards-grid"></div>
 </div>
 
+<style id="booking-history-card-layout-v1">
+/* BOOKING HISTORY — card layout mengikuti gaya Kelola Member */
+#page-booking-history .booking-history-cards-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+  width:100%;
+}
+#page-booking-history .booking-history-card{
+  min-width:0;
+  padding:14px;
+  border:1px solid rgba(255,255,255,.72);
+  border-radius:18px;
+  background:rgba(255,255,255,.76);
+  box-shadow:0 8px 22px rgba(15,23,42,.10);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+#page-booking-history .booking-history-card-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  min-width:0;
+}
+#page-booking-history .booking-history-datetime{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  min-width:0;
+  flex-wrap:wrap;
+}
+#page-booking-history .booking-history-date{
+  font-size:11px;
+  font-weight:950;
+  color:#172033;
+}
+#page-booking-history .booking-history-time{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:5px 8px;
+  border-radius:9px;
+  background:#f59e0b;
+  color:#fff;
+  border:1px solid #d97706;
+  box-shadow:0 2px 5px rgba(15,23,42,.10);
+  font-size:10px;
+  font-weight:950;
+  white-space:nowrap;
+}
+#page-booking-history .booking-history-status{flex:0 0 auto}
+#page-booking-history .booking-history-team-row{margin-top:10px}
+#page-booking-history .booking-history-team-identity{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+  padding:9px;
+  border-radius:12px;
+  background:rgba(248,250,252,.72);
+  border:1px solid rgba(148,163,184,.22);
+}
+#page-booking-history .booking-history-logo-wrap{
+  width:54px;
+  height:54px;
+  min-width:54px;
+  flex:0 0 54px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+#page-booking-history .booking-history-logo-wrap img,
+#page-booking-history .booking-history-logo-wrap > div{
+  max-width:54px;
+  max-height:54px;
+}
+#page-booking-history .booking-history-team-copy{min-width:0}
+#page-booking-history .booking-history-team-name{
+  font-size:14px;
+  font-weight:950;
+  color:#172033;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+#page-booking-history .booking-history-opponent{
+  display:inline-flex;
+  align-items:center;
+  margin-top:4px;
+  padding:3px 7px;
+  border-radius:999px;
+  background:#E9F0F4;
+  border:1px solid #7B8F9E;
+  color:#163B55;
+  font-size:8px;
+  font-weight:900;
+  max-width:100%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+#page-booking-history .booking-history-meta{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;
+  margin-top:10px;
+}
+#page-booking-history .booking-history-meta-item{
+  min-width:0;
+  padding:7px 8px;
+  border-radius:10px;
+  background:rgba(248,250,252,.8);
+  border:1px solid rgba(148,163,184,.22);
+  text-align:center;
+}
+#page-booking-history .booking-history-meta-item > span:first-child{
+  display:block;
+  font-size:9px;
+  color:#64748b;
+  font-weight:900;
+  text-transform:uppercase;
+}
+#page-booking-history .booking-history-meta-item strong{
+  display:block;
+  margin-top:2px;
+  font-size:10px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+#page-booking-history .booking-history-subvalue{
+  display:block;
+  margin-top:2px;
+  font-size:8px;
+  color:#64748b;
+  font-weight:900;
+  white-space:nowrap;
+}
+#page-booking-history .booking-history-actions{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:5px;
+  width:100%;
+  margin-top:10px;
+}
+#page-booking-history .booking-history-actions button{
+  width:100%;
+  min-width:0;
+  height:30px;
+  min-height:30px;
+  padding:3px 4px;
+  margin:0;
+  border:0;
+  border-radius:8px;
+  color:#fff;
+  font-size:8px;
+  line-height:1;
+  font-weight:900;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  cursor:pointer;
+}
+#page-booking-history .booking-history-actions .action-logo{background:#4f46e5}
+#page-booking-history .booking-history-actions .action-logo:hover{background:#4338ca}
+#page-booking-history .booking-history-actions .action-edit{background:#2563eb}
+#page-booking-history .booking-history-actions .action-edit:hover{background:#1d4ed8}
+#page-booking-history .booking-history-actions .action-delete{background:#e11d48}
+#page-booking-history .booking-history-actions .action-delete:hover{background:#be123c}
+
+@media (max-width:640px){
+  #page-booking-history .booking-history-cards-grid{grid-template-columns:1fr;gap:10px}
+  #page-booking-history .booking-history-card{padding:10px;border-radius:15px}
+  #page-booking-history .booking-history-card-top{gap:7px}
+  #page-booking-history .booking-history-date{font-size:10px}
+  #page-booking-history .booking-history-time{padding:4px 7px;font-size:9px}
+  #page-booking-history .booking-history-team-row{margin-top:8px}
+  #page-booking-history .booking-history-team-identity{gap:8px;padding:8px}
+  #page-booking-history .booking-history-logo-wrap{width:48px;height:48px;min-width:48px;flex-basis:48px}
+  #page-booking-history .booking-history-logo-wrap img,
+  #page-booking-history .booking-history-logo-wrap > div{max-width:48px;max-height:48px}
+  #page-booking-history .booking-history-team-name{font-size:13px}
+  #page-booking-history .booking-history-meta{gap:5px;margin-top:8px}
+  #page-booking-history .booking-history-meta-item{padding:6px 5px}
+  #page-booking-history .booking-history-actions{gap:4px;margin-top:8px}
+  #page-booking-history .booking-history-actions button{height:29px;min-height:29px;font-size:7.5px;border-radius:7px}
+}
+@media (max-width:380px){
+  #page-booking-history .booking-history-card{padding:8px}
+  #page-booking-history .booking-history-actions{gap:3px}
+  #page-booking-history .booking-history-actions button{height:27px;min-height:27px;font-size:7px;border-radius:6px;padding:2px 1px}
+}
+</style>
 <style id="member-cards-layout-v1">
 /* Kelola Member: card grid, bukan tabel. Desktop 2 kolom, HP 1 kolom. */
 #page-atur-member .member-cards-grid{
@@ -8026,7 +8261,7 @@ body > * {
                         </div>
                         <div class="font-black text-slate-900 text-xs truncate mb-2">${selectedName || 'Pilih tim'}</div>
                         <div class="grid grid-cols-2 gap-1 text-[10px]">
-                            <div class="bg-white/70 rounded-lg p-1.5"><div class="text-slate-500">Harga ${durasiJam > 1 ? `Total ${durasiJam} Jam` : 'Booking'}</div><b class="text-slate-900">${formatRupiah(totalAkhir1)}</b></div>
+                            <div class="bg-white/70 rounded-lg p-1.5"><div class="text-slate-500">${durasiJam > 1 ? `TOTAL ${durasiJam} JAM` : 'TOTAL BOOKING'}</div><b class="text-slate-900">${formatRupiah(totalAkhir1)}</b></div>
                             <div class="bg-white/70 rounded-lg p-1.5"><div class="text-slate-500">DP</div><b class="text-slate-900">${formatRupiah(dp1)}</b></div>
                         </div>
                         <div class="mt-2 flex items-center justify-between rounded-lg bg-blue-600 text-white px-2 py-1.5"><span class="text-[10px] font-bold">SISA TAGIHAN</span><b class="text-sm">${formatRupiah(sisa1)}</b></div>
@@ -8053,8 +8288,35 @@ body > * {
             if (label1) label1.textContent = isSparingPayment ? 'Pembayaran Tim 1' : 'Pembayaran Tim Internal';
             const modeInfo = document.getElementById('info-jenis-pembayaran');
             if (modeInfo) modeInfo.textContent = isSparingPayment ? 'Mode Sparing: Tim 1 dan Tim 2 membayar masing-masing.' : 'Mode Tim Internal: hanya 1 tim yang membayar seluruh tagihan.';
-            if (pay1 && document.activeElement !== pay1 && document.getElementById('in-metode-1')?.value !== 'Free' && document.getElementById('in-metode-1')?.value !== 'Belum Bayar') pay1.value = sisa1;
-            if (pay2 && document.activeElement !== pay2 && document.getElementById('in-metode-2')?.value !== 'Free' && document.getElementById('in-metode-2')?.value !== 'Belum Bayar') pay2.value = sisa2;
+            // LOGIKA PEMBAYARAN:
+            // - Booking multi-jam selalu dihitung sebagai SATU total tagihan.
+            // - Belum Bayar / Free selalu bernilai Rp 0 pada input.
+            // - Cash/QRIS/Transfer otomatis diisi sisa tagihan, tetapi tetap boleh diedit manual.
+            // - Free dianggap LUNAS walaupun nominal yang tersimpan Rp 0.
+            const syncNominalPembayaran = (timNo, sisa) => {
+                const metodeEl = document.getElementById(`in-metode-${timNo}`);
+                const jumlahEl = document.getElementById(`in-jumlah-${timNo}`);
+                if(!metodeEl || !jumlahEl) return;
+                const metode = String(metodeEl.value || '');
+                const khususNol = metode === 'Free' || metode === 'Belum Bayar';
+
+                if(khususNol) {
+                    jumlahEl.value = 0;
+                    jumlahEl.disabled = true;
+                    jumlahEl.classList.add('opacity-60', 'cursor-not-allowed');
+                    jumlahEl.placeholder = metode === 'Free' ? 'FREE / Rp 0' : 'BELUM BAYAR';
+                } else {
+                    jumlahEl.disabled = false;
+                    jumlahEl.classList.remove('opacity-60', 'cursor-not-allowed');
+                    jumlahEl.placeholder = 'Nominal (Rp)';
+                    if(document.activeElement !== jumlahEl) {
+                        jumlahEl.value = Math.max(0, Number(sisa || 0));
+                    }
+                }
+            };
+
+            syncNominalPembayaran(1, sisa1);
+            if(isSparingPayment) syncNominalPembayaran(2, sisa2);
         };
 
         window.showSuccessPopup = (message = 'Data berhasil disimpan!') => {
@@ -10396,18 +10658,24 @@ body > * {
                 adaCatatan = true;
 
                 const met1 = String(pay.metode1 || pay.metode || '');
-                const met2 = String(pay.metode2 || '');
-                // Status pembayaran dinilai per tim. Untuk kartu Tim 1, hanya metode/jumlah Tim 1
-                // yang dihitung; pembayaran Tim 2 tidak boleh membuat Tim 1 dianggap lunas.
-                if(met1 === 'Free' || String(pay.metode || '') === 'Free') {
+                const status1 = String(pay.paymentStatus1 || '').toLowerCase();
+
+                // Status pembayaran Tim 1 harus mengikuti metode/status yang benar.
+                // Free = langsung LUNAS, nominal tetap Rp 0.
+                if(met1 === 'Free' || status1 === 'free' || String(pay.metode || '') === 'Free') {
                     free = true;
+                    belumBayar = false;
                     dibayar = Math.max(dibayar, Number(totalTagihan || 0));
                     return;
                 }
-                if(met1 === 'Belum Bayar') {
+
+                // Belum Bayar harus tetap menjadi status tagihan sampai ada
+                // pembayaran berikutnya yang benar-benar menutup sisa tagihan.
+                if(met1 === 'Belum Bayar' || status1 === 'unpaid') {
                     belumBayar = true;
                     return;
                 }
+
                 dibayar += Number(pay.jumlah1 ?? pay.jumlah ?? 0);
             });
 
@@ -10550,7 +10818,7 @@ body > * {
                 const unpaidTotal = aktif.reduce((sum, x) => sum + Number(x.total || 0), 0);
                 const unpaidDp = aktif.reduce((sum, x) => sum + Number(x.dp || 0), 0);
                 const unpaidSisa = Math.max(0, aktif.reduce((sum, x) => sum + Number(x.sisa || 0), 0));
-                const dipilihBelumBayar = aktif.some(x => x.belumBayar === true);
+                const dipilihBelumBayar = aktif.some(x => x.belumBayar === true && !x.free);
                 if(unpaidSisa > 0 && dipilihBelumBayar) {
                     unpaidGroups.push({
                         nama: group.nama || '-',
@@ -11461,63 +11729,79 @@ body > * {
 
             Object.entries(globalCache.booking).forEach(([key, item]) => {
                 let tanggalBooking = item.tgl ? item.tgl.split('T')[0] : "";
+                let jamBooking = item.tgl && item.tgl.split('T')[1]
+                    ? item.tgl.split('T')[1].substring(0,5).replace(':','.')
+                    : '-';
                 let dpVal = Number(item.dp || 0);
-                let row = `<tr class="border-b border-slate-900/40 font-bold">
-                    <td class="p-2 border border-slate-900/40">
-                        <div class="flex flex-col items-center justify-center gap-1">
-                            <span class="text-[10px] sm:text-xs font-black">${tanggalBooking ? tanggalBooking.split('-').reverse().join('/') : '-'}</span>
-                            <span class="inline-flex items-center justify-center px-2 py-1 rounded-lg bg-amber-500 text-white border border-amber-600 shadow-sm font-black text-[10px] sm:text-xs">⏰ ${item.tgl && item.tgl.split('T')[1] ? item.tgl.split('T')[1].substring(0,5).replace(':','.') : '-'}</span>
-                        </div>
-                    </td>
-                    <td class="p-1 sm:p-2 border border-slate-900/40 font-black break-words">
-                        <div class="booking-team-identity">
-                            <div class="booking-team-logo-indicator"
-                                 data-team-logo-name="${escapeAttrLogo(encodeURIComponent(String(item.nama || '')))}">
-                                ${renderTeamLogoHtml(item.nama || '-', 'booking-history-team-logo')}
+                let statusHtml = String(item.status || '').toLowerCase() === 'member'
+                    ? `<span class="status-badge-member" title="Member">M</span>`
+                    : `<span class="status-badge-nonmember" title="Non-Member">Non</span>`;
+                let lawanHtml = getOpponentLabelForBooking(item)
+                    ? `<div class="booking-history-opponent">🤝 Lawan: ${escapeHtmlSparing(getOpponentLabelForBooking(item))}</div>`
+                    : '';
+                let dpDateHtml = dpVal > 0
+                    ? `<span class="booking-history-subvalue">DP: ${item.tglDp ? item.tglDp.split('-').reverse().join('/') : '-'}</span>`
+                    : `<span class="booking-history-subvalue">Tgl DP: -</span>`;
+
+                let card = `
+                    <article class="booking-history-card">
+                        <div class="booking-history-card-top">
+                            <div class="booking-history-datetime">
+                                <span class="booking-history-date">${tanggalBooking ? tanggalBooking.split('-').reverse().join('/') : '-'}</span>
+                                <span class="booking-history-time">⏰ ${jamBooking}</span>
                             </div>
-                            <div class="min-w-0">
-                                <div class="truncate">${escapeHtmlSparing(item.nama || '-')}</div>
-                                ${getOpponentLabelForBooking(item) ? `<div class="mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#E9F0F4] border border-[#7B8F9E] text-[#163B55] text-[8px] sm:text-[9px] font-black">🤝 Lawan: ${escapeHtmlSparing(getOpponentLabelForBooking(item))}</div>` : ''}
+                            <div class="booking-history-status">${statusHtml}</div>
+                        </div>
+
+                        <div class="booking-history-team-row">
+                            <div class="booking-history-team-identity">
+                                <div class="booking-team-logo-indicator booking-history-logo-wrap"
+                                     data-team-logo-name="${escapeAttrLogo(encodeURIComponent(String(item.nama || '')))}">
+                                    ${renderTeamLogoHtml(item.nama || '-', 'booking-history-team-logo')}
+                                </div>
+                                <div class="booking-history-team-copy">
+                                    <div class="booking-history-team-name">${escapeHtmlSparing(item.nama || '-')}</div>
+                                    ${lawanHtml}
+                                </div>
                             </div>
                         </div>
-                    </td>
-                    <td class="p-1 sm:p-2 border border-slate-900/40 text-center">
-                        ${String(item.status || '').toLowerCase() === 'member'
-                            ? `<span class="status-badge-member" title="Member">M</span>`
-                            : `<span class="status-badge-nonmember" title="Non-Member">Non</span>`}
-                    </td>
-                    <td class="p-1 sm:p-2 border border-slate-900/40">
-                        <div class="flex flex-col items-center gap-0.5">
-                            <span class="font-black">Rp ${dpVal.toLocaleString('id-ID')}</span>
-                            ${dpVal > 0 ? `<span class="text-[8px] sm:text-[10px] text-indigo-700 font-black whitespace-nowrap">DP: ${item.tglDp ? item.tglDp.split('-').reverse().join('/') : '-'}</span>` : '<span class="text-[8px] sm:text-[10px] text-slate-500 font-black whitespace-nowrap">Tgl DP: -</span>'}
+
+                        <div class="booking-history-meta">
+                            <div class="booking-history-meta-item">
+                                <span>DP</span>
+                                <strong>Rp ${dpVal.toLocaleString('id-ID')}</strong>
+                                ${dpDateHtml}
+                            </div>
+                            <div class="booking-history-meta-item">
+                                <span>METODE</span>
+                                <strong>${escapeHtmlSparing(item.metode || 'Cash')}</strong>
+                            </div>
                         </div>
-                    </td>
-                    <td class="p-1 sm:p-2 border border-slate-900/40 text-[9px] sm:text-[10px]">${item.metode || 'Cash'}</td>
-                    <td class="p-1 sm:p-2 border border-slate-900/40 text-center whitespace-nowrap">
-                        <div class="flex items-center justify-center gap-1">
+
+                        <div class="booking-history-actions">
                             <button type="button"
                                     onclick="openTeamLogoEditor(decodeURIComponent('${encodeURIComponent(String(item.nama || ''))}'),'booking')"
-                                    class="action-icon action-logo booking-history-logo-btn"
+                                    class="action-logo booking-history-action-logo"
                                     title="Tambah / ubah logo tim"
                                     aria-label="Tambah / ubah logo tim">
-                                🖼️ <span class="booking-history-logo-label">Logo</span>
+                                🖼️ <span>Logo</span>
                             </button>
-                            <button type="button" onclick="editBooking('${key}')" class="action-icon action-edit" title="Edit booking" aria-label="Edit booking">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 3.487a2.1 2.1 0 012.97 2.97L7.5 18.79 3 20l1.21-4.5L16.862 3.487z"/><path stroke-linecap="round" stroke-linejoin="round" d="M14.5 5.85l3.65 3.65"/></svg>
+                            <button type="button" onclick="editBooking('${key}')" class="action-edit" title="Edit booking" aria-label="Edit booking">
+                                ✏️ <span>Edit</span>
                             </button>
-                            <button type="button" onclick="hapusBooking('${key}')" class="action-icon action-delete" title="Hapus booking" aria-label="Hapus booking">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 0h14M10 11v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3"/></svg>
+                            <button type="button" onclick="hapusBooking('${key}')" class="action-delete" title="Hapus booking" aria-label="Hapus booking">
+                                🗑️ <span>Hapus</span>
                             </button>
                         </div>
-                    </td>                </tr>`;
+                    </article>`;
 
                 // Booking yang tanggal mainnya sudah lewat selalu masuk bagian selesai.
                 if(tanggalBooking && tanggalBooking < today) {
-                    tbodySelesai.innerHTML += row;
+                    tbodySelesai.insertAdjacentHTML('beforeend', card);
                 } else if(dpVal > 0) {
-                    tbodyDp.innerHTML += row;
+                    tbodyDp.insertAdjacentHTML('beforeend', card);
                 } else {
-                    tbodyNoDp.innerHTML += row;
+                    tbodyNoDp.insertAdjacentHTML('beforeend', card);
                 }
             });
         }
@@ -13646,6 +13930,448 @@ window.downloadDailyRecapJPG = async function() {
 .home-menu-card.menu-fuchsia .menu-card-copy strong,
 .home-menu-card.menu-fuchsia .menu-card-copy small,
 .home-menu-card.menu-fuchsia .menu-card-arrow { color:#64104f !important; }
+</style>
+
+
+
+<!-- FINAL REVISION: submenu scroll + Daily Recap glass buttons -->
+<style id="submenu-scroll-and-daily-glass-final">
+/* =========================================================
+   SUB MENU — SELALU MULAI DARI PALING ATAS
+   Daily Recap dikecualikan saat tombol 4 kategori diklik:
+   kategori akan diarahkan ke area datanya.
+   ========================================================= */
+
+/* Daily Recap: tombol dibuat liquid-glass seperti menu Home.
+   Warna tema masing-masing tetap dipertahankan. */
+#daily-menu-grid .glass-btn {
+  position: relative !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+  min-height: 118px !important;
+  padding: 1rem !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,.42) !important;
+  border-radius: 1.15rem !important;
+  background-color: rgba(255,255,255,.10) !important;
+  backdrop-filter: blur(16px) saturate(145%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(145%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.48),
+    inset 0 -1px 0 rgba(255,255,255,.10),
+    0 10px 28px rgba(15,23,42,.13) !important;
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease !important;
+}
+
+/* Lapangan */
+#daily-menu-grid .glass-btn:nth-child(1) {
+  background: linear-gradient(135deg, rgba(37,99,235,.58), rgba(29,78,216,.42), rgba(55,48,163,.38)) !important;
+}
+/* Minuman */
+#daily-menu-grid .glass-btn:nth-child(2) {
+  background: linear-gradient(135deg, rgba(16,185,129,.58), rgba(5,150,105,.42), rgba(4,120,87,.38)) !important;
+}
+/* Pengeluaran */
+#daily-menu-grid .glass-btn:nth-child(3) {
+  background: linear-gradient(135deg, rgba(245,158,11,.58), rgba(234,88,12,.42), rgba(194,65,12,.38)) !important;
+}
+/* Ringkasan */
+#daily-menu-grid .glass-btn:nth-child(4) {
+  background: linear-gradient(135deg, rgba(244,63,94,.58), rgba(225,29,72,.42), rgba(190,18,60,.38)) !important;
+}
+
+#daily-menu-grid .glass-btn::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  background: linear-gradient(135deg,
+    rgba(255,255,255,.34) 0%,
+    rgba(255,255,255,.10) 38%,
+    rgba(255,255,255,.04) 62%,
+    rgba(255,255,255,.18) 100%) !important;
+}
+
+#daily-menu-grid .glass-btn::after {
+  content: "" !important;
+  position: absolute !important;
+  width: 110px !important;
+  height: 110px !important;
+  right: -35px !important;
+  bottom: -48px !important;
+  border-radius: 50% !important;
+  background: rgba(255,255,255,.14) !important;
+  box-shadow: 0 0 35px rgba(255,255,255,.10) !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+#daily-menu-grid .glass-btn > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+#daily-menu-grid .glass-btn span {
+  background: rgba(255,255,255,.18) !important;
+  border: 1px solid rgba(255,255,255,.38) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.42), 0 4px 14px rgba(15,23,42,.10) !important;
+  backdrop-filter: blur(10px) saturate(130%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(130%) !important;
+}
+
+#daily-menu-grid .glass-btn:hover {
+  transform: translateY(-2px) !important;
+  filter: brightness(1.04) saturate(1.05) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.58),
+    0 14px 32px rgba(15,23,42,.18) !important;
+}
+
+#daily-menu-grid .glass-btn:active {
+  transform: translateY(0) scale(.985) !important;
+}
+
+#daily-menu-grid .glass-btn.is-selected {
+  border-width: 2px !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.62),
+    0 0 0 2px rgba(255,255,255,.20),
+    0 14px 32px rgba(15,23,42,.18) !important;
+}
+
+@media (max-width:640px) {
+  #daily-menu-grid .glass-btn {
+    min-height: 108px !important;
+    padding: .75rem .45rem !important;
+    border-radius: 1rem !important;
+  }
+}
+</style>
+
+<script id="submenu-scroll-behavior-final">
+(function () {
+  function forceScrollTop() {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }
+
+  function scrollDailySubToData(targetEl) {
+    if (!targetEl) return;
+
+    const go = () => {
+      const rect = targetEl.getBoundingClientRect();
+      const currentY = window.scrollY || document.documentElement.scrollTop || 0;
+      const targetY = Math.max(0, currentY + rect.top - 16);
+      window.scrollTo({ top: targetY, left: 0, behavior: 'auto' });
+      document.documentElement.scrollTop = targetY;
+      document.body.scrollTop = targetY;
+    };
+
+    /* Render dulu agar tinggi/posisi data sudah stabil, lalu turun ke data. */
+    requestAnimationFrame(() => {
+      go();
+      requestAnimationFrame(go);
+      setTimeout(go, 80);
+    });
+  }
+
+  /* Bungkus fungsi asli tanpa mengganggu onclick/ID/fungsi aplikasi. */
+  const oldShowPage = window.showPage;
+  if (typeof oldShowPage === 'function' && !window.__submenuScrollPatched) {
+    window.__submenuScrollPatched = true;
+    window.showPage = function (id) {
+      oldShowPage.apply(this, arguments);
+
+      if (id !== 'home') {
+        /* Semua submenu mulai dari paling atas. */
+        forceScrollTop();
+        requestAnimationFrame(forceScrollTop);
+        setTimeout(forceScrollTop, 50);
+      }
+    };
+  }
+
+  const oldShowDailySub = window.showDailySub;
+  if (typeof oldShowDailySub === 'function' && !window.__dailySubScrollPatched) {
+    window.__dailySubScrollPatched = true;
+    window.showDailySub = function (sub) {
+      oldShowDailySub.apply(this, arguments);
+      const target = document.getElementById('sub-page-' + sub);
+      scrollDailySubToData(target);
+    };
+  }
+})();
+</script>
+
+
+<style id="jadwal-hari-ini-alignment-final">
+/* =========================================================
+   FINAL ALIGNMENT — JADWAL HARI INI
+   Semua ukuran mengikuti 3 kolom bawah: TOTAL / DP / SISA.
+   Berlaku desktop + HP agar semua elemen benar-benar satu grid.
+   ========================================================= */
+#today-schedule-panel .schedule-card > .today-schedule-main-row{
+  position:relative !important;
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  grid-template-rows:36px 38px 38px !important;
+  column-gap:8px !important;
+  row-gap:7px !important;
+  width:100% !important;
+  height:126px !important;
+  min-height:126px !important;
+  max-height:126px !important;
+  margin:0 !important;
+  padding:0 !important;
+  box-sizing:border-box !important;
+  overflow:visible !important;
+}
+
+/* Logo = lebar kolom TOTAL dan sejajar mulai dari bagian atas. */
+#today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-logo{
+  position:relative !important;
+  grid-column:1 !important;
+  grid-row:1 / 4 !important;
+  left:auto !important;
+  top:auto !important;
+  width:100% !important;
+  height:126px !important;
+  min-width:0 !important;
+  min-height:126px !important;
+  max-width:none !important;
+  max-height:126px !important;
+  transform:none !important;
+  margin:0 !important;
+  padding:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  overflow:hidden !important;
+  box-sizing:border-box !important;
+  border-radius:12px !important;
+}
+#today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-logo img,
+#today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-logo > span{
+  width:100% !important;
+  height:100% !important;
+  max-width:100% !important;
+  max-height:100% !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  padding:5px !important;
+  margin:0 !important;
+  box-sizing:border-box !important;
+}
+
+/* Jam booking: mulai sejajar dengan bagian paling atas logo. */
+#today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-times{
+  position:relative !important;
+  grid-column:2 / 4 !important;
+  grid-row:1 !important;
+  left:auto !important;
+  right:auto !important;
+  top:auto !important;
+  width:100% !important;
+  height:36px !important;
+  min-height:36px !important;
+  max-height:36px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  gap:8px !important;
+  margin:0 !important;
+  padding:0 !important;
+  overflow:hidden !important;
+  box-sizing:border-box !important;
+}
+#today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-times .schedule-time{
+  flex:0 0 auto !important;
+  width:auto !important;
+  min-width:0 !important;
+  margin:0 !important;
+  padding:7px 12px !important;
+  box-sizing:border-box !important;
+  white-space:nowrap !important;
+  border-radius:11px !important;
+}
+
+/* Nama tim: dari ujung DP sampai ujung SISA. */
+#today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info{
+  position:relative !important;
+  grid-column:2 / 4 !important;
+  grid-row:2 !important;
+  left:auto !important;
+  right:auto !important;
+  top:auto !important;
+  width:100% !important;
+  height:38px !important;
+  min-height:38px !important;
+  max-height:38px !important;
+  margin:0 !important;
+  padding:0 !important;
+  overflow:visible !important;
+  box-sizing:border-box !important;
+}
+#today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info .today-schedule-name-row{
+  width:100% !important;
+  height:38px !important;
+  min-height:38px !important;
+  max-height:38px !important;
+  margin:0 !important;
+  padding:5px 9px !important;
+  box-sizing:border-box !important;
+  overflow:hidden !important;
+  border-radius:10px !important;
+  display:flex !important;
+  align-items:center !important;
+}
+#today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info .schedule-team-member,
+#today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info .schedule-team-nonmember,
+#today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info .schedule-team-sparing{
+  min-width:0 !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+  box-sizing:border-box !important;
+}
+
+/* Timer = lebar DP, Ingatkan = lebar SISA, satu baris. */
+#today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info .today-admin-reminder-timer,
+#today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info .today-late-timer{
+  position:absolute !important;
+  left:0 !important;
+  top:45px !important;
+  width:calc(50% - 4px) !important;
+  max-width:calc(50% - 4px) !important;
+  height:38px !important;
+  min-height:38px !important;
+  max-height:38px !important;
+  margin:0 !important;
+  padding:7px 8px !important;
+  box-sizing:border-box !important;
+  overflow:hidden !important;
+  border-radius:11px !important;
+}
+#today-schedule-panel .schedule-card > .today-schedule-main-row > .today-remind-btn{
+  position:absolute !important;
+  left:calc(66.666667% + 4px) !important;
+  right:auto !important;
+  top:88px !important;
+  width:calc(33.333333% - 4px) !important;
+  min-width:0 !important;
+  max-width:none !important;
+  height:38px !important;
+  min-height:38px !important;
+  max-height:38px !important;
+  margin:0 !important;
+  padding:6px 8px !important;
+  box-sizing:border-box !important;
+  border-radius:11px !important;
+}
+/* Override posisi tombol: timer dan tombol benar-benar sejajar. */
+#today-schedule-panel .schedule-card > .today-schedule-main-row > .today-remind-btn{
+  top:88px !important;
+  left:calc(66.666667% + 4px) !important;
+  width:calc(33.333333% - 4px) !important;
+}
+
+/* Uang: 3 kolom tetap sama dengan grid utama. */
+#today-schedule-panel .schedule-card > .grid.grid-cols-3{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:8px !important;
+  width:100% !important;
+  margin:8px 0 0 !important;
+  padding:0 !important;
+  box-sizing:border-box !important;
+}
+#today-schedule-panel .schedule-card > .grid.grid-cols-3 > div{
+  width:100% !important;
+  min-width:0 !important;
+  min-height:58px !important;
+  height:58px !important;
+  margin:0 !important;
+  padding:8px 6px !important;
+  box-sizing:border-box !important;
+  overflow:hidden !important;
+  border-radius:11px !important;
+}
+
+/* HP: tetap 3 kolom yang sama, hanya diperkecil secara proporsional. */
+@media (max-width:640px){
+  #today-schedule-panel .schedule-card > .today-schedule-main-row{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    column-gap:5px !important;
+    row-gap:5px !important;
+    height:108px !important;
+    min-height:108px !important;
+    max-height:108px !important;
+  }
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-logo{
+    height:108px !important;
+    min-height:108px !important;
+    max-height:108px !important;
+  }
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-times{
+    height:31px !important;
+    min-height:31px !important;
+    max-height:31px !important;
+    gap:5px !important;
+  }
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-times .schedule-time{
+    padding:6px 8px !important;
+    font-size:9px !important;
+  }
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info{
+    height:33px !important;
+    min-height:33px !important;
+    max-height:33px !important;
+  }
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info .today-schedule-name-row{
+    height:33px !important;
+    min-height:33px !important;
+    max-height:33px !important;
+    padding:4px 6px !important;
+  }
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info .schedule-team-member,
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info .schedule-team-nonmember,
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info .schedule-team-sparing{
+    font-size:10px !important;
+    padding:4px 5px !important;
+  }
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info .today-admin-reminder-timer,
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info .today-late-timer,
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-remind-btn{
+    top:39px !important;
+    height:32px !important;
+    min-height:32px !important;
+    max-height:32px !important;
+    padding:4px 5px !important;
+    border-radius:9px !important;
+  }
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info .today-admin-reminder-timer,
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info .today-late-timer{
+    width:calc(50% - 3px) !important;
+    max-width:calc(50% - 3px) !important;
+  }
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-remind-btn{
+    top:75px !important;
+    left:calc(66.666667% + 3px) !important;
+    width:calc(33.333333% - 3px) !important;
+  }
+  #today-schedule-panel .schedule-card > .grid.grid-cols-3{
+    gap:5px !important;
+    margin-top:6px !important;
+  }
+  #today-schedule-panel .schedule-card > .grid.grid-cols-3 > div{
+    height:52px !important;
+    min-height:52px !important;
+    padding:6px 4px !important;
+  }
+}
 </style>
 
 </body>
@@ -16617,5 +17343,282 @@ window.downloadDailyRecapJPG = async function() {
   #today-schedule-panel .today-schedule-info .today-admin-reminder-timer,
   #today-schedule-panel .today-schedule-info .today-late-timer{top:30px !important;height:25px !important;min-height:25px !important;max-height:25px !important;}
   #today-schedule-panel .schedule-card > .grid.grid-cols-3 > div{height:40px !important;min-height:40px !important;}
+}
+</style>
+
+<style id="jadwal-hari-ini-desktop-fix-v1">
+/* =========================================================
+   DESKTOP ONLY — PERBAIKAN SUSUNAN JADWAL HARI INI
+   HP TIDAK DISENTUH. Semua aturan di bawah hanya berlaku
+   untuk layar >= 641px.
+   ========================================================= */
+@media (min-width:641px){
+  #today-schedule-panel #today-schedule-list.today-schedule-list-modern{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:12px !important;
+    align-items:start !important;
+  }
+
+  #today-schedule-panel #today-schedule-list.today-schedule-list-modern > .schedule-card{
+    position:relative !important;
+    display:block !important;
+    width:100% !important;
+    min-width:0 !important;
+    max-width:none !important;
+    min-height:0 !important;
+    height:auto !important;
+    margin:0 !important;
+    padding:12px !important;
+    box-sizing:border-box !important;
+    overflow:hidden !important;
+  }
+
+  /* Area atas dibuat stabil agar logo tidak lagi terpotong. */
+  #today-schedule-panel .schedule-card > .today-schedule-main-row{
+    position:relative !important;
+    display:block !important;
+    width:100% !important;
+    height:142px !important;
+    min-height:142px !important;
+    max-height:142px !important;
+    margin:0 !important;
+    padding:0 !important;
+    box-sizing:border-box !important;
+    overflow:visible !important;
+  }
+
+  /* LOGO DESKTOP — seluruh logo berada di dalam frame, tidak crop. */
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-logo{
+    position:absolute !important;
+    left:0 !important;
+    top:50% !important;
+    bottom:auto !important;
+    width:150px !important;
+    height:120px !important;
+    min-width:150px !important;
+    min-height:120px !important;
+    max-width:150px !important;
+    max-height:120px !important;
+    transform:translateY(-50%) !important;
+    margin:0 !important;
+    padding:0 !important;
+    aspect-ratio:auto !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    overflow:hidden !important;
+    box-sizing:border-box !important;
+    border-radius:12px !important;
+    z-index:3 !important;
+  }
+
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-logo img,
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-logo > span{
+    display:block !important;
+    width:100% !important;
+    height:100% !important;
+    max-width:100% !important;
+    max-height:100% !important;
+    object-fit:contain !important;
+    object-position:center !important;
+    padding:5px !important;
+    margin:0 !important;
+    box-sizing:border-box !important;
+  }
+
+  /* Untuk logo sparing, kedua logo tetap utuh. */
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-logo-sparing img,
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-logo-sparing > span{
+    width:50% !important;
+    height:100% !important;
+    max-width:50% !important;
+    max-height:100% !important;
+    object-fit:contain !important;
+    padding:5px !important;
+    box-sizing:border-box !important;
+  }
+
+  /* Area kanan: jam di atas, nama tim di bawah. */
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-times{
+    position:absolute !important;
+    left:162px !important;
+    right:0 !important;
+    top:0 !important;
+    width:auto !important;
+    max-width:none !important;
+    min-width:0 !important;
+    height:32px !important;
+    min-height:32px !important;
+    max-height:32px !important;
+    display:flex !important;
+    flex-wrap:wrap !important;
+    align-items:center !important;
+    justify-content:flex-start !important;
+    gap:7px !important;
+    padding:0 !important;
+    overflow:hidden !important;
+    box-sizing:border-box !important;
+  }
+
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-times .schedule-time{
+    flex:0 0 auto !important;
+    width:auto !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    margin:0 !important;
+    padding:7px 12px !important;
+    font-size:11px !important;
+    line-height:1 !important;
+    white-space:nowrap !important;
+    box-sizing:border-box !important;
+    border-radius:11px !important;
+  }
+
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info{
+    position:absolute !important;
+    left:162px !important;
+    right:0 !important;
+    top:43px !important;
+    width:auto !important;
+    max-width:none !important;
+    min-width:0 !important;
+    height:88px !important;
+    min-height:88px !important;
+    max-height:88px !important;
+    margin:0 !important;
+    padding:0 !important;
+    overflow:visible !important;
+    box-sizing:border-box !important;
+  }
+
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info .today-schedule-name-row{
+    width:100% !important;
+    height:36px !important;
+    min-height:36px !important;
+    max-height:36px !important;
+    margin:0 !important;
+    padding:5px 9px !important;
+    gap:6px !important;
+    box-sizing:border-box !important;
+    overflow:hidden !important;
+    border-radius:10px !important;
+  }
+
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info .schedule-team-member,
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info .schedule-team-nonmember,
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info .schedule-team-sparing{
+    min-width:0 !important;
+    max-width:100% !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    white-space:nowrap !important;
+    font-size:12px !important;
+    line-height:1.05 !important;
+    padding:6px 8px !important;
+    box-sizing:border-box !important;
+  }
+
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info .today-status-badge{
+    flex:0 0 auto !important;
+    font-size:9px !important;
+    white-space:nowrap !important;
+  }
+
+  /* Timer + Ingatkan sejajar dan tidak lagi meninggalkan ruang kosong besar. */
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info .today-admin-reminder-timer,
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info .today-late-timer{
+    position:absolute !important;
+    left:0 !important;
+    top:46px !important;
+    width:calc(50% - 5px) !important;
+    max-width:calc(50% - 5px) !important;
+    height:38px !important;
+    min-height:38px !important;
+    max-height:38px !important;
+    margin:0 !important;
+    padding:7px 10px !important;
+    box-sizing:border-box !important;
+    overflow:hidden !important;
+    border-radius:11px !important;
+  }
+
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-remind-btn{
+    position:absolute !important;
+    left:calc(50% + 5px) !important;
+    right:auto !important;
+    top:89px !important;
+    width:calc(50% - 5px) !important;
+    min-width:0 !important;
+    max-width:none !important;
+    height:38px !important;
+    min-height:38px !important;
+    max-height:38px !important;
+    margin:0 !important;
+    padding:6px 10px !important;
+    box-sizing:border-box !important;
+    border-radius:11px !important;
+  }
+
+  /* Posisi timer dan tombol dibuat benar-benar sejajar pada satu baris. */
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info .today-admin-reminder-timer,
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info .today-late-timer{
+    top:46px !important;
+  }
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-remind-btn{
+    top:46px !important;
+  }
+
+  /* Total / DP / Sisa selalu berada di bawah area utama dan selebar card. */
+  #today-schedule-panel .schedule-card > .grid.grid-cols-3{
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    width:100% !important;
+    margin:8px 0 0 !important;
+    padding:0 !important;
+    gap:8px !important;
+    box-sizing:border-box !important;
+  }
+
+  #today-schedule-panel .schedule-card > .grid.grid-cols-3 > div{
+    width:100% !important;
+    min-width:0 !important;
+    min-height:58px !important;
+    height:auto !important;
+    padding:8px 6px !important;
+    margin:0 !important;
+    box-sizing:border-box !important;
+    overflow:hidden !important;
+    border-radius:11px !important;
+  }
+
+  #today-schedule-panel .schedule-card > .grid.grid-cols-3 > div > div:first-child{
+    font-size:9px !important;
+    line-height:1 !important;
+  }
+
+  #today-schedule-panel .schedule-card > .grid.grid-cols-3 > div > div:last-child{
+    margin-top:4px !important;
+    font-size:12px !important;
+    line-height:1.1 !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+  }
+}
+
+/* Desktop lebar besar: logo sedikit lebih lega tanpa mengubah HP. */
+@media (min-width:1200px){
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-logo{
+    width:154px !important;
+    height:124px !important;
+    min-width:154px !important;
+    max-width:154px !important;
+    min-height:124px !important;
+    max-height:124px !important;
+  }
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-times,
+  #today-schedule-panel .schedule-card > .today-schedule-main-row > .today-schedule-info{
+    left:166px !important;
+  }
 }
 </style>
