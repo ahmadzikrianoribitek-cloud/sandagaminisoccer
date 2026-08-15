@@ -6508,6 +6508,63 @@ body > * {
     content: none !important;
 }
 </style>
+
+<style id="daily-menu-glass-match-home">
+/* DAILY RECAP — tombol dibuat konsisten dengan gaya kaca pada menu HOME. */
+#daily-menu-grid .daily-mini-card {
+    border: 1px solid rgba(255,255,255,.58) !important;
+    border-radius: 1.15rem !important;
+    background: rgba(255,255,255,.18) !important;
+    backdrop-filter: blur(14px) saturate(135%) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(135%) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.58), 0 10px 24px rgba(15,23,42,.12) !important;
+    color: #0f172a !important;
+}
+#daily-menu-grid .daily-mini-card::before {
+    background: linear-gradient(135deg,rgba(255,255,255,.46),rgba(255,255,255,.12) 52%,rgba(255,255,255,.26)) !important;
+}
+#daily-menu-grid .daily-mini-card::after {
+    background: rgba(255,255,255,.18) !important;
+}
+#daily-menu-grid .daily-mini-card:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.68), 0 14px 28px rgba(15,23,42,.16) !important;
+    filter: saturate(1.05) !important;
+}
+/* Warna kaca mengikuti tema masing-masing tombol, bukan gradient solid. */
+#daily-menu-grid .daily-mini-card:nth-child(1) {
+    background: linear-gradient(135deg,rgba(96,165,250,.38),rgba(37,99,235,.18)) !important;
+    border-color: rgba(96,165,250,.48) !important;
+}
+#daily-menu-grid .daily-mini-card:nth-child(2) {
+    background: linear-gradient(135deg,rgba(52,211,153,.38),rgba(16,185,129,.18)) !important;
+    border-color: rgba(52,211,153,.48) !important;
+}
+#daily-menu-grid .daily-mini-card:nth-child(3) {
+    background: linear-gradient(135deg,rgba(251,191,36,.40),rgba(245,158,11,.18)) !important;
+    border-color: rgba(245,158,11,.48) !important;
+}
+#daily-menu-grid .daily-mini-card:nth-child(4) {
+    background: linear-gradient(135deg,rgba(251,113,133,.38),rgba(244,63,94,.18)) !important;
+    border-color: rgba(244,63,94,.46) !important;
+}
+#daily-menu-grid .daily-mini-card .daily-mini-icon,
+#daily-menu-grid .daily-mini-card .daily-mini-text,
+#daily-menu-grid .daily-mini-card .daily-mini-arrow {
+    color: #172554 !important;
+    text-shadow: 0 1px 1px rgba(255,255,255,.45);
+}
+#daily-menu-grid .daily-mini-card:nth-child(2) .daily-mini-icon,
+#daily-menu-grid .daily-mini-card:nth-child(2) .daily-mini-text,
+#daily-menu-grid .daily-mini-card:nth-child(2) .daily-mini-arrow { color:#064e3b !important; }
+#daily-menu-grid .daily-mini-card:nth-child(3) .daily-mini-icon,
+#daily-menu-grid .daily-mini-card:nth-child(3) .daily-mini-text,
+#daily-menu-grid .daily-mini-card:nth-child(3) .daily-mini-arrow { color:#78350f !important; }
+#daily-menu-grid .daily-mini-card:nth-child(4) .daily-mini-icon,
+#daily-menu-grid .daily-mini-card:nth-child(4) .daily-mini-text,
+#daily-menu-grid .daily-mini-card:nth-child(4) .daily-mini-arrow { color:#881337 !important; }
+</style>
+
 </head>
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium"><button class="sticky-back-btn" data-back-context="page-keluar" onclick="navigateBack()" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="sticky-back-btn" data-back-context="page-minuman" onclick="navigateBack()" type="button">
@@ -6532,30 +6589,19 @@ body > * {
 </header>
 <main class="w-full max-w-6xl space-y-6">
 <!-- BERANDA -->
-<div class="glass-panel home-dashboard p-3 sm:p-6 rounded-2xl" id="page-home">
-<div class="home-hero">
-<div>
-<h2>Dashboard Lapangan</h2>
-<p>Kelola booking, keuangan, minuman, dan laporan dengan lebih cepat.</p>
-</div>
-<div class="home-hero-badge">⚡</div>
-</div>
-
-<!-- JADWAL TIM HARI INI — SELALU DI ATAS TOMBOL -->
+<!-- JADWAL HARI INI — HALAMAN TERPISAH -->
+<div class="glass-panel home-dashboard p-3 sm:p-6 rounded-2xl" id="page-jadwal">
 <section class="today-schedule-modern" id="today-schedule-panel">
 <div class="today-schedule-head">
 <div class="today-title-wrap">
 <span class="today-icon">📅</span>
-<div>
-<h3>JADWAL HARI INI</h3>
-</div>
+<div><h3>JADWAL HARI INI</h3></div>
 </div>
 <span class="today-date-badge" id="today-schedule-date"></span>
 </div>
 <div class="today-schedule-list-modern" id="today-schedule-list"></div>
 </section>
 
-<!-- TAGIHAN BELUM LUNAS — FRAME TERPISAH DARI JADWAL HARI INI -->
 <section class="today-unpaid-modern" id="today-unpaid-panel">
   <div class="today-unpaid-head">
     <div class="today-title-wrap">
@@ -6569,6 +6615,16 @@ body > * {
   </div>
   <div id="today-unpaid-list" class="today-unpaid-list-modern"></div>
 </section>
+</div>
+
+<div class="glass-panel home-dashboard p-3 sm:p-6 rounded-2xl" id="page-home">
+<div class="home-hero">
+<div>
+<h2>Dashboard Lapangan</h2>
+<p>Kelola booking, keuangan, minuman, dan laporan dengan lebih cepat.</p>
+</div>
+<div class="home-hero-badge">⚡</div>
+</div>
 
 <!-- SEMUA TOMBOL DIGABUNG MENJADI SATU MENU -->
 <section class="home-section home-all-menu">
@@ -7421,6 +7477,11 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
       </select>
       <p class="text-[10px] text-slate-500 mt-1">Hanya tanggal yang memang masuk jadwal member yang ditampilkan. Tanggal besok dan seterusnya tetap boleh dipilih.</p>
     </div>
+    <div>
+      <label class="block text-xs font-bold mb-1">Tanggal Pelunasan</label>
+      <input id="pm-tanggal-bayar" type="date" class="w-full p-2 rounded-xl text-sm glass-input font-bold" onchange="updatePelunasanMemberPreview()">
+      <p class="text-[10px] text-slate-500 mt-1">Tanggal ini adalah tanggal pembayaran yang dicatat admin, bukan tanggal jadwal yang dilunasi.</p>
+    </div>
   </div>
   <div id="pm-summary" class="mb-3"></div>
   <div id="pm-tagihan" class="space-y-2 mb-4"></div>
@@ -7728,6 +7789,28 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 </div>
 </form>
 </div>
+
+<!-- MENU LAINNYA — HALAMAN TERSENDIRI -->
+<div class="hidden" id="page-more">
+  <div class="sub-menu-modern glass-panel p-4 sm:p-6 rounded-2xl font-bold text-slate-900 more-menu-page">
+    <div class="mb-5">
+      <h2 class="text-base sm:text-lg font-black text-slate-900">Menu Lainnya</h2>
+      <p class="text-xs text-slate-600 font-bold mt-1">Menu tambahan yang tidak digunakan setiap saat.</p>
+    </div>
+    <div class="more-page-grid">
+      <button type="button" onclick="quickMoreOpen('masuk')"><span>💰</span><b>Uang Masuk</b><small>Catat pemasukan</small></button>
+      <button type="button" onclick="quickMoreOpen('pelunasan-member')"><span>🧾</span><b>Pelunasan Member</b><small>Tagihan member</small></button>
+      <button type="button" onclick="quickMoreOpen('booking')"><span>⚽</span><b>Booking</b><small>Input booking</small></button>
+      <button type="button" onclick="quickMoreOpen('sparring')"><span>🤝</span><b>Sparing</b><small>Catat sparing</small></button>
+      <button type="button" onclick="quickMoreOpen('admin-jaga')"><span>🧑‍💼</span><b>Admin Jaga</b><small>Jadwal admin</small></button>
+      <button type="button" onclick="quickMoreOpen('atur-member')"><span>⚙️</span><b>Atur Member</b><small>Data member</small></button>
+      <button type="button" onclick="quickMoreOpen('booking-schedule')"><span>🗓️</span><b>Booking Schedule</b><small>Jadwal booking</small></button>
+      <button type="button" onclick="quickMoreOpen('booking-history')"><span>📋</span><b>Booking History</b><small>Riwayat booking</small></button>
+      <button type="button" onclick="quickMoreOpen('monthly-recap')"><span>📈</span><b>Monthly Recap</b><small>Rekap bulanan</small></button>
+    </div>
+  </div>
+</div>
+
 </main>
 <!-- Script Firebase & Logika Aplikasi -->
 <script type="module">
@@ -9420,7 +9503,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 
                             <div>
                                 <label class="block text-xs font-black mb-1">DP / Bayar (Rp)</label>
-                                <input id="edit-b-dp" type="number" min="0" value="${Number(item.dp || 0)}" class="w-full p-2.5 rounded-xl border border-slate-300 bg-white font-bold text-sm" required>
+                                <input id="edit-b-dp" type="text" inputmode="numeric" value="${formatNominalEditPelunasan(Number(item.dp || 0))}" oninput="this.value=formatNominalEditPelunasan(this.value)" class="w-full p-2.5 rounded-xl border border-slate-300 bg-white font-bold text-sm" required>
                             </div>
 
                             <div>
@@ -9459,7 +9542,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             const jam = document.getElementById('edit-b-jam')?.value;
             const status = document.getElementById('edit-b-status')?.value;
             const wa = document.getElementById('edit-b-wa')?.value.trim() || '';
-            const dp = Number(document.getElementById('edit-b-dp')?.value || 0);
+            const dp = parseNominalEditPelunasan(document.getElementById('edit-b-dp')?.value || '');
             const tanggalDp = document.getElementById('edit-b-tanggal-dp')?.value || getLocalDateString();
             const metode = document.getElementById('edit-b-metode')?.value || 'Cash';
 
@@ -9730,6 +9813,16 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             return el?.value || getLocalDateString().substring(0,7);
         }
 
+        function getPelunasanPaymentDate() {
+            const el = document.getElementById('pm-tanggal-bayar');
+            return el?.value || getLocalDateString();
+        }
+
+        function ensurePelunasanPaymentDate() {
+            const el = document.getElementById('pm-tanggal-bayar');
+            if(el && !el.value) el.value = getLocalDateString();
+        }
+
         function getMemberDuesForMonth(nama, monthKey) {
             if(!nama || !monthKey) return [];
             const [yy, mm] = monthKey.split('-').map(Number);
@@ -9778,6 +9871,205 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             return dues.map(d => ({...d, terbayar:Math.min(d.nominal, allocated[d.id] || 0), sisa:Math.max(0,d.nominal-(allocated[d.id]||0))}));
         }
 
+        // Versi khusus saat mengedit satu pencatatan:
+        // alokasi dari pencatatan yang sedang diedit dikeluarkan terlebih dahulu
+        // agar nominal baru dapat dihitung ulang tanpa double counting.
+        function getOpenDuesForMemberExcludingPayment(nama, monthKey, excludeKey) {
+            const dues = getMemberDuesForMonth(nama, monthKey);
+            const allocated = {};
+            const target = String(nama || '').trim().toLowerCase();
+
+            Object.entries(globalCache.pelunasanMember || {}).forEach(([recKey, rec]) => {
+                if(recKey === excludeKey) return;
+                if(String(rec?.member || '').trim().toLowerCase() !== target) return;
+                (rec?.alokasi || []).forEach(a => {
+                    const dueId = String(a?.dueId || '');
+                    if(!dueId) return;
+                    allocated[dueId] = (allocated[dueId] || 0) + Number(a?.amount || 0);
+                });
+            });
+
+            return dues.map(d => ({
+                ...d,
+                terbayar: Math.min(d.nominal, allocated[d.id] || 0),
+                sisa: Math.max(0, d.nominal - (allocated[d.id] || 0))
+            }));
+        }
+
+        function formatNominalEditPelunasan(value) {
+            const digits = String(value ?? '').replace(/\D/g, '');
+            if(!digits) return '';
+            return Number(digits).toLocaleString('id-ID');
+        }
+
+        function parseNominalEditPelunasan(value) {
+            const digits = String(value ?? '').replace(/\D/g, '');
+            return digits ? Number(digits) : 0;
+        }
+
+        window.editPelunasanMember = async (key) => {
+            if(!key) return;
+            const item = globalCache?.pelunasanMember?.[key];
+            if(!item) {
+                alert('Data pelunasan member tidak ditemukan.');
+                return;
+            }
+
+            const old = document.getElementById('modal-edit-pelunasan-member');
+            if(old) old.remove();
+
+            const nama = String(item.member || '');
+            const periode = String(item.periode || getLocalDateString().substring(0,7));
+            const tanggalJadwal = String(item.tanggalJadwalDipilih || '');
+            const tanggalBayar = String(item.tanggalBayar || getLocalDateString());
+            const jumlah = Number(item.jumlah || 0);
+            const metode = String(item.metode || 'Cash');
+
+            const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({
+                '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+            }[c]));
+
+            const modal = document.createElement('div');
+            modal.id = 'modal-edit-pelunasan-member';
+            modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4';
+            modal.innerHTML = `
+                <div class="w-full max-w-lg rounded-2xl bg-white shadow-2xl border border-violet-200 overflow-hidden">
+                    <div class="bg-gradient-to-r from-violet-950 to-violet-700 px-5 py-4 text-white">
+                        <div class="flex items-center justify-between gap-3">
+                            <div>
+                                <h3 class="font-black text-lg">Edit Pelunasan Member</h3>
+                                <p class="text-xs text-violet-100">Perbarui tanggal, nominal, atau metode pembayaran.</p>
+                            </div>
+                            <button type="button" onclick="document.getElementById('modal-edit-pelunasan-member')?.remove()" class="text-white/80 hover:text-white text-xl font-black">×</button>
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-xs font-black text-slate-700">Member</label>
+                                <input value="${esc(nama)}" disabled class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-500 bg-slate-100">
+                            </div>
+                            <div>
+                                <label class="text-xs font-black text-slate-700">Periode</label>
+                                <input value="${esc(periode)}" disabled class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-500 bg-slate-100">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-xs font-black text-slate-700">Tanggal Jadwal Dilunasi</label>
+                                <input id="edit-pm-tanggal-jadwal" type="date" value="${esc(tanggalJadwal)}" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900">
+                            </div>
+                            <div>
+                                <label class="text-xs font-black text-slate-700">Tanggal Pelunasan</label>
+                                <input id="edit-pm-tanggal-bayar" type="date" value="${esc(tanggalBayar)}" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-xs font-black text-slate-700">Jumlah Dibayar</label>
+                                <input id="edit-pm-jumlah" type="text" inputmode="numeric" value="${formatNominalEditPelunasan(jumlah)}"
+                                       class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"
+                                       oninput="this.value=formatNominalEditPelunasan(this.value)">
+                            </div>
+                            <div>
+                                <label class="text-xs font-black text-slate-700">Metode Pembayaran</label>
+                                <select id="edit-pm-metode" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900">
+                                    <option value="Cash" ${metode==='Cash'?'selected':''}>Cash</option>
+                                    <option value="QRIS" ${metode==='QRIS'?'selected':''}>QRIS</option>
+                                    <option value="Transfer" ${metode==='Transfer'?'selected':''}>Transfer</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="text-[11px] text-slate-500 bg-violet-50 border border-violet-100 rounded-xl p-3">
+                            Setelah disimpan, alokasi tagihan akan dihitung ulang dari tanggal jadwal yang dipilih dan Daily Recap otomatis mengikuti tanggal pelunasan baru.
+                        </div>
+                        <div class="flex gap-2 pt-2">
+                            <button type="button" onclick="simpanEditPelunasanMember('${esc(key)}')" class="flex-1 bg-violet-700 hover:bg-violet-800 text-white px-4 py-2.5 rounded-xl font-black shadow">Simpan Perubahan</button>
+                            <button type="button" onclick="document.getElementById('modal-edit-pelunasan-member')?.remove()" class="bg-slate-200 hover:bg-slate-300 text-slate-900 px-4 py-2.5 rounded-xl font-black">Batal</button>
+                        </div>
+                    </div>
+                </div>`;
+            document.body.appendChild(modal);
+        };
+
+        window.simpanEditPelunasanMember = async (key) => {
+            if(!key) return;
+            const item = globalCache?.pelunasanMember?.[key];
+            if(!item) {
+                alert('Data pelunasan member tidak ditemukan.');
+                return;
+            }
+
+            const tanggalJadwal = document.getElementById('edit-pm-tanggal-jadwal')?.value || '';
+            const tanggalBayar = document.getElementById('edit-pm-tanggal-bayar')?.value || '';
+            const jumlah = parseNominalEditPelunasan(document.getElementById('edit-pm-jumlah')?.value || '');
+            const metode = document.getElementById('edit-pm-metode')?.value || 'Cash';
+            const nama = String(item.member || '');
+            const month = String(item.periode || getLocalDateString().substring(0,7));
+
+            if(!tanggalJadwal) return alert('Pilih tanggal jadwal yang dilunasi.');
+            if(!tanggalBayar) return alert('Pilih tanggal pelunasan.');
+            if(jumlah <= 0) return alert('Jumlah pembayaran harus lebih dari Rp 0.');
+
+            const dues = getOpenDuesForMemberExcludingPayment(nama, month, key)
+                .filter(d => d.sisa > 0 && d.tanggal >= tanggalJadwal);
+
+            if(!dues.length) {
+                alert('Tidak ada tagihan terbuka yang bisa dialokasikan dari tanggal jadwal tersebut.');
+                return;
+            }
+
+            let remain = jumlah;
+            const alokasi = [];
+            for(const d of dues) {
+                if(remain <= 0) break;
+                const amount = Math.min(remain, d.sisa);
+                if(amount > 0) {
+                    alokasi.push({
+                        dueId: d.id,
+                        tanggal: d.tanggal,
+                        jam: d.jam,
+                        amount
+                    });
+                    remain -= amount;
+                }
+            }
+
+            try {
+                await update(ref(db, 'pelunasanMember/' + key), {
+                    ...item,
+                    tanggalJadwalDipilih: tanggalJadwal,
+                    tanggalBayar,
+                    jumlah,
+                    metode,
+                    alokasi,
+                    saldoLebih: remain,
+                    timestamp: Date.now()
+                });
+
+                if(globalCache.pelunasanMember) {
+                    globalCache.pelunasanMember[key] = {
+                        ...item,
+                        tanggalJadwalDipilih: tanggalJadwal,
+                        tanggalBayar,
+                        jumlah,
+                        metode,
+                        alokasi,
+                        saldoLebih: remain,
+                        timestamp: Date.now()
+                    };
+                }
+
+                document.getElementById('modal-edit-pelunasan-member')?.remove();
+                showSuccessPopup('Pelunasan member berhasil diperbarui dan Daily Recap disinkronkan.');
+                renderPelunasanMember();
+                renderRekapHarian();
+            } catch(error) {
+                console.error(error);
+                alert('Gagal memperbarui pelunasan member: ' + error.message);
+            }
+        };
+
         function formatTanggalPelunasanOption(dateStr) {
             if(!dateStr) return '-';
             const d = new Date(dateStr + 'T00:00:00');
@@ -9825,6 +10117,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 
         window.renderPelunasanMember = () => {
             refreshPelunasanMemberSelect();
+            ensurePelunasanPaymentDate();
             const nama = document.getElementById('pm-member')?.value || '';
             const month = getPelunasanMonth();
             const box = document.getElementById('pm-tagihan');
@@ -9881,8 +10174,10 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             const jumlah = Number(document.getElementById('pm-jumlah')?.value || 0);
             const metode = document.getElementById('pm-metode')?.value || 'Cash';
             const selectedDate = document.getElementById('pm-tanggal-jadwal')?.value || '';
+            const tanggalBayar = document.getElementById('pm-tanggal-bayar')?.value || '';
             if(!nama) return alert('Pilih member terlebih dahulu.');
             if(!selectedDate) return alert('Pilih tanggal jadwal yang akan dilunasi.');
+            if(!tanggalBayar) return alert('Pilih tanggal pelunasan.');
             if(jumlah<=0) return alert('Jumlah pembayaran harus lebih dari Rp 0.');
             let dues = getOpenDuesForMember(nama, month).filter(d=>d.sisa>0);
             if(selectedDate) dues = dues.filter(d=>d.tanggal >= selectedDate);
@@ -9891,11 +10186,25 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             const alokasi=[];
             for(const d of dues) { if(remain<=0) break; const x=Math.min(remain,d.sisa); alokasi.push({dueId:d.id,tanggal:d.tanggal,jam:d.jam,amount:x}); remain-=x; }
             try {
-                await push(ref(db,'pelunasanMember'), {member:nama, periode:month, tanggalJadwalDipilih:selectedDate, tanggalBayar:getLocalDateString(), jumlah, metode, alokasi, saldoLebih:remain, timestamp:Date.now()});
+                await push(ref(db,'pelunasanMember'), {member:nama, periode:month, tanggalJadwalDipilih:selectedDate, tanggalBayar, jumlah, metode, alokasi, saldoLebih:remain, timestamp:Date.now()});
                 document.getElementById('pm-jumlah').value='';
                 showSuccessPopup(`Pelunasan ${nama} berhasil disimpan. ${remain>0?'Saldo lebih '+formatRupiah(remain)+' disimpan.':''}`);
                 renderPelunasanMember();
             } catch(error) { console.error(error); alert('Gagal menyimpan pelunasan member: '+error.message); }
+        };
+
+        window.hapusPelunasanMember = async (key) => {
+            if(!key) return;
+            if(!(await window.appConfirm('Yakin ingin menghapus pencatatan pelunasan member ini?'))) return;
+            try {
+                await remove(ref(db, 'pelunasanMember/' + key));
+                showSuccessPopup('Pencatatan pelunasan member berhasil dihapus dan Daily Recap disinkronkan.');
+                renderPelunasanMember();
+                renderRekapHarian();
+            } catch(error) {
+                console.error(error);
+                alert('Gagal menghapus pelunasan member: ' + error.message);
+            }
         };
 
         function renderAll() {
@@ -10195,6 +10504,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
         onValue(ref(db, 'pelunasanMember'), (snapshot) => {
             globalCache.pelunasanMember = snapshot.val() || {};
             if (typeof renderPelunasanMember === 'function') renderPelunasanMember();
+            if (typeof renderRekapHarian === 'function') renderRekapHarian();
         });
 
         onValue(ref(db, 'sparring'), (snapshot) => {
@@ -12235,6 +12545,54 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 }
             });
 
+            // --- PELUNASAN MEMBER ---
+            // Pelunasan dihitung sebagai pemasukan Uang Lapangan berdasarkan
+            // tanggal pembayaran (tanggalBayar), bukan tanggal jadwal yang dilunasi.
+            Object.entries(globalCache.pelunasanMember || {}).forEach(([key, item]) => {
+                const tanggalBayar = String(item?.tanggalBayar || '');
+                if(tanggalBayar !== filterTgl) return;
+
+                const jumlah = Number(item?.jumlah || 0);
+                if(!Number.isFinite(jumlah) || jumlah <= 0) return;
+
+                const metode = String(item?.metode || 'Cash');
+                totalLapangan += jumlah;
+                if(metode === 'Cash') totalLapanganCash += jumlah;
+                else if(metode !== 'Free' && metode !== 'Belum Bayar') totalLapanganQrif += jumlah;
+
+                if(tbodyLapangan) {
+                    const nama = item?.member || '-';
+                    const tanggalJadwal = item?.tanggalJadwalDipilih || '';
+                    const alokasi = Array.isArray(item?.alokasi) ? item.alokasi : [];
+                    const detailAlokasi = alokasi.length
+                        ? alokasi.map(a => `${a.tanggal || '-'} ${a.jam || ''} → ${formatRupiah(a.amount)}`).join('<br>')
+                        : '-';
+
+                    tbodyLapangan.innerHTML += `<tr class="border-b border-violet-300/50 text-center font-bold bg-violet-50/60">
+                        <td class="p-2 border border-slate-900/40 text-left">
+                            <div class="font-black text-violet-950">🧾 ${escapeHtmlSparing(nama)}</div>
+                            <div class="text-[9px] text-violet-700 font-black mt-0.5">Pelunasan Member</div>
+                            <div class="text-[9px] text-slate-600 mt-0.5">Jadwal dilunasi: ${tanggalJadwal ? tanggalJadwal.split('-').reverse().join('/') : '-'}</div>
+                        </td>
+                        <td class="p-2 border border-slate-900/40 text-xs">
+                            <span class="font-black text-violet-800">${escapeHtmlSparing(metode)}</span><br>
+                            <span class="text-slate-600">Alokasi:</span><br>${detailAlokasi}
+                        </td>
+                        <td class="p-2 border border-slate-900/40 text-violet-900 font-black">Rp ${jumlah.toLocaleString('id-ID')}</td>
+                        <td class="p-2 border border-slate-900/40 text-center whitespace-nowrap">
+                            <div class="flex items-center justify-center gap-1">
+                                <button type="button" onclick="editPelunasanMember('${key}')" class="action-icon action-edit" title="Edit data" aria-label="Edit data">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 3.487a2.1 2.1 0 012.97 2.97L7.5 18.79 3 20l1.21-4.5L16.862 3.487z"/><path stroke-linecap="round" stroke-linejoin="round" d="M14.5 5.85l3.65 3.65"/></svg>
+                                </button>
+                                <button type="button" onclick="hapusPelunasanMember('${key}')" class="action-icon action-delete" title="Hapus data" aria-label="Hapus data">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 0h14M10 11v6m4-6v6"/></svg>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>`;
+                }
+            });
+
             Object.entries(globalCache.booking).forEach(([key, item]) => {
                 // Untuk laporan keuangan, DP dicatat berdasarkan TANGGAL DP,
                 // bukan tanggal main. Booking dari web customer sudah mengirim tglDp.
@@ -12262,7 +12620,16 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                             </td>
                             <td class="p-2 border border-slate-900/40 text-xs">Metode: ${metode}<br><span class="text-indigo-700 font-black">Tgl DP: ${tanggalDp ? tanggalDp.split('-').reverse().join('/') : '-'}</span></td>
                             <td class="p-2 border border-slate-900/40 text-emerald-900 font-black">Rp ${dpVal.toLocaleString('id-ID')}</td>
-                            <td class="p-2 border border-slate-900/40 text-center"><button type="button" onclick="hapusBooking('${key}')" class="bg-rose-700 hover:bg-rose-800 text-white px-2 py-1 rounded text-xs">Hapus</button></td>
+                            <td class="p-2 border border-slate-900/40 text-center whitespace-nowrap">
+                                <div class="flex items-center justify-center gap-1">
+                                    <button type="button" onclick="editBooking('${key}')" class="action-icon action-edit" title="Edit DP Booking" aria-label="Edit DP Booking">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 3.487a2.1 2.1 0 012.97 2.97L7.5 18.79 3 20l1.21-4.5L16.862 3.487z"/><path stroke-linecap="round" stroke-linejoin="round" d="M14.5 5.85l3.65 3.65"/></svg>
+                                    </button>
+                                    <button type="button" onclick="hapusBooking('${key}')" class="action-icon action-delete" title="Hapus Booking" aria-label="Hapus Booking">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 0h14M10 11v6m4-6v6M9 7V4a1 1 0 011 1v3H9z"/></svg>
+                                    </button>
+                                </div>
+                            </td>
                         </tr>`;
                     }
                 }
@@ -13951,7 +14318,7 @@ window.downloadDailyRecapJPG = async function() {
     }
 
     // Entry awal aplikasi = Beranda.
-    history.replaceState(makeState('home'), '', location.href);
+    history.replaceState(makeState('jadwal'), '', location.href);
     navigationReady = true;
 
     // Tombol Back di dalam aplikasi.
@@ -15030,6 +15397,51 @@ window.downloadDailyRecapJPG = async function() {
     #daily-menu-grid .daily-mini-arrow { font-size:.95rem !important; }
 }
 </style>
+
+<style id="uang-lapangan-width-match-menu">
+/* UANG LAPANGAN: samakan lebar area dengan tombol menu Daily Recap di atasnya. */
+#sub-page-lapangan {
+    width: 95% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+#sub-page-lapangan > section {
+    width: 100% !important;
+}
+@media (max-width: 640px) {
+    #sub-page-lapangan {
+        width: 94% !important;
+    }
+}
+</style>
+
+
+<!-- QUICK BOTTOM NAV — 5 MENU UTAMA -->
+<nav id="quick-bottom-nav" class="quick-bottom-nav" aria-label="Menu cepat admin">
+  <button type="button" class="quick-nav-item" data-quick="schedule" onclick="quickOpenSchedule()">
+    <span class="quick-nav-icon">📅</span>
+    <span class="quick-nav-label">Jadwal</span>
+  </button>
+  <button type="button" class="quick-nav-item" data-quick="minuman" onclick="quickOpenPage('minuman')">
+    <span class="quick-nav-icon">🥤</span>
+    <span class="quick-nav-label">Minuman</span>
+  </button>
+  <button type="button" class="quick-nav-item quick-nav-main" data-quick="daily-recap" onclick="quickOpenPage('daily-recap')">
+    <span class="quick-nav-icon">📊</span>
+    <span class="quick-nav-label">Daily Recap</span>
+  </button>
+  <button type="button" class="quick-nav-item" data-quick="keluar" onclick="quickOpenPage('keluar')">
+    <span class="quick-nav-icon">💸</span>
+    <span class="quick-nav-label">Uang Keluar</span>
+  </button>
+  <button type="button" class="quick-nav-item" data-quick="more" onclick="toggleQuickMore()" aria-expanded="false">
+    <span class="quick-nav-icon">☰</span>
+    <span class="quick-nav-label">Lainnya</span>
+  </button>
+</nav>
+
+<!-- Menu Lainnya sekarang menjadi halaman tersendiri: #page-more -->
+
 </body>
 </html>
 
@@ -18684,3 +19096,229 @@ window.downloadDailyRecapJPG = async function() {
   }
 }
 </style>
+
+<style id="quick-bottom-nav-glass">
+  :root{--quick-nav-h:82px;}
+  body{padding-bottom:calc(var(--quick-nav-h) + 18px) !important;}
+  .quick-bottom-nav{
+    position:fixed;
+    z-index:9998;
+    left:50%;
+    bottom:14px;
+    transform:translateX(-50%);
+    width:min(760px,calc(100vw - 28px));
+    min-height:68px;
+    padding:7px;
+    display:grid;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:6px;
+    border:1px solid rgba(255,255,255,.72);
+    border-radius:24px;
+    background:linear-gradient(135deg,rgba(255,255,255,.60),rgba(255,255,255,.22));
+    box-shadow:0 18px 45px rgba(15,23,42,.22),inset 0 1px 0 rgba(255,255,255,.75);
+    backdrop-filter:blur(24px) saturate(155%);
+    -webkit-backdrop-filter:blur(24px) saturate(155%);
+  }
+  .quick-nav-item{
+    position:relative;
+    min-width:0;
+    min-height:54px;
+    border:1px solid transparent;
+    border-radius:18px;
+    background:rgba(255,255,255,.22);
+    color:#172033;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:2px;
+    cursor:pointer;
+    transition:transform .16s ease,background .16s ease,box-shadow .16s ease,border-color .16s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .quick-nav-item:hover{transform:translateY(-2px);background:rgba(255,255,255,.42);border-color:rgba(255,255,255,.72);}
+  .quick-nav-item:active{transform:scale(.96);}
+  .quick-nav-item.active{
+    background:rgba(255,255,255,.58);
+    border-color:rgba(255,255,255,.92);
+    box-shadow:0 8px 20px rgba(30,64,175,.14),inset 0 1px 0 rgba(255,255,255,.8);
+  }
+  .quick-nav-item.quick-nav-main{background:rgba(255,255,255,.38);}
+  .quick-nav-icon{font-size:20px;line-height:1;filter:drop-shadow(0 2px 3px rgba(15,23,42,.10));}
+  .quick-nav-label{font-size:10px;font-weight:900;line-height:1.1;white-space:nowrap;letter-spacing:-.01em;}
+
+  .quick-more-overlay{
+    position:fixed;inset:0;z-index:9997;
+    background:rgba(15,23,42,.22);
+    backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+    display:flex;align-items:flex-end;justify-content:center;
+    padding:16px 14px calc(var(--quick-nav-h) + 22px);
+  }
+  .quick-more-overlay.hidden{display:none;}
+  .quick-more-sheet{
+    width:min(760px,100%);
+    max-height:min(72vh,620px);
+    overflow:auto;
+    padding:12px;
+    border:1px solid rgba(255,255,255,.78);
+    border-radius:28px;
+    background:linear-gradient(145deg,rgba(255,255,255,.78),rgba(224,242,254,.42));
+    box-shadow:0 25px 70px rgba(15,23,42,.28),inset 0 1px 0 rgba(255,255,255,.85);
+    backdrop-filter:blur(28px) saturate(160%);
+    -webkit-backdrop-filter:blur(28px) saturate(160%);
+  }
+  .quick-more-handle{width:42px;height:4px;border-radius:999px;background:rgba(71,85,105,.28);margin:0 auto 12px;}
+  .quick-more-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 5px 12px;}
+  .quick-more-head strong{display:block;font-size:16px;font-weight:950;color:#172033;}
+  .quick-more-head small{display:block;margin-top:2px;font-size:10px;font-weight:700;color:#64748b;}
+  .quick-more-close{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.8);background:rgba(255,255,255,.45);font-weight:900;color:#334155;cursor:pointer;}
+  .quick-more-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;}
+  .quick-more-grid button{
+    min-height:78px;padding:10px 7px;border-radius:18px;border:1px solid rgba(255,255,255,.72);
+    background:rgba(255,255,255,.38);color:#172033;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.72);cursor:pointer;transition:.16s ease;
+  }
+  .quick-more-grid button:hover{transform:translateY(-2px);background:rgba(255,255,255,.60);}
+  .quick-more-grid button:active{transform:scale(.97);}
+  .quick-more-grid button span{font-size:22px;line-height:1;}
+  .quick-more-grid button b{font-size:10px;text-align:center;line-height:1.15;}
+
+  /* MENU LAINNYA — halaman penuh bergaya glass, bukan popup */
+  #page-more{width:100%;}
+  .more-menu-page{width:min(95%,920px);margin:0 auto 18px;}
+  .more-page-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+  .more-page-grid button{
+    min-height:112px;padding:14px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.72);
+    background:linear-gradient(145deg,rgba(255,255,255,.50),rgba(255,255,255,.22));
+    color:#172033;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    box-shadow:0 8px 24px rgba(15,23,42,.08),inset 0 1px 0 rgba(255,255,255,.78);
+    backdrop-filter:blur(18px) saturate(145%);-webkit-backdrop-filter:blur(18px) saturate(145%);
+    cursor:pointer;transition:.16s ease;
+  }
+  .more-page-grid button:hover{transform:translateY(-2px);background:rgba(255,255,255,.62);}
+  .more-page-grid button:active{transform:scale(.98);}
+  .more-page-grid button span{font-size:28px;line-height:1;}
+  .more-page-grid button b{font-size:12px;text-align:center;line-height:1.15;font-weight:950;}
+  .more-page-grid button small{font-size:9px;color:#64748b;font-weight:800;text-align:center;}
+  #quick-more-overlay{display:none!important;}
+  @media(max-width:640px){
+    .more-menu-page{width:94%;padding:14px !important;}
+    .more-page-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}
+    .more-page-grid button{min-height:92px;padding:10px 7px;border-radius:16px;}
+    .more-page-grid button span{font-size:23px;}
+    .more-page-grid button b{font-size:10px;}
+    .more-page-grid button small{font-size:8px;}
+  }
+
+  @media(max-width:640px){
+    :root{--quick-nav-h:76px;}
+    body{padding-bottom:calc(var(--quick-nav-h) + 12px) !important;}
+    .quick-bottom-nav{left:8px;right:8px;bottom:8px;transform:none;width:auto;min-height:62px;padding:5px;gap:3px;border-radius:22px;}
+    .quick-nav-item{min-height:50px;border-radius:16px;gap:2px;}
+    .quick-nav-icon{font-size:17px;}
+    .quick-nav-label{font-size:8px;}
+    .quick-more-overlay{padding:10px 8px calc(var(--quick-nav-h) + 16px);}
+    .quick-more-sheet{border-radius:24px;padding:10px;max-height:76vh;}
+    .quick-more-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;}
+    .quick-more-grid button{min-height:70px;border-radius:16px;}
+    .quick-more-grid button span{font-size:19px;}
+    .quick-more-grid button b{font-size:8px;}
+  }
+  @media(max-width:380px){
+    .quick-nav-label{font-size:7px;}
+    .quick-nav-icon{font-size:16px;}
+    .quick-bottom-nav{left:5px;right:5px;bottom:6px;}
+  }
+</style>
+
+<script id="quick-bottom-nav-js">
+(function(){
+  function setQuickActive(key){
+    document.querySelectorAll('#quick-bottom-nav .quick-nav-item').forEach(btn=>btn.classList.toggle('active',btn.dataset.quick===key));
+  }
+
+  function closeMoreBeforeNavigation(){
+    const overlay=document.getElementById('quick-more-overlay');
+    if(overlay && !overlay.classList.contains('hidden')){
+      overlay.classList.add('hidden');
+      document.body.classList.remove('quick-more-open');
+      document.querySelector('#quick-bottom-nav [data-quick="more"]')?.setAttribute('aria-expanded','false');
+    }
+  }
+
+  window.quickOpenPage=function(id){
+    closeMoreBeforeNavigation();
+    if(typeof window.showPage==='function') window.showPage(id);
+    setTimeout(function(){
+      setQuickActive(id==='minuman'?'minuman':id==='daily-recap'?'daily-recap':id==='keluar'?'keluar':'');
+    },80);
+  };
+
+  window.quickOpenSchedule=function(){
+    closeMoreBeforeNavigation();
+    if(typeof window.showPage==='function') window.showPage('jadwal');
+    setQuickActive('schedule');
+  };
+
+  window.toggleQuickMore=function(force){
+    // Menu Lainnya sekarang berupa halaman penuh, bukan popup/bottom sheet.
+    if(typeof window.showPage!=='function') return;
+    const open=typeof force==='boolean'?force:true;
+    if(open){
+      closeMoreBeforeNavigation();
+      window.showPage('more');
+      setQuickActive('more');
+    }
+  };
+
+  window.closeQuickMore=function(){
+    if(typeof window.showPage==='function') window.showPage('jadwal');
+    setQuickActive('schedule');
+  };
+
+  window.quickMoreOpen=function(id){
+    if(typeof window.showPage==='function') window.showPage(id);
+  };
+
+  const originalShowPage=window.showPage;
+  if(typeof originalShowPage==='function') window.showPage=function(id){
+    // Setiap perpindahan halaman menutup bottom sheet Menu Lainnya.
+    closeMoreBeforeNavigation();
+    originalShowPage(id);
+    setTimeout(function(){
+      if(id==='jadwal') setQuickActive('schedule');
+      else if(id==='minuman') setQuickActive('minuman');
+      else if(id==='daily-recap') setQuickActive('daily-recap');
+      else if(id==='keluar') setQuickActive('keluar');
+      else if(id==='more') setQuickActive('more');
+      else setQuickActive('');
+    },30);
+  };
+
+  document.addEventListener('keydown',function(e){if(e.key==='Escape') toggleQuickMore(false);});
+
+  // Saat web pertama kali dibuka, langsung tampilkan halaman JADWAL HARI INI.
+  // Jadwal sekarang merupakan halaman tersendiri, bukan bagian dari Home.
+  let initialScheduleDone = false;
+  function openScheduleOnFirstLoad(){
+    if(initialScheduleDone) return;
+    initialScheduleDone = true;
+    closeMoreBeforeNavigation();
+    if(typeof window.showPage==='function') window.showPage('jadwal');
+    setQuickActive('schedule');
+    window.scrollTo({top:0,left:0,behavior:'auto'});
+  }
+
+  try { history.scrollRestoration = 'manual'; } catch(e) {}
+
+  if(document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', openScheduleOnFirstLoad, {once:true});
+  } else {
+    openScheduleOnFirstLoad();
+  }
+  window.addEventListener('load', function(){
+    if(!initialScheduleDone) openScheduleOnFirstLoad();
+    else window.scrollTo({top:0,left:0,behavior:'auto'});
+  }, {once:true});
+})();
+</script>
