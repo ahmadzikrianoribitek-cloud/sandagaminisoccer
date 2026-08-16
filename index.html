@@ -23119,3 +23119,118 @@ body.daily-sub-modal-v6-open > main #sub-page-ringkasan{
 #daily-cash-seharusnya { border-color:rgb(5 150 105 / 0.5) !important; }
 #daily-cash-seharusnya:where(*) { color:#065f46 !important; }
 </style>
+
+
+<style id="uang-masuk-options-unified-v27">
+/* =========================================================
+   UANG MASUK — OPSI SEWA & DISKON DISELARASKAN
+   Visual only: tidak mengubah ID, event, JS, Firebase, atau logic.
+   Sewa Bola/Rompi dan Diskon 100 rb memakai bahasa card yang sama.
+   ========================================================= */
+#page-masuk .uang-masuk-option-panel {
+  position: relative !important;
+  margin: 0 0 12px !important;
+  padding: 12px !important;
+  border-radius: 16px !important;
+  background: rgba(255,255,255,.18) !important;
+  border: 1px solid rgba(255,255,255,.52) !important;
+  box-shadow: 0 6px 16px rgba(15,23,42,.055), inset 0 1px 0 rgba(255,255,255,.58) !important;
+  backdrop-filter: blur(8px) saturate(115%) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(115%) !important;
+}
+
+/* Header opsi dibuat seperti judul card, bukan label polos. */
+#page-masuk .uang-masuk-option-panel > label.block {
+  display: flex !important;
+  align-items: center !important;
+  min-height: 34px !important;
+  margin: 0 0 9px !important;
+  padding: 8px 10px !important;
+  border-radius: 11px !important;
+  background: rgba(236,253,245,.72) !important;
+  border: 1px solid rgba(16,185,129,.22) !important;
+  color: #065f46 !important;
+  font-size: 11px !important;
+  line-height: 1.25 !important;
+}
+
+/* Tiga opsi sewa menjadi mini-card yang seragam. */
+#page-masuk .uang-masuk-option-panel .grid > label.flex {
+  min-height: 52px !important;
+  margin: 0 !important;
+  padding: 10px 11px !important;
+  border-radius: 13px !important;
+  background: rgba(255,255,255,.50) !important;
+  border: 1px solid rgba(16,185,129,.24) !important;
+  box-shadow: 0 3px 9px rgba(15,23,42,.045), inset 0 1px 0 rgba(255,255,255,.62) !important;
+  transition: transform .15s ease, background .15s ease, border-color .15s ease !important;
+}
+#page-masuk .uang-masuk-option-panel .grid > label.flex:hover {
+  background: rgba(236,253,245,.68) !important;
+  border-color: rgba(16,185,129,.42) !important;
+  transform: translateY(-1px) !important;
+}
+#page-masuk .uang-masuk-option-panel .grid > label.flex input {
+  flex: 0 0 auto !important;
+}
+#page-masuk .uang-masuk-option-panel .grid > label.flex span {
+  line-height: 1.35 !important;
+}
+
+/* Keterangan tambahan tetap menjadi info kecil di bawah card. */
+#page-masuk #info-biaya-tambahan {
+  margin: 8px 2px 0 !important;
+  padding: 6px 8px !important;
+  border-radius: 9px !important;
+  background: rgba(236,253,245,.55) !important;
+  color: #065f46 !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+}
+
+/* Diskon 100 rb: struktur card sama, tetap memakai aksen amber agar makna promo terjaga. */
+#page-masuk .uang-masuk-option-panel:has(#in-diskon-khusus-100) {
+  background: rgba(255,255,255,.18) !important;
+  border-color: rgba(245,158,11,.30) !important;
+}
+#page-masuk .uang-masuk-option-panel:has(#in-diskon-khusus-100) > label.flex {
+  min-height: 52px !important;
+  margin: 0 0 8px !important;
+  padding: 10px 11px !important;
+  border-radius: 13px !important;
+  background: rgba(255,251,235,.72) !important;
+  border: 1px solid rgba(245,158,11,.30) !important;
+  box-shadow: 0 3px 9px rgba(120,53,15,.045), inset 0 1px 0 rgba(255,255,255,.65) !important;
+}
+#page-masuk .uang-masuk-option-panel:has(#in-diskon-khusus-100) > label.flex span {
+  color: #713f12 !important;
+  line-height: 1.35 !important;
+}
+#page-masuk .uang-masuk-option-panel:has(#in-diskon-khusus-100) > p {
+  margin: 7px 2px 0 !important;
+  padding: 0 2px !important;
+  line-height: 1.4 !important;
+}
+#page-masuk #info-diskon-khusus {
+  padding: 6px 8px !important;
+  border-radius: 9px !important;
+  background: rgba(255,251,235,.60) !important;
+  color: #92400e !important;
+}
+
+@media (max-width: 640px) {
+  #page-masuk .uang-masuk-option-panel {
+    padding: 10px !important;
+    border-radius: 15px !important;
+  }
+  #page-masuk .uang-masuk-option-panel .grid {
+    gap: 8px !important;
+  }
+  #page-masuk .uang-masuk-option-panel .grid > label.flex,
+  #page-masuk .uang-masuk-option-panel:has(#in-diskon-khusus-100) > label.flex {
+    min-height: 50px !important;
+    padding: 9px 10px !important;
+    border-radius: 12px !important;
+  }
+}
+</style>
