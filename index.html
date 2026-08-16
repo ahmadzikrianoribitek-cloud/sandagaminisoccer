@@ -7628,6 +7628,26 @@ body > .sticky-back-btn,
 }
 </style>
 
+<style id="no-unused-home-page-guard">
+/* Home lama sudah dihapus. Aplikasi dimulai langsung di Jadwal Hari Ini. */
+#page-home { display:none !important; }
+</style>
+
+<style id="enhanced-glass-effect">
+/* Enhanced glass: denser blur + stronger depth, while preserving existing card colors */
+.glass, .glass-card, .glass-panel, .glass-effect, [class*="backdrop-blur"] {
+  backdrop-filter: blur(16px) saturate(125%);
+  -webkit-backdrop-filter: blur(16px) saturate(125%);
+  box-shadow: 0 10px 28px rgba(15,23,42,.22), 0 3px 10px rgba(15,23,42,.14), inset 0 1px 0 rgba(255,255,255,.42) !important;
+}
+/* Daily recap / Kas Hari Ini cards */
+#page-daily-recap .rounded-xl, #page-daily-recap .rounded-2xl {
+  backdrop-filter: blur(16px) saturate(125%);
+  -webkit-backdrop-filter: blur(16px) saturate(125%);
+  box-shadow: 0 10px 28px rgba(15,23,42,.22), 0 3px 10px rgba(15,23,42,.14), inset 0 1px 0 rgba(255,255,255,.42) !important;
+}
+</style>
+
 </head>
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium">
 <!-- Header -->
@@ -7665,82 +7685,7 @@ body > .sticky-back-btn,
 </section>
 </div>
 
-<div class="glass-panel home-dashboard p-3 sm:p-6 rounded-2xl" id="page-home">
-<div class="home-hero">
-<div>
-<h2>Dashboard Lapangan</h2>
-<p>Kelola booking, keuangan, minuman, dan laporan dengan lebih cepat.</p>
-</div>
-<div class="home-hero-badge">⚡</div>
-</div>
-
-<!-- SEMUA TOMBOL DIGABUNG MENJADI SATU MENU -->
-<section class="home-section home-all-menu">
-
-<div class="home-menu-grid">
-<button class="home-menu-card menu-amber" onclick="showPage('minuman')">
-<span class="menu-card-icon">🥤</span>
-<span class="menu-card-copy"><strong>MINUMAN</strong><small>Kelola transaksi minuman</small></span>
-<span class="menu-card-arrow">→</span>
-</button>
-<button class="home-menu-card menu-emerald" onclick="showPage('masuk')">
-<span class="menu-card-icon">💰</span>
-<span class="menu-card-copy"><strong>UANG MASUK</strong><small>Catat pembayaran &amp; pelunasan</small></span>
-<span class="menu-card-arrow">→</span>
-</button>
-<button class="home-menu-card menu-violet" onclick="showPage('pelunasan-member')">
-<span class="menu-card-icon">🧾</span>
-<span class="menu-card-copy"><strong>PELUNASAN MEMBER</strong><small>Bayar beberapa tagihan sekaligus</small></span>
-<span class="menu-card-arrow">→</span>
-</button>
-<button class="home-menu-card menu-rose" onclick="showPage('keluar')">
-<span class="menu-card-icon">💸</span>
-<span class="menu-card-copy"><strong>UANG KELUAR</strong><small>Catat pengeluaran operasional</small></span>
-<span class="menu-card-arrow">→</span>
-</button>
-<button class="home-menu-card menu-blue" onclick="showPage('booking')">
-<span class="menu-card-icon">⚽</span>
-<span class="menu-card-copy"><strong>BOOKING</strong><small>Tambah jadwal lapangan</small></span>
-<span class="menu-card-arrow">→</span>
-</button>
-<button class="home-menu-card menu-sparring" onclick="showPage('sparring')">
-<span class="menu-card-icon">🤝</span>
-<span class="menu-card-copy"><strong>SPARING</strong><small>Catat &amp; cek lawan tim</small></span>
-<span class="menu-card-arrow">→</span>
-</button>
-<button class="home-menu-card menu-admin-jaga" onclick="showPage('admin-jaga')">
-<span class="menu-card-icon">🧑‍💼</span>
-<span class="menu-card-copy"><strong>JADWAL ADMIN JAGA</strong><small>Atur jadwal admin bertugas</small></span>
-<span class="menu-card-arrow">→</span>
-</button>
-<button class="home-menu-card menu-indigo" onclick="showPage('atur-member')">
-<span class="menu-card-icon">⚙️</span>
-<span class="menu-card-copy"><strong>ATUR MEMBER</strong><small>Kelola jadwal member</small></span>
-<span class="menu-card-arrow">→</span>
-</button>
-<button class="home-menu-card menu-cyan" onclick="showPage('booking-schedule')">
-<span class="menu-card-icon">📅</span>
-<span class="menu-card-copy"><strong>BOOKING SCHEDULE</strong><small>Lihat jadwal mingguan</small></span>
-<span class="menu-card-arrow">→</span>
-</button>
-<button class="home-menu-card menu-orange" onclick="showPage('booking-history')">
-<span class="menu-card-icon">📋</span>
-<span class="menu-card-copy"><strong>BOOKING HISTORY</strong><small>Riwayat seluruh booking</small></span>
-<span class="menu-card-arrow">→</span>
-</button>
-<button class="home-menu-card menu-lime" onclick="showPage('daily-recap')">
-<span class="menu-card-icon">📈</span>
-<span class="menu-card-copy"><strong>DAILY RECAP</strong><small>Rekap keuangan harian</small></span>
-<span class="menu-card-arrow">→</span>
-</button>
-<button class="home-menu-card menu-fuchsia" onclick="showPage('monthly-recap')">
-<span class="menu-card-icon">📊</span>
-<span class="menu-card-copy"><strong>MONTHLY RECAP</strong><small>Ringkasan aktivitas bulanan</small></span>
-<span class="menu-card-arrow">→</span>
-</button>
-</div>
-</section>
-</div>
+<!-- BERANDA DIHAPUS: aplikasi langsung menggunakan JADWAL HARI INI -->
 <!-- HALAMAN JADWAL ADMIN JAGA -->
 <div class="sub-menu-modern glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900" id="page-admin-jaga">
   <div class="flex justify-between items-center mb-4">
@@ -7814,8 +7759,13 @@ body > .sticky-back-btn,
         <div>
           <label class="sparring-label">Tim 1 / Tim yang Mencari Lawan</label>
           <select id="sparring-tim-a" required class="sparring-input" onchange="updateSparingBookingOptions()">
-            <option value="">Pilih tim dari jadwal booking</option>
+            <option value="">Pilih tim dari jadwal</option>
+            <option value="__manual__">✏️ Tim Tanpa Jadwal Tetap</option>
           </select>
+        </div>
+        <div id="sparring-manual-wrap" class="hidden">
+          <label class="sparring-label">Nama Tim Manual</label>
+          <input id="sparring-tim-a-manual" class="sparring-input" placeholder="Ketik nama tim yang konfirmasi via WhatsApp">
         </div>
         <div>
           <label class="sparring-label">No. WhatsApp Tim yang Mencari Lawan</label>
@@ -7827,6 +7777,17 @@ body > .sticky-back-btn,
           <input id="sparring-tim-b" class="sparring-input" placeholder="Ketik nama tim lawan; kosongkan jika belum dapat lawan">
         </div>
       </div>
+      <div id="sparring-manual-date-wrap" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+        <div>
+          <label class="sparring-label">Tanggal Main Tim Manual</label>
+          <input id="sparring-tanggal-manual" type="date" class="sparring-input">
+        </div>
+        <div>
+          <label class="sparring-label">Jam Main Tim Manual</label>
+          <input id="sparring-jam-manual" type="time" class="sparring-input">
+        </div>
+      </div>
+      <div id="sparring-booking-info" class="sparring-booking-info">Pilih tim dari jadwal, atau pilih <b>Tim Tanpa Jadwal Tetap</b> jika jadwal main ditentukan langsung oleh tim.</div>
       <div>
         <label class="sparring-label">Catatan</label>
         <textarea id="sparring-catatan" rows="2" class="sparring-input" placeholder="Contoh: sudah konfirmasi via WhatsApp, minta jam 20.00, dll."></textarea>
@@ -7921,7 +7882,7 @@ body > .sticky-back-btn,
             <span id="daily-cash-status" class="px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-black bg-slate-100 text-slate-600">Belum dicek</span>
         </div>
 
-        <div class="grid grid-cols-2 lg:grid-cols-5 gap-2.5 sm:gap-3">
+        <div class="grid grid-cols-2 lg:grid-cols-7 gap-2.5 sm:gap-3">
             <div class="p-3 rounded-xl border border-blue-500/30 bg-white/70">
                 <p class="text-[10px] font-bold text-slate-500">Total Pemasukan</p>
                 <p id="daily-total-pemasukan" class="text-sm sm:text-lg font-black text-blue-800 mt-1">Rp 0</p>
@@ -7938,8 +7899,16 @@ body > .sticky-back-btn,
                 <p class="text-[10px] font-bold text-slate-500">Pengeluaran</p>
                 <p id="daily-total-keluar" class="text-sm sm:text-lg font-black text-rose-800 mt-1">Rp 0</p>
             </div>
+            <div class="p-3 rounded-xl border-2" style="border-color: rgb(5 150 105 / 0.5) !important; background-color: rgb(236 253 245 / 0.8) !important;">
+                <p class="text-[10px] font-bold text-emerald-700">Sisa Cash Lapangan</p>
+                <p id="daily-sisa-cash-lapangan" class="text-sm sm:text-lg font-black text-emerald-900 mt-1">Rp 0</p>
+            </div>
+            <div class="p-3 rounded-xl border border-purple-500/30 bg-white/70">
+                <p class="text-[10px] font-bold text-purple-700">Sisa Cash Minuman</p>
+                <p id="daily-sisa-cash-minuman" class="text-sm sm:text-lg font-black text-purple-800 mt-1">Rp 0</p>
+            </div>
             <div class="p-3 rounded-xl border-2 col-span-2 lg:col-span-1" style="border-color: rgb(5 150 105 / 0.5) !important; background-color: rgb(236 253 245 / 0.8) !important;">
-                <p class="text-[10px] font-bold text-emerald-700">Cash Seharusnya</p>
+                <p class="text-[10px] font-bold text-emerald-700">Total Sisa Cash</p>
                 <p id="daily-cash-seharusnya" class="text-base sm:text-xl font-black text-emerald-900 mt-1">Rp 0</p>
             </div>
         </div>
@@ -9341,7 +9310,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             }
 
             // Mengganti Background Body Berdasarkan Halaman yang Aktif
-            if(id === 'home') {
+            if(id === 'jadwal') {
                 document.body.classList.remove('sub-menu-active');
             } else {
                 document.body.classList.add('sub-menu-active');
@@ -10016,7 +9985,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 e.target.reset();
                 setDefaultDates();
                 if(document.getElementById('m-select-pilihan')) document.getElementById('m-select-pilihan').value = "";
-                showPage('home');
+                showPage('jadwal');
                 return;
             } else if(type === 'pemasukan') {
                 let tim = document.getElementById('in-tim').value;
@@ -10144,7 +10113,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             }
 
             if(document.getElementById('m-select-pilihan')) document.getElementById('m-select-pilihan').value = "";
-            showPage('home');
+            showPage('jadwal');
         }
 
 
@@ -12027,6 +11996,13 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 if(jamInput) jamInput.value = jamMain || '-';
             }
 
+            // Penting: value di atas diubah oleh JavaScript, bukan melalui
+            // event change/input. Sinkronkan kartu preview agar langsung
+            // menampilkan tanggal, tim, dan jam yang baru dipilih.
+            if(typeof window.updateUangMasukCards === 'function') {
+                window.updateUangMasukCards();
+            }
+
             // Untuk booking multi-jam, tampilkan seluruh rentang jam di menu
             // pembayaran. Jangan hanya bergantung pada bookingGroupId karena
             // booking lama bisa saja belum mempunyai field tersebut.
@@ -12074,6 +12050,12 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 if(jamInputFull && Number.isFinite(firstHour) && Number.isFinite(lastHour)) {
                     jamInputFull.value = `${String(firstHour).padStart(2,'0')}:00-${String(lastHour + 1).padStart(2,'0')}:00`;
                 }
+            }
+
+            // Sinkronkan sekali lagi setelah rentang jam multi-jam selesai
+            // supaya preview tidak kembali ke "Jam main otomatis".
+            if(typeof window.updateUangMasukCards === 'function') {
+                window.updateUangMasukCards();
             }
 
             // Dari kartu Jadwal Hari Ini, default metode adalah Cash dan nominal
@@ -12125,7 +12107,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 }
 
                 // Kembali ke halaman awal; listener Firebase akan menyegarkan jadwal.
-                showPage('home');
+                showPage('jadwal');
                 showSuccessPopup(type === 'member' ? 'Jadwal hari ini berhasil dihapus.' : 'Booking berhasil dihapus.');
             } catch(error) {
                 console.error(error);
@@ -13159,6 +13141,11 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             const info = document.getElementById('sparring-booking-info');
             const tanggal = document.getElementById('sparring-tanggal');
             const jam = document.getElementById('sparring-jam');
+            const manualWrap = document.getElementById('sparring-manual-wrap');
+            const manualDateWrap = document.getElementById('sparring-manual-date-wrap');
+            const manualTeam = document.getElementById('sparring-tim-a-manual');
+            const manualDate = document.getElementById('sparring-tanggal-manual');
+            const manualJam = document.getElementById('sparring-jam-manual');
             if(!selectTimA) return;
 
             const editKey = document.getElementById('sparring-edit-key')?.value || '';
@@ -13169,17 +13156,48 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             const currentValue = selectTimA.value || '';
             const options = getSparingTeamOptions();
 
-            selectTimA.innerHTML = '<option value="">Pilih tim dari jadwal</option>' + options.map(item =>
+            selectTimA.innerHTML = '<option value="">Pilih tim dari jadwal</option><option value="__manual__">✏️ Tim Tanpa Jadwal Tetap</option>' + options.map(item =>
                 `<option value="${escapeHtmlSparing(item.key)}" data-source="${escapeHtmlSparing(item.source)}" data-booking-key="${escapeHtmlSparing(item.bookingKey || '')}" data-tanggal="${escapeHtmlSparing(item.tanggal)}" data-jam="${escapeHtmlSparing(item.jam)}">${escapeHtmlSparing(item.nama)} · ${escapeHtmlSparing(formatTanggalSparing(item.tanggal))} · ${escapeHtmlSparing(item.jam)}${item.source === 'Member' ? ' · Member' : ' · Booking'}</option>`
             ).join('');
 
             let selected = null;
-            if(currentValue) selected = options.find(item => item.key === currentValue) || null;
+            if(currentValue === '__manual__') {
+                selected = { source:'Manual', key:'__manual__', nama:currentTeam, tanggal:currentDate, jam:currentJam };
+            } else if(currentValue) {
+                selected = options.find(item => item.key === currentValue) || null;
+            }
             if(!selected && currentTeam) {
                 selected = options.find(item =>
                     item.nama.toLowerCase() === currentTeam.toLowerCase() &&
                     item.tanggal === currentDate && item.jam === currentJam
                 ) || null;
+                if(!selected && currentItem?.source === 'Manual') {
+                    selected = { source:'Manual', key:'__manual__', nama:currentTeam, tanggal:currentDate, jam:currentJam };
+                }
+            }
+
+            const isManual = selected?.source === 'Manual' || selectTimA.value === '__manual__';
+            if(manualWrap) manualWrap.classList.toggle('hidden', !isManual);
+            if(manualDateWrap) manualDateWrap.classList.toggle('hidden', !isManual);
+            if(manualTeam) {
+                manualTeam.required = isManual;
+                if(isManual && !manualTeam.value) manualTeam.value = currentTeam || '';
+            }
+            if(manualDate) {
+                manualDate.required = isManual;
+                if(isManual && !manualDate.value) manualDate.value = currentDate || '';
+            }
+            if(manualJam) {
+                manualJam.required = isManual;
+                if(isManual && !manualJam.value) manualJam.value = currentJam || '';
+            }
+
+            if(isManual) {
+                selectTimA.value = '__manual__';
+                if(tanggal) tanggal.value = manualDate?.value || currentDate || '';
+                if(jam) jam.value = manualJam?.value || currentJam || '';
+                if(info) info.innerHTML = '✏️ <b>Tim tanpa jadwal tetap</b> — isi nama tim, tanggal, dan jam sesuai konfirmasi WhatsApp.';
+                return;
             }
 
             if(selected) {
@@ -13196,21 +13214,40 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             }
         };
 
+        document.addEventListener('input', (e) => {
+            if(e.target?.id === 'sparring-tanggal-manual') {
+                const el = document.getElementById('sparring-tanggal');
+                if(el) el.value = e.target.value;
+            }
+            if(e.target?.id === 'sparring-jam-manual') {
+                const el = document.getElementById('sparring-jam');
+                if(el) el.value = e.target.value;
+            }
+        });
+
         window.simpanSparing = async (e) => {
             e.preventDefault();
             const editKey = document.getElementById('sparring-edit-key')?.value || '';
             const selectedValue = document.getElementById('sparring-tim-a')?.value || '';
             const selectedOption = document.querySelector(`#sparring-tim-a option[value="${CSS.escape(selectedValue)}"]`);
-            const tanggal = selectedOption?.dataset?.tanggal || document.getElementById('sparring-tanggal')?.value || '';
-            const jam = selectedOption?.dataset?.jam || document.getElementById('sparring-jam')?.value || '';
-            const timA = String(selectedOption?.textContent || '').split(' · ')[0].trim();
+            const isManual = selectedValue === '__manual__';
+            const manualTeam = document.getElementById('sparring-tim-a-manual')?.value.trim() || '';
+            const tanggal = isManual
+                ? (document.getElementById('sparring-tanggal-manual')?.value || '')
+                : (selectedOption?.dataset?.tanggal || document.getElementById('sparring-tanggal')?.value || '');
+            const jam = isManual
+                ? (document.getElementById('sparring-jam-manual')?.value || '')
+                : (selectedOption?.dataset?.jam || document.getElementById('sparring-jam')?.value || '');
+            const timA = isManual
+                ? manualTeam
+                : String(selectedOption?.textContent || '').split(' · ')[0].trim();
             const timB = document.getElementById('sparring-tim-b')?.value.trim() || '';
             const wa = document.getElementById('sparring-wa')?.value.trim() || '';
             const catatan = document.getElementById('sparring-catatan')?.value.trim() || '';
-            const bookingKeyA = selectedOption?.dataset?.source === 'Booking'
+            const bookingKeyA = !isManual && selectedOption?.dataset?.source === 'Booking'
                 ? (selectedOption?.dataset?.bookingKey || '')
                 : '';
-            if(!selectedValue || !tanggal || !jam || !timA) { alert('Pilih Tim 1 dari jadwal Member atau Booking terlebih dahulu.'); return; }
+            if(!selectedValue || !tanggal || !jam || !timA) { alert(isManual ? 'Isi nama tim, tanggal, dan jam untuk tim tanpa jadwal tetap.' : 'Pilih Tim 1 dari jadwal Member atau Booking terlebih dahulu.'); return; }
             if(timB && timA.toLowerCase() === timB.toLowerCase()) { alert('Tim A dan Tim B tidak boleh sama.'); return; }
 
             const duplicate = Object.entries(globalCache.sparring || {}).find(([key,item]) => {
@@ -13231,7 +13268,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             // booking yang dipakai untuk sparing juga bisa ikut dihapus.
             const relatedBookingKeys = bookingKeyA ? [bookingKeyA] : [];
             const data = {
-                tanggal, jam, timA, timB, wa,
+                tanggal, jam, timA, timB, wa, source: isManual ? 'Manual' : (selectedOption?.dataset?.source || ''),
                 status: timB ? 'matched' : 'pending',
                 catatan, timestamp: Date.now(),
                 ...(relatedBookingKeys.length ? { bookingKeys: relatedBookingKeys, bookingKey: bookingKeyA } : {})
@@ -13298,6 +13335,10 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             document.getElementById('sparring-edit-key').value = key;
             document.getElementById('sparring-tim-b').value = item.timB || '';
             document.getElementById('sparring-wa').value = item.wa || '';
+            const editManual = item.source === 'Manual';
+            document.getElementById('sparring-tim-a-manual').value = editManual ? (item.timA || '') : '';
+            document.getElementById('sparring-tanggal-manual').value = editManual ? (item.tanggal || '') : '';
+            document.getElementById('sparring-jam-manual').value = editManual ? (item.jam || '') : '';
             document.getElementById('sparring-catatan').value = item.catatan || '';
             document.getElementById('sparring-form-title').textContent = '✏️ Edit Catatan Sparing';
             document.getElementById('sparring-save-btn').textContent = 'Simpan Perubahan';
@@ -13312,6 +13353,9 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             document.getElementById('sparring-edit-key').value = '';
             document.getElementById('sparring-tanggal').value = '';
             document.getElementById('sparring-jam').value = '';
+            document.getElementById('sparring-tim-a-manual').value = '';
+            document.getElementById('sparring-tanggal-manual').value = '';
+            document.getElementById('sparring-jam-manual').value = '';
             document.getElementById('sparring-form-title').textContent = '➕ Catat Permintaan Sparing';
             document.getElementById('sparring-save-btn').textContent = 'Simpan Catatan';
             document.getElementById('sparring-cancel-edit').classList.add('hidden');
@@ -14188,6 +14232,8 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             if(document.getElementById('daily-total-cash')) document.getElementById('daily-total-cash').textContent = formatRupiahDaily(totalCashHarian);
             if(document.getElementById('daily-total-qris')) document.getElementById('daily-total-qris').textContent = formatRupiahDaily(totalQrisHarian);
             if(document.getElementById('daily-total-keluar')) document.getElementById('daily-total-keluar').textContent = formatRupiahDaily(totalKeluar);
+            if(document.getElementById('daily-sisa-cash-lapangan')) document.getElementById('daily-sisa-cash-lapangan').textContent = formatRupiahDaily(sisaCashLapangan);
+            if(document.getElementById('daily-sisa-cash-minuman')) document.getElementById('daily-sisa-cash-minuman').textContent = formatRupiahDaily(sisaCashMinuman);
             if(document.getElementById('daily-cash-seharusnya')) document.getElementById('daily-cash-seharusnya').textContent = formatRupiahDaily(totalSisaCash);
 
         }
@@ -15660,13 +15706,13 @@ window.downloadDailyRecapJPG = async function() {
     let navigationReady = false;
 
     function makeState(page, sub = null) {
-        return { [APP_STATE_KEY]: true, page: page || 'home', sub: sub || null };
+        return { [APP_STATE_KEY]: true, page: page || 'jadwal', sub: sub || null };
     }
 
     function currentState() {
         const visiblePage = Array.from(document.querySelectorAll('main > div'))
             .find(el => !el.classList.contains('hidden'));
-        const page = visiblePage ? visiblePage.id.replace(/^page-/, '') : 'home';
+        const page = visiblePage ? visiblePage.id.replace(/^page-/, '') : 'jadwal';
         if (page === 'daily-recap') {
             const sub = ['lapangan','minuman','pengeluaran','ringkasan'].find(id => {
                 const el = document.getElementById('sub-page-' + id);
@@ -15678,7 +15724,7 @@ window.downloadDailyRecapJPG = async function() {
     }
 
     function applyState(state) {
-        const safe = state && state[APP_STATE_KEY] ? state : makeState('home');
+        const safe = state && state[APP_STATE_KEY] ? state : makeState('jadwal');
         applyingHistoryState = true;
         try {
             if (safe.page === 'daily-recap') {
@@ -15689,7 +15735,7 @@ window.downloadDailyRecapJPG = async function() {
                     window.backToDailyMenu();
                 }
             } else {
-                window.showPage(safe.page || 'home');
+                window.showPage(safe.page || 'jadwal');
             }
         } finally {
             applyingHistoryState = false;
@@ -15726,12 +15772,12 @@ window.downloadDailyRecapJPG = async function() {
         };
     }
 
-    // Entry awal aplikasi = Beranda.
+    // Entry awal aplikasi = Jadwal Hari Ini.
     history.replaceState(makeState('jadwal'), '', location.href);
     navigationReady = true;
 
     // Tombol Back di dalam aplikasi.
-    // Semua tombol kembali langsung menuju Beranda, termasuk saat sedang
+    // Semua tombol kembali langsung menuju Jadwal Hari Ini, termasuk saat sedang
     // berada di submenu Daily Recap.
     window.navigateBack = function () {
         const state = currentState();
@@ -15740,17 +15786,17 @@ window.downloadDailyRecapJPG = async function() {
             // Dari RINCIAN Daily Recap, tombol Back langsung kembali ke Beranda.
             // Berlaku sama untuk Lapangan, Minuman, Pengeluaran, dan Ringkasan.
             if (state.page === 'daily-recap' && state.sub) {
-                if (typeof originalShowPage === 'function') originalShowPage('home');
-                else if (typeof window.showPage === 'function') window.showPage('home');
-                history.replaceState(makeState('home'), '', location.href);
+                if (typeof originalShowPage === 'function') originalShowPage('jadwal');
+                else if (typeof window.showPage === 'function') window.showPage('jadwal');
+                history.replaceState(makeState('jadwal'), '', location.href);
                 return false;
             }
 
-            // Jika sudah berada di menu Daily Recap utama atau halaman utama lain,
-            // tombol kembali juga menuju Beranda.
-            if (typeof originalShowPage === 'function') originalShowPage('home');
-            else if (typeof window.showPage === 'function') window.showPage('home');
-            history.replaceState(makeState('home'), '', location.href);
+            // Jika sudah berada di menu Daily Recap utama atau halaman lain,
+            // tombol kembali juga menuju Jadwal Hari Ini.
+            if (typeof originalShowPage === 'function') originalShowPage('jadwal');
+            else if (typeof window.showPage === 'function') window.showPage('jadwal');
+            history.replaceState(makeState('jadwal'), '', location.href);
         } finally {
             applyingHistoryState = false;
         }
@@ -15758,23 +15804,23 @@ window.downloadDailyRecapJPG = async function() {
     };
 
     // Back bawaan HP/browser mengikuti hierarki navigasi aplikasi:
-    // Rincian Daily Recap -> menu Daily Recap -> Beranda.
+    // Rincian Daily Recap -> menu Daily Recap -> Jadwal Hari Ini.
     window.addEventListener('popstate', function (event) {
         const state = event.state;
         applyingHistoryState = true;
         try {
             if (state && state[APP_STATE_KEY]) {
                 if (state.page === 'daily-recap' && state.sub) {
-                    if (typeof originalShowPage === 'function') originalShowPage('home');
-                    else if (typeof window.showPage === 'function') window.showPage('home');
-                    history.replaceState(makeState('home'), '', location.href);
+                    if (typeof originalShowPage === 'function') originalShowPage('jadwal');
+                    else if (typeof window.showPage === 'function') window.showPage('jadwal');
+                    history.replaceState(makeState('jadwal'), '', location.href);
                 } else {
                     applyState(state);
                 }
             } else {
-                if (typeof originalShowPage === 'function') originalShowPage('home');
-                else if (typeof window.showPage === 'function') window.showPage('home');
-                history.replaceState(makeState('home'), '', location.href);
+                if (typeof originalShowPage === 'function') originalShowPage('jadwal');
+                else if (typeof window.showPage === 'function') window.showPage('jadwal');
+                history.replaceState(makeState('jadwal'), '', location.href);
             }
         } finally {
             applyingHistoryState = false;
@@ -17463,15 +17509,26 @@ window.downloadDailyRecapJPG = async function() {
       try { if(typeof el.showPicker==='function') el.showPicker(); else { el.focus(); el.click(); } } catch(_) { el.focus(); el.click(); }
     });
   }
+  function refreshAll(){
+    updateCard('in-tgl','in-tgl-display','Pilih tanggal');
+    updateCard('in-tim','in-tim-display','Pilih tim yang main');
+    updateCard('in-jam-main','in-jam-main-display','Jam main otomatis');
+    updateCard('in-tambahan-waktu','in-tambahan-waktu-display','Tidak ada perubahan');
+    updateCard('in-jenis-pembayaran','in-jenis-pembayaran-display','Pilih jenis pembayaran');
+  }
   function init(){
     bind('in-tgl','in-tgl-display','Pilih tanggal');
     bind('in-tim','in-tim-display','Pilih tim yang main');
     bind('in-jam-main','in-jam-main-display','Jam main otomatis');
     bind('in-tambahan-waktu','in-tambahan-waktu-display','Tidak ada perubahan');
     bind('in-jenis-pembayaran','in-jenis-pembayaran-display','Pilih jenis pembayaran');
+    refreshAll();
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
-  window.updateUangMasukCards = init;
+  // Dipanggil setelah JavaScript mengubah value secara programatik.
+  // Setting .value tidak memicu event change/input, jadi kartu preview
+  // harus disinkronkan secara eksplisit.
+  window.updateUangMasukCards = refreshAll;
 })();
 </script>
 
@@ -17577,6 +17634,55 @@ window.downloadDailyRecapJPG = async function() {
   box-shadow: inset 0 1px 0 rgba(255,255,255,.55) !important;
   backdrop-filter: blur(10px) !important;
   -webkit-backdrop-filter: blur(10px) !important;
+}
+</style>
+
+<style id="fix-admin-jaga-mobile-viewport-final">
+@media (max-width: 640px) {
+  body {
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+  main {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+  #page-admin-jaga {
+    position: relative !important;
+    left: 0 !important;
+    right: auto !important;
+    transform: none !important;
+    width: calc(100vw - 32px) !important;
+    max-width: calc(100vw - 32px) !important;
+    min-width: 0 !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    box-sizing: border-box !important;
+  }
+  #page-admin-jaga > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    box-sizing: border-box !important;
+  }
+  #page-admin-jaga .admin-calendar,
+  #page-admin-jaga .admin-roster-toolbar,
+  #page-admin-jaga .admin-roster-legend {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    box-sizing: border-box !important;
+  }
 }
 </style>
 </body>
@@ -23231,6 +23337,229 @@ body.daily-sub-modal-v6-open > main #sub-page-ringkasan{
     min-height: 50px !important;
     padding: 9px 10px !important;
     border-radius: 12px !important;
+  }
+}
+</style>
+
+<style id="final-uang-keluar-desktop-no-outer-glass-v12">
+/* =========================================================
+   FINAL UANG KELUAR — DESKTOP TANPA KACA BESAR
+   Outer frame halaman dibuat transparan.
+   Yang tetap terlihat hanya kartu/form di dalamnya.
+   Mobile dipertahankan seperti kondisi yang sudah pas.
+   Visual only — tidak mengubah fungsi / JS / Firebase.
+   ========================================================= */
+
+@media (min-width: 641px) {
+  #page-keluar.sub-menu-modern {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    isolation: auto !important;
+  }
+
+  #page-keluar.sub-menu-modern::before,
+  #page-keluar.sub-menu-modern::after {
+    display: none !important;
+    content: none !important;
+    background: none !important;
+  }
+
+  /* Jangan ikut membuat seluruh form menjadi kaca besar. */
+  #page-keluar > form {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+
+  /* Kartu isi tetap ada, tetapi bukan frame besar pembungkus halaman. */
+  #page-keluar > form > .p-3.rounded-xl,
+  #page-keluar > form > .p-3.rounded-xl.border {
+    background: rgba(255,255,255,.16) !important;
+    border: 1px solid rgba(255,255,255,.52) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.60), 0 7px 20px rgba(190,24,93,.08) !important;
+    backdrop-filter: blur(14px) saturate(130%) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(130%) !important;
+  }
+}
+</style>
+
+<style id="FINAL_FIX_UANG_KELUAR_DESKTOP_NO_BIG_GLASS_V13">
+/* FINAL FIX: UANG KELUAR DESKTOP TANPA KACA BESAR
+   Hanya berlaku desktop. Tampilan HP sengaja tidak disentuh.
+   Yang dihilangkan adalah frame/panel besar pembungkus halaman dan form.
+   Kartu/input kecil di dalam tetap mengikuti desainnya.
+*/
+@media (min-width: 768px) {
+  /* Frame utama halaman */
+  #page-keluar.sub-menu-modern,
+  #page-keluar.sub-menu-modern.glass-panel {
+    background: transparent !important;
+    background-image: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+
+  #page-keluar.sub-menu-modern::before,
+  #page-keluar.sub-menu-modern::after,
+  #page-keluar.sub-menu-modern.glass-panel::before,
+  #page-keluar.sub-menu-modern.glass-panel::after {
+    content: none !important;
+    display: none !important;
+    background: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Form pembungkus juga harus transparan */
+  #page-keluar > form,
+  #page-keluar > form.glass-panel,
+  #page-keluar > form > div:first-child {
+    background: transparent !important;
+    background-image: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Kartu besar langsung di bawah form: jangan jadikan kaca besar.
+     Input/kartu kecil di dalamnya tetap dibiarkan oleh CSS lain. */
+  #page-keluar > form > .p-3.rounded-xl,
+  #page-keluar > form > .p-3.rounded-xl.border,
+  #page-keluar > form > .p-3.rounded-xl.border.rounded-xl {
+    background: transparent !important;
+    background-image: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-radius: 0 !important;
+  }
+}
+</style>
+
+<style id="final-desktop-single-background-fix-v2">
+/* =========================================================
+   FINAL BACKGROUND FIX V2
+   HP     : latar.png
+   DESKTOP: latardekstop.png
+   Satu background penuh viewport, tanpa pengulangan.
+   ========================================================= */
+
+/* Default HP — pertahankan latar HP */
+html, body {
+  background-image: url('latar.png') !important;
+  background-repeat: no-repeat !important;
+  background-position: center center !important;
+  background-size: cover !important;
+  background-attachment: fixed !important;
+}
+
+/* Desktop — SATU background pada html. Body transparan agar tidak ada
+   lapisan/gambar kedua yang menyebabkan efek dua gambar atau putih. */
+@media (min-width: 768px) {
+  html {
+    min-height: 100% !important;
+    background-color: #000 !important;
+    background-image: url('latardekstop.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    background-size: cover !important;
+    background-attachment: fixed !important;
+  }
+
+  body {
+    min-height: 100vh !important;
+    background: transparent !important;
+    background-image: none !important;
+    background-repeat: no-repeat !important;
+    background-size: auto !important;
+    background-attachment: initial !important;
+  }
+
+  /* Matikan pseudo-background lama agar tidak membuat lapisan kedua. */
+  body::before,
+  body::after {
+    content: none !important;
+    display: none !important;
+    background-image: none !important;
+  }
+}
+</style>
+
+<style id="kas-hari-ini-glass-all-cards-v2">
+/* KAS HARI INI — semua kartu nominal disamakan dengan efek kaca Sisa Cash Minuman */
+#daily-cash-dashboard > section > .grid > div {
+    position: relative !important;
+    background: linear-gradient(135deg, rgba(255,255,255,.42), rgba(255,255,255,.18)) !important;
+    border: 1px solid rgba(255,255,255,.62) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.78), 0 8px 22px rgba(15,23,42,.08) !important;
+    backdrop-filter: blur(16px) saturate(135%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(135%) !important;
+    border-radius: 18px !important;
+    overflow: hidden !important;
+}
+#daily-cash-dashboard > section > .grid > div::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    pointer-events: none !important;
+    background: linear-gradient(135deg, rgba(255,255,255,.22), rgba(255,255,255,0) 55%) !important;
+    opacity: 1 !important;
+}
+#daily-cash-dashboard > section > .grid > div > * {
+    position: relative !important;
+    z-index: 1 !important;
+}
+</style>
+<style id="fix-admin-jaga-mobile-centered-final">
+@media (max-width: 640px) {
+  html, body { width:100%; max-width:100%; overflow-x:hidden !important; }
+  #page-admin-jaga {
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    box-sizing:border-box !important;
+    overflow-x:hidden !important;
+  }
+  #page-admin-jaga > * {
+    max-width:100% !important;
+    box-sizing:border-box !important;
+  }
+  #page-admin-jaga .admin-roster-toolbar,
+  #page-admin-jaga .admin-calendar,
+  #page-admin-jaga .admin-roster-legend {
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    box-sizing:border-box !important;
+  }
+  #page-admin-jaga .admin-calendar {
+    overflow:hidden !important;
+  }
+  #page-admin-jaga .admin-day,
+  #page-admin-jaga .admin-cal-head,
+  #page-admin-jaga .admin-shift,
+  #page-admin-jaga .admin-edit-btn {
+    min-width:0 !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
   }
 }
 </style>
