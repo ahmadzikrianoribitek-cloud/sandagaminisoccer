@@ -11843,11 +11843,15 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             if (typeof renderRekapHarian === 'function') renderRekapHarian();
         });
 
-        onValue(ref(db, 'sparring'), (snapshot) => {
+        onValue(ref(db, 'sparring'), async (snapshot) => {
             globalCache.sparring = snapshot.val() || {};
+            // Reconcile data manual yang mungkin tersimpan sebelum booking
+            // berhasil dibuat. Setelah sinkron, semua tampilan dirender ulang.
+            try { await syncManualSparingToBooking(); } catch(error) { console.error('Sync Sparing -> Booking:', error); }
             updateSparingBookingOptions();
             renderSparing();
             renderGridJadwal();
+            renderTodaySchedule();
             renderTabelBooking();
         });
 
@@ -13225,6 +13229,81 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             }
         });
 
+        // =========================================================
+        // SINKRONISASI WAJIB: SPARING MANUAL -> BOOKING
+        // =========================================================
+        // Data Sparing manual harus selalu mempunyai booking nyata. Fungsi ini
+        // sengaja dibuat terpisah dari tombol Simpan agar jika listener Firebase
+        // menerima data sparing lebih dulu, booking tetap otomatis dibuat.
+        window.syncManualSparingToBooking = async () => {
+            const sparrings = globalCache.sparring || {};
+            const bookings = globalCache.booking || {};
+            let changed = false;
+
+            for (const [sparringKey, s] of Object.entries(sparrings)) {
+                if(!s || s.source !== 'Manual' || !s.tanggal || !s.jam || !s.timA) continue;
+
+                const teams = [String(s.timA).trim(), String(s.timB || '').trim()].filter(Boolean);
+                const bookingKeys = Array.isArray(s.bookingKeys) ? [...s.bookingKeys.filter(Boolean)] : [];
+
+                for(const team of teams) {
+                    const teamLower = team.toLowerCase();
+                    let foundKey = bookingKeys.find(k => {
+                        const b = bookings[k];
+                        if(!b) return false;
+                        return String(b.nama || '').trim().toLowerCase() === teamLower &&
+                            String(b.tgl || '').split('T')[0] === String(s.tanggal) &&
+                            String(b.tgl || '').split('T')[1]?.substring(0,5) === String(s.jam).substring(0,5);
+                    });
+
+                    if(!foundKey) {
+                        const existing = Object.entries(bookings).find(([k,b]) => {
+                            if(!b || !b.tgl || String(b.sparringKey || '') !== String(sparringKey)) return false;
+                            return String(b.nama || '').trim().toLowerCase() === teamLower &&
+                                String(b.tgl).split('T')[0] === String(s.tanggal) &&
+                                String(b.tgl).split('T')[1]?.substring(0,5) === String(s.jam).substring(0,5);
+                        });
+                        if(existing) foundKey = existing[0];
+                    }
+
+                    if(!foundKey) {
+                        const record = {
+                            status: 'Non Member',
+                            nama: team,
+                            wa: teamLower === String(s.timA).trim().toLowerCase() ? (s.wa || '') : '',
+                            tgl: `${s.tanggal}T${String(s.jam).substring(0,5)}`,
+                            dp: 0,
+                            tglDp: '',
+                            metode: 'Cash',
+                            sparringSource: true,
+                            sparringKey: sparringKey,
+                            sparringManual: true,
+                            timestamp: Date.now()
+                        };
+                        const pushed = await push(ref(db, 'booking'), record);
+                        foundKey = pushed.key || '';
+                        if(foundKey) {
+                            globalCache.booking = globalCache.booking || {};
+                            globalCache.booking[foundKey] = record;
+                        }
+                        changed = true;
+                    }
+
+                    if(foundKey && !bookingKeys.includes(foundKey)) bookingKeys.push(foundKey);
+                }
+
+                const newKeys = [...new Set(bookingKeys)];
+                if(JSON.stringify(newKeys) !== JSON.stringify(Array.isArray(s.bookingKeys) ? s.bookingKeys : [])) {
+                    const patch = { bookingKeys: newKeys, bookingKey: newKeys[0] || '' };
+                    await update(ref(db, 'sparring/' + sparringKey), patch);
+                    globalCache.sparring[sparringKey] = { ...s, ...patch };
+                    changed = true;
+                }
+            }
+
+            return changed;
+        };
+
         window.simpanSparing = async (e) => {
             e.preventDefault();
             const editKey = document.getElementById('sparring-edit-key')?.value || '';
@@ -13245,10 +13324,16 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             const wa = document.getElementById('sparring-wa')?.value.trim() || '';
             const catatan = document.getElementById('sparring-catatan')?.value.trim() || '';
             const bookingKeyA = !isManual && selectedOption?.dataset?.source === 'Booking'
-                ? (selectedOption?.dataset?.bookingKey || '')
-                : '';
-            if(!selectedValue || !tanggal || !jam || !timA) { alert(isManual ? 'Isi nama tim, tanggal, dan jam untuk tim tanpa jadwal tetap.' : 'Pilih Tim 1 dari jadwal Member atau Booking terlebih dahulu.'); return; }
-            if(timB && timA.toLowerCase() === timB.toLowerCase()) { alert('Tim A dan Tim B tidak boleh sama.'); return; }
+                ? (selectedOption?.dataset?.bookingKey || '') : '';
+
+            if(!selectedValue || !tanggal || !jam || !timA) {
+                alert(isManual ? 'Isi nama tim, tanggal, dan jam untuk tim tanpa jadwal tetap.' : 'Pilih Tim 1 dari jadwal Member atau Booking terlebih dahulu.');
+                return;
+            }
+            if(timB && timA.toLowerCase() === timB.toLowerCase()) {
+                alert('Tim A dan Tim B tidak boleh sama.');
+                return;
+            }
 
             const duplicate = Object.entries(globalCache.sparring || {}).find(([key,item]) => {
                 if(editKey && key === editKey) return false;
@@ -13264,22 +13349,31 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 return;
             }
 
-            // Simpan relasi booking sumber agar saat sparing dihapus,
-            // booking yang dipakai untuk sparing juga bisa ikut dihapus.
-            const relatedBookingKeys = bookingKeyA ? [bookingKeyA] : [];
-            const data = {
-                tanggal, jam, timA, timB, wa, source: isManual ? 'Manual' : (selectedOption?.dataset?.source || ''),
-                status: timB ? 'matched' : 'pending',
-                catatan, timestamp: Date.now(),
-                ...(relatedBookingKeys.length ? { bookingKeys: relatedBookingKeys, bookingKey: bookingKeyA } : {})
-            };
             try {
+                /*
+                 * PENTING:
+                 * Untuk Tim Tanpa Jadwal Tetap, Sparing harus menjadi booking nyata.
+                 * Booking dibuat setelah key Sparing tersedia agar relasinya tidak kosong.
+                 * Dengan begitu Firebase listener 'booking' langsung memasukkannya ke
+                 * Booking Schedule, Booking History, dan Jadwal Hari Ini.
+                 */
+                const existingSparing = editKey ? (globalCache.sparring?.[editKey] || null) : null;
+                let sparringKey = editKey;
+                let manualBookingKey = String(existingSparing?.manualBookingKey || '').trim();
+                let createdBookingKeys = [];
+
+                const sparringDataBase = {
+                    tanggal, jam, timA, timB, wa,
+                    source: isManual ? 'Manual' : (selectedOption?.dataset?.source || ''),
+                    status: timB ? 'matched' : 'pending',
+                    catatan,
+                    timestamp: Date.now()
+                };
+
+                // Simpan / update Sparing terlebih dahulu.
                 if(editKey) {
-                    await update(ref(db, 'sparring/' + editKey), data);
+                    await update(ref(db, 'sparring/' + editKey), sparringDataBase);
                 } else if(timB) {
-                    // Jika salah satu tim sebelumnya sudah tercatat "mencari lawan",
-                    // gunakan record yang sama agar statusnya benar-benar sinkron dan
-                    // tidak muncul dua catatan berbeda untuk pertandingan yang sama.
                     const pending = Object.entries(globalCache.sparring || {}).find(([key,item]) => {
                         if(!item || item.status === 'matched' || item.tanggal !== tanggal || item.jam !== jam) return false;
                         const existingTeam = String(item.timA || '').trim().toLowerCase();
@@ -13287,28 +13381,19 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                     });
                     if(pending) {
                         const [pendingKey, pendingItem] = pending;
+                        sparringKey = pendingKey;
                         const existingTeam = String(pendingItem.timA || '').trim();
                         const otherTeam = existingTeam.toLowerCase() === timB.toLowerCase() ? timA : timB;
-                        const pendingBookingKeys = Array.isArray(pendingItem.bookingKeys)
-                            ? pendingItem.bookingKeys.filter(Boolean)
-                            : (pendingItem.bookingKey ? [pendingItem.bookingKey] : []);
-                        const mergedBookingKeys = [...new Set([
-                            ...pendingBookingKeys,
-                            ...(bookingKeyA ? [bookingKeyA] : [])
-                        ])];
-
                         await update(ref(db, 'sparring/' + pendingKey), {
-                            tanggal, jam, timA: existingTeam, timB: otherTeam,
+                            ...sparringDataBase,
+                            timA: existingTeam,
+                            timB: otherTeam,
                             wa: wa || pendingItem.wa || '',
-                            status:'matched',
-                            catatan: catatan || pendingItem.catatan || '',
-                            timestamp: Date.now(),
-                            ...(mergedBookingKeys.length
-                                ? { bookingKeys: mergedBookingKeys, bookingKey: mergedBookingKeys[0] }
-                                : {})
+                            catatan: catatan || pendingItem.catatan || ''
                         });
                     } else {
-                        await push(ref(db, 'sparring'), data);
+                        const pushed = await push(ref(db, 'sparring'), sparringDataBase);
+                        sparringKey = pushed.key || '';
                     }
                 } else {
                     const duplicateRequest = Object.entries(globalCache.sparring || {}).find(([key,item]) => {
@@ -13319,13 +13404,136 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                         alert(`${timA} sudah tercatat sedang mencari lawan pada ${tanggal} ${jam}.`);
                         return;
                     }
-                    await push(ref(db, 'sparring'), data);
+                    const pushed = await push(ref(db, 'sparring'), sparringDataBase);
+                    sparringKey = pushed.key || '';
                 }
+
+                // Jika Tim A diketik manual, buat/update booking nyata.
+                if(isManual) {
+                    const manualBookingData = {
+                        status: 'Non Member',
+                        nama: timA,
+                        wa,
+                        tgl: `${tanggal}T${jam}`,
+                        dp: 0,
+                        tglDp: '',
+                        metode: 'Cash',
+                        sparringSource: true,
+                        sparringKey: sparringKey || '',
+                        sparringManual: true,
+                        timestamp: Date.now()
+                    };
+
+                    if(manualBookingKey && globalCache.booking?.[manualBookingKey]) {
+                        await update(ref(db, 'booking/' + manualBookingKey), manualBookingData);
+                    } else {
+                        const existingManualBooking = Object.entries(globalCache.booking || {}).find(([key,item]) => {
+                            if(!item || item.sparringSource !== true) return false;
+                            const itemDate = String(item.tgl || '').split('T')[0];
+                            const itemJam = String(item.tgl || '').split('T')[1]?.substring(0,5) || '';
+                            return itemDate === tanggal && itemJam === jam &&
+                                String(item.nama || '').trim().toLowerCase() === timA.toLowerCase();
+                        });
+                        if(existingManualBooking) {
+                            manualBookingKey = existingManualBooking[0];
+                            await update(ref(db, 'booking/' + manualBookingKey), manualBookingData);
+                        } else {
+                            const pushedBooking = await push(ref(db, 'booking'), manualBookingData);
+                            manualBookingKey = pushedBooking.key || '';
+                            if(manualBookingKey) {
+                                globalCache.booking = globalCache.booking || {};
+                                globalCache.booking[manualBookingKey] = { ...manualBookingData };
+                            }
+                        }
+                    }
+                    if(manualBookingKey) {
+                        globalCache.booking = globalCache.booking || {};
+                        globalCache.booking[manualBookingKey] = {
+                            ...(globalCache.booking[manualBookingKey] || {}),
+                            ...manualBookingData
+                        };
+                    }
+                    createdBookingKeys.push(manualBookingKey);
+                }
+
+                // Jika Tim B diketik manual dan belum mempunyai booking pada slot ini,
+                // buat juga booking-nya agar kedua tim sparing terlihat di jadwal.
+                if(isManual && timB) {
+                    const existingOpponentBooking = Object.entries(globalCache.booking || {}).find(([key,item]) => {
+                        if(!item || !item.nama || !item.tgl) return false;
+                        const itemDate = String(item.tgl).split('T')[0];
+                        const itemJam = String(item.tgl).split('T')[1]?.substring(0,5) || '';
+                        return itemDate === tanggal && itemJam === jam &&
+                            String(item.nama).trim().toLowerCase() === timB.toLowerCase();
+                    });
+                    if(existingOpponentBooking) {
+                        createdBookingKeys.push(existingOpponentBooking[0]);
+                    } else {
+                        const opponentBookingData = {
+                            status: 'Non Member',
+                            nama: timB,
+                            wa: '',
+                            tgl: `${tanggal}T${jam}`,
+                            dp: 0,
+                            tglDp: '',
+                            metode: 'Cash',
+                            sparringSource: true,
+                            sparringKey: sparringKey || '',
+                            sparringOpponent: true,
+                            timestamp: Date.now()
+                        };
+                        const pushedOpponent = await push(ref(db, 'booking'), opponentBookingData);
+                        const opponentBookingKey = pushedOpponent.key || '';
+                        if(opponentBookingKey) {
+                            globalCache.booking = globalCache.booking || {};
+                            globalCache.booking[opponentBookingKey] = { ...opponentBookingData };
+                        }
+                        createdBookingKeys.push(opponentBookingKey);
+                    }
+                }
+
+                // Simpan relasi booking ke Sparing.
+                const existingRelated = Array.isArray(existingSparing?.bookingKeys)
+                    ? existingSparing.bookingKeys.filter(Boolean)
+                    : (existingSparing?.bookingKey ? [existingSparing.bookingKey] : []);
+                const allRelatedBookingKeys = [...new Set([
+                    ...existingRelated,
+                    ...(bookingKeyA ? [bookingKeyA] : []),
+                    ...createdBookingKeys.filter(Boolean)
+                ])];
+
+                if(sparringKey) {
+                    const finalSparingData = {
+                        ...sparringDataBase,
+                        ...(allRelatedBookingKeys.length ? {
+                            bookingKeys: allRelatedBookingKeys,
+                            bookingKey: allRelatedBookingKeys[0]
+                        } : {}),
+                        ...(manualBookingKey ? { manualBookingKey } : {})
+                    };
+                    await update(ref(db, 'sparring/' + sparringKey), finalSparingData);
+                    globalCache.sparring = globalCache.sparring || {};
+                    globalCache.sparring[sparringKey] = { ...(globalCache.sparring[sparringKey] || {}), ...finalSparingData };
+                }
+
+                if(createdBookingKeys.length) {
+                    globalCache.booking = globalCache.booking || {};
+                    createdBookingKeys.forEach(k => {
+                        if(k && globalCache.booking[k]) globalCache.booking[k].sparringKey = sparringKey || globalCache.booking[k].sparringKey || '';
+                    });
+                }
+
                 batalEditSparing();
-                showSuccessPopup(timB ? 'Pasangan sparring berhasil disimpan dan disinkronkan.' : 'Permintaan mencari lawan berhasil disimpan.');
+                // Listener Firebase biasanya akan merender ulang. Render manual juga
+                // supaya data langsung terlihat tanpa menunggu round-trip listener.
+                try { await syncManualSparingToBooking(); } catch(syncError) { console.error('Sync Sparing -> Booking:', syncError); }
+                if(typeof renderAll === 'function') renderAll();
+                if(typeof updateSparingBookingOptions === 'function') updateSparingBookingOptions();
+                if(typeof renderSparing === 'function') renderSparing();
+                showSuccessPopup(timB ? 'Pasangan sparing berhasil disimpan dan masuk ke Jadwal/Booking.' : 'Permintaan sparing berhasil disimpan dan masuk ke Jadwal/Booking.');
             } catch(error) {
                 console.error(error);
-                alert('Gagal menyimpan data sparring: ' + error.message);
+                alert('Gagal menyimpan data sparing/booking: ' + error.message);
             }
         };
 
@@ -13373,6 +13581,9 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                     ? sparringItem.bookingKeys.filter(Boolean)
                     : (sparringItem.bookingKey ? [sparringItem.bookingKey] : [])
             );
+            if(sparringItem.manualBookingKey) {
+                bookingKeys.add(String(sparringItem.manualBookingKey));
+            }
 
             // Data sparring lama mungkin belum mempunyai bookingKey.
             // Untuk data lama, cari booking berdasarkan nama tim + tanggal + jam.
@@ -13445,10 +13656,18 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             if(!list) return;
             const search = (document.getElementById('sparring-filter-search')?.value || '').trim().toLowerCase();
             const statusFilter = document.getElementById('sparring-filter-status')?.value || 'all';
-            const entries = Object.entries(globalCache.sparring || {}).sort((a,b)=>{
-                const x=a[1]||{}, y=b[1]||{};
-                return String(y.tanggal||'').localeCompare(String(x.tanggal||'')) || String(y.jam||'').localeCompare(String(x.jam||''));
-            });
+            const today = getLocalDateString();
+
+            // Tanggal yang sudah lewat tidak ditampilkan lagi di menu Sparing.
+            // Hari ini dan tanggal mendatang tetap tampil, lalu diurutkan terdekat dulu.
+            const entries = Object.entries(globalCache.sparring || {})
+                .filter(([key,item]) => String(item?.tanggal || '') >= today)
+                .sort((a,b)=>{
+                    const x=a[1]||{}, y=b[1]||{};
+                    return String(x.tanggal||'').localeCompare(String(y.tanggal||'')) ||
+                           String(x.jam||'').localeCompare(String(y.jam||'')) ||
+                           String(x.timA||'').localeCompare(String(y.timA||''),'id');
+                });
             const pendingCount = entries.filter(([k,x])=>x?.status !== 'matched').length;
             const matchedCount = entries.filter(([k,x])=>x?.status === 'matched').length;
             if(pendingEl) pendingEl.textContent = pendingCount;
@@ -13881,7 +14100,23 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             tbodySelesai.innerHTML = "";
             let today = getLocalDateString();
 
-            Object.entries(globalCache.booking).forEach(([key, item]) => {
+            // Urutkan Booking History berdasarkan tanggal main + jam secara kronologis.
+            // Tanggal terdekat tampil lebih dulu; untuk tanggal yang sama, jam lebih awal lebih dulu.
+            const bookingEntries = Object.entries(globalCache.booking || {}).sort(([keyA, a], [keyB, b]) => {
+                const dateA = String(a?.tgl || '').replace('T', ' ');
+                const dateB = String(b?.tgl || '').replace('T', ' ');
+                const timeA = dateA ? new Date(dateA).getTime() : Number.MAX_SAFE_INTEGER;
+                const timeB = dateB ? new Date(dateB).getTime() : Number.MAX_SAFE_INTEGER;
+                if(Number.isFinite(timeA) && Number.isFinite(timeB) && timeA !== timeB) return timeA - timeB;
+                if(dateA !== dateB) return dateA.localeCompare(dateB);
+                return String(keyA).localeCompare(String(keyB));
+            });
+
+            const rowsDp = [];
+            const rowsNoDp = [];
+            const rowsSelesai = [];
+
+            bookingEntries.forEach(([key, item]) => {
                 let tanggalBooking = item.tgl ? item.tgl.split('T')[0] : "";
                 let dpVal = Number(item.dp || 0);
                 let row = `<div class="booking-history-card">
@@ -13914,13 +14149,24 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                  </div>`;
 // Booking yang tanggal mainnya sudah lewat selalu masuk bagian selesai.
                 if(tanggalBooking && tanggalBooking < today) {
-                    tbodySelesai.innerHTML += row;
+                    rowsSelesai.push({ tanggal: tanggalBooking, jam: item.tgl || '', row });
                 } else if(dpVal > 0) {
-                    tbodyDp.innerHTML += row;
+                    rowsDp.push({ tanggal: tanggalBooking, jam: item.tgl || '', row });
                 } else {
-                    tbodyNoDp.innerHTML += row;
+                    rowsNoDp.push({ tanggal: tanggalBooking, jam: item.tgl || '', row });
                 }
             });
+
+            // Masing-masing bagian tetap kronologis setelah pembagian status.
+            const sortRows = (a, b) => String(a.jam || a.tanggal || '').localeCompare(String(b.jam || b.tanggal || ''));
+            rowsDp.sort(sortRows);
+            rowsNoDp.sort(sortRows);
+            // Booking selesai: yang terbaru dari yang sudah lewat tampil paling atas.
+            rowsSelesai.sort((a, b) => String(b.jam || b.tanggal || '').localeCompare(String(a.jam || a.tanggal || '')));
+
+            tbodyDp.innerHTML = rowsDp.map(x => x.row).join('');
+            tbodyNoDp.innerHTML = rowsNoDp.map(x => x.row).join('');
+            tbodySelesai.innerHTML = rowsSelesai.map(x => x.row).join('');
         }
 
         function formatRupiahDaily(nominal){
