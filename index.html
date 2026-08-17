@@ -96,41 +96,78 @@
             background-color: #eef6ff;
         }
 
-        body { 
-            background-image: url('latar.png'); 
-            background-size: cover; 
-            background-attachment: fixed !important; 
-            background-position: center center;
-            background-repeat: no-repeat;
-            background-clip: border-box;
+        /* Latar global dibuat sebagai layer FIXED terpisah.
+           Ini lebih stabil di HP daripada background-attachment: fixed pada body,
+           sehingga saat isi menu panjang di-scroll, gambar latar tetap diam. */
+        body {
+            background: transparent !important;
+            background-image: none !important;
             min-height: 100vh;
             min-height: 100dvh;
             overscroll-behavior-y: auto;
+            isolation: isolate;
         }
 
-        /* Semua halaman/sub-menu memakai latar yang sama dengan halaman awal.
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            background-image: url('latar.png');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            pointer-events: none;
+            z-index: -1;
+            transform: translateZ(0);
+            will-change: transform;
+        }
+
+        /* Semua halaman/sub-menu memakai layer latar yang sama.
            HP: latar.png | Desktop: latardesktop.png */
         body.sub-menu-active {
-            background-image: url('latar.png') !important;
-            background-size: cover !important;
-            background-attachment: fixed !important;
-            background-position: center center !important;
-            background-repeat: no-repeat !important;
+            background: transparent !important;
+            background-image: none !important;
         }
 
         @media (min-width: 768px) {
-            body,
-            body.sub-menu-active {
-                background-image: url('latardesktop.png') !important;
-                background-size: cover !important;
-                background-attachment: fixed !important;
-                background-position: center center !important;
-                background-repeat: no-repeat !important;
+            body::before {
+                background-image: url('latardesktop.png');
             }
         }
 
-        /* Beri ruang napas pada seluruh isi sub-menu di layar HP. */
+        /* Pastikan seluruh isi menu berada di atas layer latar fixed. */
+        body > * {
+            position: relative;
+            z-index: 0;
+        }
+
+        /* Elemen fixed/modal tetap boleh memakai z-index miliknya sendiri. */
+        body > .sticky-back-btn,
+        body > [id*="modal"],
+        body > [id*="dialog"],
+        body > [class*="modal"] {
+            z-index: 1000;
+        }
+
+        /* Di HP layer latar tetap menempel ke viewport, bukan ke panjang halaman. */
         @media (max-width: 767px) {
+            body::before {
+                position: fixed !important;
+                top: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                width: 100vw !important;
+                height: 100dvh !important;
+                min-height: 100vh !important;
+                background-attachment: scroll !important;
+                transform: translate3d(0,0,0) !important;
+            }
+
+            /* Beri ruang napas pada seluruh isi sub-menu di layar HP. */
             .sub-menu-modern {
                 width: calc(100% - 24px) !important;
                 max-width: calc(100% - 24px) !important;
@@ -486,7 +523,7 @@
         .app-success-overlay {
             position: fixed;
             inset: 0;
-            z-index: 9999;
+            z-index: 2147483647 !important;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -6999,7 +7036,7 @@ textarea.glass-input{
 }
 .fixed.inset-0.z-\[9999\],
 .fixed.inset-0.z-\[120\],
-.app-success-overlay{background:rgba(8,20,45,.34) !important;backdrop-filter:blur(12px) !important;-webkit-backdrop-filter:blur(12px) !important;}
+.app-success-overlay{z-index:2147483647 !important;background:rgba(8,20,45,.34) !important;backdrop-filter:blur(12px) !important;-webkit-backdrop-filter:blur(12px) !important;}
 
 /* Back button */
 body > .sticky-back-btn,
@@ -7503,8 +7540,10 @@ body > .sticky-back-btn,
     card2.style.setProperty('display', sparing ? 'flex' : 'none', 'important');
     if(!sparing){
       const s2=document.getElementById('in-status-2');
+      const n2=document.getElementById('in-tim-2-nama');
       const j2=document.getElementById('in-jumlah-2');
       const m2=document.getElementById('in-metode-2');
+      if(n2) n2.value='';
       if(s2) s2.value='Non-Member';
       if(j2) j2.value='';
       if(m2) m2.value='Belum Bayar';
@@ -7940,15 +7979,72 @@ body > .sticky-back-btn,
 .daily-recap-date-actions {
     display: flex !important;
     align-items: center !important;
-    justify-content: flex-end !important;
+    justify-content: center !important;
     gap: 12px !important;
 }
 
 .daily-recap-date-picker {
     display: flex !important;
     align-items: center !important;
-    justify-content: flex-end !important;
-    gap: 8px !important;
+    justify-content: center !important;
+    gap: 0 !important;
+}
+
+/* Kontrol tanggal Daily Recap:
+   - tanggal berada tepat di tengah card
+   - label "Tanggal Rekap" dan "Ganti tanggal" tidak ditampilkan
+   - tombol download tetap berada di sisi kanan */
+.daily-recap-date-control {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 72px;
+}
+
+.daily-recap-date-actions {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.daily-recap-date-picker {
+    width: auto !important;
+    margin: 0 auto !important;
+}
+
+.daily-recap-date-picker #daily-dashboard-date-input {
+    width: 164px !important;
+    min-width: 164px !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+    text-align-last: center !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+}
+
+.daily-recap-download-inline {
+    position: absolute !important;
+    right: 16px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+}
+
+@media (max-width: 640px) {
+    .daily-recap-date-control {
+        min-height: 68px;
+        padding: 10px !important;
+    }
+
+    .daily-recap-date-picker #daily-dashboard-date-input {
+        width: 162px !important;
+        min-width: 162px !important;
+    }
+
+    .daily-recap-download-inline {
+        right: 10px !important;
+    }
 }
 
 .daily-recap-download-inline {
@@ -8408,6 +8504,24 @@ body > .sticky-back-btn,
 }
 </style>
 
+
+<style id="sparing-remove-outer-glass">
+/* SPARING — hilangkan kaca pembungkus luar yang mengelilingi seluruh daftar.
+   Card sparing di dalamnya tetap dipertahankan. */
+#page-sparring {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+#page-sparring.sub-menu-modern::before,
+#page-sparring.sub-menu-modern::after {
+    content: none !important;
+    display: none !important;
+}
+</style>
 </head>
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium">
 <!-- Header -->
@@ -8489,7 +8603,7 @@ body > .sticky-back-btn,
 
 </div>
 <!-- HALAMAN SPARING -->
-<div class="sub-menu-modern glass-panel p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900" id="page-sparring">
+<div class="sub-menu-modern p-4 sm:p-6 rounded-2xl hidden font-bold text-slate-900" id="page-sparring">
   <div class="flex justify-between items-center mb-4">
     <h2 class="text-base sm:text-lg font-black w-full text-center">🤝 CATATAN SPARING</h2>
   </div>
@@ -8522,6 +8636,11 @@ body > .sticky-back-btn,
             <option value="">Pilih tim dari jadwal</option>
             <option value="__manual__">✏️ Tim Tanpa Jadwal Tetap</option>
           </select>
+          <label class="sparring-label sparring-status-label">Status Tim 1</label>
+          <select id="sparring-status-a" class="sparring-input sparring-status-select">
+            <option value="Member">Member</option>
+            <option value="Non Member">Non Member</option>
+          </select>
         </div>
         <div id="sparring-manual-wrap" class="hidden">
           <label class="sparring-label">Nama Tim Manual</label>
@@ -8535,6 +8654,11 @@ body > .sticky-back-btn,
         <div>
           <label class="sparring-label">Tim 2 / Lawan Sparing <span class="text-slate-400">(boleh dikosongkan)</span></label>
           <input id="sparring-tim-b" class="sparring-input" placeholder="Ketik nama tim lawan; kosongkan jika belum dapat lawan">
+          <label class="sparring-label sparring-status-label">Status Tim 2</label>
+          <select id="sparring-status-b" class="sparring-input sparring-status-select">
+            <option value="Member">Member</option>
+            <option value="Non Member" selected>Non Member</option>
+          </select>
         </div>
       </div>
       <div id="sparring-manual-date-wrap" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
@@ -8613,14 +8737,9 @@ body > .sticky-back-btn,
 </div>
 <!-- DASHBOARD KAS HARIAN -->
 <div id="daily-cash-dashboard" class="space-y-4 mb-5">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 sm:p-4 rounded-2xl border border-blue-500/30 bg-white/40 shadow-sm">
-        <div>
-            <p class="text-[10px] sm:text-xs font-black uppercase tracking-wider text-slate-500">Tanggal Rekap</p>
-            <p id="daily-dashboard-date" class="text-sm sm:text-base font-black text-slate-900">-</p>
-        </div>
+    <div class="daily-recap-date-control p-3 sm:p-4 rounded-2xl border border-blue-500/30 bg-white/40 shadow-sm">
         <div class="daily-recap-date-actions">
             <div class="daily-recap-date-picker">
-                <label for="daily-dashboard-date-input" class="text-[10px] sm:text-xs font-black text-slate-600">Ganti tanggal</label>
                 <input id="daily-dashboard-date-input" type="date" class="p-2 rounded-xl text-xs glass-input font-bold text-center"
                        onchange="syncFilterTanggal(this.value); renderRekapHarian()">
             </div>
@@ -9060,6 +9179,52 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 </div>
 <button class="bg-indigo-700 hover:bg-indigo-800 text-white px-4 py-2 rounded text-xs font-bold shadow border border-indigo-500/50" type="submit">Simpan Jadwal</button>
 </form>
+
+<div id="member-tanpa-jadwal-panel" class="member-tanpa-jadwal-panel">
+  <div class="member-tanpa-jadwal-head">
+    <div>
+      <div class="member-tanpa-jadwal-title">➕ Member Tanpa Jadwal Tetap</div>
+      <div class="member-tanpa-jadwal-subtitle">
+        Tambahkan member yang tidak memiliki jadwal mingguan tetap. Member ini tetap bisa dipilih saat booking.
+      </div>
+    </div>
+  </div>
+
+  <div class="member-tanpa-jadwal-form">
+    <div>
+      <label class="member-tanpa-jadwal-label">Nama Member</label>
+      <input id="member-tanpa-jadwal-nama"
+             class="member-tanpa-jadwal-input"
+             type="text"
+             placeholder="Contoh: Budi Santoso"
+             autocomplete="off">
+    </div>
+    <div>
+      <label class="member-tanpa-jadwal-label">Nomor WhatsApp</label>
+      <input id="member-tanpa-jadwal-wa"
+             class="member-tanpa-jadwal-input"
+             type="tel"
+             placeholder="08xxxxxxxxxx"
+             autocomplete="off">
+    </div>
+    <div class="member-tanpa-jadwal-actions">
+      <button type="button" id="btn-simpan-member-tanpa-jadwal"
+              class="member-tanpa-jadwal-btn member-tanpa-jadwal-btn-primary"
+              onclick="simpanMemberTanpaJadwal()">
+        Simpan Member
+      </button>
+      <button type="button" id="btn-batal-member-tanpa-jadwal"
+              class="member-tanpa-jadwal-btn member-tanpa-jadwal-btn-secondary"
+              onclick="batalEditMemberTanpaJadwal()"
+              style="display:none">
+        Batal
+      </button>
+    </div>
+  </div>
+
+  <div id="member-tanpa-jadwal-list" class="member-tanpa-jadwal-list"></div>
+</div>
+
 <h3 class="font-black text-sm text-slate-900 mb-2">Daftar Jadwal / Member Aktif</h3>
 <div id="tabel-list-member" class="member-cards-grid"></div>
 </div>
@@ -9430,8 +9595,22 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 <p id="info-diskon-khusus" class="text-[10px] text-amber-800 font-black">Diskon promo tidak aktif</p>
 </div>
 <div class="p-3 rounded-xl border border-violet-400/50 mb-3 space-y-2 bg-violet-50/50 uang-masuk-option-panel">
-  <label class="block text-xs font-black text-violet-950">💸 Diskon Tambahan Manual</label>
+  <label class="block text-xs font-black text-violet-950">💸 Diskon Tambahan Manual dari Admin</label>
   <input id="in-diskon-manual" class="w-full p-2 rounded-xl text-sm glass-input font-bold" type="number" min="0" step="1000" value="0" placeholder="Masukkan nominal diskon (Rp)" oninput="hitungOtomatisBiaya()"/>
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+    <label class="flex items-center gap-2 rounded-xl border border-violet-200 bg-white/70 px-3 py-2 cursor-pointer">
+      <input type="radio" name="diskon-manual-alokasi" id="in-diskon-manual-tim1" value="tim1" onchange="hitungOtomatisBiaya()" checked>
+      <span class="text-xs font-black text-slate-900">Untuk Tim 1</span>
+    </label>
+    <label class="flex items-center gap-2 rounded-xl border border-violet-200 bg-white/70 px-3 py-2 cursor-pointer">
+      <input type="radio" name="diskon-manual-alokasi" id="in-diskon-manual-tim2" value="tim2" onchange="hitungOtomatisBiaya()">
+      <span class="text-xs font-black text-slate-900">Untuk Tim 2</span>
+    </label>
+    <label class="flex items-center gap-2 rounded-xl border border-violet-200 bg-white/70 px-3 py-2 cursor-pointer">
+      <input type="radio" name="diskon-manual-alokasi" id="in-diskon-manual-rata" value="rata" onchange="hitungOtomatisBiaya()">
+      <span class="text-xs font-black text-slate-900">Dibagi Rata</span>
+    </label>
+  </div>
   <p id="info-diskon-manual" class="text-[10px] text-violet-800 font-black">Diskon tambahan tidak aktif</p>
 </div>
 <div class="uang-masuk-socks-card" id="in-kaos-kaki-card">
@@ -9452,19 +9631,30 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 <input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-jumlah-1" placeholder="Nominal pembayaran sekarang (Rp)" type="number"/>
 <div class="grid grid-cols-2 gap-2"><div><label class="block text-[10px] font-black text-emerald-950 mb-1">DP Manual (Rp)</label><input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-dp-1" min="0" type="number" placeholder="Jika sudah DP"/></div><div><label class="block text-[10px] font-black text-emerald-950 mb-1">Tanggal DP</label><input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-tgl-dp-1" type="date"/></div></div>
 <select class="w-full p-2 rounded text-sm glass-input font-bold" id="in-metode-1" onchange="toggleFreePaymentInput(1)">
-<option value="Belum Bayar">Belum Bayar</option><option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option><option value="Free">Free / Gratis</option>
+<option value="Belum Bayar">Belum Bayar</option><option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option><option value="Free">Free / Gratis</option><option value="Campuran">Campuran (2 Metode)</option>
 </select>
+<label class="flex items-center gap-2 text-[10px] font-black text-emerald-900 cursor-pointer"><input id="in-campuran-1" type="checkbox" class="w-4 h-4" onchange="toggleMixedPayment(1)"> Bayar dengan 2 metode</label>
+<div id="in-campuran-box-1" class="hidden grid grid-cols-2 gap-2">
+  <input id="in-jumlah-1b" type="number" min="0" placeholder="Nominal metode 2 (Rp)" class="w-full p-2 rounded text-sm glass-input font-bold">
+  <select id="in-metode-1b" class="w-full p-2 rounded text-sm glass-input font-bold"><option value="QRIS">QRIS</option><option value="Cash">Cash</option><option value="Transfer">Transfer</option></select>
+</div>
 </div>
 <div class="p-3 rounded-xl border border-emerald-500/40 space-y-2 bg-white/30 uang-masuk-payment-card">
 <label id="label-pembayaran-tim-2" class="block text-xs font-black text-emerald-950">Tim 2 · Lawan Sparing</label>
+<input class="w-full p-2 rounded text-sm glass-input font-bold bg-slate-100/70" id="in-tim-2-nama" type="text" placeholder="Nama Tim 2 otomatis dari Jadwal Hari Ini" readonly/>
 <select class="w-full p-2 rounded text-sm glass-input font-bold" id="in-status-2" onchange="hitungOtomatisBiaya()">
 <option value="Non-Member">Non-Member</option><option value="Member">Member</option>
 </select>
 <input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-jumlah-2" placeholder="Nominal pembayaran sekarang (Rp)" type="number"/>
 <div class="grid grid-cols-2 gap-2"><div><label class="block text-[10px] font-black text-emerald-950 mb-1">DP Manual (Rp)</label><input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-dp-2" min="0" type="number" placeholder="Jika sudah DP"/></div><div><label class="block text-[10px] font-black text-emerald-950 mb-1">Tanggal DP</label><input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-tgl-dp-2" type="date"/></div></div>
 <select class="w-full p-2 rounded text-sm glass-input font-bold" id="in-metode-2" onchange="toggleFreePaymentInput(2)">
-<option value="Belum Bayar">Belum Bayar</option><option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option><option value="Free">Free / Gratis</option>
+<option value="Belum Bayar">Belum Bayar</option><option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option><option value="Free">Free / Gratis</option><option value="Campuran">Campuran (2 Metode)</option>
 </select>
+<label class="flex items-center gap-2 text-[10px] font-black text-emerald-900 cursor-pointer"><input id="in-campuran-2" type="checkbox" class="w-4 h-4" onchange="toggleMixedPayment(2)"> Bayar dengan 2 metode</label>
+<div id="in-campuran-box-2" class="hidden grid grid-cols-2 gap-2">
+  <input id="in-jumlah-2b" type="number" min="0" placeholder="Nominal metode 2 (Rp)" class="w-full p-2 rounded text-sm glass-input font-bold">
+  <select id="in-metode-2b" class="w-full p-2 rounded text-sm glass-input font-bold"><option value="QRIS">QRIS</option><option value="Cash">Cash</option><option value="Transfer">Transfer</option></select>
+</div>
 </div>
 </div>
 <input type="hidden" id="in-jadwal-source-key" value="">
@@ -9473,7 +9663,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 <input type="hidden" id="in-jadwal-source-jam" value="">
 <div class="flex justify-end gap-2">
 <button type="button" id="btn-hapus-dari-jadwal" onclick="hapusJadwalHariIniDariPembayaran()" class="hidden bg-rose-700 hover:bg-rose-800 text-white px-4 py-2 rounded text-sm font-bold border border-rose-500/50 shadow">🗑️ Hapus Jadwal</button>
-<button class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded text-sm font-bold border border-emerald-500/50 shadow" type="submit">Simpan</button>
+<button type="submit" id="btn-simpan-pemasukan" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded text-sm font-bold border border-emerald-500/50 shadow relative z-[100] touch-manipulation">Simpan</button>
 </div>
 </form>
 </div>
@@ -9836,6 +10026,14 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
+/* Bridge untuk fitur tambahan yang berada di script non-module. */
+window.__APP_FIREBASE_DB__ = db;
+window.__APP_FIREBASE_REF__ = ref;
+window.__APP_FIREBASE_PUSH__ = push;
+window.__APP_FIREBASE_REMOVE__ = remove;
+window.__APP_FIREBASE_UPDATE__ = update;
+window.__APP_FIREBASE_GET__ = get;
+
         function getLocalDateString(date = new Date()) {
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -10176,8 +10374,8 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                         let singleMet = item.metode || 'Cash';
                         if(singleMet === 'Cash') totalMasukCash += Number(item.jumlah || 0);
                     } else {
-                        if(met1 === 'Cash') totalMasukCash += Number(item.jumlah1 || 0);
-                        if(met2 === 'Cash') totalMasukCash += Number(item.jumlah2 || 0);
+                        totalMasukCash += window.getPaymentCash(item,1);
+                        totalMasukCash += window.getPaymentCash(item,2);
                         if(Number(item.totalKaosKaki || 0) > 0 && met1 === 'Cash') totalMasukCash += Number(item.totalKaosKaki || 0);
                     }
                 }
@@ -10235,6 +10433,12 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             if (diskonManualEl) diskonManualEl.value = 0;
             const infoDiskonManualEl = document.getElementById('info-diskon-manual');
             if (infoDiskonManualEl) infoDiskonManualEl.innerText = 'Diskon tambahan tidak aktif';
+            const diskonTim1Radio = document.getElementById('in-diskon-manual-tim1');
+            if (diskonTim1Radio) diskonTim1Radio.checked = true;
+            const diskonTim2Radio = document.getElementById('in-diskon-manual-tim2');
+            if (diskonTim2Radio) diskonTim2Radio.checked = false;
+            const diskonRataRadio = document.getElementById('in-diskon-manual-rata');
+            if (diskonRataRadio) diskonRataRadio.checked = false;
             document.getElementById('info-biaya-tambahan').innerText = "Biaya tambahan sewa: Rp 0";
 
             if(!tglInput) return;
@@ -10333,6 +10537,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             const pakaiDiskonKhusus = !!document.getElementById('in-diskon-khusus-100')?.checked;
             const diskonManualInput = Number(document.getElementById('in-diskon-manual')?.value || 0);
             const diskonManual = Math.max(0, Number.isFinite(diskonManualInput) ? diskonManualInput : 0);
+            const diskonManualAlokasi = document.querySelector('input[name="diskon-manual-alokasi"]:checked')?.value || 'tim1';
 
             let durasiJam = 1;
             if (jamMainStr.includes('-')) {
@@ -10411,7 +10616,20 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             // mencatat pembayaran kedua secara manual.
             let second = { nama: 'Tim 2 / Sparing', status: document.getElementById('in-status-2')?.value || 'Non-Member', dp: 0 };
             if (isSparingPayment && tgl && jam) {
-                Object.values(globalCache.booking || {}).some(b => {
+                const namaTim2Form = String(document.getElementById('in-tim-2-nama')?.value || '').trim();
+                if(namaTim2Form) {
+                    second.nama = namaTim2Form;
+                    const targetTim2 = namaTim2Form.toLowerCase();
+                    Object.values(globalCache.booking || {}).some(b => {
+                        const bj = b.tgl ? (b.tgl.split('T')[1] || '').substring(0, 5) : '';
+                        const bn = String(b.nama || '').trim();
+                        if (b.tgl?.split('T')[0] === tgl && bj === jam && bn.toLowerCase() === targetTim2) {
+                            second.dp = Number(b.dp || 0);
+                            return true;
+                        }
+                        return false;
+                    });
+                } else Object.values(globalCache.booking || {}).some(b => {
                     const bj = b.tgl ? (b.tgl.split('T')[1] || '').substring(0, 5) : '';
                     const bn = String(b.nama || '').trim();
                     if (b.tgl?.split('T')[0] === tgl && bj === jam && bn && bn.toLowerCase() !== nama1.toLowerCase()) {
@@ -10423,6 +10641,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 });
             }
             second.status = document.getElementById('in-status-2')?.value || 'Non-Member';
+            const timNama2 = isSparingPayment ? String(second.nama || '').trim() : '';
 
             // Harga booking normal = JUMLAH seluruh jam. Bukan harga satu jam.
             // Tambahan 30 menit = 50% tarif pada jam berikutnya.
@@ -10515,11 +10734,16 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                     hargaTim1 = Math.max(0, hargaTim1 - diskonKhususTim1);
                     hargaTim2 = Math.max(0, hargaTim2 - diskonKhususTim2);
                 }
-                // Diskon manual adalah diskon tambahan dari admin. Untuk Sparing,
-                // nominal diskon dibagi rata kepada Tim 1 dan Tim 2.
+                // Diskon manual dari admin dapat diarahkan ke Tim 1, Tim 2, atau dibagi rata.
                 if (diskonManual > 0) {
-                    diskonManualTim1 = diskonManual / 2;
-                    diskonManualTim2 = diskonManual / 2;
+                    if (diskonManualAlokasi === 'tim2') {
+                        diskonManualTim2 = diskonManual;
+                    } else if (diskonManualAlokasi === 'rata') {
+                        diskonManualTim1 = diskonManual / 2;
+                        diskonManualTim2 = diskonManual / 2;
+                    } else {
+                        diskonManualTim1 = diskonManual;
+                    }
                     hargaTim1 = Math.max(0, hargaTim1 - diskonManualTim1);
                     hargaTim2 = Math.max(0, hargaTim2 - diskonManualTim2);
                 }
@@ -10536,7 +10760,8 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                     diskonKhususTim1 = Math.max(0, 100000 - diskonNormalMemberTim1);
                     hargaTim1 = Math.max(0, hargaTim1 - diskonKhususTim1);
                 }
-                // Pada Tim Internal seluruh diskon manual menjadi tanggungan Tim 1.
+                // Pada transaksi internal hanya Tim 1 yang tersedia. Jika admin memilih Tim 2,
+                // arahkan otomatis ke Tim 1 agar diskon tidak hilang.
                 if (diskonManual > 0) {
                     diskonManualTim1 = diskonManual;
                     hargaTim1 = Math.max(0, hargaTim1 - diskonManualTim1);
@@ -10573,6 +10798,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 diskonNormalMemberTim1,
                 diskonNormalMemberTim2,
                 diskonManual,
+                diskonManualAlokasi,
                 diskonManualTim1,
                 diskonManualTim2
             };
@@ -10596,8 +10822,8 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 const free = x.metode1 === 'Free' || x.metode2 === 'Free' || x.metode === 'Free';
                 if (free) pembayaranTim1 += totalAkhir1;
                 else {
-                    pembayaranTim1 += Number(x.jumlah1 ?? x.jumlah ?? 0);
-                    pembayaranTim2 += Number(x.jumlah2 || 0);
+                    pembayaranTim1 += window.getPaymentTotal(x,1);
+                    pembayaranTim2 += window.getPaymentTotal(x,2);
                 }
             });
 
@@ -10661,9 +10887,22 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             if (infoDiskonManual) {
                 infoDiskonManual.innerText = diskonManual > 0
                     ? (isSparingPayment
-                        ? `Diskon ${formatRupiah(diskonManual)} dibagi rata · Tim 1: ${formatRupiah(diskonManualTim1)} · Tim 2: ${formatRupiah(diskonManualTim2)}`
+                        ? (diskonManualAlokasi === 'tim2'
+                            ? `Diskon ${formatRupiah(diskonManual)} untuk Tim 2`
+                            : diskonManualAlokasi === 'rata'
+                                ? `Diskon ${formatRupiah(diskonManual)} dibagi rata · Tim 1: ${formatRupiah(diskonManualTim1)} · Tim 2: ${formatRupiah(diskonManualTim2)}`
+                                : `Diskon ${formatRupiah(diskonManual)} untuk Tim 1`)
                         : `Diskon tambahan Tim Internal: ${formatRupiah(diskonManualTim1)}`)
                     : 'Diskon tambahan tidak aktif';
+            }
+            // Tim 2 tidak tersedia pada transaksi internal.
+            const diskonTim2Radio = document.getElementById('in-diskon-manual-tim2');
+            if (diskonTim2Radio) diskonTim2Radio.disabled = !isSparingPayment;
+            const diskonRataRadio = document.getElementById('in-diskon-manual-rata');
+            if (diskonRataRadio) diskonRataRadio.disabled = !isSparingPayment;
+            if (!isSparingPayment && diskonManualAlokasi !== 'tim1') {
+                const tim1Radio = document.getElementById('in-diskon-manual-tim1');
+                if (tim1Radio) tim1Radio.checked = true;
             }
 
             const pay1 = document.getElementById('in-jumlah-1');
@@ -10761,6 +11000,46 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             // Data pemasukan utama tetap boleh disimpan.
             return true;
         }
+        // Pembayaran campuran: satu tim dapat membayar dengan dua metode sekaligus.
+        // Contoh: Tim 2 Rp100.000 Cash + Rp50.000 QRIS.
+        window.getPaymentParts = function(item, teamNo){
+            const n = Number(teamNo) === 2 ? 2 : 1;
+            const met = item?.['metode'+n] || item?.metode || 'Cash';
+            const jml = Number(item?.['jumlah'+n] ?? (n===1 ? item?.jumlah : 0) ?? 0);
+            const metB = item?.['metode'+n+'b'] || '';
+            const jmlB = Number(item?.['jumlah'+n+'b'] || 0);
+            if(met === 'Campuran'){
+                return [{metode: metB && metB !== 'Campuran' ? (item?.['metode'+n+'a'] || 'Cash') : (item?.['metode'+n+'a'] || 'Cash'), jumlah:jml}, {metode:metB || 'QRIS', jumlah:jmlB}].filter(x=>x.jumlah>0 || x.metode==='Free' || x.metode==='Belum Bayar');
+            }
+            return [{metode:met, jumlah:jml}];
+        };
+        window.getPaymentTotal = function(item, teamNo){
+            return window.getPaymentParts(item, teamNo).reduce((sum,x)=>sum + (x.metode==='Free' || x.metode==='Belum Bayar' ? 0 : Number(x.jumlah||0)), 0);
+        };
+        window.getPaymentCash = function(item, teamNo){
+            return window.getPaymentParts(item, teamNo).reduce((sum,x)=>sum + (x.metode==='Cash' ? Number(x.jumlah||0) : 0), 0);
+        };
+        window.getPaymentNonCash = function(item, teamNo){
+            return window.getPaymentParts(item, teamNo).reduce((sum,x)=>sum + ((x.metode && !['Cash','Free','Belum Bayar'].includes(x.metode)) ? Number(x.jumlah||0) : 0), 0);
+        };
+        window.toggleMixedPayment = function(teamNo){
+            const n=Number(teamNo)===2?2:1;
+            const cb=document.getElementById('in-campuran-'+n);
+            const box=document.getElementById('in-campuran-box-'+n);
+            const met=document.getElementById('in-metode-'+n);
+            if(box) box.classList.toggle('hidden', !cb?.checked);
+            toggleFreePaymentInput(n);
+            if(typeof hitungOtomatisBiaya==='function') hitungOtomatisBiaya();
+        };
+        window.toggleEditMixedPayment = function(teamNo){
+            const n=Number(teamNo)===2?2:1;
+            const cb=document.getElementById('edit-in-campuran-'+n);
+            const box=document.getElementById('edit-in-campuran-box-'+n);
+            const met=document.getElementById('edit-in-met'+n);
+            if(box) box.classList.toggle('hidden', !cb?.checked);
+            toggleEditFreePaymentInput(n);
+        };
+
         window.submitData = async (e, type) => {
             e.preventDefault();
             let data = { timestamp: Date.now() };
@@ -10824,6 +11103,10 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 showPage('jadwal');
                 return;
             } else if(type === 'pemasukan') {
+                const tglValidasi = document.getElementById('in-tgl')?.value || '';
+                const timSelectValidasi = document.getElementById('in-tim')?.value || '';
+                if(!tglValidasi) { alert('Mohon pilih tanggal terlebih dahulu.'); return; }
+                if(!timSelectValidasi) { alert('Mohon pilih tim terlebih dahulu.'); return; }
                 let tim = document.getElementById('in-tim').value;
                 if(tim === '__manual__') {
                     tim = document.getElementById('in-keterangan-manual').value.trim();
@@ -10836,9 +11119,14 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 let jamMain = jamMainElSubmit?.getAttribute('data-base-jam-main') || jamMainElSubmit?.value || '';
                 let met1 = document.getElementById('in-metode-1').value;
                 let met2 = document.getElementById('in-metode-2').value;
+                const campur1 = document.getElementById('in-campuran-1')?.checked || met1 === 'Campuran';
+                const campur2 = document.getElementById('in-campuran-2')?.checked || met2 === 'Campuran';
+                const met1b = document.getElementById('in-metode-1b')?.value || 'QRIS';
+                const met2b = document.getElementById('in-metode-2b')?.value || 'QRIS';
                 let jenisPembayaran = document.getElementById('in-jenis-pembayaran')?.value || 'internal';
                 let isSparingPayment = jenisPembayaran === 'sparing';
                 let jml1 = (met1 === 'Free' || met1 === 'Belum Bayar') ? 0 : Number(document.getElementById('in-jumlah-1').value || 0);
+                const jml1b = campur1 ? Number(document.getElementById('in-jumlah-1b')?.value || 0) : 0;
                 const jml2Input = Number(document.getElementById('in-jumlah-2').value || 0);
                 // Untuk SPARING, nominal Tim 2 yang benar-benar diisi admin adalah
                 // pembayaran nyata dari tim lawan. Jangan sampai nominal ini hilang
@@ -10850,6 +11138,8 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                     if(met2El) met2El.value = 'Cash';
                 }
                 let jml2 = (met2 === 'Free') ? 0 : jml2Input;
+                const jml2b = campur2 ? Number(document.getElementById('in-jumlah-2b')?.value || 0) : 0;
+                if((campur1 && jml1b <= 0) || (campur2 && jml2b <= 0)) { alert('Nominal metode kedua harus diisi jika pembayaran campuran dipilih.'); return; }
                 const kaosKakiAktif = !!document.getElementById('in-kaos-kaki')?.checked;
                 const jumlahKaosKaki = kaosKakiAktif ? Number(document.getElementById('in-kaos-kaki-qty')?.value || 1) : 0;
                 const totalKaosKaki = jumlahKaosKaki * 30000;
@@ -10879,7 +11169,8 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 let tambahanTim1 = (pakaiBola ? Math.ceil(biayaBola / 2) : 0) + (pakaiRompi1 ? biayaRompi : 0);
                 let tambahanTim2 = (pakaiBola ? Math.floor(biayaBola / 2) : 0) + (pakaiRompi2 ? biayaRompi : 0);
 
-                let totalTim1 = jml1;
+                const timNama2 = document.getElementById('in-nama-2')?.value.trim() || '';
+                let totalTim1 = jml1 + jml1b;
                 let ketSewa = [];
                 if(pakaiBola) ketSewa.push(`Sewa Bola(${durasiEfektif}j, bagi 2)`);
                 if(pakaiRompi1) ketSewa.push(`Sewa Rompi Tim 1(${durasiEfektif}j)`);
@@ -10891,11 +11182,18 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 
                 data = { 
                     ket: `Pelunasan ${tim} (${jamMain})${ketTambahanStr}${kaosKakiAktif ? ` + Kaos Kaki ${jumlahKaosKaki} pcs (${formatRupiah(totalKaosKaki)})` : ''}`, 
-                    timNamaBersih: tim.replace(/\s*\(.*\)/g, '').trim(), 
+                    timNamaBersih: tim.replace(/\s*\(.*\)/g, '').trim(),
+                    timNama2: timNama2,
                     jumlah1: totalTim1,
-                    metode1: met1,
-                    jumlah2: isSparingPayment ? jml2 : 0,
-                    metode2: isSparingPayment ? met2 : 'Belum Bayar',
+                    metode1: campur1 ? 'Campuran' : met1,
+                    metode1a: campur1 ? met1 : '',
+                    jumlah1b: campur1 ? jml1b : 0,
+                    metode1b: campur1 ? met1b : '',
+                    jumlah2: isSparingPayment ? (jml2 + jml2b) : 0,
+                    metode2: isSparingPayment ? (campur2 ? 'Campuran' : met2) : 'Belum Bayar',
+                    metode2a: isSparingPayment && campur2 ? met2 : '',
+                    jumlah2b: isSparingPayment && campur2 ? jml2b : 0,
+                    metode2b: isSparingPayment && campur2 ? met2b : '',
                     dpManual1,
                     tglDpManual1,
                     dpManual2: isSparingPayment ? dpManual2 : 0,
@@ -10905,6 +11203,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                     jenisPembayaran: isSparingPayment ? 'sparing' : 'internal',
                     status2: document.getElementById('in-status-2')?.value || 'Non-Member',
                     diskonManual: Number(window.__pelunasanCalc?.diskonManual || 0),
+                    diskonManualAlokasi: window.__pelunasanCalc?.diskonManualAlokasi || 'tim1',
                     diskonManualTim1: Number(window.__pelunasanCalc?.diskonManualTim1 || 0),
                     diskonManualTim2: isSparingPayment ? Number(window.__pelunasanCalc?.diskonManualTim2 || 0) : 0,
                     biayaTambahanTim1: tambahanTim1,
@@ -10940,7 +11239,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                         const dibayarSekarang = Number(document.getElementById('in-jumlah-1')?.value || 0);
                         return dpBayar + dibayarSekarang >= totalTagihanPenyesuaian;
                     })(),
-                    jumlah: totalTim1 + jml2 + totalKaosKaki,
+                    jumlah: totalTim1 + (campur1 ? jml1b : 0) + jml2 + (isSparingPayment && campur2 ? jml2b : 0) + totalKaosKaki,
                     tgl: tgl
                 };
             } else if(type === 'minuman') {
@@ -10949,7 +11248,9 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                     jumlahPcs: Number(document.getElementById('m-jumlah-pcs').value),
                     total: Number(document.getElementById('m-total').value),
                     metode: document.getElementById('m-metode').value,
-                    tgl: document.getElementById('m-tgl').value
+                    tgl: document.getElementById('m-tgl').value,
+                    // Waktu transaksi dipakai untuk menampilkan transaksi terbaru di paling atas.
+                    timestamp: Date.now()
                 };
             } else if(type === 'pengeluaran') {
                 data = { 
@@ -10973,7 +11274,8 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             }
             await push(ref(db, type), data);
             showSuccessPopup("Data berhasil disimpan dengan sukses.");
-            e.target.reset();
+            const formTarget = e?.target?.form || document.querySelector('#page-masuk form');
+            if (formTarget && typeof formTarget.reset === 'function') formTarget.reset();
             setDefaultDates();
             
             if(type === 'minuman') {
@@ -11015,7 +11317,14 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                     if (!cari) return true;
                     return String(item.produk || '').toLowerCase().includes(cari);
                 })
-                .sort((a,b) => Number(b.item.timestamp || 0) - Number(a.item.timestamp || 0));
+                // Terbaru di atas. Data lama yang belum punya timestamp memakai
+                // key Firebase sebagai fallback karena push key tersusun kronologis.
+                .sort((a,b) => {
+                    const ta = Number(a.item.timestamp || 0);
+                    const tb = Number(b.item.timestamp || 0);
+                    if (tb !== ta) return tb - ta;
+                    return String(b.key || '').localeCompare(String(a.key || ''));
+                });
 
             if (!rows.length) {
                 list.innerHTML = '<div class="minuman-history-empty">Belum ada transaksi minuman pada tanggal ini.</div>';
@@ -11876,13 +12185,21 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             const jml2 = Number(item.jumlah2 ?? 0);
             const met1 = item.metode1 || item.metode || 'Cash';
             const met2 = item.metode2 || 'Cash';
+            const mixed1 = met1 === 'Campuran';
+            const mixed2 = met2 === 'Campuran';
+            const jml1b = Number(item.jumlah1b || 0);
+            const jml2b = Number(item.jumlah2b || 0);
+            const met1a = item.metode1a || 'Cash';
+            const met2a = item.metode2a || 'Cash';
+            const met1b = item.metode1b || 'QRIS';
+            const met2b = item.metode2b || 'QRIS';
 
             const old = document.getElementById('modal-edit-pemasukan');
             if(old) old.remove();
 
             const modal = document.createElement('div');
             modal.id = 'modal-edit-pemasukan';
-            modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4';
+            modal.className = 'fixed inset-0 z-[2147483646] flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4';
             modal.innerHTML = `
                 <div class="w-full max-w-lg rounded-2xl bg-white shadow-2xl border border-blue-100 overflow-hidden">
                     <div class="bg-gradient-to-r from-blue-950 to-blue-700 px-5 py-4 text-white">
@@ -11899,9 +12216,9 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div><label class="text-xs font-black text-slate-700">Jumlah Tim 1</label><input id="edit-in-jml1" type="number" min="0" value="${jml1}" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"></div>
-                            <div><label class="text-xs font-black text-slate-700">Metode Tim 1</label><select id="edit-in-met1" onchange="toggleEditFreePaymentInput(1)" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"><option value="Cash" ${met1==='Cash'?'selected':''}>Cash</option><option value="QRIS" ${met1==='QRIS'?'selected':''}>QRIS</option><option value="Transfer" ${met1==='Transfer'?'selected':''}>Transfer</option><option value="Free" ${met1==='Free'?'selected':''}>Free / Gratis</option></select></div>
+                            <div><label class="text-xs font-black text-slate-700">Metode Tim 1</label><select id="edit-in-met1" onchange="toggleEditFreePaymentInput(1)" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"><option value="Cash" ${met1==='Cash'?'selected':''}>Cash</option><option value="QRIS" ${met1==='QRIS'?'selected':''}>QRIS</option><option value="Transfer" ${met1==='Transfer'?'selected':''}>Transfer</option><option value="Free" ${met1==='Free'?'selected':''}>Free / Gratis</option><option value="Campuran" ${mixed1?'selected':''}>Campuran (2 Metode)</option></select><label class="flex items-center gap-2 text-[10px] font-black text-slate-700 mt-1"><input id="edit-in-campuran-1" type="checkbox" ${mixed1?'checked':''} onchange="toggleEditMixedPayment(1)"> Bayar dengan 2 metode</label><div id="edit-in-campuran-box-1" class="${mixed1?'':'hidden '}grid grid-cols-2 gap-2 mt-1"><input id="edit-in-jml1b" type="number" min="0" value="${jml1b}" class="w-full border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"><select id="edit-in-met1b" class="w-full border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"><option value="QRIS" ${met1b==='QRIS'?'selected':''}>QRIS</option><option value="Cash" ${met1b==='Cash'?'selected':''}>Cash</option><option value="Transfer" ${met1b==='Transfer'?'selected':''}>Transfer</option></select></div></div>
                             <div><label class="text-xs font-black text-slate-700">Jumlah Tim 2</label><input id="edit-in-jml2" type="number" min="0" value="${jml2}" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"></div>
-                            <div><label class="text-xs font-black text-slate-700">Metode Tim 2</label><select id="edit-in-met2" onchange="toggleEditFreePaymentInput(2)" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"><option value="Cash" ${met2==='Cash'?'selected':''}>Cash</option><option value="QRIS" ${met2==='QRIS'?'selected':''}>QRIS</option><option value="Transfer" ${met2==='Transfer'?'selected':''}>Transfer</option><option value="Free" ${met2==='Free'?'selected':''}>Free / Gratis</option></select></div>
+                            <div><label class="text-xs font-black text-slate-700">Metode Tim 2</label><select id="edit-in-met2" onchange="toggleEditFreePaymentInput(2)" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"><option value="Cash" ${met2==='Cash'?'selected':''}>Cash</option><option value="QRIS" ${met2==='QRIS'?'selected':''}>QRIS</option><option value="Transfer" ${met2==='Transfer'?'selected':''}>Transfer</option><option value="Free" ${met2==='Free'?'selected':''}>Free / Gratis</option><option value="Campuran" ${mixed2?'selected':''}>Campuran (2 Metode)</option></select><label class="flex items-center gap-2 text-[10px] font-black text-slate-700 mt-1"><input id="edit-in-campuran-2" type="checkbox" ${mixed2?'checked':''} onchange="toggleEditMixedPayment(2)"> Bayar dengan 2 metode</label><div id="edit-in-campuran-box-2" class="${mixed2?'':'hidden '}grid grid-cols-2 gap-2 mt-1"><input id="edit-in-jml2b" type="number" min="0" value="${jml2b}" class="w-full border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"><select id="edit-in-met2b" class="w-full border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"><option value="QRIS" ${met2b==='QRIS'?'selected':''}>QRIS</option><option value="Cash" ${met2b==='Cash'?'selected':''}>Cash</option><option value="Transfer" ${met2b==='Transfer'?'selected':''}>Transfer</option></select></div></div>
                         </div>
                         <div class="flex gap-2 pt-2">
                             <button type="button" onclick="simpanEditDataKeuangan('pemasukan','${key}')" class="flex-1 bg-blue-700 hover:bg-blue-800 text-white px-4 py-2.5 rounded-xl font-black shadow">Simpan Perubahan</button>
@@ -11936,8 +12253,15 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             const tgl = document.getElementById('edit-in-tgl')?.value;
             const met1 = document.getElementById('edit-in-met1')?.value || 'Cash';
             const met2 = document.getElementById('edit-in-met2')?.value || 'Cash';
+            const mixed1 = met1 === 'Campuran' || document.getElementById('edit-in-campuran-1')?.checked;
+            const mixed2 = met2 === 'Campuran' || document.getElementById('edit-in-campuran-2')?.checked;
             const jml1 = met1 === 'Free' ? 0 : Number(document.getElementById('edit-in-jml1')?.value || 0);
             const jml2 = met2 === 'Free' ? 0 : Number(document.getElementById('edit-in-jml2')?.value || 0);
+            const jml1b = mixed1 ? Number(document.getElementById('edit-in-jml1b')?.value || 0) : 0;
+            const jml2b = mixed2 ? Number(document.getElementById('edit-in-jml2b')?.value || 0) : 0;
+            const met1b = document.getElementById('edit-in-met1b')?.value || 'QRIS';
+            const met2b = document.getElementById('edit-in-met2b')?.value || 'QRIS';
+            if((mixed1 && jml1b<=0) || (mixed2 && jml2b<=0)) { alert('Nominal metode kedua harus diisi.'); return; }
             if(!tim || !tgl || jml1 < 0 || jml2 < 0) { alert('Mohon lengkapi data dengan benar.'); return; }
             const oldItem = globalCache?.pemasukan?.[key] || {};
             const rentalText = String(oldItem.ket || '').match(/\s\+\sSewa\s.*$/i)?.[0] || '';
@@ -11946,11 +12270,18 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                     ...oldItem,
                     ket: `Pelunasan ${tim} (${jam})${rentalText}`,
                     timNamaBersih: tim,
+                    timNama2: String(oldItem.timNama2 || '').trim(),
                     jumlah1: jml1,
-                    metode1: met1,
+                    metode1: mixed1 ? 'Campuran' : met1,
+                    metode1a: mixed1 ? ((met1 !== 'Campuran' ? met1 : (oldItem.metode1a || 'Cash'))) : '',
+                    jumlah1b: mixed1 ? jml1b : 0,
+                    metode1b: mixed1 ? met1b : '',
                     jumlah2: jml2,
-                    metode2: met2,
-                    jumlah: jml1 + jml2,
+                    metode2: mixed2 ? 'Campuran' : met2,
+                    metode2a: mixed2 ? ((met2 !== 'Campuran' ? met2 : (oldItem.metode2a || 'Cash'))) : '',
+                    jumlah2b: mixed2 ? jml2b : 0,
+                    metode2b: mixed2 ? met2b : '',
+                    jumlah: jml1 + (mixed1 ? jml1b : 0) + jml2 + (mixed2 ? jml2b : 0),
                     tgl
                 });
                 document.getElementById('modal-edit-pemasukan')?.remove();
@@ -12701,6 +13032,185 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             renderAll();
         });
 
+        /* =========================================================
+           MEMBER TANPA JADWAL TETAP -> tampil di "Daftar Jadwal /
+           Member Aktif" sebagai card khusus.
+           ========================================================= */
+        let _memberTanpaJadwalActiveCache = {};
+
+        function renderMemberTanpaJadwalKeListAktif() {
+            const list = document.getElementById('tabel-list-member');
+            if (!list) return;
+
+            // Hapus chip/card tambahan yang sebelumnya dibuat oleh renderer ini.
+            list.querySelectorAll('.member-tanpa-jadwal-inline').forEach(el => el.remove());
+            list.querySelectorAll('[data-member-tanpa-jadwal-extra="true"]').forEach(el => el.remove());
+            list.querySelectorAll('[data-member-tanpa-jadwal-card="true"]').forEach(el => el.remove());
+
+            const allItems = Object.values(_memberTanpaJadwalActiveCache || {})
+                .filter(m => m && m.nama && String(m.status || 'Member').toLowerCase() !== 'non member');
+
+            // Nama yang benar-benar sama (case-sensitive) dianggap satu member.
+            // Jika ada lebih dari satu record tanpa jadwal dengan nama identik,
+            // cukup tampilkan satu representasi di card.
+            const uniqueItems = [];
+            const seenNames = new Set();
+            allItems.forEach(m => {
+                const exactName = String(m.nama || '').trim();
+                if (!seenNames.has(exactName)) {
+                    seenNames.add(exactName);
+                    uniqueItems.push(m);
+                }
+            });
+
+            const newCards = [];
+
+            uniqueItems.forEach(m => {
+                const exactName = String(m.nama || '').trim();
+
+                // Cari card member jadwal tetap dengan NAMA YANG SAMA PERSIS.
+                const existingCard = Array.from(
+                    list.querySelectorAll('article.member-card:not([data-member-tanpa-jadwal-card="true"])')
+                ).find(card => {
+                    const nameEl = card.querySelector('.member-team-name');
+                    return nameEl && String(nameEl.textContent || '').trim() === exactName;
+                });
+
+                if (existingCard) {
+                    // GABUNG: jangan buat card kedua.
+                    const scheduleGroups = existingCard.querySelector('.member-schedule-groups');
+                    if (scheduleGroups) {
+                        scheduleGroups.insertAdjacentHTML('beforeend', `
+                            <div class="member-day-group member-tanpa-jadwal-inline">
+                                <span class="member-day-label">Status</span>
+                                <span class="member-day-times">
+                                    <span class="member-schedule-chip member-tanpa-jadwal-chip">
+                                        Tanpa Jadwal Tetap
+                                    </span>
+                                </span>
+                            </div>
+                        `);
+                    }
+
+                    // Jika member jadwal tetap belum punya WA, gunakan WA dari
+                    // record tanpa jadwal tetap.
+                    if (m.wa) {
+                        const metaItems = existingCard.querySelectorAll('.member-meta-item');
+                        const waMeta = Array.from(metaItems).find(el =>
+                            String(el.querySelector('span')?.textContent || '').trim() === 'WA'
+                        );
+                        const waStrong = waMeta?.querySelector('strong');
+                        if (waStrong && String(waStrong.textContent || '').trim() === '-') {
+                            waStrong.textContent = String(m.wa);
+                        }
+                    }
+
+                    // Tambahkan aksi edit/hapus khusus record tanpa jadwal,
+                    // tetapi tetap dalam card yang sama.
+                    const actions = existingCard.querySelector('.member-card-actions');
+                    if (actions && !actions.querySelector('[data-member-tanpa-jadwal-extra="true"]')) {
+                        actions.insertAdjacentHTML('beforeend', `
+                            <button type="button"
+                                    data-member-tanpa-jadwal-extra="true"
+                                    onclick="editMemberTanpaJadwal('${escapeAttrLogo(String(m.id || ''))}')"
+                                    class="bg-blue-700 hover:bg-blue-800 text-white">
+                                ✏️ Edit Tanpa Jadwal
+                            </button>
+                            <button type="button"
+                                    data-member-tanpa-jadwal-extra="true"
+                                    onclick="hapusMemberTanpaJadwal('${escapeAttrLogo(String(m.id || ''))}')"
+                                    class="bg-rose-700 hover:bg-rose-800 text-white">
+                                🗑 Hapus Tanpa Jadwal
+                            </button>
+                        `);
+                    }
+
+                    return;
+                }
+
+                // Tidak ada member jadwal tetap dengan nama sama -> buat card baru.
+                const key = escapeAttrLogo(String(m.id || ''));
+                const nama = escapeHtmlSparing(exactName);
+                const wa = escapeHtmlSparing(String(m.wa || '-'));
+
+                newCards.push(`
+                    <article class="member-card" data-member-tanpa-jadwal-card="true">
+                        <div class="member-card-main">
+                            <div class="member-team-identity">
+                                <div class="member-team-logo-indicator"
+                                     data-team-logo-name="${escapeAttrLogo(encodeURIComponent(exactName))}">
+                                    ${renderTeamLogoHtml(exactName, 'member-list-team-logo')}
+                                </div>
+                                <div class="member-team-copy">
+                                    <div class="member-team-name">${nama}</div>
+                                    <div class="member-team-count">Tanpa jadwal tetap</div>
+                                </div>
+                            </div>
+                            <div class="member-schedule-box">
+                                <div class="member-schedule-groups">
+                                    <div class="member-day-group">
+                                        <span class="member-day-label">Jadwal</span>
+                                        <span class="member-day-times">
+                                            <span class="member-schedule-chip member-tanpa-jadwal-chip">
+                                                Tanpa Jadwal Tetap
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="member-card-meta">
+                            <div class="member-meta-item">
+                                <span>Mulai</span><strong>-</strong>
+                            </div>
+                            <div class="member-meta-item">
+                                <span>WA</span><strong>${wa}</strong>
+                            </div>
+                            <div class="member-meta-item">
+                                <span>Status</span>
+                                <strong>
+                                    <span class="member-status-active inline-flex items-center justify-center px-2.5 py-1 rounded-full bg-white text-emerald-800 border-2 border-emerald-700 shadow-sm text-[10px] font-black tracking-wide">● AKTIF</span>
+                                </strong>
+                            </div>
+                        </div>
+
+                        <div class="member-actions member-card-actions">
+                            <button type="button"
+                                    onclick="editMemberTanpaJadwal('${key}')"
+                                    class="bg-blue-600 hover:bg-blue-700 text-white">✏️ Edit</button>
+                            <button type="button"
+                                    onclick="hapusMemberTanpaJadwal('${key}')"
+                                    class="bg-rose-600 hover:bg-rose-700 text-white">🗑 Hapus</button>
+                            <button type="button"
+                                    onclick="openTeamLogoEditor(decodeURIComponent('${encodeURIComponent(exactName)}'),'member')"
+                                    class="bg-indigo-700 hover:bg-indigo-800 text-white">Logo</button>
+                        </div>
+                    </article>
+                `);
+            });
+
+            if (newCards.length) {
+                list.insertAdjacentHTML('beforeend', newCards.join(''));
+            }
+
+            if (typeof refreshTeamLogoIndicators === 'function') refreshTeamLogoIndicators();
+        }
+        onValue(ref(db, 'memberTanpaJadwal'), (snapshot) => {
+            _memberTanpaJadwalActiveCache = {};
+            if (snapshot.exists()) {
+                snapshot.forEach(child => {
+                    const m = child.val() || {};
+                    _memberTanpaJadwalActiveCache[child.key] = {
+                        ...m,
+                        id: child.key
+                    };
+                });
+            }
+            renderMemberTanpaJadwalKeListAktif();
+        });
+
+
         onValue(ref(db, 'booking'), (snapshot) => {
             globalCache.booking = snapshot.val() || {};
             renderAll();
@@ -12877,6 +13387,18 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 String(sparingRec.timA || '').trim() &&
                 String(sparingRec.timB || '').trim()
             );
+
+            // Saat Jadwal Hari Ini dibuka ke Uang Masuk, nama Tim 2 harus
+            // mengikuti pasangan sparing yang benar-benar tersimpan di data jadwal.
+            // Jika tim yang diklik adalah Tim A, Tim 2 = Tim B; dan sebaliknya.
+            const namaTim2DariJadwal = autoSparing
+                ? (String(sparingRec.timA || '').trim().toLowerCase() === nama.toLowerCase()
+                    ? String(sparingRec.timB || '').trim()
+                    : String(sparingRec.timA || '').trim())
+                : '';
+            const namaTim2El = document.getElementById('in-tim-2-nama');
+            if(namaTim2El) namaTim2El.value = namaTim2DariJadwal;
+
             const jenisPembayaranEl = document.getElementById('in-jenis-pembayaran');
             if(jenisPembayaranEl) {
                 // Kartu dengan lawan = Sparing, kartu biasa = Tim Internal.
@@ -13711,7 +14233,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                     return;
                 }
 
-                const nilaiBayar = Number(pay.jumlah1 ?? pay.jumlah ?? 0);
+                const nilaiBayar = window.getPaymentTotal(pay,1);
                 const penyesuaianWaktu = Number(pay.tambahanWaktuMenit || 0);
                 const totalSetelahPenyesuaian = Number(pay.totalTagihanSetelahPenyesuaian || 0);
 
@@ -14430,10 +14952,11 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                     }
 
                     if(!foundKey) {
+                        const isTeamA = teamLower === String(s.timA).trim().toLowerCase();
                         const record = {
-                            status: 'Non Member',
+                            status: isTeamA ? (s.statusA || 'Non Member') : (s.statusB || 'Non Member'),
                             nama: team,
-                            wa: teamLower === String(s.timA).trim().toLowerCase() ? (s.wa || '') : '',
+                            wa: isTeamA ? (s.wa || '') : '', 
                             tgl: `${s.tanggal}T${String(s.jam).substring(0,5)}`,
                             dp: 0,
                             tglDp: '',
@@ -14484,6 +15007,8 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 ? manualTeam
                 : String(selectedOption?.textContent || '').split(' · ')[0].trim();
             const timB = document.getElementById('sparring-tim-b')?.value.trim() || '';
+            const statusA = document.getElementById('sparring-status-a')?.value || (isManual ? 'Non Member' : 'Member');
+            const statusB = document.getElementById('sparring-status-b')?.value || 'Non Member';
             const wa = document.getElementById('sparring-wa')?.value.trim() || '';
             const catatan = document.getElementById('sparring-catatan')?.value.trim() || '';
             const bookingKeyA = !isManual && selectedOption?.dataset?.source === 'Booking'
@@ -14527,6 +15052,8 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 
                 const sparringDataBase = {
                     tanggal, jam, timA, timB, wa,
+                    statusA,
+                    statusB: timB ? statusB : '',
                     source: isManual ? 'Manual' : (selectedOption?.dataset?.source || ''),
                     status: timB ? 'matched' : 'pending',
                     catatan,
@@ -14705,6 +15232,8 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             if(!item) return;
             document.getElementById('sparring-edit-key').value = key;
             document.getElementById('sparring-tim-b').value = item.timB || '';
+            document.getElementById('sparring-status-a').value = item.statusA || (item.source === 'Manual' ? 'Non Member' : 'Member');
+            document.getElementById('sparring-status-b').value = item.statusB || 'Non Member';
             document.getElementById('sparring-wa').value = item.wa || '';
             const editManual = item.source === 'Manual';
             document.getElementById('sparring-tim-a-manual').value = editManual ? (item.timA || '') : '';
@@ -14875,8 +15404,8 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 };
 
                 const pair = matched
-                    ? `${buildSparingTeamSide(item.timA)}<span class="vs">VS</span>${buildSparingTeamSide(item.timB)}`
-                    : `${buildSparingTeamSide(item.timA)}<span class="vs">VS</span>${buildSparingTeamSide('')}`;
+                    ? `<div class="sparring-pair-clean">${buildSparingTeamSide(item.timA)}<span class="vs">VS</span>${buildSparingTeamSide(item.timB)}</div>`
+                    : `<div class="sparring-pair-clean">${buildSparingTeamSide(item.timA)}<span class="vs">VS</span>${buildSparingTeamSide('')}</div>`;
                 const waRaw = String(item?.wa || '').trim();
                 const waDigits = waRaw.replace(/\D/g, '');
                 const waIntl = waDigits ? (waDigits.startsWith('0') ? '62' + waDigits.slice(1) : waDigits) : '';
@@ -15367,24 +15896,22 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 
                     // Free/Gratis dianggap lunas, tetapi nominalnya tidak masuk
                     // ke total keuangan maupun saldo Cash/QRIS/Transfer.
-                    const nilaiTim1Keuangan = met1 === 'Free' ? 0 : jml1;
-                    const nilaiTim2Keuangan = met2 === 'Free' ? 0 : jml2;
+                    const nilaiTim1Keuangan = window.getPaymentTotal(item,1);
+                    const nilaiTim2Keuangan = window.getPaymentTotal(item,2);
                     const nilaiKaosKakiKeuangan = Number(item.totalKaosKaki || 0);
                     let subTotalItem = nilaiTim1Keuangan + nilaiTim2Keuangan + nilaiKaosKakiKeuangan;
                     totalLapangan += subTotalItem;
 
-                    if(met1 === 'Cash') totalLapanganCash += nilaiTim1Keuangan;
-                    else if(met1 !== 'Free') totalLapanganQrif += nilaiTim1Keuangan;
-                    if(met2 === 'Cash') totalLapanganCash += nilaiTim2Keuangan;
-                    else if(met2 !== 'Free') totalLapanganQrif += nilaiTim2Keuangan;
+                    totalLapanganCash += window.getPaymentCash(item,1) + window.getPaymentCash(item,2);
+                    totalLapanganQrif += window.getPaymentNonCash(item,1) + window.getPaymentNonCash(item,2);
                     if(nilaiKaosKakiKeuangan > 0) {
                         if(met1 === 'Cash') totalLapanganCash += nilaiKaosKakiKeuangan;
                         else if(met1 !== 'Free' && met1 !== 'Belum Bayar') totalLapanganQrif += nilaiKaosKakiKeuangan;
                     }
 
-                    let detailTxt = `Tim 1: Rp ${jml1.toLocaleString('id-ID')} (${met1})`;
+                    let detailTxt = `Tim 1: Rp ${jml1.toLocaleString('id-ID')} (${met1 === 'Campuran' ? ((item.metode1a||'Cash')+' + '+(item.jumlah1b||0).toLocaleString('id-ID')+' '+(item.metode1b||'QRIS')) : met1})`;
                     if(jml2 > 0) {
-                        detailTxt += `<br>Tim 2: Rp ${jml2.toLocaleString('id-ID')} (${met2})`;
+                        detailTxt += `<br>Tim 2: Rp ${jml2.toLocaleString('id-ID')} (${met2 === 'Campuran' ? ((item.metode2a||'Cash')+' + '+(item.jumlah2b||0).toLocaleString('id-ID')+' '+(item.metode2b||'QRIS')) : met2})`;
                     }
 
                     if(tbodyLapangan) {
@@ -19377,6 +19904,1393 @@ window.downloadDailyRecapJPG = async function() {
   }
 }
 </style>
+
+<style id="SPARING-CLEAN-FINAL-OVERRIDE">
+/* =========================================================
+   SPARING CLEAN FINAL
+   Hapus KACA UTAMA + KACA GANDA.
+   Tidak mengubah logic / Firebase / event / ID.
+   ========================================================= */
+
+/* ROOT SPARING = TIDAK ADA KACA */
+#page-sparring,
+#page-sparring.sub-menu-modern,
+#page-sparring.glass-panel {
+    background: transparent !important;
+    background-image: none !important;
+    background-color: transparent !important;
+    border: 0 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    overflow: visible !important;
+}
+
+/* Matikan efek cahaya milik root */
+#page-sparring::before,
+#page-sparring::after,
+#page-sparring.sub-menu-modern::before,
+#page-sparring.sub-menu-modern::after {
+    content: none !important;
+    display: none !important;
+    background: none !important;
+    box-shadow: none !important;
+}
+
+/* FORM dan LIST bukan frame */
+#page-sparring .sparring-form-wrap,
+#page-sparring .sparring-list-wrap,
+#page-sparring .sparring-form-wrap > form,
+#page-sparring .sparring-list-wrap > div:first-child {
+    background: transparent !important;
+    background-image: none !important;
+    border: 0 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Header tetap clean */
+#page-sparring > div:first-child {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+/* Summary cards = elemen individual */
+#page-sparring .sparring-summary-grid {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+#page-sparring .sparring-summary-card {
+    background: rgba(255,255,255,.92) !important;
+    border: 1px solid rgba(148,163,184,.30) !important;
+    box-shadow: 0 4px 14px rgba(15,23,42,.055) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Form dibuat seperti panel putih tunggal yang clean, bukan kaca */
+#page-sparring .sparring-form-wrap {
+    padding: 0 !important;
+    margin-bottom: 16px !important;
+}
+
+#page-sparring .sparring-form-wrap > form {
+    padding: 16px !important;
+    border-radius: 16px !important;
+    background: rgba(255,255,255,.94) !important;
+    border: 1px solid rgba(148,163,184,.28) !important;
+    box-shadow: 0 5px 18px rgba(15,23,42,.055) !important;
+}
+
+/* Notice tetap satu elemen kecil */
+#page-sparring .sparring-booking-info {
+    background: #f8fafc !important;
+    border: 1px dashed #cbd5e1 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+}
+
+/* Daftar = baris pertandingan clean */
+#page-sparring .sparring-list-wrap {
+    margin: 0 !important;
+}
+
+#page-sparring .sparring-list-wrap > div:first-child {
+    margin-bottom: 10px !important;
+}
+
+#page-sparring .sparring-record {
+    background: rgba(255,255,255,.96) !important;
+    border: 1px solid rgba(148,163,184,.28) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 4px 14px rgba(15,23,42,.055) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Tidak ada kaca tambahan di dalam record */
+#page-sparring .sparring-record::before,
+#page-sparring .sparring-record::after {
+    content: none !important;
+    display: none !important;
+}
+
+/* Input/filter tetap putih, bukan glass */
+#page-sparring .sparring-input,
+#page-sparring .sparring-filter {
+    background: #fff !important;
+    color: #172033 !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Typography */
+#page-sparring .sparring-label,
+#page-sparring .sparring-pair {
+    text-shadow: none !important;
+}
+
+@media (max-width:640px) {
+    #page-sparring .sparring-form-wrap > form {
+        padding: 13px !important;
+    }
+}
+</style>
+
+
+<style id="SPARING-FORM-TEXT-FIX">
+/* SPARING — teks form dibuat gelap agar jelas di atas panel putih */
+#page-sparring .sparring-form-wrap,
+#page-sparring .sparring-form-wrap form {
+    color: #172033 !important;
+}
+
+#page-sparring .sparring-form-wrap h3,
+#page-sparring .sparring-form-wrap h4,
+#page-sparring .sparring-form-wrap label,
+#page-sparring .sparring-form-wrap .sparring-label,
+#page-sparring .sparring-form-wrap p,
+#page-sparring .sparring-form-wrap span,
+#page-sparring .sparring-form-wrap strong {
+    color: #172033 !important;
+    text-shadow: none !important;
+}
+
+/* Placeholder tetap terbaca */
+#page-sparring .sparring-form-wrap input::placeholder,
+#page-sparring .sparring-form-wrap textarea::placeholder {
+    color: #64748b !important;
+    opacity: 1 !important;
+}
+
+/* Select / option */
+#page-sparring .sparring-form-wrap select,
+#page-sparring .sparring-form-wrap option {
+    color: #172033 !important;
+}
+
+/* Teks keterangan dibuat sedikit lebih lembut */
+#page-sparring .sparring-form-wrap .sparring-booking-info {
+    color: #334155 !important;
+}
+
+#page-sparring .sparring-form-wrap .sparring-booking-info strong {
+    color: #172033 !important;
+}
+</style>
+
+
+<style id="SPARING-SUMMARY-COLOR-FIX">
+/* SPARING — summary cards dibuat lebih kontras dan selaras */
+#page-sparring .sparring-summary-card {
+    background: linear-gradient(135deg, #e8f1f6 0%, #dce9f0 100%) !important;
+    border: 1px solid #b7ccd8 !important;
+    box-shadow: 0 5px 14px rgba(14,37,56,.08) !important;
+    color: #0e2538 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+#page-sparring .sparring-summary-card.matched {
+    background: linear-gradient(135deg, #dcefe9 0%, #cfe5dc 100%) !important;
+    border-color: #a9c9bd !important;
+}
+
+#page-sparring .sparring-summary-card small {
+    color: #496579 !important;
+    font-weight: 900 !important;
+}
+
+#page-sparring .sparring-summary-card strong {
+    color: #0e2538 !important;
+    font-weight: 950 !important;
+    text-shadow: none !important;
+}
+
+#page-sparring .sparring-summary-card > span {
+    color: #163b55 !important;
+    opacity: 1 !important;
+}
+
+/* Pastikan teks apa pun di dalam summary tidak ikut putih */
+#page-sparring .sparring-summary-card,
+#page-sparring .sparring-summary-card * {
+    text-shadow: none !important;
+}
+</style>
+
+
+<style id="SPARING-FILTER-TEXT-FIX">
+/* SPARING — teks "Cari nama tim..." dibuat tegas dan kontras */
+#page-sparring .sparring-list-wrap .sparring-filter {
+    color: #172033 !important;
+    background: #ffffff !important;
+    border: 1px solid #b8c7d3 !important;
+    box-shadow: 0 2px 7px rgba(15,23,42,.05) !important;
+}
+
+#page-sparring .sparring-list-wrap .sparring-filter::placeholder {
+    color: #475569 !important;
+    opacity: 1 !important;
+    font-weight: 700 !important;
+}
+
+/* Jika teks "Cari Nama Tim" berasal dari label di atas input */
+#page-sparring .sparring-list-wrap label,
+#page-sparring .sparring-list-wrap .sparring-label {
+    color: #17324a !important;
+    text-shadow: none !important;
+}
+</style>
+
+
+<style id="SPARING-TEAM-STATUS-FIX">
+#page-sparring .sparring-status-label {
+    margin-top: .55rem !important;
+    color: #17324a !important;
+}
+#page-sparring .sparring-status-select {
+    min-height: 38px !important;
+    background: #f8fafc !important;
+    color: #172033 !important;
+    border: 1px solid #b8c7d3 !important;
+    font-weight: 800 !important;
+}
+#page-sparring .sparring-status-select:focus {
+    border-color: #2e607a !important;
+    box-shadow: 0 0 0 3px rgba(46,96,122,.12) !important;
+}
+</style>
+
+
+<style id="SPARING-PAIR-CENTERED-FINAL">
+/* Susunan card:
+   NAMA TIM 1 — LOGO TIM 1 — VS — LOGO TIM 2 — NAMA TIM 2
+   VS selalu tepat di tengah. */
+#page-sparring .sparring-pair-clean {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 48px minmax(0, 1fr) !important;
+    align-items: center !important;
+    justify-items: center !important;
+    column-gap: 10px !important;
+}
+
+#page-sparring .sparring-pair-clean .sparring-pair-team {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    display: grid !important;
+    align-items: center !important;
+    justify-items: center !important;
+    gap: 5px !important;
+}
+
+/* Tim 1: nama di kiri, logo di kanan */
+#page-sparring .sparring-pair-clean .sparring-pair-team:first-child {
+    grid-template-columns: minmax(0, 1fr) 44px !important;
+    justify-items: end !important;
+    text-align: right !important;
+}
+
+/* Tim 2: logo di kiri, nama di kanan */
+#page-sparring .sparring-pair-clean .sparring-pair-team:last-child {
+    grid-template-columns: 44px minmax(0, 1fr) !important;
+    justify-items: start !important;
+    text-align: left !important;
+}
+
+/* VS selalu berada di sumbu tengah card */
+#page-sparring .sparring-pair-clean > .vs {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    width: 48px !important;
+    min-width: 48px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    font-size: 11px !important;
+    font-weight: 950 !important;
+    color: #2e607a !important;
+}
+
+/* Wrapper logo tidak ikut menggeser VS */
+#page-sparring .sparring-pair-clean .sparring-team-logo-wrap {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Nama tim */
+#page-sparring .sparring-pair-clean .sparring-pair-team-name {
+    min-width: 0 !important;
+    max-width: 180px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    font-size: 11px !important;
+    font-weight: 950 !important;
+    color: #0e2538 !important;
+}
+
+/* Tim 1: nama sebelum logo */
+#page-sparring .sparring-pair-clean .sparring-pair-team:first-child .sparring-pair-team-name {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+}
+
+/* Tim 1: logo sesudah nama */
+#page-sparring .sparring-pair-clean .sparring-pair-team:first-child .sparring-team-logo-wrap {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+}
+
+/* Tim 2: logo sebelum nama */
+#page-sparring .sparring-pair-clean .sparring-pair-team:last-child .sparring-team-logo-wrap {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+}
+
+/* Tim 2: nama sesudah logo */
+#page-sparring .sparring-pair-clean .sparring-pair-team:last-child .sparring-pair-team-name {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+}
+
+/* Mobile tetap rapi dan VS tetap di tengah */
+@media (max-width: 640px) {
+    #page-sparring .sparring-pair-clean {
+        grid-template-columns: minmax(0, 1fr) 38px minmax(0, 1fr) !important;
+        column-gap: 5px !important;
+    }
+
+    #page-sparring .sparring-pair-clean > .vs {
+        width: 38px !important;
+        min-width: 38px !important;
+        font-size: 9px !important;
+    }
+
+    #page-sparring .sparring-pair-clean .sparring-team-logo-wrap,
+    #page-sparring .sparring-pair-clean .sparring-record-logo {
+        width: 34px !important;
+        height: 34px !important;
+        min-width: 34px !important;
+    }
+
+    #page-sparring .sparring-pair-clean .sparring-pair-team:first-child {
+        grid-template-columns: minmax(0, 1fr) 34px !important;
+    }
+
+    #page-sparring .sparring-pair-clean .sparring-pair-team:last-child {
+        grid-template-columns: 34px minmax(0, 1fr) !important;
+    }
+
+    #page-sparring .sparring-pair-clean .sparring-pair-team-name {
+        max-width: 115px !important;
+        font-size: 9px !important;
+    }
+}
+</style>
+
+
+<script id="member-tanpa-jadwal-feature">
+/* =========================================================
+   MEMBER TANPA JADWAL TETAP — FIREBASE REALTIME DATABASE
+   Aplikasi ini memakai Firebase Realtime Database (bukan Firestore).
+   ========================================================= */
+let memberTanpaJadwalCache = [];
+let memberTanpaJadwalEditId = null;
+
+function normalisasiWaMemberTanpaJadwal(value) {
+    return String(value || '').replace(/[^\d+]/g, '').trim();
+}
+
+function escapeHtmlMemberTanpaJadwal(value) {
+    return String(value ?? '')
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;')
+      .replace(/'/g,'&#039;');
+}
+
+async function simpanMemberTanpaJadwal() {
+    const namaEl = document.getElementById('member-tanpa-jadwal-nama');
+    const waEl = document.getElementById('member-tanpa-jadwal-wa');
+    const btn = document.getElementById('btn-simpan-member-tanpa-jadwal');
+
+    const nama = String(namaEl?.value || '').trim();
+    const wa = normalisasiWaMemberTanpaJadwal(waEl?.value || '');
+
+    if (!nama) {
+        alert('Nama member wajib diisi.');
+        namaEl?.focus();
+        return;
+    }
+
+    // File ini menggunakan Firebase Realtime Database.
+    // db dibuat oleh script utama dengan getDatabase(app).
+    const appDb = window.__APP_FIREBASE_DB__;
+    const appRef = window.__APP_FIREBASE_REF__;
+    const appPush = window.__APP_FIREBASE_PUSH__;
+    const appUpdate = window.__APP_FIREBASE_UPDATE__;
+    const appGet = window.__APP_FIREBASE_GET__;
+    const appRemove = window.__APP_FIREBASE_REMOVE__;
+
+    if (!appDb || !appRef || !appPush || !appUpdate || !appGet || !appRemove) {
+        alert('Koneksi database belum siap. Silakan tunggu beberapa saat lalu coba lagi.');
+        return;
+    }
+
+    try {
+        if (btn) btn.disabled = true;
+
+        const data = {
+            nama,
+            wa,
+            status: 'Member',
+            tipeMember: 'Tanpa Jadwal Tetap',
+            tanpaJadwalTetap: true,
+            jadwalTetap: false,
+            updatedAt: Date.now()
+        };
+
+        if (memberTanpaJadwalEditId) {
+            await appUpdate(appRef(appDb, 'memberTanpaJadwal/' + memberTanpaJadwalEditId), data);
+        } else {
+            data.createdAt = Date.now();
+            await appPush(appRef(appDb, 'memberTanpaJadwal'), data);
+        }
+
+        const wasEdit = !!memberTanpaJadwalEditId;
+        batalEditMemberTanpaJadwal();
+        await muatMemberTanpaJadwal();
+        refreshOpsiMemberTanpaJadwal();
+
+        if (typeof showSuccessPopup === 'function') {
+            showSuccessPopup(wasEdit
+                ? 'Member tanpa jadwal tetap berhasil diperbarui.'
+                : 'Member tanpa jadwal tetap berhasil ditambahkan.');
+        } else {
+            alert(wasEdit
+                ? 'Member tanpa jadwal tetap berhasil diperbarui.'
+                : 'Member tanpa jadwal tetap berhasil ditambahkan.');
+        }
+    } catch (err) {
+        console.error('simpanMemberTanpaJadwal:', err);
+        alert('Gagal menyimpan member: ' + (err?.message || err));
+    } finally {
+        if (btn) btn.disabled = false;
+    }
+}
+
+async function muatMemberTanpaJadwal() {
+    const list = document.getElementById('member-tanpa-jadwal-list');
+    if (!list) return;
+
+    const appDb = window.__APP_FIREBASE_DB__;
+    const appRef = window.__APP_FIREBASE_REF__;
+    const appGet = window.__APP_FIREBASE_GET__;
+
+    if (!appDb || !appRef || !appGet) {
+        list.innerHTML = '<div class="member-tanpa-jadwal-empty">Database belum siap.</div>';
+        return;
+    }
+
+    try {
+        const snap = await appGet(appRef(appDb, 'memberTanpaJadwal'));
+        memberTanpaJadwalCache = [];
+
+        if (snap.exists()) {
+            const raw = snap.val() || {};
+            Object.entries(raw).forEach(([id, item]) => {
+                if (item && typeof item === 'object') {
+                    memberTanpaJadwalCache.push({ id, ...item });
+                }
+            });
+        }
+
+        memberTanpaJadwalCache.sort((a,b) =>
+            String(a.nama || '').localeCompare(
+                String(b.nama || ''),
+                'id',
+                { sensitivity:'base' }
+            )
+        );
+
+        renderMemberTanpaJadwal();
+    } catch (err) {
+        console.error('muatMemberTanpaJadwal:', err);
+        list.innerHTML = '<div class="member-tanpa-jadwal-empty">Gagal memuat member tanpa jadwal tetap.</div>';
+    }
+}
+
+function renderMemberTanpaJadwal() {
+    const list = document.getElementById('member-tanpa-jadwal-list');
+    if (!list) return;
+
+    if (!memberTanpaJadwalCache.length) {
+        list.innerHTML = '<div class="member-tanpa-jadwal-empty">Belum ada member tanpa jadwal tetap.</div>';
+        return;
+    }
+
+    list.innerHTML = memberTanpaJadwalCache.map(item => `
+      <div class="member-tanpa-jadwal-card">
+        <div class="member-tanpa-jadwal-info">
+          <div class="member-tanpa-jadwal-name">${escapeHtmlMemberTanpaJadwal(item.nama)}</div>
+          <div class="member-tanpa-jadwal-meta">
+            <span>📅 Tanpa Jadwal Tetap</span>
+            ${item.wa ? `<span>📱 ${escapeHtmlMemberTanpaJadwal(item.wa)}</span>` : ''}
+            <span class="member-tanpa-jadwal-badge">MEMBER</span>
+          </div>
+        </div>
+        <div class="member-tanpa-jadwal-card-actions">
+          <button type="button" onclick="editMemberTanpaJadwal('${item.id}')">Edit</button>
+          <button type="button" class="danger" onclick="hapusMemberTanpaJadwal('${item.id}')">Hapus</button>
+        </div>
+      </div>
+    `).join('');
+}
+
+function editMemberTanpaJadwal(id) {
+    const item = memberTanpaJadwalCache.find(x => x.id === id);
+    if (!item) return;
+
+    memberTanpaJadwalEditId = id;
+    document.getElementById('member-tanpa-jadwal-nama').value = item.nama || '';
+    document.getElementById('member-tanpa-jadwal-wa').value = item.wa || '';
+
+    const btn = document.getElementById('btn-simpan-member-tanpa-jadwal');
+    const cancel = document.getElementById('btn-batal-member-tanpa-jadwal');
+    if (btn) btn.textContent = 'Simpan Perubahan';
+    if (cancel) cancel.style.display = 'inline-flex';
+
+    document.getElementById('member-tanpa-jadwal-nama')?.focus();
+}
+
+function batalEditMemberTanpaJadwal() {
+    memberTanpaJadwalEditId = null;
+    const nama = document.getElementById('member-tanpa-jadwal-nama');
+    const wa = document.getElementById('member-tanpa-jadwal-wa');
+    const btn = document.getElementById('btn-simpan-member-tanpa-jadwal');
+    const cancel = document.getElementById('btn-batal-member-tanpa-jadwal');
+
+    if (nama) nama.value = '';
+    if (wa) wa.value = '';
+    if (btn) btn.textContent = 'Simpan Member';
+    if (cancel) cancel.style.display = 'none';
+}
+
+async function hapusMemberTanpaJadwal(id) {
+    const item = memberTanpaJadwalCache.find(x => x.id === id);
+    if (!item) return;
+    if (!confirm(`Hapus member "${item.nama}" dari daftar tanpa jadwal tetap?`)) return;
+
+    try {
+        const appDb = window.__APP_FIREBASE_DB__;
+        const appRef = window.__APP_FIREBASE_REF__;
+        const appRemove = window.__APP_FIREBASE_REMOVE__;
+
+        if (!appDb || !appRef || !appRemove) {
+            alert('Koneksi database belum siap.');
+            return;
+        }
+
+        await appRemove(appRef(appDb, 'memberTanpaJadwal/' + id));
+        await muatMemberTanpaJadwal();
+        refreshOpsiMemberTanpaJadwal();
+    } catch (err) {
+        console.error('hapusMemberTanpaJadwal:', err);
+        alert('Gagal menghapus member: ' + (err?.message || err));
+    }
+}
+
+function tambahkanMemberTanpaJadwalKeSelect(selectEl) {
+    if (!selectEl || !Array.isArray(memberTanpaJadwalCache)) return;
+
+    const existing = new Set(Array.from(selectEl.options).map(o => String(o.value)));
+
+    memberTanpaJadwalCache.forEach(item => {
+        const value = `manual-member:${item.id}`;
+        if (existing.has(value)) return;
+
+        const opt = document.createElement('option');
+        opt.value = value;
+        opt.textContent = `👤 ${item.nama} — Tanpa Jadwal Tetap`;
+        opt.dataset.memberTanpaJadwal = 'true';
+        opt.dataset.memberId = item.id;
+        opt.dataset.nama = item.nama || '';
+        opt.dataset.wa = item.wa || '';
+        opt.dataset.status = 'Member';
+        selectEl.appendChild(opt);
+    });
+}
+
+function refreshOpsiMemberTanpaJadwal() {
+    const selects = document.querySelectorAll(
+        '#page-atur-member select, select[id*="member" i], select[id*="booking" i]'
+    );
+    selects.forEach(tambahkanMemberTanpaJadwalKeSelect);
+}
+
+/* Firebase adalah module script; tunggu sebentar agar db dan fungsi RTDB
+   dari script utama sudah tersedia. */
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(async () => {
+        await muatMemberTanpaJadwal();
+        refreshOpsiMemberTanpaJadwal();
+    }, 1200);
+});
+
+/* Expose untuk dipanggil ulang dari halaman lain bila diperlukan. */
+window.muatMemberTanpaJadwal = muatMemberTanpaJadwal;
+window.refreshOpsiMemberTanpaJadwal = refreshOpsiMemberTanpaJadwal;
+
+</script>
+
+
+<style id="member-tanpa-jadwal-style">
+#page-atur-member .member-tanpa-jadwal-panel {
+    margin: 0 0 18px;
+    padding: 16px;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(15,23,42,.05);
+}
+#page-atur-member .member-tanpa-jadwal-head {
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:12px;
+}
+#page-atur-member .member-tanpa-jadwal-title {
+    color:#0e2538;
+    font-weight:950;
+    font-size:14px;
+}
+#page-atur-member .member-tanpa-jadwal-subtitle {
+    color:#64748b;
+    font-size:11px;
+    font-weight:700;
+    line-height:1.45;
+    margin-top:3px;
+}
+#page-atur-member .member-tanpa-jadwal-form {
+    display:grid;
+    grid-template-columns:1fr 1fr auto;
+    gap:10px;
+    align-items:end;
+}
+#page-atur-member .member-tanpa-jadwal-label {
+    display:block;
+    color:#17324a;
+    font-size:11px;
+    font-weight:900;
+    margin-bottom:5px;
+}
+#page-atur-member .member-tanpa-jadwal-input {
+    width:100%;
+    min-height:40px;
+    padding:8px 11px;
+    color:#172033;
+    background:#fff;
+    border:1px solid #b8c7d3;
+    border-radius:10px;
+    outline:none;
+    box-sizing:border-box;
+}
+#page-atur-member .member-tanpa-jadwal-input:focus {
+    border-color:#2e607a;
+    box-shadow:0 0 0 3px rgba(46,96,122,.10);
+}
+#page-atur-member .member-tanpa-jadwal-actions {
+    display:flex;
+    gap:6px;
+}
+#page-atur-member .member-tanpa-jadwal-btn {
+    min-height:40px;
+    padding:8px 13px;
+    border:0;
+    border-radius:10px;
+    font-weight:900;
+    cursor:pointer;
+    white-space:nowrap;
+}
+#page-atur-member .member-tanpa-jadwal-btn-primary {
+    background:#173b55;
+    color:#fff;
+}
+#page-atur-member .member-tanpa-jadwal-btn-secondary {
+    background:#e2e8f0;
+    color:#334155;
+}
+#page-atur-member .member-tanpa-jadwal-list {
+    display:grid;
+    gap:7px;
+    margin-top:12px;
+}
+#page-atur-member .member-tanpa-jadwal-card {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:10px 12px;
+    background:#fff;
+    border:1px solid #d5dee6;
+    border-radius:12px;
+}
+#page-atur-member .member-tanpa-jadwal-name {
+    color:#10263a;
+    font-size:12px;
+    font-weight:950;
+}
+#page-atur-member .member-tanpa-jadwal-meta {
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+    margin-top:3px;
+    color:#64748b;
+    font-size:10px;
+    font-weight:800;
+}
+#page-atur-member .member-tanpa-jadwal-badge {
+    color:#166534;
+    background:#dcfce7;
+    border-radius:999px;
+    padding:2px 7px;
+    font-weight:950;
+}
+#page-atur-member .member-tanpa-jadwal-card-actions {
+    display:flex;
+    gap:5px;
+    flex-shrink:0;
+}
+#page-atur-member .member-tanpa-jadwal-card-actions button {
+    border:1px solid #cbd5e1;
+    background:#f8fafc;
+    color:#334155;
+    border-radius:8px;
+    padding:6px 9px;
+    font-size:10px;
+    font-weight:900;
+    cursor:pointer;
+}
+#page-atur-member .member-tanpa-jadwal-card-actions button.danger {
+    color:#b91c1c;
+    border-color:#fecaca;
+    background:#fff7f7;
+}
+#page-atur-member .member-tanpa-jadwal-empty {
+    padding:9px;
+    text-align:center;
+    color:#94a3b8;
+    font-size:10px;
+    font-weight:800;
+}
+@media (max-width: 700px) {
+    #page-atur-member .member-tanpa-jadwal-form {
+        grid-template-columns:1fr;
+    }
+    #page-atur-member .member-tanpa-jadwal-actions {
+        width:100%;
+    }
+    #page-atur-member .member-tanpa-jadwal-btn {
+        flex:1;
+    }
+    #page-atur-member .member-tanpa-jadwal-card {
+        align-items:flex-start;
+        flex-direction:column;
+    }
+    #page-atur-member .member-tanpa-jadwal-card-actions {
+        width:100%;
+    }
+    #page-atur-member .member-tanpa-jadwal-card-actions button {
+        flex:1;
+    }
+}
+</style>
+
+
+<style id="MEMBER-TANPA-JADWAL-ACTIVE-CARD">
+#page-atur-member [data-member-tanpa-jadwal-card="true"] .member-day-times {
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:4px;
+}
+#page-atur-member [data-member-tanpa-jadwal-card="true"] .member-schedule-chip {
+    background:#e8f1f6 !important;
+    color:#17324a !important;
+    border:1px solid #b7ccd8 !important;
+}
+</style>
+
+
+<style id="MEMBER-TANPA-JADWAL-MERGE-FIX">
+#page-atur-member .member-tanpa-jadwal-inline {
+    margin-top: 2px;
+}
+#page-atur-member .member-tanpa-jadwal-chip {
+    background: #e8f1f6 !important;
+    color: #17324a !important;
+    border: 1px solid #b7ccd8 !important;
+    font-weight: 900 !important;
+}
+#page-atur-member [data-member-tanpa-jadwal-extra="true"] {
+    font-size: 10px !important;
+}
+</style>
+
+
+<style id="MEMBER-CLEAN-NO-DOUBLE-GLASS-FINAL">
+/* =========================================================
+   KELOLA MEMBER — CLEAN
+   Satu kaca untuk card utama. Semua panel anak transparan.
+   ========================================================= */
+
+/* Card member utama: satu-satunya surface/kaca */
+#page-atur-member .member-card {
+    background: rgba(255,255,255,.88) !important;
+    border: 1px solid rgba(148,163,184,.28) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 7px 18px rgba(15,23,42,.07) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    padding: 14px !important;
+}
+
+/* Hilangkan semua "kaca di dalam kaca" */
+#page-atur-member .member-card-main,
+#page-atur-member .member-team-identity,
+#page-atur-member .member-team-copy,
+#page-atur-member .member-schedule-box,
+#page-atur-member .member-schedule-groups,
+#page-atur-member .member-day-group,
+#page-atur-member .member-card-meta,
+#page-atur-member .member-meta-item,
+#page-atur-member .member-actions,
+#page-atur-member .member-card-actions {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Layout isi dibuat flat dan lega */
+#page-atur-member .member-card-main {
+    grid-template-columns: 150px minmax(0,1fr) !important;
+    gap: 16px !important;
+    align-items: center !important;
+}
+
+#page-atur-member .member-schedule-box {
+    padding: 0 !important;
+}
+
+#page-atur-member .member-schedule-groups {
+    gap: 5px !important;
+}
+
+#page-atur-member .member-day-group {
+    gap: 7px !important;
+}
+
+#page-atur-member .member-day-label {
+    min-width: 55px !important;
+    color: #64748b !important;
+    font-size: 9px !important;
+    font-weight: 950 !important;
+    text-transform: uppercase !important;
+}
+
+#page-atur-member .member-day-times {
+    gap: 4px !important;
+}
+
+#page-atur-member .member-team-name {
+    color: #102a43 !important;
+    font-size: 14px !important;
+    font-weight: 950 !important;
+}
+
+#page-atur-member .member-team-count {
+    color: #7890a3 !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+}
+
+#page-atur-member .member-meta-item {
+    padding: 6px 2px !important;
+}
+
+#page-atur-member .member-meta-item span {
+    color: #8293a3 !important;
+    font-size: 8px !important;
+    letter-spacing: .04em !important;
+}
+
+#page-atur-member .member-meta-item strong {
+    color: #17324a !important;
+    font-size: 10px !important;
+}
+
+#page-atur-member .member-card-meta {
+    border-top: 1px solid rgba(148,163,184,.16) !important;
+    grid-template-columns: repeat(3,minmax(0,1fr)) !important;
+    gap: 5px !important;
+    margin-top: 10px !important;
+    padding-top: 7px !important;
+}
+
+/* Chip jadwal tetap ringan, bukan kaca */
+#page-atur-member .member-schedule-chip {
+    background: #eef4f7 !important;
+    color: #244c63 !important;
+    border: 1px solid #d5e1e7 !important;
+    box-shadow: none !important;
+    border-radius: 7px !important;
+    padding: 4px 7px !important;
+    font-size: 9px !important;
+    font-weight: 900 !important;
+}
+
+/* Tombol dibuat flat, tidak seperti panel */
+#page-atur-member .member-card-actions {
+    grid-template-columns: repeat(6,minmax(0,1fr)) !important;
+    gap: 5px !important;
+    margin-top: 9px !important;
+}
+
+#page-atur-member .member-card-actions button {
+    height: 30px !important;
+    min-height: 30px !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    font-size: 9px !important;
+}
+
+/* Header/list juga jangan diberi kaca tambahan */
+#page-atur-member .member-cards-grid {
+    gap: 11px !important;
+}
+
+/* Member tanpa jadwal yang digabung tetap flat */
+#page-atur-member .member-tanpa-jadwal-chip {
+    background: #edf4f7 !important;
+    border: 1px solid #d2e0e6 !important;
+    color: #244c63 !important;
+    box-shadow: none !important;
+}
+
+@media (max-width:640px) {
+    #page-atur-member .member-card {
+        padding: 11px !important;
+        border-radius: 13px !important;
+    }
+
+    #page-atur-member .member-card-main {
+        grid-template-columns: 1fr !important;
+        gap: 9px !important;
+    }
+
+    #page-atur-member .member-team-identity {
+        display:flex !important;
+        align-items:center !important;
+        gap:10px !important;
+    }
+
+    #page-atur-member .member-schedule-box {
+        padding: 0 !important;
+    }
+
+    #page-atur-member .member-card-meta {
+        margin-top: 7px !important;
+        padding-top: 6px !important;
+    }
+
+    #page-atur-member .member-card-actions {
+        grid-template-columns: repeat(3,minmax(0,1fr)) !important;
+    }
+
+    #page-atur-member .member-card-actions button {
+        font-size: 8px !important;
+    }
+}
+</style>
+
+
+<style id="MEMBER-FORM-CLEAN-FINAL">
+/* =========================================================
+   KELOLA MEMBER — FORM CLEAN
+   Fokus: Tambah Jadwal Member / Status Baru
+          + Member Tanpa Jadwal Tetap
+   Tidak mengubah desain list member yang sudah bagus.
+   ========================================================= */
+
+/* ---------- FORM TAMBAH JADWAL / STATUS ---------- */
+#page-atur-member .member-form,
+#page-atur-member .member-form-card,
+#page-atur-member .member-add-form,
+#page-atur-member .member-status-form {
+    background: #f8fafc !important;
+    border: 1px solid #dbe4ea !important;
+    border-radius: 15px !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Area input dibuat satu bidang yang rapi, bukan kaca bertingkat */
+#page-atur-member .member-form input,
+#page-atur-member .member-form select,
+#page-atur-member .member-form textarea,
+#page-atur-member .member-form-card input,
+#page-atur-member .member-form-card select,
+#page-atur-member .member-add-form input,
+#page-atur-member .member-add-form select,
+#page-atur-member .member-status-form input,
+#page-atur-member .member-status-form select {
+    background: #ffffff !important;
+    color: #17324a !important;
+    border: 1px solid #cbd7df !important;
+    border-radius: 9px !important;
+    box-shadow: none !important;
+}
+
+#page-atur-member .member-form input:focus,
+#page-atur-member .member-form select:focus,
+#page-atur-member .member-form-card input:focus,
+#page-atur-member .member-form-card select:focus,
+#page-atur-member .member-add-form input:focus,
+#page-atur-member .member-add-form select:focus,
+#page-atur-member .member-status-form input:focus,
+#page-atur-member .member-status-form select:focus {
+    border-color: #47718a !important;
+    box-shadow: 0 0 0 3px rgba(71,113,138,.09) !important;
+    outline: none !important;
+}
+
+/* Label */
+#page-atur-member .member-form label,
+#page-atur-member .member-form-card label,
+#page-atur-member .member-add-form label,
+#page-atur-member .member-status-form label {
+    color: #28465c !important;
+    font-weight: 900 !important;
+}
+
+/* ---------- PANEL MEMBER TANPA JADWAL ---------- */
+#page-atur-member .member-tanpa-jadwal-panel {
+    background: #f8fafc !important;
+    border: 1px solid #dbe4ea !important;
+    border-radius: 15px !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    padding: 15px !important;
+}
+
+#page-atur-member .member-tanpa-jadwal-head {
+    padding-bottom: 10px !important;
+    border-bottom: 1px solid #e2e8ee !important;
+    margin-bottom: 12px !important;
+}
+
+#page-atur-member .member-tanpa-jadwal-title {
+    color: #17324a !important;
+    font-size: 13px !important;
+    font-weight: 950 !important;
+}
+
+#page-atur-member .member-tanpa-jadwal-subtitle {
+    color: #708292 !important;
+    font-size: 10px !important;
+    line-height: 1.5 !important;
+}
+
+/* Form dalam panel: flat */
+#page-atur-member .member-tanpa-jadwal-form {
+    background: transparent !important;
+}
+
+#page-atur-member .member-tanpa-jadwal-input {
+    min-height: 39px !important;
+    background: #fff !important;
+    color: #17324a !important;
+    border: 1px solid #cbd7df !important;
+    border-radius: 9px !important;
+    box-shadow: none !important;
+}
+
+#page-atur-member .member-tanpa-jadwal-input:focus {
+    border-color: #47718a !important;
+    box-shadow: 0 0 0 3px rgba(71,113,138,.09) !important;
+}
+
+#page-atur-member .member-tanpa-jadwal-label {
+    color: #28465c !important;
+    font-size: 10px !important;
+    font-weight: 900 !important;
+}
+
+#page-atur-member .member-tanpa-jadwal-btn {
+    min-height: 39px !important;
+    border-radius: 9px !important;
+    box-shadow: none !important;
+    font-size: 10px !important;
+}
+
+#page-atur-member .member-tanpa-jadwal-btn-primary {
+    background: #244f68 !important;
+}
+
+#page-atur-member .member-tanpa-jadwal-btn-secondary {
+    background: #e8eef2 !important;
+    color: #405769 !important;
+}
+
+/* List mini member tanpa jadwal tetap: hanya garis pemisah,
+   bukan card kaca di dalam panel. */
+#page-atur-member .member-tanpa-jadwal-list {
+    gap: 0 !important;
+    margin-top: 10px !important;
+}
+
+#page-atur-member .member-tanpa-jadwal-card {
+    background: transparent !important;
+    border: 0 !important;
+    border-top: 1px solid #e2e8ee !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 10px 2px !important;
+}
+
+#page-atur-member .member-tanpa-jadwal-card:first-child {
+    border-top: 0 !important;
+}
+
+#page-atur-member .member-tanpa-jadwal-name {
+    color: #17324a !important;
+    font-size: 11px !important;
+}
+
+#page-atur-member .member-tanpa-jadwal-meta {
+    color: #778997 !important;
+}
+
+#page-atur-member .member-tanpa-jadwal-card-actions button {
+    background: #fff !important;
+    box-shadow: none !important;
+    border-radius: 7px !important;
+}
+
+/* Hilangkan kaca dari wrapper/section generik yang membungkus
+   dua form tersebut, jika ada. */
+#page-atur-member .member-form > div,
+#page-atur-member .member-form-card > div,
+#page-atur-member .member-add-form > div,
+#page-atur-member .member-status-form > div {
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+@media (max-width:700px) {
+    #page-atur-member .member-tanpa-jadwal-panel {
+        padding: 12px !important;
+    }
+}
+</style>
+
+
+<style id="MEMBER-ADD-SCHEDULE-REMOVE-OUTER-GLASS">
+/* =========================================================
+   TAMBAH JADWAL MEMBER / STATUS BARU
+   Hilangkan kaca besar pembungkus dari judul sampai tombol.
+   Konten dibuat langsung menyatu dengan halaman.
+   ========================================================= */
+
+/* Semua kandidat wrapper form dibuat transparan/flat */
+#page-atur-member .member-form,
+#page-atur-member .member-form-card,
+#page-atur-member .member-add-form,
+#page-atur-member .member-status-form,
+#page-atur-member .member-form-container,
+#page-atur-member .member-schedule-form,
+#page-atur-member .schedule-member-form,
+#page-atur-member .member-add-panel {
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* Judul tidak lagi berada di dalam "kaca" */
+#page-atur-member .member-form h3,
+#page-atur-member .member-form-card h3,
+#page-atur-member .member-add-form h3,
+#page-atur-member .member-status-form h3,
+#page-atur-member .member-form-container h3 {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* Hanya input/select yang tetap punya bidang putih */
+#page-atur-member .member-form input,
+#page-atur-member .member-form select,
+#page-atur-member .member-form textarea,
+#page-atur-member .member-form-card input,
+#page-atur-member .member-form-card select,
+#page-atur-member .member-add-form input,
+#page-atur-member .member-add-form select,
+#page-atur-member .member-status-form input,
+#page-atur-member .member-status-form select {
+    background: #fff !important;
+    border: 1px solid #cbd7df !important;
+    border-radius: 9px !important;
+    box-shadow: none !important;
+}
+
+/* Jangan biarkan child wrapper membentuk kaca baru */
+#page-atur-member .member-form > div,
+#page-atur-member .member-form-card > div,
+#page-atur-member .member-add-form > div,
+#page-atur-member .member-status-form > div,
+#page-atur-member .member-form-container > div {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Tombol tetap jelas, tetapi flat */
+#page-atur-member .member-form button,
+#page-atur-member .member-form-card button,
+#page-atur-member .member-add-form button,
+#page-atur-member .member-status-form button {
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-radius: 9px !important;
+}
+
+/* Jika ada section/header wrapper generik di area ini,
+   jangan beri surface tambahan. */
+#page-atur-member .glass-card,
+#page-atur-member .glass-panel,
+#page-atur-member .glass,
+#page-atur-member .panel-glass {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+</style>
+
+
+<style id="daily-recap-action-modal-stack-v2">
+/* DAILY RECAP — urutan layer modal:
+   submenu Daily Recap < form Edit Uang Lapangan < konfirmasi */
+#daily-sub-modal-glass,
+#daily-sub-modal-glass-v6 {
+    z-index: 99999 !important;
+}
+#modal-edit-pemasukan {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 2147483646 !important;
+}
+#modal-edit-pemasukan > div {
+    position: relative !important;
+    z-index: 2 !important;
+}
+#modern-dialog-root {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 2147483647 !important;
+}
+#modern-dialog-root .modern-dialog-backdrop {
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 1 !important;
+}
+#modern-dialog-root .modern-dialog-card {
+    position: relative !important;
+    z-index: 2 !important;
+}
+</style>
+
+<style id="uang-masuk-save-button-final-hit-fix">
+/* FINAL MOBILE HIT FIX: tombol Simpan Uang Masuk selalu berada di atas layer visual */
+#btn-simpan-pemasukan{
+  position:relative !important;
+  z-index:2147483647 !important;
+  pointer-events:auto !important;
+  touch-action:manipulation !important;
+  -webkit-tap-highlight-color:rgba(16,185,129,.25) !important;
+}
+#page-masuk form .flex.justify-end:has(#btn-simpan-pemasukan){
+  position:relative !important;
+  z-index:2147483647 !important;
+  pointer-events:auto !important;
+}
+</style>
+<script id="uang-masuk-save-button-final-hit-fix-script">
+(function(){
+  'use strict';
+  let guardUntil = 0;
+  function hitSaveAtPoint(ev){
+    const btn=document.getElementById('btn-simpan-pemasukan');
+    if(!btn || btn.disabled) return false;
+    const form=btn.closest('form');
+    if(!form) return false;
+    const p=ev.touches?.[0] || ev.changedTouches?.[0] || ev;
+    const x=Number(p?.clientX), y=Number(p?.clientY);
+    if(!Number.isFinite(x) || !Number.isFinite(y)) return false;
+    const r=btn.getBoundingClientRect();
+    const inside=x>=r.left && x<=r.right && y>=r.top && y<=r.bottom;
+    if(!inside) return false;
+    /* Jika event memang sudah mengenai tombol, biarkan submit native berjalan. */
+    if(ev.target===btn || btn.contains(ev.target)) return false;
+    ev.preventDefault?.();
+    ev.stopImmediatePropagation?.();
+    if(Date.now()<guardUntil) return true;
+    guardUntil=Date.now()+800;
+    if(typeof form.requestSubmit==='function') form.requestSubmit(btn);
+    else if(typeof window.submitData==='function') window.submitData({preventDefault(){},target:btn},'pemasukan');
+    return true;
+  }
+  document.addEventListener('pointerup',hitSaveAtPoint,true);
+  document.addEventListener('touchend',hitSaveAtPoint,true);
+})();
+</script>
 </body>
 </html>
 
@@ -23250,15 +25164,15 @@ window.downloadDailyRecapJPG = async function() {
       const j2 = Number(item.jumlah2 || 0);
       const m1 = item.metode1 || item.metode || 'Cash';
       const m2 = item.metode2 || 'Cash';
-      const v1 = m1 === 'Free' ? 0 : j1;
-      const v2 = m2 === 'Free' ? 0 : j2;
+      const v1 = window.getPaymentTotal(item,1);
+      const v2 = window.getPaymentTotal(item,2);
       const totalKaosKaki = Number(item.totalKaosKaki || 0);
       const total = v1 + v2 + totalKaosKaki;
       totalLapangan += total;
       pemasukanRows.push({
         tanggal:String(item.tgl).split('T')[0],
         keterangan:item.ket || 'Penjualan lapangan',
-        metode:[m1, j2 > 0 ? m2 : ''].filter(Boolean).join(' / '),
+        metode:[m1 === 'Campuran' ? `${item.metode1a||'Cash'} + ${item.metode1b||'QRIS'}` : m1, j2 > 0 ? (m2 === 'Campuran' ? `${item.metode2a||'Cash'} + ${item.metode2b||'QRIS'}` : m2) : ''].filter(Boolean).join(' / '),
         jumlah:total
       });
     });
