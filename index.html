@@ -3240,6 +3240,41 @@ body > *, main, #app, .app, .page, .page-content {
 }
 </style>
 
+<style id="daily-report-jpg-vertical-center-fix">
+/* EXPORT DAILY RECAP — semua teks di dalam kartu benar-benar berada di tengah vertikal. */
+#daily-report-jpg-canvas .report-source .grid > div,
+#daily-report-jpg-canvas #ringkasan-minuman-box > *,
+#daily-report-jpg-canvas .report-source [class*="rounded-xl"] {
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    box-sizing:border-box !important;
+    text-align:center !important;
+}
+#daily-report-jpg-canvas .report-source .grid > div {
+    min-height:72px !important;
+    padding:10px 9px !important;
+}
+#daily-report-jpg-canvas .report-source .grid > div > p {
+    margin-top:0 !important;
+    margin-bottom:3px !important;
+    line-height:1.25 !important;
+}
+#daily-report-jpg-canvas .report-source .grid > div > p:last-child {
+    margin-bottom:0 !important;
+}
+#daily-report-jpg-canvas .report-source table th,
+#daily-report-jpg-canvas .report-source table td {
+    vertical-align:middle !important;
+    padding-top:12px !important;
+    padding-bottom:12px !important;
+}
+#daily-report-jpg-canvas .report-source table td {
+    line-height:1.35 !important;
+}
+</style>
+
 <style id="daily-report-jpg-top-style">
 .daily-recap-download-area{display:flex;justify-content:flex-end;width:100%;margin:0 0 16px}
 .daily-report-jpg-button{
@@ -7486,6 +7521,55 @@ body > .sticky-back-btn,
 })();
 </script>
 
+<script id="manual-sparing-payment-final-v1">
+(function(){
+  // Jika admin mengubah jadwal internal menjadi SPARING secara manual,
+  // mode pembayaran Tim 2 harus langsung aktif seperti sparing yang sudah
+  // memiliki lawan sejak awal. Ini penting karena kartu Jadwal Hari Ini
+  // memang boleh berasal dari jadwal internal, lalu keputusan sparing dibuat
+  // oleh admin berdasarkan kondisi di lapangan.
+  function syncManualSparingPayment(){
+    const mode = document.getElementById('in-jenis-pembayaran');
+    if(!mode) return;
+    const isSparing = mode.value === 'sparing';
+    const met2 = document.getElementById('in-metode-2');
+    const pay2 = document.getElementById('in-jumlah-2');
+
+    if(isSparing && met2){
+      // Saat pertama kali berpindah ke Sparing, Tim 2 dianggap membayar Cash.
+      // Jika admin sudah memilih metode lain, pilihan tersebut tidak ditimpa.
+      if(met2.value === 'Belum Bayar'){
+        met2.value = 'Cash';
+        if(typeof window.toggleFreePaymentInput === 'function') window.toggleFreePaymentInput(2);
+      }
+    }
+
+    // Hitung ulang setelah mode berubah agar sisa Tim 2 langsung tersedia.
+    if(typeof window.hitungOtomatisBiaya === 'function') window.hitungOtomatisBiaya();
+
+    if(isSparing && pay2 && met2 && met2.value !== 'Free' && met2.value !== 'Belum Bayar'){
+      // Jangan menimpa nominal yang sudah diketik admin.
+      if(document.activeElement !== pay2 && (!pay2.value || Number(pay2.value) === 0)){
+        const sisa2 = Number(window.__pelunasanCalc?.sisa2 || 0);
+        if(sisa2 > 0) pay2.value = sisa2;
+      }
+    }
+  }
+
+  function install(){
+    const mode = document.getElementById('in-jenis-pembayaran');
+    if(mode && !mode.dataset.manualSparingBound){
+      mode.dataset.manualSparingBound = '1';
+      mode.addEventListener('change', syncManualSparingPayment);
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install);
+  else install();
+  window.syncManualSparingPayment = syncManualSparingPayment;
+})();
+</script>
+
 
 
 <style id="final-mobile-header-and-cash-contrast-v1">
@@ -7645,6 +7729,682 @@ body > .sticky-back-btn,
   backdrop-filter: blur(16px) saturate(125%);
   -webkit-backdrop-filter: blur(16px) saturate(125%);
   box-shadow: 0 10px 28px rgba(15,23,42,.22), 0 3px 10px rgba(15,23,42,.14), inset 0 1px 0 rgba(255,255,255,.42) !important;
+}
+</style>
+
+
+<style id="daily-report-simple-summary-v1">
+/* Hanya memengaruhi hasil JPG Daily Recap, bukan tampilan aplikasi. */
+#daily-report-jpg-canvas { width:820px !important; padding:18px !important; background:#f5f7fa !important; }
+#daily-report-jpg-canvas .report-admin-header { padding:16px 18px !important; margin-bottom:10px !important; border-radius:12px !important; box-shadow:none !important; }
+#daily-report-jpg-canvas .report-admin-header h2 { font-size:28px !important; }
+#daily-report-jpg-canvas .report-admin-header .report-date { font-size:15px !important; margin-top:5px !important; }
+#daily-report-jpg-canvas .report-admin-header .report-made-by { font-size:13px !important; margin-top:5px !important; }
+#daily-report-jpg-canvas .report-section { padding:11px !important; margin-bottom:9px !important; border-radius:12px !important; box-shadow:none !important; }
+#daily-report-jpg-canvas .report-section h3 { margin:0 0 7px !important; font-size:17px !important; }
+#daily-report-jpg-canvas .report-source { font-size:13px !important; line-height:1.25 !important; }
+#daily-report-jpg-canvas .report-source > section { padding:0 !important; border:0 !important; border-radius:0 !important; }
+#daily-report-jpg-canvas .report-source table { font-size:11px !important; }
+#daily-report-jpg-canvas .report-source th, #daily-report-jpg-canvas .report-source td { padding:6px 5px !important; line-height:1.2 !important; }
+#daily-report-jpg-canvas .report-source table thead th { font-size:11px !important; padding:6px 5px !important; }
+#daily-report-jpg-canvas .report-source .text-\[10px\], #daily-report-jpg-canvas .report-source .text-\[11px\], #daily-report-jpg-canvas .report-source .text-xs { font-size:11px !important; line-height:1.2 !important; }
+#daily-report-jpg-canvas .report-source .text-sm { font-size:12px !important; }
+#daily-report-jpg-canvas .report-source .text-base { font-size:13px !important; }
+#daily-report-jpg-canvas .report-source .grid { gap:5px !important; }
+#daily-report-jpg-canvas .report-source .grid > div { min-height:44px !important; padding:6px !important; border-radius:8px !important; }
+#daily-report-jpg-canvas #ringkasan-minuman-box { gap:5px !important; }
+#daily-report-jpg-canvas #ringkasan-minuman-box > * { min-height:42px !important; padding:6px !important; font-size:12px !important; }
+#daily-report-jpg-canvas .report-summary-note { margin:0 0 7px; padding:7px 9px; border:1px solid #dbe5ee; border-radius:8px; background:#f8fafc; color:#475569; font-size:10px; line-height:1.3; font-weight:700; text-align:center; }
+#daily-report-jpg-canvas .report-summary-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px; }
+#daily-report-jpg-canvas .report-summary-card { min-height:48px; box-sizing:border-box; padding:7px 9px; border:1px solid #e2e8f0; border-radius:9px; background:#fff; display:flex; flex-direction:column; justify-content:center; text-align:center; }
+#daily-report-jpg-canvas .report-summary-label { font-size:9.5px; line-height:1.15; font-weight:800; color:#475569; }
+#daily-report-jpg-canvas .report-summary-value { margin-top:3px; font-size:14px; line-height:1.1; font-weight:900; color:#0f172a; }
+#daily-report-jpg-canvas .report-summary-blue { border-color:#bfdbfe; }
+#daily-report-jpg-canvas .report-summary-blue .report-summary-value { color:#1e40af; }
+#daily-report-jpg-canvas .report-summary-sky { border-color:#bae6fd; }
+#daily-report-jpg-canvas .report-summary-sky .report-summary-value { color:#0369a1; }
+#daily-report-jpg-canvas .report-summary-amber { border-color:#fde68a; }
+#daily-report-jpg-canvas .report-summary-amber .report-summary-value { color:#92400e; }
+#daily-report-jpg-canvas .report-summary-teal { border-color:#99f6e4; }
+#daily-report-jpg-canvas .report-summary-teal .report-summary-value { color:#0f766e; }
+#daily-report-jpg-canvas .report-summary-rose { border-color:#fecdd3; }
+#daily-report-jpg-canvas .report-summary-rose .report-summary-value { color:#be123c; }
+#daily-report-jpg-canvas .report-summary-purple { border-color:#ddd6fe; }
+#daily-report-jpg-canvas .report-summary-purple .report-summary-value { color:#6d28d9; }
+#daily-report-jpg-canvas .report-summary-red { border-color:#fecaca; }
+#daily-report-jpg-canvas .report-summary-red .report-summary-value { color:#b91c1c; }
+#daily-report-jpg-canvas .report-summary-indigo { border-color:#c7d2fe; }
+#daily-report-jpg-canvas .report-summary-indigo .report-summary-value { color:#3730a3; }
+#daily-report-jpg-canvas .report-summary-emerald { border-color:#a7f3d0; background:#f0fdf4; }
+#daily-report-jpg-canvas .report-summary-emerald .report-summary-value { color:#047857; }
+#daily-report-jpg-canvas .report-summary-final { margin-top:1px; }
+#daily-report-jpg-canvas .report-summary-total { grid-column:1 / -1; min-height:54px; }
+#daily-report-jpg-canvas .report-summary-total .report-summary-label { font-size:10px; }
+#daily-report-jpg-canvas .report-summary-total .report-summary-value { font-size:17px; }
+#daily-report-jpg-canvas .report-footer { font-size:11px !important; padding:2px !important; }
+</style>
+
+
+<style id="daily-cash-glass-centered-final">
+/* =========================================================
+   DAILY RECAP — KAS HARI INI
+   Semua card nominal dibuat glass seperti "Sisa Cash Minuman"
+   dan seluruh isi card dibuat rata tengah.
+   Visual only — tidak mengubah ID, data, atau fungsi JS.
+   ========================================================= */
+
+#daily-cash-dashboard > section > .grid > div {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+
+    /* Liquid glass */
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,.34),
+        rgba(255,255,255,.16)
+    ) !important;
+    border: 1px solid rgba(255,255,255,.62) !important;
+    border-radius: 18px !important;
+
+    backdrop-filter: blur(18px) saturate(135%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.78),
+        inset 0 -1px 0 rgba(255,255,255,.16),
+        0 8px 22px rgba(15,23,42,.10) !important;
+
+    overflow: hidden !important;
+}
+
+/* Kilau kaca */
+#daily-cash-dashboard > section > .grid > div::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    pointer-events: none !important;
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,.28),
+        rgba(255,255,255,0) 55%
+    ) !important;
+}
+
+/* Pastikan semua isi tetap di atas efek kaca */
+#daily-cash-dashboard > section > .grid > div > * {
+    position: relative !important;
+    z-index: 2 !important;
+    text-align: center !important;
+    width: 100% !important;
+}
+
+/* Label */
+#daily-cash-dashboard > section > .grid > div p:first-child {
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* Nominal */
+#daily-cash-dashboard > section > .grid > div p:last-child {
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* Hilangkan override background warna solid dari versi sebelumnya */
+#daily-cash-dashboard > section > .grid > div:nth-child(1),
+#daily-cash-dashboard > section > .grid > div:nth-child(2),
+#daily-cash-dashboard > section > .grid > div:nth-child(3),
+#daily-cash-dashboard > section > .grid > div:nth-child(4),
+#daily-cash-dashboard > section > .grid > div:nth-child(5),
+#daily-cash-dashboard > section > .grid > div:nth-child(6),
+#daily-cash-dashboard > section > .grid > div:nth-child(7) {
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,.34),
+        rgba(255,255,255,.16)
+    ) !important;
+    border-color: rgba(255,255,255,.62) !important;
+}
+
+/* Tetap pertahankan warna teks nominal masing-masing */
+#daily-cash-dashboard > section > .grid > div:nth-child(1) p:last-child { color:#1d4ed8 !important; }
+#daily-cash-dashboard > section > .grid > div:nth-child(2) p:last-child { color:#047857 !important; }
+#daily-cash-dashboard > section > .grid > div:nth-child(3) p:last-child { color:#0369a1 !important; }
+#daily-cash-dashboard > section > .grid > div:nth-child(4) p:last-child { color:#c2410c !important; }
+#daily-cash-dashboard > section > .grid > div:nth-child(5) p:last-child { color:#047857 !important; }
+#daily-cash-dashboard > section > .grid > div:nth-child(6) p:last-child { color:#6d28d9 !important; }
+#daily-cash-dashboard > section > .grid > div:nth-child(7) p:last-child { color:#047857 !important; }
+
+/* Label juga dibuat konsisten dan tetap terbaca */
+#daily-cash-dashboard > section > .grid > div:nth-child(1) p:first-child { color:#1e3a8a !important; }
+#daily-cash-dashboard > section > .grid > div:nth-child(2) p:first-child { color:#065f46 !important; }
+#daily-cash-dashboard > section > .grid > div:nth-child(3) p:first-child { color:#075985 !important; }
+#daily-cash-dashboard > section > .grid > div:nth-child(4) p:first-child { color:#9a3412 !important; }
+#daily-cash-dashboard > section > .grid > div:nth-child(5) p:first-child { color:#047857 !important; }
+#daily-cash-dashboard > section > .grid > div:nth-child(6) p:first-child { color:#6b21a8 !important; }
+#daily-cash-dashboard > section > .grid > div:nth-child(7) p:first-child { color:#065f46 !important; }
+
+@media (max-width: 640px) {
+    #daily-cash-dashboard > section > .grid > div {
+        min-height: 82px !important;
+        padding: 11px 8px !important;
+        border-radius: 16px !important;
+    }
+
+    #daily-cash-dashboard > section > .grid > div p:first-child {
+        line-height: 1.15 !important;
+    }
+
+    #daily-cash-dashboard > section > .grid > div p:last-child {
+        line-height: 1.15 !important;
+        margin-top: 5px !important;
+    }
+}
+</style>
+
+
+<style id="daily-recap-final-layout-v46">
+/* =========================================================
+   FINAL DAILY RECAP
+   A. Semua 7 card Kas Hari Ini = liquid glass
+   B. Isi card rata tengah
+   C. Download pindah ke samping "Ganti tanggal"
+   D. Judul Rekap Keuangan Harian tetap tepat di tengah
+   ========================================================= */
+
+/* --- Judul utama benar-benar di tengah --- */
+#page-daily-recap > .flex.justify-between.items-center.mb-4.border-b {
+    position: relative !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+#page-daily-recap > .flex.justify-between.items-center.mb-4.border-b > h2 {
+    width: 100% !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+}
+
+/* --- Area kontrol tanggal --- */
+#daily-cash-dashboard > div:first-child {
+    position: relative !important;
+}
+
+.daily-recap-date-actions {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 12px !important;
+}
+
+.daily-recap-date-picker {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+}
+
+.daily-recap-download-inline {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: auto !important;
+    margin: 0 !important;
+}
+
+.daily-recap-download-inline .daily-report-jpg-button {
+    width: 58px !important;
+    min-width: 58px !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    padding: 10px !important;
+    border-radius: 16px !important;
+}
+
+/* --- Semua card Kas Hari Ini: satu efek kaca yang konsisten --- */
+#daily-cash-dashboard > section > .grid > div {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,.34),
+        rgba(255,255,255,.16)
+    ) !important;
+
+    border: 1px solid rgba(255,255,255,.68) !important;
+    border-radius: 18px !important;
+
+    backdrop-filter: blur(18px) saturate(135%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.82),
+        inset 0 -1px 0 rgba(255,255,255,.16),
+        0 8px 22px rgba(15,23,42,.10) !important;
+
+    overflow: hidden !important;
+}
+
+/* Menimpa background solid/warna lama pada SEMUA card,
+   termasuk card ke-5, ke-6, dan ke-7. */
+#daily-cash-dashboard > section > .grid > div:nth-child(1),
+#daily-cash-dashboard > section > .grid > div:nth-child(2),
+#daily-cash-dashboard > section > .grid > div:nth-child(3),
+#daily-cash-dashboard > section > .grid > div:nth-child(4),
+#daily-cash-dashboard > section > .grid > div:nth-child(5),
+#daily-cash-dashboard > section > .grid > div:nth-child(6),
+#daily-cash-dashboard > section > .grid > div:nth-child(7) {
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,.34),
+        rgba(255,255,255,.16)
+    ) !important;
+    border-color: rgba(255,255,255,.68) !important;
+}
+
+/* Kilau kaca */
+#daily-cash-dashboard > section > .grid > div::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    pointer-events: none !important;
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,.28),
+        rgba(255,255,255,0) 55%
+    ) !important;
+}
+
+/* Isi berada di atas efek kaca */
+#daily-cash-dashboard > section > .grid > div > * {
+    position: relative !important;
+    z-index: 2 !important;
+    width: 100% !important;
+    text-align: center !important;
+}
+
+#daily-cash-dashboard > section > .grid > div p:first-child,
+#daily-cash-dashboard > section > .grid > div p:last-child {
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* Warna nominal tetap dipertahankan */
+#daily-cash-dashboard > section > .grid > div:nth-child(1) p:last-child { color:#1d4ed8 !important; }
+#daily-cash-dashboard > section > .grid > div:nth-child(2) p:last-child { color:#047857 !important; }
+#daily-cash-dashboard > section > .grid > div:nth-child(3) p:last-child { color:#0369a1 !important; }
+#daily-cash-dashboard > section > .grid > div:nth-child(4) p:last-child { color:#c2410c !important; }
+#daily-cash-dashboard > section > .grid > div:nth-child(5) p:last-child { color:#047857 !important; }
+#daily-cash-dashboard > section > .grid > div:nth-child(6) p:last-child { color:#6d28d9 !important; }
+#daily-cash-dashboard > section > .grid > div:nth-child(7) p:last-child { color:#047857 !important; }
+
+/* --- HP --- */
+@media (max-width: 640px) {
+    .daily-recap-date-actions {
+        gap: 8px !important;
+    }
+
+    .daily-recap-date-picker {
+        gap: 6px !important;
+    }
+
+    .daily-recap-date-picker label {
+        line-height: 1.05 !important;
+    }
+
+    .daily-recap-download-inline .daily-report-jpg-button {
+        width: 48px !important;
+        min-width: 48px !important;
+        height: 44px !important;
+        min-height: 44px !important;
+        padding: 8px !important;
+        border-radius: 14px !important;
+    }
+
+    #daily-cash-dashboard > section > .grid > div {
+        min-height: 82px !important;
+        padding: 11px 8px !important;
+        border-radius: 16px !important;
+    }
+}
+</style>
+
+
+<style id="daily-recap-final-clean-glass-v47">
+/* =========================================================
+   DAILY RECAP FINAL
+   ========================================================= */
+
+/* 1. KONTROL CEPAT benar-benar disembunyikan */
+#daily-cash-dashboard > section > div:first-child p:first-child {
+    display: none !important;
+}
+
+/* 2. Judul KAS HARI INI rata tengah */
+#daily-cash-dashboard > section > div:first-child {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    margin-bottom: 10px !important;
+    padding: 0 !important;
+}
+
+#daily-cash-dashboard > section > div:first-child p:last-child {
+    width: 100% !important;
+    text-align: center !important;
+    margin: 0 auto !important;
+}
+
+/* 3. Hilangkan tulisan/frame "Belum dicek" */
+#daily-cash-dashboard > section > div:first-child > *:not(p) {
+    display: none !important;
+}
+
+/* Jika status "Belum dicek" berada di elemen sibling lain */
+#daily-cash-dashboard .daily-check-status,
+#daily-cash-dashboard .check-status,
+#daily-cash-dashboard .status-badge,
+#daily-cash-dashboard [class*="check-status"],
+#daily-cash-dashboard [class*="status-badge"] {
+    display: none !important;
+}
+
+/* 4. SEMUA card nominal memakai glass yang sama.
+      Card 5 = Sisa Cash Lapangan
+      Card 6 = Sisa Cash Minuman
+      Card 7 = Total Sisa Cash */
+#daily-cash-dashboard > section > .grid > div:nth-child(5),
+#daily-cash-dashboard > section > .grid > div:nth-child(6),
+#daily-cash-dashboard > section > .grid > div:nth-child(7) {
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,.42),
+        rgba(255,255,255,.18)
+    ) !important;
+
+    border: 1px solid rgba(255,255,255,.62) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.78),
+        0 8px 22px rgba(15,23,42,.08) !important;
+
+    backdrop-filter: blur(16px) saturate(135%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(135%) !important;
+
+    border-radius: 18px !important;
+    overflow: hidden !important;
+}
+
+/* Pastikan override warna solid lama tidak bisa muncul kembali */
+#daily-cash-dashboard > section > .grid > div:nth-child(5),
+#daily-cash-dashboard > section > .grid > div:nth-child(6),
+#daily-cash-dashboard > section > .grid > div:nth-child(7) {
+    background-color: transparent !important;
+}
+
+/* Kilau kaca */
+#daily-cash-dashboard > section > .grid > div:nth-child(5)::before,
+#daily-cash-dashboard > section > .grid > div:nth-child(6)::before,
+#daily-cash-dashboard > section > .grid > div:nth-child(7)::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    pointer-events: none !important;
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,.28),
+        rgba(255,255,255,0) 55%
+    ) !important;
+}
+
+/* Semua isi card tetap di atas efek kaca dan rata tengah */
+#daily-cash-dashboard > section > .grid > div:nth-child(5) > *,
+#daily-cash-dashboard > section > .grid > div:nth-child(6) > *,
+#daily-cash-dashboard > section > .grid > div:nth-child(7) > * {
+    position: relative !important;
+    z-index: 2 !important;
+    text-align: center !important;
+}
+
+/* Warna teks tetap seperti sebelumnya */
+#daily-cash-dashboard > section > .grid > div:nth-child(5) p:first-child,
+#daily-cash-dashboard > section > .grid > div:nth-child(5) p:last-child {
+    color: #047857 !important;
+}
+
+#daily-cash-dashboard > section > .grid > div:nth-child(6) p:first-child {
+    color: #6b21a8 !important;
+}
+#daily-cash-dashboard > section > .grid > div:nth-child(6) p:last-child {
+    color: #6d28d9 !important;
+}
+
+#daily-cash-dashboard > section > .grid > div:nth-child(7) p:first-child,
+#daily-cash-dashboard > section > .grid > div:nth-child(7) p:last-child {
+    color: #065f46 !important;
+}
+
+/* HP */
+@media (max-width: 640px) {
+    #daily-cash-dashboard > section > div:first-child {
+        margin-bottom: 10px !important;
+    }
+
+    #daily-cash-dashboard > section > div:first-child p:last-child {
+        text-align: center !important;
+    }
+}
+</style>
+
+
+<style id="daily-recap-glass-balance-hard-fix-v48">
+/* HARD FIX:
+   Sisa Cash Lapangan dan Total Sisa Cash sekarang memakai
+   struktur/class glass yang sama dan tidak lagi memiliki
+   inline background-color yang mengalahkan efek kaca. */
+
+#daily-cash-dashboard > section > .grid > .daily-glass-balance-card {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,.42),
+        rgba(255,255,255,.18)
+    ) !important;
+
+    background-color: transparent !important;
+    border: 1px solid rgba(255,255,255,.62) !important;
+    border-radius: 18px !important;
+
+    backdrop-filter: blur(16px) saturate(135%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(135%) !important;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.78),
+        inset 0 -1px 0 rgba(255,255,255,.16),
+        0 8px 22px rgba(15,23,42,.08) !important;
+
+    overflow: hidden !important;
+}
+
+#daily-cash-dashboard > section > .grid > .daily-glass-balance-card::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,.30),
+        rgba(255,255,255,0) 58%
+    ) !important;
+}
+
+#daily-cash-dashboard > section > .grid > .daily-glass-balance-card > * {
+    position: relative !important;
+    z-index: 2 !important;
+    width: 100% !important;
+    text-align: center !important;
+}
+
+#daily-cash-dashboard > section > .grid > .daily-glass-balance-card p:first-child {
+    color: #047857 !important;
+}
+
+#daily-cash-dashboard > section > .grid > .daily-glass-balance-card p:last-child {
+    color: #047857 !important;
+    text-align: center !important;
+}
+</style>
+
+
+<style id="daily-recap-uniform-glass-v49">
+/* =========================================================
+   KAS HARI INI — GLASS SERAGAM
+   Semua card dari Total Pemasukan sampai Total Sisa Cash
+   memakai warna kaca yang sama agar terlihat satu kesatuan.
+   ========================================================= */
+
+#daily-cash-dashboard > section > .grid > div {
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,.42),
+        rgba(255,255,255,.18)
+    ) !important;
+
+    background-color: transparent !important;
+    border: 1px solid rgba(255,255,255,.62) !important;
+    border-radius: 18px !important;
+
+    backdrop-filter: blur(16px) saturate(135%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(135%) !important;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.78),
+        inset 0 -1px 0 rgba(255,255,255,.16),
+        0 8px 22px rgba(15,23,42,.08) !important;
+}
+
+/* Hilangkan perbedaan warna background lama pada setiap card */
+#daily-cash-dashboard > section > .grid > div:nth-child(1),
+#daily-cash-dashboard > section > .grid > div:nth-child(2),
+#daily-cash-dashboard > section > .grid > div:nth-child(3),
+#daily-cash-dashboard > section > .grid > div:nth-child(4),
+#daily-cash-dashboard > section > .grid > div:nth-child(5),
+#daily-cash-dashboard > section > .grid > div:nth-child(6),
+#daily-cash-dashboard > section > .grid > div:nth-child(7) {
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,.42),
+        rgba(255,255,255,.18)
+    ) !important;
+    background-color: transparent !important;
+    border-color: rgba(255,255,255,.62) !important;
+}
+
+/* Kilau kaca dibuat seragam */
+#daily-cash-dashboard > section > .grid > div::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,.30),
+        rgba(255,255,255,0) 58%
+    ) !important;
+}
+
+/* Isi tetap di atas kaca dan rata tengah */
+#daily-cash-dashboard > section > .grid > div > * {
+    position: relative !important;
+    z-index: 2 !important;
+    width: 100% !important;
+    text-align: center !important;
+}
+</style>
+
+
+<style id="daily-recap-glass-match-total-sisa-v50">
+/* =========================================================
+   SEMUA CARD KAS HARI INI DISAMAKAN PERSIS DENGAN
+   WARNA KACA CARD "TOTAL SISA CASH".
+   Tidak ada lagi warna kaca berbeda per card.
+   ========================================================= */
+
+/* Satu sumber warna kaca untuk SEMUA card */
+#daily-cash-dashboard > section > .grid > div,
+#daily-cash-dashboard > section > .grid > div:nth-child(1),
+#daily-cash-dashboard > section > .grid > div:nth-child(2),
+#daily-cash-dashboard > section > .grid > div:nth-child(3),
+#daily-cash-dashboard > section > .grid > div:nth-child(4),
+#daily-cash-dashboard > section > .grid > div:nth-child(5),
+#daily-cash-dashboard > section > .grid > div:nth-child(6),
+#daily-cash-dashboard > section > .grid > div:nth-child(7) {
+    background: rgba(255,255,255,.30) !important;
+    background-image: none !important;
+    background-color: rgba(255,255,255,.30) !important;
+
+    border: 1px solid rgba(255,255,255,.62) !important;
+    border-color: rgba(255,255,255,.62) !important;
+
+    backdrop-filter: blur(16px) saturate(135%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(135%) !important;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.78),
+        inset 0 -1px 0 rgba(255,255,255,.16),
+        0 8px 22px rgba(15,23,42,.08) !important;
+}
+
+/* Hilangkan efek kilau yang bisa membuat sebagian card terlihat
+   berbeda warna */
+#daily-cash-dashboard > section > .grid > div::before,
+#daily-cash-dashboard > section > .grid > div:nth-child(1)::before,
+#daily-cash-dashboard > section > .grid > div:nth-child(2)::before,
+#daily-cash-dashboard > section > .grid > div:nth-child(3)::before,
+#daily-cash-dashboard > section > .grid > div:nth-child(4)::before,
+#daily-cash-dashboard > section > .grid > div:nth-child(5)::before,
+#daily-cash-dashboard > section > .grid > div:nth-child(6)::before,
+#daily-cash-dashboard > section > .grid > div:nth-child(7)::before {
+    background: none !important;
+    background-image: none !important;
+}
+
+/* Pastikan isi tetap rata tengah */
+#daily-cash-dashboard > section > .grid > div > * {
+    position: relative !important;
+    z-index: 2 !important;
+    text-align: center !important;
+}
+
+/* Mobile tetap sama */
+@media (max-width: 640px) {
+    #daily-cash-dashboard > section > .grid > div {
+        background: rgba(255,255,255,.30) !important;
+        background-image: none !important;
+    }
 }
 </style>
 
@@ -7850,14 +8610,6 @@ body > .sticky-back-btn,
 <div class="flex justify-between items-center mb-4 border-b border-slate-900/20 pb-3">
 <h2 class="font-black text-base sm:text-lg text-slate-900 drop-shadow-sm w-full text-center">📊 REKAP KEUANGAN HARIAN</h2>
 
-<div class="daily-recap-download-area">
-  <button type="button" class="daily-report-jpg-button" onclick="downloadDailyRecapJPG()" aria-label="Download laporan JPG" title="Download laporan JPG">
-    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <path d="M12 3v11m0 0 4-4m-4 4-4-4M5 19h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </button>
-</div>
-
 </div>
 <!-- DASHBOARD KAS HARIAN -->
 <div id="daily-cash-dashboard" class="space-y-4 mb-5">
@@ -7866,10 +8618,20 @@ body > .sticky-back-btn,
             <p class="text-[10px] sm:text-xs font-black uppercase tracking-wider text-slate-500">Tanggal Rekap</p>
             <p id="daily-dashboard-date" class="text-sm sm:text-base font-black text-slate-900">-</p>
         </div>
-        <div class="flex items-center gap-2">
-            <label for="daily-dashboard-date-input" class="text-[10px] sm:text-xs font-black text-slate-600">Ganti tanggal</label>
-            <input id="daily-dashboard-date-input" type="date" class="p-2 rounded-xl text-xs glass-input font-bold text-center"
-                   onchange="syncFilterTanggal(this.value); renderRekapHarian()">
+        <div class="daily-recap-date-actions">
+            <div class="daily-recap-date-picker">
+                <label for="daily-dashboard-date-input" class="text-[10px] sm:text-xs font-black text-slate-600">Ganti tanggal</label>
+                <input id="daily-dashboard-date-input" type="date" class="p-2 rounded-xl text-xs glass-input font-bold text-center"
+                       onchange="syncFilterTanggal(this.value); renderRekapHarian()">
+            </div>
+
+            <div class="daily-recap-download-area daily-recap-download-inline">
+                <button type="button" class="daily-report-jpg-button" onclick="downloadDailyRecapJPG()" aria-label="Download laporan JPG" title="Download laporan JPG">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="M12 3v11m0 0 4-4m-4 4-4-4M5 19h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -7899,7 +8661,7 @@ body > .sticky-back-btn,
                 <p class="text-[10px] font-bold text-slate-500">Pengeluaran</p>
                 <p id="daily-total-keluar" class="text-sm sm:text-lg font-black text-rose-800 mt-1">Rp 0</p>
             </div>
-            <div class="p-3 rounded-xl border-2" style="border-color: rgb(5 150 105 / 0.5) !important; background-color: rgb(236 253 245 / 0.8) !important;">
+            <div class="p-3 rounded-xl border-2 daily-glass-balance-card">
                 <p class="text-[10px] font-bold text-emerald-700">Sisa Cash Lapangan</p>
                 <p id="daily-sisa-cash-lapangan" class="text-sm sm:text-lg font-black text-emerald-900 mt-1">Rp 0</p>
             </div>
@@ -7907,7 +8669,7 @@ body > .sticky-back-btn,
                 <p class="text-[10px] font-bold text-purple-700">Sisa Cash Minuman</p>
                 <p id="daily-sisa-cash-minuman" class="text-sm sm:text-lg font-black text-purple-800 mt-1">Rp 0</p>
             </div>
-            <div class="p-3 rounded-xl border-2 col-span-2 lg:col-span-1" style="border-color: rgb(5 150 105 / 0.5) !important; background-color: rgb(236 253 245 / 0.8) !important;">
+            <div class="p-3 rounded-xl border-2 col-span-2 lg:col-span-1 daily-glass-balance-card">
                 <p class="text-[10px] font-bold text-emerald-700">Total Sisa Cash</p>
                 <p id="daily-cash-seharusnya" class="text-base sm:text-xl font-black text-emerald-900 mt-1">Rp 0</p>
             </div>
@@ -8074,14 +8836,6 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 <p class="text-xs text-slate-900 font-bold mb-1 text-center">Total Pengeluaran</p>
 <p class="text-base sm:text-lg font-black text-rose-700 text-center" id="rekap-keluar">Rp 0</p>
 </div>
-<div class="p-3 sm:p-4 rounded-xl border border-indigo-600/50 text-center shadow bg-white/30">
-<p class="text-xs text-slate-900 font-bold mb-1 text-center">Sisa Cash Lapangan Setelah Pengeluaran</p>
-<p class="text-base sm:text-lg font-black text-indigo-800 text-center" id="rekap-sisa-cash-lapangan">Rp 0</p>
-</div>
-<div class="p-3 sm:p-4 rounded-xl border border-purple-600/50 text-center shadow bg-white/30">
-<p class="text-xs text-slate-900 font-bold mb-1 text-center">Sisa Cash Minuman Setelah Pengeluaran</p>
-<p class="text-base sm:text-lg font-black text-purple-800 text-center" id="rekap-sisa-cash-minuman">Rp 0</p>
-</div>
 <div class="p-3 sm:p-4 rounded-xl border border-blue-600/50 text-center shadow bg-white/30">
 <p class="text-xs text-slate-900 font-bold mb-1 text-center">Pengeluaran dari Cash Lapangan</p>
 <p class="text-base sm:text-lg font-black text-blue-900 text-center" id="rekap-pengeluaran-dari-lapangan">Rp 0</p>
@@ -8093,6 +8847,14 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 <div class="p-3 sm:p-4 rounded-xl border border-red-600/50 text-center shadow bg-white/30">
 <p class="text-xs text-slate-900 font-bold mb-1 text-center">Cash Tidak Tercover</p>
 <p class="text-base sm:text-lg font-black text-red-700 text-center" id="rekap-kekurangan-cash">Rp 0</p>
+</div>
+<div class="p-3 sm:p-4 rounded-xl border border-indigo-600/50 text-center shadow bg-white/30">
+<p class="text-xs text-slate-900 font-bold mb-1 text-center">Sisa Cash Lapangan Setelah Pengeluaran</p>
+<p class="text-base sm:text-lg font-black text-indigo-800 text-center" id="rekap-sisa-cash-lapangan">Rp 0</p>
+</div>
+<div class="p-3 sm:p-4 rounded-xl border border-purple-600/50 text-center shadow bg-white/30">
+<p class="text-xs text-slate-900 font-bold mb-1 text-center">Sisa Cash Minuman Setelah Pengeluaran</p>
+<p class="text-base sm:text-lg font-black text-purple-800 text-center" id="rekap-sisa-cash-minuman">Rp 0</p>
 </div>
 <div class="p-3 sm:p-4 rounded-xl border border-emerald-600/50 text-center shadow bg-white/30">
 <p class="text-xs text-slate-900 font-bold mb-1 text-center">Total Cash Tersisa</p>
@@ -8667,6 +9429,11 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 <p class="text-[10px] text-amber-900 font-bold">Promo ini berlaku untuk member maupun non-member. Member mendapat tambahan diskon hanya sebesar kekurangannya agar total diskon menjadi Rp 100.000.</p>
 <p id="info-diskon-khusus" class="text-[10px] text-amber-800 font-black">Diskon promo tidak aktif</p>
 </div>
+<div class="p-3 rounded-xl border border-violet-400/50 mb-3 space-y-2 bg-violet-50/50 uang-masuk-option-panel">
+  <label class="block text-xs font-black text-violet-950">💸 Diskon Tambahan Manual</label>
+  <input id="in-diskon-manual" class="w-full p-2 rounded-xl text-sm glass-input font-bold" type="number" min="0" step="1000" value="0" placeholder="Masukkan nominal diskon (Rp)" oninput="hitungOtomatisBiaya()"/>
+  <p id="info-diskon-manual" class="text-[10px] text-violet-800 font-black">Diskon tambahan tidak aktif</p>
+</div>
 <div class="uang-masuk-socks-card" id="in-kaos-kaki-card">
   <label class="flex items-center gap-2 cursor-pointer">
     <input class="w-4 h-4 rounded accent-sky-600" id="in-kaos-kaki" onchange="updateKaosKakiMasuk()" type="checkbox"/>
@@ -8682,7 +9449,8 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3 uang-masuk-payment-wrap">
 <div class="p-3 rounded-xl border border-emerald-500/40 space-y-2 bg-white/30 uang-masuk-payment-card">
 <label id="label-pembayaran-tim-1" class="block text-xs font-black text-emerald-950">Pembayaran Tim 1</label>
-<input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-jumlah-1" placeholder="Nominal (Rp)" type="number"/>
+<input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-jumlah-1" placeholder="Nominal pembayaran sekarang (Rp)" type="number"/>
+<div class="grid grid-cols-2 gap-2"><div><label class="block text-[10px] font-black text-emerald-950 mb-1">DP Manual (Rp)</label><input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-dp-1" min="0" type="number" placeholder="Jika sudah DP"/></div><div><label class="block text-[10px] font-black text-emerald-950 mb-1">Tanggal DP</label><input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-tgl-dp-1" type="date"/></div></div>
 <select class="w-full p-2 rounded text-sm glass-input font-bold" id="in-metode-1" onchange="toggleFreePaymentInput(1)">
 <option value="Belum Bayar">Belum Bayar</option><option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option><option value="Free">Free / Gratis</option>
 </select>
@@ -8692,7 +9460,8 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 <select class="w-full p-2 rounded text-sm glass-input font-bold" id="in-status-2" onchange="hitungOtomatisBiaya()">
 <option value="Non-Member">Non-Member</option><option value="Member">Member</option>
 </select>
-<input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-jumlah-2" placeholder="Nominal (Rp)" type="number"/>
+<input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-jumlah-2" placeholder="Nominal pembayaran sekarang (Rp)" type="number"/>
+<div class="grid grid-cols-2 gap-2"><div><label class="block text-[10px] font-black text-emerald-950 mb-1">DP Manual (Rp)</label><input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-dp-2" min="0" type="number" placeholder="Jika sudah DP"/></div><div><label class="block text-[10px] font-black text-emerald-950 mb-1">Tanggal DP</label><input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-tgl-dp-2" type="date"/></div></div>
 <select class="w-full p-2 rounded text-sm glass-input font-bold" id="in-metode-2" onchange="toggleFreePaymentInput(2)">
 <option value="Belum Bayar">Belum Bayar</option><option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option><option value="Free">Free / Gratis</option>
 </select>
@@ -9462,6 +10231,10 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
              document.getElementById('in-sewa-rompi-2').checked = false;
             const diskonKhususEl = document.getElementById('in-diskon-khusus-100');
             if (diskonKhususEl) diskonKhususEl.checked = false;
+            const diskonManualEl = document.getElementById('in-diskon-manual');
+            if (diskonManualEl) diskonManualEl.value = 0;
+            const infoDiskonManualEl = document.getElementById('info-diskon-manual');
+            if (infoDiskonManualEl) infoDiskonManualEl.innerText = 'Diskon tambahan tidak aktif';
             document.getElementById('info-biaya-tambahan').innerText = "Biaya tambahan sewa: Rp 0";
 
             if(!tglInput) return;
@@ -9558,6 +10331,8 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             const pakaiRompi1 = !!document.getElementById('in-sewa-rompi-1')?.checked;
             const pakaiRompi2 = !!document.getElementById('in-sewa-rompi-2')?.checked;
             const pakaiDiskonKhusus = !!document.getElementById('in-diskon-khusus-100')?.checked;
+            const diskonManualInput = Number(document.getElementById('in-diskon-manual')?.value || 0);
+            const diskonManual = Math.max(0, Number.isFinite(diskonManualInput) ? diskonManualInput : 0);
 
             let durasiJam = 1;
             if (jamMainStr.includes('-')) {
@@ -9714,6 +10489,8 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             let diskonKhususTim2 = 0;
             let diskonNormalMemberTim1 = 0;
             let diskonNormalMemberTim2 = 0;
+            let diskonManualTim1 = 0;
+            let diskonManualTim2 = 0;
             if (isSparingPayment) {
                 const hargaNormalPerJam = hargaTotalLapangan;
                 const hargaDasarPerTim = Math.round(hargaNormalPerJam / 2);
@@ -9738,6 +10515,14 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                     hargaTim1 = Math.max(0, hargaTim1 - diskonKhususTim1);
                     hargaTim2 = Math.max(0, hargaTim2 - diskonKhususTim2);
                 }
+                // Diskon manual adalah diskon tambahan dari admin. Untuk Sparing,
+                // nominal diskon dibagi rata kepada Tim 1 dan Tim 2.
+                if (diskonManual > 0) {
+                    diskonManualTim1 = diskonManual / 2;
+                    diskonManualTim2 = diskonManual / 2;
+                    hargaTim1 = Math.max(0, hargaTim1 - diskonManualTim1);
+                    hargaTim2 = Math.max(0, hargaTim2 - diskonManualTim2);
+                }
             } else {
                 const tim1Member = String(selectedStatus).toLowerCase() === 'member';
                 // Harga non-member tetap menjadi acuan; member sudah mendapat
@@ -9750,6 +10535,11 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 if (pakaiDiskonKhusus) {
                     diskonKhususTim1 = Math.max(0, 100000 - diskonNormalMemberTim1);
                     hargaTim1 = Math.max(0, hargaTim1 - diskonKhususTim1);
+                }
+                // Pada Tim Internal seluruh diskon manual menjadi tanggungan Tim 1.
+                if (diskonManual > 0) {
+                    diskonManualTim1 = diskonManual;
+                    hargaTim1 = Math.max(0, hargaTim1 - diskonManualTim1);
                 }
             }
 
@@ -9781,7 +10571,10 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 diskonKhususTim1,
                 diskonKhususTim2,
                 diskonNormalMemberTim1,
-                diskonNormalMemberTim2
+                diskonNormalMemberTim2,
+                diskonManual,
+                diskonManualTim1,
+                diskonManualTim2
             };
 
             let dp1 = 0;
@@ -9812,6 +10605,10 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             const totalTerbayar2 = Number(second.dp || 0) + pembayaranTim2;
             const sisa1 = Math.max(0, totalAkhir1 - totalTerbayar1);
             const sisa2 = Math.max(0, totalAkhir2 - totalTerbayar2);
+            if (window.__pelunasanCalc) {
+                window.__pelunasanCalc.sisa1 = sisa1;
+                window.__pelunasanCalc.sisa2 = sisa2;
+            }
 
             if (info) {
                 info.innerHTML = `
@@ -9826,6 +10623,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                             <div class="bg-white/70 rounded-lg p-1.5"><div class="text-slate-500">DP</div><b class="text-slate-900">${formatRupiah(dp1)}</b></div>
                         </div>
                         ${pakaiDiskonKhusus ? `<div class="mt-2 rounded-lg bg-amber-100 text-amber-900 px-2 py-1.5 text-[10px] font-black">🎟️ Diskon promo: ${formatRupiah(diskonNormalMemberTim1 + diskonKhususTim1)} total</div>` : ''}
+                        ${diskonManual > 0 ? `<div class="mt-2 rounded-lg bg-violet-100 text-violet-900 px-2 py-1.5 text-[10px] font-black">💸 Diskon manual: ${formatRupiah(diskonManualTim1)}</div>` : ''}
                         <div class="mt-2 flex items-center justify-between rounded-lg bg-blue-600 text-white px-2 py-1.5"><span class="text-[10px] font-bold">SISA TAGIHAN</span><b class="text-sm">${formatRupiah(sisa1)}</b></div>
                     </div>
                     ${isSparingPayment ? `<div class="rounded-xl border-2 border-blue-300 bg-blue-50 p-3 shadow-md">
@@ -9839,6 +10637,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                             <div class="bg-white/70 rounded-lg p-1.5"><div class="text-slate-500">DP</div><b class="text-slate-900">${formatRupiah(Number(second.dp || 0))}</b></div>
                         </div>
                         ${pakaiDiskonKhusus ? `<div class="mt-2 rounded-lg bg-amber-100 text-amber-900 px-2 py-1.5 text-[10px] font-black">🎟️ Diskon promo: ${formatRupiah(diskonNormalMemberTim2 + diskonKhususTim2)} total</div>` : ''}
+                        ${diskonManual > 0 ? `<div class="mt-2 rounded-lg bg-violet-100 text-violet-900 px-2 py-1.5 text-[10px] font-black">💸 Diskon manual: ${formatRupiah(diskonManualTim2)}</div>` : ''}
                         <div class="mt-2 flex items-center justify-between rounded-lg bg-blue-600 text-white px-2 py-1.5"><span class="text-[10px] font-bold">SISA TAGIHAN</span><b class="text-sm">${formatRupiah(sisa2)}</b></div>
                     </div>` : ''}`;
             }
@@ -9857,6 +10656,14 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 infoDiskon.innerText = pakaiDiskonKhusus
                     ? `Diskon promo aktif · Tim 1: ${formatRupiah(diskonNormalMemberTim1 + diskonKhususTim1)} total${isSparingPayment ? ` · Tim 2: ${formatRupiah(diskonNormalMemberTim2 + diskonKhususTim2)} total` : ''}`
                     : 'Diskon promo tidak aktif';
+            }
+            const infoDiskonManual = document.getElementById('info-diskon-manual');
+            if (infoDiskonManual) {
+                infoDiskonManual.innerText = diskonManual > 0
+                    ? (isSparingPayment
+                        ? `Diskon ${formatRupiah(diskonManual)} dibagi rata · Tim 1: ${formatRupiah(diskonManualTim1)} · Tim 2: ${formatRupiah(diskonManualTim2)}`
+                        : `Diskon tambahan Tim Internal: ${formatRupiah(diskonManualTim1)}`)
+                    : 'Diskon tambahan tidak aktif';
             }
 
             const pay1 = document.getElementById('in-jumlah-1');
@@ -9925,6 +10732,35 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             return total;
         };
 
+        function getBookingForPaymentTeam(nama,tgl,jam){const target=String(nama||'').trim().toLowerCase(),j=String(jam||'').substring(0,5);if(!target||!tgl)return null;return Object.entries(globalCache.booking||{}).find(([k,b])=>b&&String(b.tgl||'').split('T')[0]===String(tgl)&&String(b.tgl||'').split('T')[1]?.substring(0,5)===j&&String(b.nama||'').trim().toLowerCase()===target)||null;}
+        function getSparingTeamNamesForPayment(nama,tgl,jam){const cur=String(nama||'').trim(),rec=getSparingForTeam(cur,tgl,String(jam||'').substring(0,5)),s=rec?.[1];if(!s||String(s.status||'').toLowerCase()!=='matched')return {tim1:cur,tim2:''};const a=String(s.timA||'').trim(),b=String(s.timB||'').trim(),x=cur.toLowerCase();return {tim1:a.toLowerCase()===x?a:(b.toLowerCase()===x?b:cur),tim2:a.toLowerCase()===x?b:(b.toLowerCase()===x?a:b)};}
+        function loadManualDpFields(nama,tgl,jam){const n=getSparingTeamNamesForPayment(nama,tgl,jam),b1=getBookingForPaymentTeam(n.tim1,tgl,jam),b2=n.tim2?getBookingForPaymentTeam(n.tim2,tgl,jam):null;const d1=document.getElementById('in-dp-1'),d2=document.getElementById('in-dp-2'),t1=document.getElementById('in-tgl-dp-1'),t2=document.getElementById('in-tgl-dp-2');if(d1)d1.value=Number(b1?.[1]?.dp||0)||'';if(t1)t1.value=b1?.[1]?.tglDp||'';if(d2)d2.value=Number(b2?.[1]?.dp||0)||'';if(t2)t2.value=b2?.[1]?.tglDp||'';}
+        async function simpanDpManualPembayaran(nama,tgl,jam,isSparing){
+            // DP Manual bersifat OPSIONAL / darurat.
+            // Kosong = jangan mengubah DP booking yang sudah ada, tetapi proses
+            // penyimpanan Uang Masuk tetap harus berjalan normal.
+            const n=getSparingTeamNamesForPayment(nama,tgl,jam);
+            const items=[
+                {nama:n.tim1,dp:Number(document.getElementById('in-dp-1')?.value||0),tglDp:document.getElementById('in-tgl-dp-1')?.value||''}
+            ];
+            if(isSparing&&n.tim2){
+                items.push({nama:n.tim2,dp:Number(document.getElementById('in-dp-2')?.value||0),tglDp:document.getElementById('in-tgl-dp-2')?.value||''});
+            }
+            for(const x of items){
+                // Tidak ada DP manual: lewati saja. JANGAN pernah menulis 0
+                // ke booking karena itu dapat menghapus/mengganti DP sebelumnya.
+                if(!(x.dp>0)) continue;
+                const f=getBookingForPaymentTeam(x.nama,tgl,jam);
+                if(!f) continue;
+                const[k,b]=f;
+                const patch={dp:x.dp,tglDp:x.tglDp||getLocalDateString()};
+                await update(ref(db,'booking/'+k),patch);
+                globalCache.booking[k]={...b,...patch};
+            }
+            // Fungsi ini sengaja tidak melempar error untuk DP kosong/tidak ditemukan.
+            // Data pemasukan utama tetap boleh disimpan.
+            return true;
+        }
         window.submitData = async (e, type) => {
             e.preventDefault();
             let data = { timestamp: Date.now() };
@@ -10003,11 +10839,25 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 let jenisPembayaran = document.getElementById('in-jenis-pembayaran')?.value || 'internal';
                 let isSparingPayment = jenisPembayaran === 'sparing';
                 let jml1 = (met1 === 'Free' || met1 === 'Belum Bayar') ? 0 : Number(document.getElementById('in-jumlah-1').value || 0);
-                let jml2 = (met2 === 'Free' || met2 === 'Belum Bayar') ? 0 : Number(document.getElementById('in-jumlah-2').value || 0);
+                const jml2Input = Number(document.getElementById('in-jumlah-2').value || 0);
+                // Untuk SPARING, nominal Tim 2 yang benar-benar diisi admin adalah
+                // pembayaran nyata dari tim lawan. Jangan sampai nominal ini hilang
+                // hanya karena dropdown metode masih berada di "Belum Bayar".
+                // Jika nominal > 0, otomatis perlakukan sebagai Cash.
+                if(isSparingPayment && met2 === 'Belum Bayar' && jml2Input > 0){
+                    met2 = 'Cash';
+                    const met2El = document.getElementById('in-metode-2');
+                    if(met2El) met2El.value = 'Cash';
+                }
+                let jml2 = (met2 === 'Free') ? 0 : jml2Input;
                 const kaosKakiAktif = !!document.getElementById('in-kaos-kaki')?.checked;
                 const jumlahKaosKaki = kaosKakiAktif ? Number(document.getElementById('in-kaos-kaki-qty')?.value || 1) : 0;
                 const totalKaosKaki = jumlahKaosKaki * 30000;
                 let tgl = document.getElementById('in-tgl').value;
+                const dpManual1 = Number(document.getElementById('in-dp-1')?.value || 0);
+                const dpManual2 = Number(document.getElementById('in-dp-2')?.value || 0);
+                const tglDpManual1 = document.getElementById('in-tgl-dp-1')?.value || '';
+                const tglDpManual2 = document.getElementById('in-tgl-dp-2')?.value || '';
 
                 let durasiJam = 1;
                 if(jamMain && jamMain.includes('-')) {
@@ -10046,10 +10896,17 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                     metode1: met1,
                     jumlah2: isSparingPayment ? jml2 : 0,
                     metode2: isSparingPayment ? met2 : 'Belum Bayar',
+                    dpManual1,
+                    tglDpManual1,
+                    dpManual2: isSparingPayment ? dpManual2 : 0,
+                    tglDpManual2: isSparingPayment ? tglDpManual2 : '',
                     paymentStatus1: met1 === 'Free' ? 'free' : (met1 === 'Belum Bayar' ? 'unpaid' : 'paid'),
                     paymentStatus2: isSparingPayment ? (met2 === 'Free' ? 'free' : (met2 === 'Belum Bayar' ? 'unpaid' : 'paid')) : 'not_applicable',
                     jenisPembayaran: isSparingPayment ? 'sparing' : 'internal',
                     status2: document.getElementById('in-status-2')?.value || 'Non-Member',
+                    diskonManual: Number(window.__pelunasanCalc?.diskonManual || 0),
+                    diskonManualTim1: Number(window.__pelunasanCalc?.diskonManualTim1 || 0),
+                    diskonManualTim2: isSparingPayment ? Number(window.__pelunasanCalc?.diskonManualTim2 || 0) : 0,
                     biayaTambahanTim1: tambahanTim1,
                     biayaTambahanTim2: tambahanTim2,
                     tambahanWaktuMenit: tambahanMenit,
@@ -10101,6 +10958,18 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                     tgl: document.getElementById('k-tgl').value,
                     sumberTgl: document.getElementById('k-sumber-tgl').value 
                 };
+            }
+            if(type === 'pemasukan') {
+                // DP Manual hanya fitur tambahan/darurat. Proses utama Uang Masuk
+                // tidak boleh gagal hanya karena field DP Manual dikosongkan.
+                // Jika DP diisi, sinkronkan ke booking; jika kosong, langsung lanjut.
+                try {
+                    await simpanDpManualPembayaran(tim, tgl, jamMain, isSparingPayment);
+                } catch(dpError) {
+                    // DP manual gagal bukan alasan membatalkan transaksi pemasukan.
+                    // Data pemasukan tetap disimpan agar tidak hilang.
+                    console.warn('DP manual tidak berhasil disinkronkan, tetapi Uang Masuk tetap disimpan:', dpError);
+                }
             }
             await push(ref(db, type), data);
             showSuccessPopup("Data berhasil disimpan dengan sukses.");
@@ -11095,7 +11964,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
         const listJam = ["07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00"];
         const listHariKey = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
 
-        let globalCache = { member: {}, booking: {}, pemasukan: {}, minuman: {}, pengeluaran: {}, adminJaga: {}, sparring: {}, teamLogos: {}, pelunasanMember: {} };
+        let globalCache = { member: {}, booking: {}, pemasukan: {}, minuman: {}, pengeluaran: {}, adminJaga: {}, sparring: {}, teamLogos: {}, pelunasanMember: {}, lunasDarurat: {} };
 
         function getNamaHari(dateStr) {
             let days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
@@ -11837,6 +12706,13 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             renderAll();
         });
 
+        // Penanda lunas darurat untuk jadwal yang tampil dari Member tetapi
+        // belum memiliki record Booking. Tidak membuat transaksi pemasukan.
+        onValue(ref(db, 'lunasDarurat'), (snapshot) => {
+            globalCache.lunasDarurat = snapshot.val() || {};
+            renderTodaySchedule();
+        });
+
         onValue(ref(db, 'pelunasanMember'), (snapshot) => {
             globalCache.pelunasanMember = snapshot.val() || {};
             if (typeof renderPelunasanMember === 'function') renderPelunasanMember();
@@ -11990,6 +12866,28 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 deleteBtn.textContent = sourceType === 'member' ? '🗑️ Hapus Hari Ini' : '🗑️ Hapus Booking';
             }
 
+            // Jika jadwal yang diklik sudah memiliki pasangan/lawan sparing,
+            // otomatis gunakan mode pembayaran SPARING. Sebelumnya mode selalu
+            // tetap Tim Internal karena select jenis pembayaran tidak pernah
+            // disesuaikan saat kartu jadwal sparing diklik.
+            const sparingRec = getSparingForTeam(nama, tgl, jamMain)?.[1] || null;
+            const autoSparing = !!(
+                sparingRec &&
+                String(sparingRec.status || '').toLowerCase() === 'matched' &&
+                String(sparingRec.timA || '').trim() &&
+                String(sparingRec.timB || '').trim()
+            );
+            const jenisPembayaranEl = document.getElementById('in-jenis-pembayaran');
+            if(jenisPembayaranEl) {
+                // Kartu dengan lawan = Sparing, kartu biasa = Tim Internal.
+                // Ini juga mencegah pilihan Sparing dari klik sebelumnya terbawa
+                // ketika admin kemudian membuka jadwal internal.
+                jenisPembayaranEl.value = autoSparing ? 'sparing' : 'internal';
+                // Jalankan handler perubahan agar panel Tim 2, label, dan preview
+                // langsung mengikuti mode yang dipilih otomatis.
+                jenisPembayaranEl.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+
             if(option) {
                 selectTim.value = option.value;
                 updateJamMainMasuk();
@@ -12062,6 +12960,9 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 window.updateUangMasukCards();
             }
 
+            // Muat DP yang sudah tercatat; admin bisa mengisi/mengoreksinya manual.
+            loadManualDpFields(nama, tgl, jamMain);
+
             // Dari kartu Jadwal Hari Ini, default metode adalah Cash dan nominal
             // otomatis terisi sebesar SISA TAGIHAN. Admin tetap bisa mengeditnya.
             const metodePembayaran1 = document.getElementById('in-metode-1');
@@ -12069,7 +12970,30 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 metodePembayaran1.value = 'Cash';
                 toggleFreePaymentInput(1);
             }
+
+            // Jika kartu yang diklik sudah memiliki lawan sparing, Tim 2 juga
+            // langsung dianggap akan membayar secara Cash agar nominalnya
+            // otomatis terisi sebesar sisa tagihan Tim 2.
+            // Sebelumnya metode Tim 2 masih "Belum Bayar", sehingga fungsi
+            // hitungOtomatisBiaya sengaja tidak mengisi nominalnya.
+            if(autoSparing) {
+                const metodePembayaran2 = document.getElementById('in-metode-2');
+                if(metodePembayaran2) {
+                    metodePembayaran2.value = 'Cash';
+                    toggleFreePaymentInput(2);
+                }
+            }
+
             hitungOtomatisBiaya();
+
+            // Pastikan nominal Tim 2 langsung terlihat setelah perhitungan akhir.
+            if(autoSparing) {
+                const pay2 = document.getElementById('in-jumlah-2');
+                const sisaTim2 = Number(window.__pelunasanCalc?.sisa2 || 0);
+                if(pay2 && document.getElementById('in-metode-2')?.value === 'Cash') {
+                    pay2.value = sisaTim2;
+                }
+            }
 
             // Kembalikan fokus ke bagian atas form Uang Masuk.
             document.getElementById('page-masuk')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -12450,14 +13374,66 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             </div>`;
         }
 
+        function showTeamLogoProgress(title='Mengupload logo...', text='Mohon tunggu, logo sedang diproses.') {
+            document.getElementById('team-logo-progress-overlay')?.remove();
+            document.body.insertAdjacentHTML('beforeend', `
+                <div id="team-logo-progress-overlay" class="team-logo-progress-overlay">
+                    <div class="team-logo-progress-modal" role="dialog" aria-modal="true">
+                        <div class="team-logo-progress-icon" data-logo-progress-icon>↑</div>
+                        <h3 class="team-logo-progress-title" data-logo-progress-title>${escapeHtmlSparing(title)}</h3>
+                        <p class="team-logo-progress-text" data-logo-progress-text>${escapeHtmlSparing(text)}</p>
+                        <div class="team-logo-progress-track"><div class="team-logo-progress-bar" data-logo-progress-bar></div></div>
+                        <div class="team-logo-progress-percent" data-logo-progress-percent>0%</div>
+                    </div>
+                </div>`);
+            return document.getElementById('team-logo-progress-overlay');
+        }
+
+        function setTeamLogoProgress(percent, title, text) {
+            const overlay = document.getElementById('team-logo-progress-overlay');
+            if(!overlay) return;
+            const n = Math.max(0, Math.min(100, Number(percent) || 0));
+            const bar = overlay.querySelector('[data-logo-progress-bar]');
+            const pct = overlay.querySelector('[data-logo-progress-percent]');
+            const titleEl = overlay.querySelector('[data-logo-progress-title]');
+            const textEl = overlay.querySelector('[data-logo-progress-text]');
+            if(bar) bar.style.width = n + '%';
+            if(pct) pct.textContent = Math.round(n) + '%';
+            if(title) titleEl.textContent = title;
+            if(text) textEl.textContent = text;
+        }
+
+        function finishTeamLogoProgress(ok, text, removeDelay=1200) {
+            const overlay = document.getElementById('team-logo-progress-overlay');
+            if(!overlay) return;
+            const modal = overlay.querySelector('.team-logo-progress-modal');
+            const icon = overlay.querySelector('[data-logo-progress-icon]');
+            modal?.classList.toggle('is-success', !!ok);
+            modal?.classList.toggle('is-error', !ok);
+            if(icon) icon.textContent = ok ? '✓' : '!';
+            setTeamLogoProgress(ok ? 100 : 0, ok ? 'Logo berhasil diproses' : 'Upload gagal', text);
+            if(removeDelay >= 0) setTimeout(() => overlay.remove(), removeDelay);
+        }
+
         function fileToBase64DataUrl(file, callback) {
             if(!file || !String(file.type || '').startsWith('image/')) {
                 alert('File yang dipilih harus berupa gambar.');
                 return;
             }
+            showTeamLogoProgress('Membaca gambar...', `Memproses ${file.name || 'logo'}...`);
             const reader = new FileReader();
-            reader.onload = () => callback(String(reader.result || ''));
-            reader.onerror = () => alert('Gagal membaca file gambar.');
+            reader.onprogress = event => {
+                if(event.lengthComputable) setTeamLogoProgress((event.loaded / event.total) * 90, 'Membaca gambar...', 'Mengubah gambar menjadi data yang siap disimpan...');
+            };
+            reader.onload = () => {
+                setTeamLogoProgress(95, 'Menyiapkan logo...', 'Hampir selesai.');
+                setTimeout(() => {
+                    const dataUrl = String(reader.result || '');
+                    callback(dataUrl);
+                    finishTeamLogoProgress(true, 'Gambar berhasil diproses.');
+                }, 120);
+            };
+            reader.onerror = () => finishTeamLogoProgress(false, 'Gagal membaca file gambar.', 1800);
             reader.readAsDataURL(file);
         }
 
@@ -12576,6 +13552,8 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 
             const key = getTeamLogoKey(teamName);
             try {
+                showTeamLogoProgress(logo ? 'Menyimpan logo...' : 'Menghapus logo...', logo ? 'Mengirim logo ke Firebase. Mohon tunggu...' : 'Menghapus data logo dari Firebase...');
+                setTeamLogoProgress(10, logo ? 'Menyimpan logo...' : 'Menghapus logo...', 'Menghubungkan ke Firebase...');
                 if(logo) {
                     // Simpan logo pada satu key kanonik berdasarkan nama tim.
                     // Semua Booking History, Member, Jadwal, dan Sparing mengambil
@@ -12587,6 +13565,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                         logo,
                         updatedAt: Date.now()
                     });
+                    setTeamLogoProgress(92, 'Menyegarkan tampilan...', 'Logo sudah tersimpan. Menyinkronkan tampilan...');
 
                     // Segarkan seluruh tampilan yang sedang terbuka sekarang juga.
                     // onValue(teamLogos) tetap menjadi sumber sinkronisasi utama.
@@ -12604,9 +13583,11 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                     renderTabelBooking();
                     refreshTeamLogoIndicators();
                     if (typeof renderSparing === 'function') renderSparing();
+                    finishTeamLogoProgress(true, `Logo ${teamName} berhasil disimpan dan disinkronkan.`, 1300);
                     showSuccessPopup(`Logo ${teamName} berhasil disimpan dan disinkronkan.`);
                 } else {
                     await remove(ref(db, 'teamLogos/' + key));
+                    setTeamLogoProgress(92, 'Menyegarkan tampilan...', 'Logo sudah dihapus. Menyinkronkan tampilan...');
                     // Hapus dari cache lokal agar semua tampilan langsung kembali
                     // ke placeholder tanpa menunggu listener Firebase.
                     if(globalCache.teamLogos) delete globalCache.teamLogos[key];
@@ -12614,11 +13595,13 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                     renderTabelBooking();
                     refreshTeamLogoIndicators();
                     if (typeof renderSparing === 'function') renderSparing();
+                    finishTeamLogoProgress(true, `Logo ${teamName} berhasil dihapus.`, 1300);
                     showSuccessPopup(`Logo ${teamName} dihapus.`);
                 }
                 closeTeamLogoEditor();
             } catch(error) {
                 console.error(error);
+                finishTeamLogoProgress(false, 'Gagal menyimpan logo tim: ' + error.message, 2200);
                 alert('Gagal menyimpan logo tim: ' + error.message);
             }
         };
@@ -12663,6 +13646,43 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             let belumBayar = false;
             let adaCatatan = false;
             let lunasSetelahPenyesuaian = false;
+            let forceLunas = false;
+
+            // Lunas darurat bisa berasal dari record Booking ATAU dari node
+            // khusus jika kartu Jadwal Hari Ini berasal dari jadwal Member
+            // dan belum mempunyai record Booking.
+            const emergencyMatch = Object.values(globalCache.lunasDarurat || {}).some(item => {
+                if(!item || item.tanggal !== getLocalDateString()) return false;
+                const itemJam = String(item.jam || '').substring(0,5);
+                const itemNama = String(item.nama || '').replace(/\s*\(Booking\)$/i, '').trim().toLowerCase();
+                return itemJam === jamTarget && itemNama === namaTarget && item.aktif !== false;
+            });
+            if(emergencyMatch) forceLunas = true;
+
+            // Tombol "Lunas Darurat" pada Jadwal Hari Ini tidak membuat
+            // transaksi pemasukan palsu. Status disimpan langsung pada booking
+            // sehingga keuangan/rekap tetap tidak bertambah.
+            Object.values(globalCache.booking || {}).forEach(booking => {
+                if(!booking || !booking.tgl) return;
+                const bDate = String(booking.tgl).split('T')[0];
+                const bJam = String(booking.tgl).split('T')[1]?.substring(0,5) || '';
+                const bNama = String(booking.nama || '').replace(/\s*\(Booking\)$/i, '').trim().toLowerCase();
+                if(bDate === getLocalDateString() && bJam === jamTarget && bNama === namaTarget && booking.lunasDarurat === true) {
+                    forceLunas = true;
+                }
+            });
+
+            if(forceLunas) {
+                return {
+                    free: false,
+                    belumBayar: false,
+                    adaCatatan: true,
+                    lunasSetelahPenyesuaian: false,
+                    forceLunas: true,
+                    dibayar: Number(totalTagihan || 0),
+                    sisa: 0
+                };
+            }
 
             Object.values(globalCache.pemasukan || {}).forEach(pay => {
                 if(!pay || pay.tgl !== getLocalDateString()) return;
@@ -12737,10 +13757,116 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 belumBayar,
                 adaCatatan,
                 lunasSetelahPenyesuaian,
+                forceLunas,
                 dibayar,
                 sisa: Math.max(0, Number(totalTagihan || 0) - dibayar)
             };
         }
+
+        // =========================================================
+        // LUNAS DARURAT — JADWAL HARI INI
+        // Tidak mencatat uang masuk. Hanya menandai booking sebagai sudah lunas
+        // agar kartu hilang dari Jadwal Hari Ini ketika data DP/pelunasan normal
+        // tidak terbaca.
+        // =========================================================
+        window.tandaiLunasDaruratJadwal = async (nama, jam, tanggal) => {
+            const namaTarget = String(nama || '').trim().toLowerCase();
+            const jamTarget = String(jam || '').substring(0,5);
+            const tglTarget = String(tanggal || getLocalDateString());
+            if(!namaTarget || !jamTarget || !tglTarget) return;
+
+            const normalizeName = value => String(value || '')
+                .replace(/\s*\(Booking\)$/i, '')
+                .trim()
+                .toLowerCase();
+
+            // Cari booking yang benar-benar ada. Booking lama bisa memiliki
+            // format nama/jam yang sedikit berbeda, jadi nama dinormalisasi.
+            let candidates = Object.entries(globalCache.booking || {}).filter(([key, b]) => {
+                if(!b || !b.tgl) return false;
+                const bDate = String(b.tgl).split('T')[0];
+                const bJam = String(b.tgl).split('T')[1]?.substring(0,5) || '';
+                return bDate === tglTarget && bJam === jamTarget && normalizeName(b.nama) === namaTarget;
+            });
+
+            const namaTampil = String(nama || '').trim();
+            const ok = await (window.appConfirm
+                ? window.appConfirm(`Tandai "${namaTampil}" jam ${jamTarget.replace(':','.') } sebagai LUNAS DARURAT?\n\nIni hanya mengubah status jadwal dan TIDAK menambah uang masuk/rekap keuangan.`)
+                : Promise.resolve(confirm(`Tandai "${namaTampil}" jam ${jamTarget.replace(':','.') } sebagai LUNAS DARURAT?\n\nIni hanya mengubah status jadwal dan TIDAK menambah uang masuk/rekap keuangan.`)));
+            if(!ok) return;
+
+            try {
+                // Jika ada booking, tandai booking tersebut. Untuk multi-jam,
+                // seluruh slot dalam bookingGroup ikut ditandai.
+                if(candidates.length) {
+                    const [, firstBooking] = candidates[0];
+                    let targetEntries = candidates;
+                    const groupId = String(firstBooking?.bookingGroupId || '');
+                    if(groupId) {
+                        targetEntries = Object.entries(globalCache.booking || {}).filter(([key, b]) =>
+                            b && String(b.bookingGroupId || '') === groupId &&
+                            String(b.tgl || '').split('T')[0] === tglTarget &&
+                            normalizeName(b.nama) === namaTarget
+                        );
+                    }
+
+                    const patch = {
+                        lunasDarurat: true,
+                        lunasDaruratAt: Date.now(),
+                        lunasDaruratTanggal: tglTarget
+                    };
+
+                    await Promise.all(targetEntries.map(async ([key, b]) => {
+                        await update(ref(db, 'booking/' + key), patch);
+                        globalCache.booking[key] = { ...b, ...patch };
+                    }));
+                } else {
+                    // PENTING: Jadwal Hari Ini juga dapat berasal langsung dari
+                    // Member tanpa record Booking. Sebelumnya kondisi ini membuat
+                    // popup "Booking tidak ditemukan" sehingga tombol darurat gagal.
+                    // Sekarang status darurat disimpan terpisah dan hanya berlaku
+                    // untuk tanggal/jam tersebut.
+                    const dayName = getNamaHari(tglTarget);
+                    const targetSlots = [];
+
+                    // Tandai semua slot member milik tim yang tampil pada kartu ini.
+                    Object.entries(globalCache.member || {}).forEach(([memberJam, perHari]) => {
+                        const cell = perHari ? perHari[dayName] : null;
+                        if(!cell || !cell.nama || !isMemberScheduledOnDate(cell, tglTarget)) return;
+                        if(normalizeName(cell.nama) !== namaTarget) return;
+                        targetSlots.push(String(memberJam).substring(0,5));
+                    });
+
+                    // Minimal tandai jam yang diklik meskipun cache member belum lengkap.
+                    if(!targetSlots.includes(jamTarget)) targetSlots.push(jamTarget);
+
+                    const uniqueSlots = [...new Set(targetSlots)];
+                    const writes = uniqueSlots.map(slot => {
+                        // Key aman untuk Firebase: hanya huruf/angka/underscore.
+                        const safeKey = Array.from(`${tglTarget}|${namaTarget}|${slot}`)
+                            .map(ch => ch.codePointAt(0).toString(16))
+                            .join('_');
+                        const data = {
+                            nama: namaTampil,
+                            tanggal: tglTarget,
+                            jam: slot,
+                            aktif: true,
+                            dibuatOleh: 'admin',
+                            timestamp: Date.now()
+                        };
+                        return update(ref(db, 'lunasDarurat/' + safeKey), data)
+                            .then(() => { globalCache.lunasDarurat[safeKey] = data; });
+                    });
+                    await Promise.all(writes);
+                }
+
+                renderTodaySchedule();
+                showSuccessPopup(`Jadwal ${namaTampil} jam ${jamTarget.replace(':','.')} ditandai LUNAS DARURAT.`);
+            } catch(error) {
+                console.error('Gagal menandai lunas darurat:', error);
+                alert('Gagal menandai lunas darurat: ' + error.message);
+            }
+        };
 
         window.renderTodaySchedule = () => {
             const listEl = document.getElementById('today-schedule-list');
@@ -12876,13 +14002,14 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                         getTodayPaymentSummary(firstBooking.nama, firstBooking.jam, total);
                     const freeMultiHour = paymentSummaries.some(x => x.free);
                     const lunasPenyesuaianMultiHour = paymentSummaries.some(x => x.lunasSetelahPenyesuaian);
+                    const forceLunasMultiHour = paymentSummaries.some(x => x.forceLunas);
                     const totalTerbayar = dp + paymentSummary.dibayar;
                     const sisa = Math.max(0, total - totalTerbayar);
                     // FREE atau -30 menit yang sudah dibayar sesuai tagihan setelah
                     // penyesuaian = seluruh booking multi-jam dianggap LUNAS.
                     // Semua slot dalam bookingGroup ikut hilang dari Jadwal Hari Ini.
-                    const sudahLunas = freeMultiHour || lunasPenyesuaianMultiHour || paymentSummary.free || (total > 0 && sisa <= 0);
-                    slotDetails.push({ ...firstBooking, jam: firstBooking.jam, durasiBooking: bookingSlots.length, total, dp, sisa, sudahLunas, free: paymentSummary.free, belumBayar: paymentSummary.belumBayar, bookingGroupId });
+                    const sudahLunas = freeMultiHour || lunasPenyesuaianMultiHour || forceLunasMultiHour || paymentSummary.free || (total > 0 && sisa <= 0);
+                    slotDetails.push({ ...firstBooking, jam: firstBooking.jam, durasiBooking: bookingSlots.length, total, dp, sisa, sudahLunas, free: paymentSummary.free, forceLunas: forceLunasMultiHour, belumBayar: paymentSummary.belumBayar, bookingGroupId });
                 } else {
                     slots.forEach(item => {
                         const jam = item.jam;
@@ -12891,8 +14018,8 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                         const paymentSummary = getTodayPaymentSummary(item.nama, jam, total);
                         const totalTerbayar = dp + paymentSummary.dibayar;
                         const sisa = Math.max(0, total - totalTerbayar);
-                        const sudahLunas = paymentSummary.free || paymentSummary.lunasSetelahPenyesuaian || (total > 0 && sisa <= 0);
-                        slotDetails.push({ ...item, total, dp, sisa, sudahLunas, free: paymentSummary.free, belumBayar: paymentSummary.belumBayar });
+                        const sudahLunas = paymentSummary.free || paymentSummary.lunasSetelahPenyesuaian || paymentSummary.forceLunas || (total > 0 && sisa <= 0);
+                        slotDetails.push({ ...item, total, dp, sisa, sudahLunas, free: paymentSummary.free, forceLunas: paymentSummary.forceLunas, belumBayar: paymentSummary.belumBayar });
                     });
                 }
 
@@ -12936,12 +14063,20 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 );
                 const sparingTimA = String(sparingItem?.timA || '').trim().toUpperCase();
                 const sparingTimB = String(sparingItem?.timB || '').trim().toUpperCase();
+                const sparingStatusA = isSparing ? getSparingTeamMemberStatus(sparingItem.timA, today, jamPertama) : '';
+                const sparingStatusB = isSparing ? getSparingTeamMemberStatus(sparingItem.timB, today, jamPertama) : '';
                 const sparingLabel = isSparing
                     ? `${escapeHtmlSparing(sparingTimA)} <span class="sparing-vs-label">VS</span> ${escapeHtmlSparing(sparingTimB)}`
                     : escapeHtmlSparing(namaTampil);
+                const sparingStatusHtml = isSparing
+                    ? `<div class="today-sparing-status-row">
+                         <span class="today-sparing-status ${sparingStatusA === 'Member' ? 'is-member' : 'is-nonmember'}">${escapeHtmlSparing(sparingTimA)}: ${sparingStatusA === 'Member' ? 'MEMBER' : 'NON MEMBER'}</span>
+                         <span class="today-sparing-status-separator">•</span>
+                         <span class="today-sparing-status ${sparingStatusB === 'Member' ? 'is-member' : 'is-nonmember'}">${escapeHtmlSparing(sparingTimB)}: ${sparingStatusB === 'Member' ? 'MEMBER' : 'NON MEMBER'}</span>
+                       </div>`
+                    : '';
 
-                // Untuk sparing, nama card diganti dengan matchup dan badge
-                // MEMBER/NON MEMBER tidak ditampilkan agar fokus ke pertandingan.
+                // Untuk sparing, status kedua tim ditampilkan di bawah matchup.
                 const cardStatusBadge = isSparing ? '' : statusBadge;
 
                 const jamChips = aktif.map(item => `<span class="schedule-time shrink-0 inline-flex items-center justify-center px-2 py-1 rounded-lg border font-black text-xs sm:text-sm shadow-sm">⏰ ${String(item.jam).replace(':','.')}</span>`).join('');
@@ -12952,10 +14087,11 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                         ${isSparing ? renderSparingLogoHtml(sparingItem.timA, sparingItem.timB) : renderTeamLogoHtml(namaTampil)}
                         <div class="today-schedule-times">${jamChips}</div>
                         <div class="today-schedule-info">
-                            <div class="today-schedule-name-row">
+                            <div class="today-schedule-name-row ${isSparing ? 'today-sparing-name-row' : ''}">
                                 <div class="${isSparing ? 'schedule-team-sparing' : (isMember ? 'schedule-team-member' : 'schedule-team-nonmember')} font-black text-xs sm:text-sm truncate">${sparingLabel}</div>
                                 ${cardStatusBadge}
                             </div>
+                            ${sparingStatusHtml}
                             ${isFirstConsecutiveTeamSchedule(schedules, jamList, jamPertama, first) ? getAdminReminderTimerHtml(today, jamPertama, hasWa) : ''}
                             ${lateTimers}
                         </div>
@@ -12972,6 +14108,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                             <div class="schedule-sisa-label">SISA</div><div>${formatRupiah(sisaGabungan)}</div>
                         </div>
                     </div>
+                    <button type="button" class="today-emergency-paid-btn" onclick="event.stopPropagation(); tandaiLunasDaruratJadwal(decodeURIComponent('${encodeURIComponent(String(first.nama || '')).replace("'", "%27")}'), '${jamPertama}', '${today}')" title="Darurat: tandai jadwal sebagai sudah lunas tanpa mencatat pemasukan">⚠️ TANDAI LUNAS DARURAT</button>
                 </div>`;
             }).join('');
 
@@ -13029,6 +14166,32 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                 const b = String(item.timB || '').trim().toLowerCase();
                 return a === target || b === target;
             }) || null;
+        }
+
+        function getSparingTeamMemberStatus(nama, tanggal, jam) {
+            const target = String(nama || '').trim().toLowerCase();
+            if(!target) return 'Non-Member';
+            const tgl = String(tanggal || '');
+            const jamKey = String(jam || '').substring(0,5);
+
+            // Booking pada tanggal + jam yang sama menjadi sumber utama.
+            const booking = Object.values(globalCache.booking || {}).find(item => {
+                if(!item || !item.nama || !item.tgl) return false;
+                const dt = sparringDateTime(item);
+                return dt.date === tgl && dt.jam === jamKey &&
+                    String(item.nama).trim().toLowerCase() === target;
+            });
+            if(booking) return String(booking.status || 'Non-Member').toLowerCase() === 'member' ? 'Member' : 'Non-Member';
+
+            // Jika tidak ada booking, cek jadwal member reguler.
+            const hariNama = getNamaHari(tgl);
+            const member = Object.values(globalCache.member || {}).find(perHari => {
+                const cell = perHari ? perHari[hariNama] : null;
+                return cell && cell.nama && cell.type !== 'off' &&
+                    String(cell.nama).trim().toLowerCase() === target &&
+                    isMemberScheduledOnDate(cell, tgl);
+            });
+            return member ? 'Member' : 'Non-Member';
         }
 
         function getBookingTeamsForSparing(tanggal, jam) {
@@ -14600,18 +15763,41 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
                         tName = p.ket.toUpperCase().trim();
                     }
                     if(tName) {
-                        let jamDurasi = 1;
-                        if(p.ket && p.ket.includes('(') && p.ket.includes(')')) {
-                            let matchJam = p.ket.match(/\((.*?)\)/);
-                            if(matchJam && matchJam[1].includes('-')) {
-                                let parts = matchJam[1].split('-');
-                                if(parts.length === 2) {
-                                    let startH = parseInt(parts[0].split(':')[0]);
-                                    let endH = parseInt(parts[1].split(':')[0]);
-                                    if(!isNaN(startH) && !isNaN(endH) && endH > startH) {
-                                        jamDurasi = endH - startH;
+                        // Gunakan durasi efektif yang disimpan saat transaksi dibuat.
+                        // Ini adalah sumber paling akurat karena sudah memperhitungkan
+                        // tambahan waktu +30 / -30 menit. Contoh: booking 06:00-12:00
+                        // (6 jam) +30 menit => 6,5 jam, bukan 7 jam.
+                        let jamDurasi = Number(p.durasiEfektifJam);
+
+                        if(!Number.isFinite(jamDurasi) || jamDurasi <= 0) {
+                            jamDurasi = 1;
+                            if(p.ket && p.ket.includes('(') && p.ket.includes(')')) {
+                                let matchJam = p.ket.match(/\((.*?)\)/);
+                                if(matchJam && matchJam[1].includes('-')) {
+                                    let parts = matchJam[1].split('-');
+                                    if(parts.length === 2) {
+                                        const parseJamMenit = (value) => {
+                                            const m = String(value || '').trim().match(/^(\d{1,2})(?::(\d{2}))?$/);
+                                            if(!m) return NaN;
+                                            const h = parseInt(m[1], 10);
+                                            const min = parseInt(m[2] || '0', 10);
+                                            if(h < 0 || h > 23 || min < 0 || min > 59) return NaN;
+                                            return h * 60 + min;
+                                        };
+                                        const startMinutes = parseJamMenit(parts[0]);
+                                        const endMinutes = parseJamMenit(parts[1]);
+                                        if(Number.isFinite(startMinutes) && Number.isFinite(endMinutes) && endMinutes > startMinutes) {
+                                            jamDurasi = (endMinutes - startMinutes) / 60;
+                                        }
                                     }
                                 }
+                            }
+
+                            // Untuk transaksi lama yang belum menyimpan durasi efektif,
+                            // baru gunakan field tambahan waktu sebagai fallback.
+                            const tambahanMenitLama = Number(p.tambahanWaktuMenit || 0);
+                            if(Number.isFinite(tambahanMenitLama) && tambahanMenitLama !== 0) {
+                                jamDurasi += tambahanMenitLama / 60;
                             }
                         }
                         paidRecordsPerDate[dNum].push({ nama: tName, jamDurasi: jamDurasi });
@@ -15436,28 +16622,69 @@ window.downloadDailyRecapJPG = async function() {
     `;
 
     const sections = [
-        { ids:['sub-page-lapangan','daily-recap-lapangan','rekap-lapangan'], title:'⚽ LAPANGAN' },
-        { ids:['sub-page-minuman','daily-recap-minuman','rekap-minuman'], title:'🥤 MINUMAN' },
-        { ids:['sub-page-pengeluaran','daily-recap-pengeluaran','rekap-pengeluaran'], title:'💸 PENGELUARAN' },
-        { ids:['sub-page-ringkasan','daily-recap-ringkasan','rekap-ringkasan'], title:'📊 RINGKASAN' }
+        { key:'lapangan', ids:['sub-page-lapangan','daily-recap-lapangan','rekap-lapangan'], title:'⚽ LAPANGAN' },
+        { key:'minuman', ids:['sub-page-minuman','daily-recap-minuman','rekap-minuman'], title:'🥤 MINUMAN' },
+        { key:'pengeluaran', ids:['sub-page-pengeluaran','daily-recap-pengeluaran','rekap-pengeluaran'], title:'💸 PENGELUARAN' },
+        { key:'ringkasan', ids:['sub-page-ringkasan','daily-recap-ringkasan','rekap-ringkasan'], title:'📊 RINGKASAN' }
     ];
 
     setProgress(42, 'Menyusun laporan...', 'Menata bagian lapangan, minuman, pengeluaran, dan ringkasan.');
 
-    sections.forEach(item => {
-        let source = null;
-        for (const id of item.ids) {
-            const el = document.getElementById(id);
-            if (el) { source = el; break; }
-        }
-        if (!source) return;
+    function reportValue(id) {
+        return document.getElementById(id)?.textContent?.trim() || 'Rp 0';
+    }
 
+    function addSummaryCard(parent, label, value, tone='blue', extraClass='') {
+        const card = document.createElement('div');
+        card.className = `report-summary-card report-summary-${tone} ${extraClass}`.trim();
+        card.innerHTML = `<div class="report-summary-label">${label}</div><div class="report-summary-value">${value}</div>`;
+        parent.appendChild(card);
+    }
+
+    sections.forEach(item => {
         const section = document.createElement('div');
         section.className = 'report-section';
 
         const heading = document.createElement('h3');
         heading.textContent = item.title;
         section.appendChild(heading);
+
+        // Ringkasan dibuat khusus untuk hasil download agar lebih sederhana.
+        // Urutan: pemasukan -> pengeluaran -> saldo cash paling akhir.
+        if (item.key === 'ringkasan') {
+            const note = document.createElement('div');
+            note.className = 'report-summary-note';
+            note.textContent = 'Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu. Jika tidak mencukupi, sisanya diambil dari Cash Minuman.';
+            section.appendChild(note);
+
+            const grid = document.createElement('div');
+            grid.className = 'report-summary-grid';
+
+            addSummaryCard(grid, 'Total Lapangan Cash', reportValue('rekap-lapangan-cash'), 'blue');
+            addSummaryCard(grid, 'Total Lapangan QRIS/Transfer', reportValue('rekap-lapangan-qrif'), 'sky');
+            addSummaryCard(grid, 'Total Minuman Cash', reportValue('rekap-minuman-cash'), 'amber');
+            addSummaryCard(grid, 'Total Minuman QRIS/Transfer', reportValue('rekap-minuman-qrif'), 'teal');
+            addSummaryCard(grid, 'Total Pengeluaran', reportValue('rekap-keluar'), 'rose');
+            addSummaryCard(grid, 'Pengeluaran dari Cash Lapangan', reportValue('rekap-pengeluaran-dari-lapangan'), 'blue');
+            addSummaryCard(grid, 'Pengeluaran dari Cash Minuman', reportValue('rekap-pengeluaran-dari-minuman'), 'purple');
+            addSummaryCard(grid, 'Cash Tidak Tercover', reportValue('rekap-kekurangan-cash'), 'red');
+
+            // Tiga saldo cash sengaja ditempatkan paling akhir.
+            addSummaryCard(grid, 'Sisa Cash Lapangan Setelah Pengeluaran', reportValue('rekap-sisa-cash-lapangan'), 'indigo', 'report-summary-final');
+            addSummaryCard(grid, 'Sisa Cash Minuman Setelah Pengeluaran', reportValue('rekap-sisa-cash-minuman'), 'purple', 'report-summary-final');
+            addSummaryCard(grid, 'Total Cash Tersisa', reportValue('rekap-total-sisa-cash'), 'emerald', 'report-summary-total');
+
+            section.appendChild(grid);
+            root.appendChild(section);
+            return;
+        }
+
+        let source = null;
+        for (const id of item.ids) {
+            const el = document.getElementById(id);
+            if (el) { source = el; break; }
+        }
+        if (!source) return;
 
         const clone = source.cloneNode(true);
         clone.removeAttribute('id');
@@ -15467,9 +16694,7 @@ window.downloadDailyRecapJPG = async function() {
         clone.querySelectorAll('input, button, select, textarea').forEach(el => el.remove());
         clone.querySelectorAll('[style*="display:none"], [style*="display: none"]').forEach(el => el.remove());
 
-        // Laporan JPG dibuat lebih ringkas:
-        // 1. Hilangkan blok "Pilih Tanggal Rekap" karena tanggal sudah ada di header utama.
-        // 2. Hilangkan tanggal yang muncul lagi di masing-masing sub-menu.
+        // Laporan JPG dibuat ringkas: tanggal dan kontrol admin tidak ikut.
         clone.querySelectorAll('#label-tanggal-lapangan, #label-tanggal-minuman, #label-tanggal-keluar, #label-tanggal-ringkasan').forEach(el => {
             el.remove();
         });
@@ -15478,23 +16703,19 @@ window.downloadDailyRecapJPG = async function() {
             const textValue = (el.textContent || '').replace(/\s+/g, ' ').trim();
             if (textValue === 'Pilih Tanggal Rekap:') {
                 const wrapper = el.closest('.flex.flex-col, .flex');
-                if (wrapper && wrapper !== clone) {
-                    wrapper.remove();
-                } else {
-                    el.remove();
-                }
+                if (wrapper && wrapper !== clone) wrapper.remove();
+                else el.remove();
             }
         });
 
-        // Setelah elemen tanggal dihapus, rapikan ruang kosong yang tersisa.
+        // Hilangkan judul bagian yang terduplikasi di dalam submenu.
+        clone.querySelectorAll('h1, h2, h3').forEach(el => el.remove());
+
         clone.querySelectorAll('.mb-4, .mb-3, .pb-3').forEach(el => {
-            if (!el.textContent.trim() && !el.querySelector('table')) {
-                el.remove();
-            }
+            if (!el.textContent.trim() && !el.querySelector('table')) el.remove();
         });
 
-        // Kolom Aksi hanya untuk kontrol admin di halaman aplikasi.
-        // Tidak perlu ikut masuk ke laporan JPG.
+        // Kolom Aksi hanya untuk kontrol admin di aplikasi.
         clone.querySelectorAll('table').forEach(table => {
             const headerRow = table.querySelector('thead tr');
             if (!headerRow) return;
@@ -17928,6 +19149,231 @@ window.downloadDailyRecapJPG = async function() {
     margin-left: auto !important;
     margin-right: auto !important;
     box-sizing: border-box !important;
+  }
+}
+</style>
+
+
+
+
+
+
+<style id="sparing-timer-contact-final-alignment">
+/* =========================================================
+   FINAL — SPARING: TIMER + INGATKAN SEJAJAR DENGAN CARD BIASA
+   - Timer sparing kembali ke posisi TIMER card tanpa lawan.
+   - Tombol Ingatkan tetap pada posisi SISA yang sama.
+   - Baris status MEMBER/NON MEMBER dipadatkan di antara nama
+     pertandingan dan timer agar tidak menimpa timer.
+   - Hanya visual/posisi, tidak mengubah JS atau fungsi.
+   ========================================================= */
+
+/* Desktop: timer tepat satu garis horizontal dengan Ingatkan. */
+#today-schedule-panel .today-schedule-info:has(.today-sparing-name-row) .today-admin-reminder-timer {
+  position:absolute !important;
+  left:0 !important;
+  top:58px !important;
+  right:auto !important;
+  bottom:auto !important;
+  width:calc((100% - var(--sg)) / 2) !important;
+  max-width:none !important;
+  min-width:0 !important;
+  height:40px !important;
+  min-height:40px !important;
+  max-height:40px !important;
+  margin:0 !important;
+  box-sizing:border-box !important;
+}
+
+/* Status sparing tetap di bawah matchup, tetapi dibuat kompak
+   sehingga area timer tetap bersih dan sejajar. */
+#today-schedule-panel .today-schedule-info:has(.today-sparing-name-row) .today-sparing-status-row {
+  position:absolute !important;
+  left:0 !important;
+  top:43px !important;
+  width:100% !important;
+  height:15px !important;
+  min-height:15px !important;
+  max-height:15px !important;
+  margin:0 !important;
+  padding:1px 4px !important;
+  box-sizing:border-box !important;
+  overflow:hidden !important;
+  border-radius:6px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:6px !important;
+  line-height:1 !important;
+}
+
+#today-schedule-panel .today-schedule-info:has(.today-sparing-name-row) .today-sparing-status {
+  font-size:8px !important;
+  line-height:1 !important;
+}
+
+/* Tombol Ingatkan: paksa tetap menggunakan koordinat yang sama
+   dengan card tanpa lawan. */
+#today-schedule-panel .today-schedule-main-row:has(.today-schedule-info .today-sparing-name-row) > .today-remind-btn {
+  position:absolute !important;
+  left:calc((100% - (var(--sg) * 2)) / 3 + var(--sg) + ((100% - ((100% - (var(--sg) * 2)) / 3 + var(--sg)) + var(--sg)) / 2)) !important;
+  top:calc(42px + 58px) !important;
+  right:auto !important;
+  bottom:auto !important;
+  width:calc((100% - ((100% - (var(--sg) * 2)) / 3 + var(--sg)) - var(--sg)) / 2) !important;
+  max-width:none !important;
+  min-width:0 !important;
+  height:40px !important;
+  min-height:40px !important;
+  max-height:40px !important;
+  margin:0 !important;
+  box-sizing:border-box !important;
+}
+
+@media (max-width:640px){
+  /* HP: mengikuti posisi final card biasa: timer dan Ingatkan
+     sama-sama mulai pada y yang sama. */
+  #today-schedule-panel .today-schedule-info:has(.today-sparing-name-row) .today-admin-reminder-timer {
+    position:absolute !important;
+    left:0 !important;
+    top:38px !important;
+    right:auto !important;
+    bottom:auto !important;
+    width:calc((100% - var(--sg)) / 2) !important;
+    max-width:none !important;
+    height:27px !important;
+    min-height:27px !important;
+    max-height:27px !important;
+    margin:0 !important;
+    padding:4px !important;
+    box-sizing:border-box !important;
+  }
+
+  #today-schedule-panel .today-schedule-info:has(.today-sparing-name-row) .today-sparing-status-row {
+    top:29px !important;
+    height:9px !important;
+    min-height:9px !important;
+    max-height:9px !important;
+    padding:0 3px !important;
+    gap:5px !important;
+    border-radius:5px !important;
+  }
+
+  #today-schedule-panel .today-schedule-info:has(.today-sparing-name-row) .today-sparing-status {
+    font-size:6.8px !important;
+    line-height:1 !important;
+  }
+
+  #today-schedule-panel .today-schedule-main-row:has(.today-schedule-info .today-sparing-name-row) > .today-remind-btn {
+    left:calc((100% - (var(--sg) * 2)) / 3 + var(--sg) + ((100% - ((100% - (var(--sg) * 2)) / 3 + var(--sg)) + var(--sg)) / 2)) !important;
+    top:72px !important;
+    right:auto !important;
+    bottom:auto !important;
+    width:calc((100% - ((100% - (var(--sg) * 2)) / 3 + var(--sg)) - var(--sg)) / 2) !important;
+    height:27px !important;
+    min-height:27px !important;
+    max-height:27px !important;
+    padding:3px 5px !important;
+    box-sizing:border-box !important;
+  }
+}
+
+@media (max-width:380px){
+  #today-schedule-panel .today-schedule-info:has(.today-sparing-name-row) .today-admin-reminder-timer {
+    top:36px !important;
+    height:25px !important;
+    min-height:25px !important;
+    max-height:25px !important;
+  }
+
+  #today-schedule-panel .today-schedule-info:has(.today-sparing-name-row) .today-sparing-status-row {
+    top:28px !important;
+    height:8px !important;
+    min-height:8px !important;
+    max-height:8px !important;
+  }
+
+  #today-schedule-panel .today-schedule-main-row:has(.today-schedule-info .today-sparing-name-row) > .today-remind-btn {
+    top:68px !important;
+    height:25px !important;
+    min-height:25px !important;
+    max-height:25px !important;
+  }
+}
+</style>
+
+<style id="sparing-reminder-final-v16">
+/* V16: khusus tombol Ingatkan SPARING.
+   Timer tidak disentuh. Card tanpa lawan tidak disentuh.
+   Tombol diturunkan agar pusat tombol benar-benar sejajar dengan timer
+   dan punya jarak nyaman dari baris MEMBER/NON MEMBER. */
+#today-schedule-panel .schedule-card:has(.today-schedule-teams) .today-schedule-main-row > .today-remind-btn {
+  transform: translateY(19px) !important;
+}
+
+@media (max-width: 640px) {
+  #today-schedule-panel .schedule-card:has(.today-schedule-teams) .today-schedule-main-row > .today-remind-btn {
+    transform: translateY(18px) !important;
+  }
+}
+
+@media (max-width: 380px) {
+  #today-schedule-panel .schedule-card:has(.today-schedule-teams) .today-schedule-main-row > .today-remind-btn {
+    transform: translateY(17px) !important;
+  }
+}
+</style>
+
+
+<style id="sparing-timer-align-v18">
+/* V18: tombol Ingatkan sparing sudah pas. Sekarang hanya TIMER sparing
+   diturunkan sedikit agar tepat sejajar dengan tombol. */
+#today-schedule-panel .schedule-card:has(.today-sparing-name-row) .today-schedule-info .today-admin-reminder-timer {
+  transform: translateY(6px) !important;
+}
+
+@media (max-width: 640px) {
+  #today-schedule-panel .schedule-card:has(.today-sparing-name-row) .today-schedule-info .today-admin-reminder-timer {
+    transform: translateY(5px) !important;
+  }
+}
+
+@media (max-width: 380px) {
+  #today-schedule-panel .schedule-card:has(.today-sparing-name-row) .today-schedule-info .today-admin-reminder-timer {
+    transform: translateY(5px) !important;
+  }
+}
+</style>
+
+
+<style id="today-emergency-paid-button-v1">
+/* Tombol darurat untuk kasus DP/pelunasan tidak terbaca. Tidak mencatat uang masuk. */
+#today-schedule-panel .today-emergency-paid-btn {
+  width:100% !important;
+  min-height:30px !important;
+  margin-top:6px !important;
+  padding:5px 8px !important;
+  border:1px solid #f59e0b !important;
+  border-radius:9px !important;
+  background:rgba(255,251,235,.96) !important;
+  color:#b45309 !important;
+  font-size:9px !important;
+  line-height:1 !important;
+  font-weight:950 !important;
+  cursor:pointer !important;
+  box-sizing:border-box !important;
+}
+#today-schedule-panel .today-emergency-paid-btn:hover {
+  background:#fef3c7 !important;
+  border-color:#d97706 !important;
+  color:#92400e !important;
+}
+@media(max-width:640px){
+  #today-schedule-panel .today-emergency-paid-btn {
+    min-height:28px !important;
+    margin-top:5px !important;
+    padding:4px 6px !important;
+    font-size:8px !important;
   }
 }
 </style>
@@ -22405,8 +23851,9 @@ window.downloadDailyRecapJPG = async function() {
 }
 @media (max-width: 640px) {
     #daily-sub-modal-glass {
-        padding: 7px;
-        align-items: flex-end;
+        padding: 8px;
+        align-items: center !important;
+        justify-content: center !important;
     }
     #daily-sub-modal-glass .daily-sub-modal-shell {
         width: 100%;
@@ -22594,8 +24041,8 @@ window.downloadDailyRecapJPG = async function() {
   width:100%!important;max-width:none!important;margin:0!important;
 }
 @media(max-width:640px){
-  #daily-sub-modal-glass-v6{padding:8px!important;align-items:flex-end!important}
-  #daily-sub-modal-glass-v6 .daily-v6-shell{max-height:92vh!important;border-radius:22px 22px 16px 16px!important}
+  #daily-sub-modal-glass-v6{padding:8px!important;align-items:center!important;justify-content:center!important}
+  #daily-sub-modal-glass-v6 .daily-v6-shell{max-height:92vh!important;border-radius:22px!important}
   #daily-sub-modal-glass-v6 .daily-v6-body{max-height:calc(92vh - 58px)!important;padding:8px!important}
 }
 /* Selama modal terbuka, submenu aslinya tidak mungkin terlihat di bawah. */
@@ -22709,6 +24156,56 @@ body.daily-sub-modal-v6-open > main #sub-page-ringkasan{
   });
 })();
 </script>
+
+<style id="daily-recap-modal-center-and-confirm-v1">
+/* DAILY RECAP — MODAL SELALU TEPAT DI TENGAH VIEWPORT */
+#daily-sub-modal-glass,
+#daily-sub-modal-glass-v6 {
+    position: fixed !important;
+    inset: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+}
+
+/* Konfirmasi Edit/Hapus harus berada DI ATAS modal Daily Recap, bukan di belakang/bawahnya. */
+#modern-dialog-root {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 2147483647 !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+#modern-dialog-root.is-open {
+    display: flex !important;
+}
+#modern-dialog-root .modern-dialog-card {
+    position: relative !important;
+    z-index: 2 !important;
+    margin: auto !important;
+}
+#modern-dialog-root .modern-dialog-backdrop {
+    z-index: 1 !important;
+}
+
+@media (max-width: 640px) {
+    #daily-sub-modal-glass,
+    #daily-sub-modal-glass-v6 {
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 8px !important;
+    }
+    #daily-sub-modal-glass .daily-sub-modal-shell,
+    #daily-sub-modal-glass-v6 .daily-v6-shell {
+        width: 100% !important;
+        max-width: 100% !important;
+        max-height: 92vh !important;
+        margin: auto !important;
+        border-radius: 22px !important;
+    }
+}
+</style>
 
 <style id="more-menu-10-items-v8">
 /* MENU LAINNYA — 10 TOMBOL: desktop 5x2, mobile 2x5 */
@@ -23806,6 +25303,651 @@ html, body {
     min-width:0 !important;
     max-width:100% !important;
     box-sizing:border-box !important;
+  }
+}
+</style>
+
+<style id="desktop-two-logo-position-fix">
+/* =========================================================
+   FIX DESKTOP — KARTU DENGAN 2 LOGO (SPARING)
+   Logo 1 tim tetap seperti semula.
+   Hanya kartu yang memiliki 2 logo yang dibuat lebih rapi.
+   HP tidak disentuh karena tampilannya sudah pas.
+   ========================================================= */
+@media (min-width: 641px) {
+  #today-schedule-panel .today-schedule-main-row > .today-schedule-logo-sparing {
+    left: 0 !important;
+    top: 50% !important;
+    width: 24% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+    flex: 0 0 24% !important;
+    min-width: 0 !important;
+    max-width: 24% !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    transform: translateY(-50%) !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4% !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  /* Masing-masing logo dibuat lebih kecil agar dua logo tidak memenuhi/keluar area. */
+  #today-schedule-panel .today-schedule-main-row > .today-schedule-logo-sparing img,
+  #today-schedule-panel .today-schedule-main-row > .today-schedule-logo-sparing > span {
+    flex: 0 0 43% !important;
+    width: 43% !important;
+    height: 82% !important;
+    max-width: 43% !important;
+    max-height: 82% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    padding: 2px !important;
+    margin: 0 !important;
+    object-fit: contain !important;
+    object-position: center center !important;
+    box-sizing: border-box !important;
+  }
+}
+</style>
+<style id="sparing-center-status-fix">
+.today-schedule-sparing-name-row {
+    justify-content: center !important;
+    align-items: center !important;
+    flex-direction: column !important;
+    text-align: center !important;
+    width: 100%;
+    gap: 4px !important;
+}
+.today-schedule-sparing-name-row .schedule-team-sparing {
+    width: 100%;
+    text-align: center !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: normal !important;
+}
+.schedule-sparing-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+    font-size: 8px;
+    font-weight: 900;
+    line-height: 1;
+}
+.schedule-sparing-status .today-status-member,
+.schedule-sparing-status .today-status-nonmember {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.schedule-sparing-status-vs { opacity: .55; }
+@media (max-width: 640px) {
+    .today-schedule-sparing-name-row .schedule-team-sparing {
+        font-size: 12px !important;
+    }
+}
+</style>
+
+
+<style id="jadwal-sparing-name-status-final-v42">
+/* =========================================================
+   FINAL FIX SPARING DESKTOP
+   - Nama Tim A VS Tim B benar-benar rata tengah
+   - Status MEMBER/NON MEMBER berada di bawah matchup
+   - Mencegah status menimpa nama tim / timer
+   ========================================================= */
+#today-schedule-panel .today-schedule-info:has(.today-sparing-name-row) {
+  grid-template-rows: auto auto auto !important;
+  align-content: start !important;
+  gap: 5px !important;
+}
+
+#today-schedule-panel .today-sparing-name-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+  min-height: 38px !important;
+}
+
+#today-schedule-panel .today-sparing-name-row .schedule-team-sparing {
+  flex: 1 1 100% !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: nowrap !important;
+  line-height: 1.1 !important;
+  padding: 0 !important;
+}
+
+#today-schedule-panel .today-sparing-name-row .sparing-vs-label {
+  flex: 0 0 auto !important;
+  margin: 0 5px !important;
+}
+
+#today-schedule-panel .today-sparing-status-row {
+  grid-column: 1 !important;
+  grid-row: 2 !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  padding: 0 4px !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  text-align: center !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
+
+#today-schedule-panel .today-sparing-status {
+  display: inline-block !important;
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
+  max-width: 48% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  font-size: 9px !important;
+  font-weight: 950 !important;
+  line-height: 1.1 !important;
+}
+
+#today-schedule-panel .today-sparing-status.is-member {
+  color: #2563eb !important;
+}
+
+#today-schedule-panel .today-sparing-status.is-nonmember {
+  color: #dc2626 !important;
+}
+
+#today-schedule-panel .today-sparing-status-separator {
+  flex: 0 0 auto !important;
+  color: #94a3b8 !important;
+  font-weight: 900 !important;
+}
+
+#today-schedule-panel .today-schedule-info:has(.today-sparing-name-row) .today-admin-reminder-timer {
+  grid-column: 1 !important;
+  grid-row: 3 !important;
+  width: calc(69% - 4px) !important;
+  max-width: calc(69% - 4px) !important;
+}
+
+@media (max-width: 640px) {
+  #today-schedule-panel .today-schedule-info:has(.today-sparing-name-row) {
+    grid-template-rows: auto auto auto !important;
+    gap: 4px !important;
+  }
+  #today-schedule-panel .today-sparing-name-row .schedule-team-sparing {
+    font-size: 9.5px !important;
+  }
+  #today-schedule-panel .today-sparing-status {
+    font-size: 8px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  #today-schedule-panel .today-sparing-status {
+    font-size: 7.5px !important;
+  }
+}
+</style>
+
+<style id="today-sparing-status-visibility-final">
+/* FINAL: status sparing harus terbaca jelas dan tidak menimpa nama pertandingan */
+#today-schedule-panel .today-schedule-info:has(.today-sparing-name-row) {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  gap: 5px !important;
+  overflow: visible !important;
+}
+
+#today-schedule-panel .today-sparing-name-row {
+  order: 1 !important;
+  flex: 0 0 auto !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+#today-schedule-panel .today-sparing-status-row {
+  order: 2 !important;
+  position: relative !important;
+  z-index: 3 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  min-height: 18px !important;
+  padding: 2px 5px !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  gap: 7px !important;
+  overflow: visible !important;
+  white-space: nowrap !important;
+  background: rgba(255,255,255,.58) !important;
+  border-radius: 6px !important;
+}
+
+#today-schedule-panel .today-sparing-status {
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
+  max-width: 48% !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: nowrap !important;
+  opacity: 1 !important;
+  font-size: 10px !important;
+  font-weight: 950 !important;
+  line-height: 1.2 !important;
+  letter-spacing: .1px !important;
+  text-shadow: 0 1px 1px rgba(255,255,255,.85) !important;
+}
+
+#today-schedule-panel .today-sparing-status.is-member {
+  color: #1d4ed8 !important;
+  -webkit-text-fill-color: #1d4ed8 !important;
+}
+
+#today-schedule-panel .today-sparing-status.is-nonmember {
+  color: #dc2626 !important;
+  -webkit-text-fill-color: #dc2626 !important;
+}
+
+#today-schedule-panel .today-sparing-status-separator {
+  flex: 0 0 auto !important;
+  color: #64748b !important;
+  opacity: 1 !important;
+  font-weight: 950 !important;
+}
+
+#today-schedule-panel .today-schedule-info:has(.today-sparing-name-row) .today-admin-reminder-timer {
+  order: 3 !important;
+  position: relative !important;
+  z-index: 1 !important;
+  flex: 0 0 auto !important;
+  margin-top: 0 !important;
+}
+
+#today-schedule-panel .today-schedule-info:has(.today-sparing-name-row) .today-late-timer {
+  order: 4 !important;
+  flex: 0 0 auto !important;
+}
+
+@media (max-width: 640px) {
+  #today-schedule-panel .today-sparing-status {
+    font-size: 8.5px !important;
+  }
+  #today-schedule-panel .today-sparing-status-row {
+    min-height: 16px !important;
+    gap: 5px !important;
+    padding: 1px 3px !important;
+  }
+}
+</style>
+
+<style id="sparing-timer-button-final-alignment">
+/* FINAL: card dengan lawan memakai posisi TIMER + INGATKAN yang sama
+   persis dengan card tanpa lawan. Status sparing tetap berada di bawah nama. */
+#today-schedule-panel .today-schedule-info:has(.today-sparing-name-row) .today-admin-reminder-timer {
+  position: absolute !important;
+  left: 0 !important;
+  top: 58px !important;
+  bottom: auto !important;
+  width: calc((100% - var(--sg)) / 2) !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  max-height: 40px !important;
+  margin: 0 !important;
+  padding: 8px 6px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  border-radius: 11px !important;
+  z-index: 10 !important;
+}
+
+#today-schedule-panel .today-schedule-main-row > .today-remind-btn {
+  left: calc((100% - (var(--sg) * 2)) / 3 + var(--sg) + ((100% - ((100% - (var(--sg) * 2)) / 3 + var(--sg)) + var(--sg)) / 2)) !important;
+  top: calc(42px + 58px) !important;
+  width: calc((100% - ((100% - (var(--sg) * 2)) / 3 + var(--sg)) - var(--sg)) / 2) !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  max-height: 40px !important;
+}
+
+@media (max-width: 640px) {
+  #today-schedule-panel .today-schedule-info:has(.today-sparing-name-row) .today-admin-reminder-timer {
+    top: 38px !important;
+    width: calc((100% - var(--sg)) / 2) !important;
+    height: 27px !important;
+    min-height: 27px !important;
+    max-height: 27px !important;
+    padding: 4px !important;
+    border-radius: 8px !important;
+  }
+
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn {
+    top: 72px !important;
+    height: 27px !important;
+    min-height: 27px !important;
+    max-height: 27px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  #today-schedule-panel .today-schedule-info:has(.today-sparing-name-row) .today-admin-reminder-timer {
+    top: 36px !important;
+    height: 25px !important;
+    min-height: 25px !important;
+    max-height: 25px !important;
+  }
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn {
+    top: 68px !important;
+    height: 25px !important;
+    min-height: 25px !important;
+    max-height: 25px !important;
+  }
+}
+</style>
+
+<style id="sparing-timer-button-spacing-v12">
+/* V12: TIMER V11 sudah pas. Hanya tombol INGATKAN yang diturunkan sedikit
+   agar sejajar nyaman dengan timer dan tidak terlalu mepet ke status. */
+
+/* DESKTOP */
+@media (min-width: 641px) {
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn {
+    top: calc(42px + 70px) !important;
+  }
+}
+
+/* HP */
+@media (max-width: 640px) {
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn {
+    top: 83px !important;
+  }
+}
+
+/* HP kecil */
+@media (max-width: 380px) {
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn {
+    top: 79px !important;
+  }
+}
+</style>
+
+<style id="sparing-final-position-v13">
+/* V13 — PEMISAHAN POSISI CARD BIASA & SPARING
+   Card tanpa lawan dikembalikan sejajar seperti semula.
+   Card sparing: timer + Ingatkan diturunkan sedikit dan dibuat sejajar. */
+
+/* CARD TANPA LAWAN — kembali sejajar */
+#today-schedule-panel .schedule-card:not(:has(.today-sparing-name-row)) .today-schedule-main-row > .today-remind-btn {
+  top: calc(42px + 58px) !important;
+}
+
+/* SPARING DESKTOP — timer dan tombol turun bersama */
+@media (min-width:641px) {
+  #today-schedule-panel .schedule-card:has(.today-sparing-name-row) .today-schedule-info .today-admin-reminder-timer {
+    top: 64px !important;
+  }
+  #today-schedule-panel .schedule-card:has(.today-sparing-name-row) .today-schedule-main-row > .today-remind-btn {
+    top: 98px !important;
+  }
+}
+
+/* SPARING HP — timer dan tombol turun bersama, tidak mepet status */
+@media (max-width:640px) {
+  #today-schedule-panel .schedule-card:has(.today-sparing-name-row) .today-schedule-info .today-admin-reminder-timer {
+    top: 44px !important;
+  }
+  #today-schedule-panel .schedule-card:has(.today-sparing-name-row) .today-schedule-main-row > .today-remind-btn {
+    top: 79px !important;
+  }
+}
+
+/* HP kecil */
+@media (max-width:380px) {
+  #today-schedule-panel .schedule-card:has(.today-sparing-name-row) .today-schedule-info .today-admin-reminder-timer {
+    top: 42px !important;
+  }
+  #today-schedule-panel .schedule-card:has(.today-sparing-name-row) .today-schedule-main-row > .today-remind-btn {
+    top: 74px !important;
+  }
+}
+</style>
+
+<style>
+/* V14: khusus tombol Ingatkan pada card sparing/ada lawan.
+   Timer tidak diubah. Tombol diturunkan sedikit agar sejajar dengan timer. */
+#today-schedule-panel .schedule-card:has(.today-schedule-teams) .today-schedule-main-row > .today-remind-btn {
+  transform: translateY(6px) !important;
+}
+
+@media (max-width: 640px) {
+  #today-schedule-panel .schedule-card:has(.today-schedule-teams) .today-schedule-main-row > .today-remind-btn {
+    transform: translateY(5px) !important;
+  }
+}
+</style>
+
+<style id="sparing-reminder-final-v15">
+/* V15: Hanya tombol Ingatkan pada card yang ADA LAWAN diturunkan sedikit lagi.
+   Timer dan card tanpa lawan TIDAK diubah. */
+#today-schedule-panel .schedule-card:has(.today-schedule-teams) .today-schedule-main-row > .today-remind-btn {
+  transform: translateY(9px) !important;
+}
+
+@media (max-width: 640px) {
+  #today-schedule-panel .schedule-card:has(.today-schedule-teams) .today-schedule-main-row > .today-remind-btn {
+    transform: translateY(8px) !important;
+  }
+}
+</style>
+
+<style id="sparing-reminder-actual-fix-v17">
+/* V17: selector diperbaiki — khusus card SPARING yang benar-benar memiliki
+   .today-sparing-name-row. Timer tidak disentuh. Tombol Ingatkan saja diturunkan. */
+#today-schedule-panel .schedule-card:has(.today-sparing-name-row) .today-schedule-main-row > .today-remind-btn {
+  transform: translateY(12px) !important;
+}
+
+@media (max-width: 640px) {
+  #today-schedule-panel .schedule-card:has(.today-sparing-name-row) .today-schedule-main-row > .today-remind-btn {
+    transform: translateY(10px) !important;
+  }
+}
+
+@media (max-width: 380px) {
+  #today-schedule-panel .schedule-card:has(.today-sparing-name-row) .today-schedule-main-row > .today-remind-btn {
+    transform: translateY(9px) !important;
+  }
+}
+</style>
+
+<style id="sparing-timer-final-micro-adjust-v19">
+/* V19: micro adjustment terakhir. Tombol Ingatkan sparing sudah pas,
+   jadi timer sparing saja diturunkan sedikit agar benar-benar sejajar. */
+#today-schedule-panel .schedule-card:has(.today-sparing-name-row) .today-schedule-info .today-admin-reminder-timer {
+  transform: translateY(4px) !important;
+}
+
+@media (max-width: 640px) {
+  #today-schedule-panel .schedule-card:has(.today-sparing-name-row) .today-schedule-info .today-admin-reminder-timer {
+    transform: translateY(2px) !important;
+  }
+}
+
+@media (max-width: 380px) {
+  #today-schedule-panel .schedule-card:has(.today-sparing-name-row) .today-schedule-info .today-admin-reminder-timer {
+    transform: translateY(2px) !important;
+  }
+}
+</style>
+
+<style id="today-emergency-mobile-final-position">
+/* FINAL HP — tombol DARURAT berada jelas di bawah TOTAL | DP | SISA.
+   Desktop tidak disentuh karena layout desktop sudah pas. */
+@media (max-width:640px){
+  #today-schedule-panel #today-schedule-list.today-schedule-list-modern > .schedule-card,
+  #today-schedule-panel #today-schedule-list.today-schedule-list-modern > div.schedule-card{
+    height:auto !important;
+    min-height:0 !important;
+    max-height:none !important;
+    overflow:visible !important;
+    padding-bottom:7px !important;
+  }
+
+  #today-schedule-panel .today-emergency-paid-btn{
+    position:relative !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    width:100% !important;
+    height:30px !important;
+    min-height:30px !important;
+    max-height:30px !important;
+    margin:6px 0 0 !important;
+    padding:0 8px !important;
+    box-sizing:border-box !important;
+    border-radius:9px !important;
+    font-size:8px !important;
+    line-height:1 !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    z-index:30 !important;
+  }
+}
+
+@media (max-width:380px){
+  #today-schedule-panel .today-emergency-paid-btn{
+    height:28px !important;
+    min-height:28px !important;
+    max-height:28px !important;
+    margin-top:5px !important;
+    padding:0 6px !important;
+    font-size:7.5px !important;
+  }
+}
+</style>
+
+<style id="mobile-reminder-align-with-timer-final">
+/* FINAL HP: tombol INGATKAN harus benar-benar satu baris dengan TIMER.
+   Timer berada di dalam .today-schedule-info yang mulai pada top:34px,
+   lalu timer sendiri top:38px => posisi efektif 72px dari main-row.
+   Karena tombol berada langsung di .today-schedule-main-row, tombol juga
+   harus top:72px. Desktop sengaja tidak disentuh. */
+@media (max-width: 640px) {
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn {
+    top: 72px !important;
+    transform: none !important;
+    height: 27px !important;
+    min-height: 27px !important;
+    max-height: 27px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn {
+    top: 68px !important;
+    transform: none !important;
+    height: 25px !important;
+    min-height: 25px !important;
+    max-height: 25px !important;
+  }
+}
+</style>
+
+<style id="mobile-reminder-align-timer-final-v2">
+/* FINAL V2 HP — tombol INGATKAN harus tepat satu baris dengan TIMER.
+   Pada struktur mobile, .today-remind-btn berada di .today-schedule-main-row,
+   sedangkan timer berada lebih dalam di .today-schedule-info. Karena titik
+   acuannya berbeda, posisi tombol perlu dinaikkan agar garis atasnya sama.
+   DESKTOP TIDAK DIUBAH. */
+@media (max-width:640px){
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn{
+    top:47px !important;
+    transform:none !important;
+    margin:0 !important;
+  }
+
+  /* Card sparing/lawan memakai titik acuan yang sama untuk tombolnya. */
+  #today-schedule-panel .schedule-card:has(.today-sparing-name-row) .today-schedule-main-row > .today-remind-btn,
+  #today-schedule-panel .schedule-card:has(.today-schedule-teams) .today-schedule-main-row > .today-remind-btn{
+    top:47px !important;
+    transform:none !important;
+  }
+}
+
+@media (max-width:380px){
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn,
+  #today-schedule-panel .schedule-card:has(.today-sparing-name-row) .today-schedule-main-row > .today-remind-btn,
+  #today-schedule-panel .schedule-card:has(.today-schedule-teams) .today-schedule-main-row > .today-remind-btn{
+    top:45px !important;
+  }
+}
+</style>
+
+<style id="mobile-reminder-true-final-v4">
+/* V4: tombol INGATKAN HP diturunkan sedikit lagi agar tepat sejajar
+   dengan timer. Desktop TIDAK disentuh. */
+@media (max-width:640px){
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn,
+  #today-schedule-panel .schedule-card:has(.today-sparing-name-row) .today-schedule-main-row > .today-remind-btn,
+  #today-schedule-panel .schedule-card:has(.today-schedule-teams) .today-schedule-main-row > .today-remind-btn{
+    top:76px !important;
+    transform:none !important;
+    margin:0 !important;
+  }
+}
+
+@media (max-width:380px){
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn,
+  #today-schedule-panel .schedule-card:has(.today-sparing-name-row) .today-schedule-main-row > .today-remind-btn,
+  #today-schedule-panel .schedule-card:has(.today-schedule-teams) .today-schedule-main-row > .today-remind-btn{
+    top:72px !important;
+  }
+}
+</style>
+
+<style id="mobile-remind-btn-final-1px-fix">
+/* HP: turunkan tombol Ingatkan 1px lagi. Desktop tidak diubah. */
+@media (max-width: 640px) {
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn,
+  #today-schedule-panel .schedule-card:has(.today-sparing-name-row) .today-schedule-main-row > .today-remind-btn,
+  #today-schedule-panel .schedule-card:has(.today-schedule-teams) .today-schedule-main-row > .today-remind-btn {
+    top: 79px !important;
+  }
+}
+@media (max-width: 380px) {
+  #today-schedule-panel .today-schedule-main-row > .today-remind-btn,
+  #today-schedule-panel .schedule-card:has(.today-sparing-name-row) .today-schedule-main-row > .today-remind-btn,
+  #today-schedule-panel .schedule-card:has(.today-schedule-teams) .today-schedule-main-row > .today-remind-btn {
+    top: 79px !important;
   }
 }
 </style>
