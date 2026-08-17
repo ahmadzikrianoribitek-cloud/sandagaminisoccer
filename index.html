@@ -15743,14 +15743,16 @@ window.__APP_FIREBASE_GET__ = get;
                         textVal = `<span class="schedule-grid-off-holder"><img src="off.png" alt="OFF" class="schedule-grid-off-stamp" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';"><span class="hidden items-center justify-center text-red-500 font-black text-[9px] sm:text-xs tracking-widest">OFF</span></span>`;
                     } else if(activeDate && cellData) {
                         if(cellData.type === 'member') {
+                            // Sel tetap memakai warna dasar yang sama dengan slot kosong.
+                            // Warna hanya diterapkan pada pill nama tim.
                             textVal = `<span class="schedule-grid-team-holder schedule-grid-team-member">${escapeCell(cellData.nama)}</span>`;
-                            bgClass = "bg-blue-50 border border-blue-200 text-slate-900 font-black shadow-inner text-center";
                         } else if(cellData.type === 'off') {
                             bgClass = "bg-red-500/20 border border-slate-900/40 border-dashed text-red-900 font-black shadow-lg text-center";
                             textVal = `<span class="schedule-grid-off-holder"><img src="off.png" alt="OFF" class="schedule-grid-off-stamp" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';"><span class="hidden items-center justify-center text-red-900 font-black text-[9px] sm:text-xs tracking-widest">OFF</span></span>`;
                         } else {
+                            // Non-member juga tidak memberi warna pada sel pembungkus;
+                            // warna tetap hanya berada di pill nama tim.
                             textVal = `<span class="schedule-grid-team-holder schedule-grid-team-nonmember">${escapeCell(cellData.nama)}</span>`;
-                            bgClass = "bg-rose-50 border border-rose-200 text-slate-900 font-black shadow-inner text-center";
                         }
                     }
 
@@ -15758,18 +15760,17 @@ window.__APP_FIREBASE_GET__ = get;
                     let editHint = '';
                     if(activeDate && cellData?.bookingKey) {
                         editHandler = ` onclick="editBooking('${String(cellData.bookingKey).replace(/'/g,"\\'")}')"`;
-                        editHint = `<span class="schedule-edit-hint" title="Edit booking">✏</span>`;
+                        editHint = '';
                     } else if(activeDate && cellData?.type === 'member' && cellData?.key) {
                         const mk = encodeURIComponent(String(cellData.key));
                         const td = encodeURIComponent(String(day.dateStr));
                         const tj = encodeURIComponent(String(jam));
                         editHandler = ` onclick="editJadwalMemberSatuHari('${mk}','${td}','${tj}')"`;
-                        editHint = `<span class="schedule-edit-hint" title="Pindah 1 hari">✏</span>`;
+                        editHint = '';
                     }
 
                     tr += `<td class="p-0.5 sm:p-1 ${bgClass} ${editHandler ? 'schedule-editable-cell' : ''} align-middle h-7 sm:h-14 overflow-hidden text-center relative"${editHandler}>
                         <div class="flex items-center justify-center h-full text-[6px] sm:text-[10px] text-center leading-tight line-clamp-2 font-black relative z-[2]">${textVal}</div>
-                        ${editHint}
                         ${hariSudahLewat ? `<div class="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-1/2 bg-blue-400/90 text-white pointer-events-none z-[3] flex items-center justify-center overflow-hidden"><span class="font-black text-[7px] sm:text-[10px] leading-none whitespace-nowrap tracking-wide" style="transform:rotate(-90deg); transform-origin:center;">• DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE •</span></div>` : ''}
                     </td>`;
                 });
@@ -27863,5 +27864,50 @@ html, body {
   #today-schedule-panel .schedule-card:has(.today-schedule-teams) .today-schedule-main-row > .today-remind-btn {
     top: 79px !important;
   }
+}
+</style>
+
+<style id="booking-schedule-restore-team-pill">
+/* Booking Schedule: sel tetap transparan seperti slot kosong,
+   sedangkan pill nama tim dikembalikan seperti desain semula. */
+#booking-schedule-grid-wrap .schedule-grid-team-holder {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: auto !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    min-height: 1.7rem !important;
+    padding: .28rem .35rem !important;
+    border-radius: .65rem !important;
+    font-weight: 900 !important;
+    line-height: 1 !important;
+    white-space: normal !important;
+    overflow: hidden !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+    text-overflow: clip !important;
+    box-shadow: 0 2px 7px rgba(15,23,42,.10), inset 0 1px 0 rgba(255,255,255,.65) !important;
+    cursor: pointer !important;
+}
+#booking-schedule-grid-wrap .schedule-grid-team-member {
+    color: #1e40af !important;
+    background: #dbeafe !important;
+    border: 1px solid #60a5fa !important;
+    border-radius: .65rem !important;
+}
+#booking-schedule-grid-wrap .schedule-grid-team-nonmember {
+    color: #b91c1c !important;
+    background: #fee2e2 !important;
+    border: 1px solid #f87171 !important;
+    border-radius: .65rem !important;
+}
+@media (max-width:640px) {
+    #booking-schedule-grid-wrap .schedule-grid-team-holder {
+        min-height: 1.45rem !important;
+        padding: .22rem .35rem !important;
+        border-radius: .5rem !important;
+        max-width: 98% !important;
+    }
 }
 </style>
