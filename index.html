@@ -9463,7 +9463,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
       <div>
         <label class="block text-xs font-bold mb-1">Jumlah Dibayar</label>
-        <input id="pm-jumlah" type="number" min="0" placeholder="Rp 0" class="w-full p-2 rounded-xl text-sm glass-input font-bold" oninput="updatePelunasanMemberPreview()">
+        <input id="pm-jumlah" type="text" inputmode="numeric" oninput="formatNominalInput(this)" min="0" placeholder="Rp 0" class="w-full p-2 rounded-xl text-sm glass-input font-bold" oninput="updatePelunasanMemberPreview()">
       </div>
       <div>
         <label class="block text-xs font-bold mb-1">Metode Pembayaran</label>
@@ -9518,7 +9518,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 <option value="8">8 Jam</option>
 </select>
 <p class="text-[10px] text-slate-600 font-bold -mt-1 mb-3">Contoh: pilih mulai 16:00 + 2 Jam → booking 16:00 dan 17:00.</p>
-<input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="b-dp" min="0" placeholder="Jumlah DP / Bayar (Rp)" required="" type="number"/>
+<input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="b-dp" min="0" placeholder="Jumlah DP / Bayar (Rp)" required="" type="text" inputmode="numeric" oninput="formatNominalInput(this)"/>
 <label class="block text-xs font-bold mb-1 text-slate-900">Tanggal DP / Bayar</label>
 <input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="b-tanggal-dp" type="date"/>
 <label class="block text-xs font-bold mb-1 text-slate-900">METODE PEMBAYARAN</label>
@@ -9596,7 +9596,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 </div>
 <div class="p-3 rounded-xl border border-violet-400/50 mb-3 space-y-2 bg-violet-50/50 uang-masuk-option-panel">
   <label class="block text-xs font-black text-violet-950">💸 Diskon Tambahan Manual dari Admin</label>
-  <input id="in-diskon-manual" class="w-full p-2 rounded-xl text-sm glass-input font-bold" type="number" min="0" step="1000" value="0" placeholder="Masukkan nominal diskon (Rp)" oninput="hitungOtomatisBiaya()"/>
+  <input id="in-diskon-manual" class="w-full p-2 rounded-xl text-sm glass-input font-bold" type="text" inputmode="numeric" oninput="formatNominalInput(this); hitungOtomatisBiaya()" min="0" step="1000" value="0" placeholder="Masukkan nominal diskon (Rp)"/>
   <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
     <label class="flex items-center gap-2 rounded-xl border border-violet-200 bg-white/70 px-3 py-2 cursor-pointer">
       <input type="radio" name="diskon-manual-alokasi" id="in-diskon-manual-tim1" value="tim1" onchange="hitungOtomatisBiaya()" checked>
@@ -9628,14 +9628,14 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3 uang-masuk-payment-wrap">
 <div class="p-3 rounded-xl border border-emerald-500/40 space-y-2 bg-white/30 uang-masuk-payment-card">
 <label id="label-pembayaran-tim-1" class="block text-xs font-black text-emerald-950">Pembayaran Tim 1</label>
-<input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-jumlah-1" placeholder="Nominal pembayaran sekarang (Rp)" type="number"/>
-<div class="grid grid-cols-2 gap-2"><div><label class="block text-[10px] font-black text-emerald-950 mb-1">DP Manual (Rp)</label><input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-dp-1" min="0" type="number" placeholder="Jika sudah DP"/></div><div><label class="block text-[10px] font-black text-emerald-950 mb-1">Tanggal DP</label><input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-tgl-dp-1" type="date"/></div></div>
+<input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-jumlah-1" placeholder="Nominal pembayaran sekarang (Rp)" type="text" inputmode="numeric" oninput="formatNominalInput(this)"/>
+<div class="grid grid-cols-2 gap-2"><div><label class="block text-[10px] font-black text-emerald-950 mb-1">DP Manual (Rp)</label><input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-dp-1" min="0" type="text" inputmode="numeric" oninput="formatNominalInput(this)" placeholder="Jika sudah DP"/></div><div><label class="block text-[10px] font-black text-emerald-950 mb-1">Tanggal DP</label><input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-tgl-dp-1" type="date"/></div></div>
 <select class="w-full p-2 rounded text-sm glass-input font-bold" id="in-metode-1" onchange="toggleFreePaymentInput(1)">
 <option value="Belum Bayar">Belum Bayar</option><option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option><option value="Free">Free / Gratis</option><option value="Campuran">Campuran (2 Metode)</option>
 </select>
 <label class="flex items-center gap-2 text-[10px] font-black text-emerald-900 cursor-pointer"><input id="in-campuran-1" type="checkbox" class="w-4 h-4" onchange="toggleMixedPayment(1)"> Bayar dengan 2 metode</label>
 <div id="in-campuran-box-1" class="hidden grid grid-cols-2 gap-2">
-  <input id="in-jumlah-1b" type="number" min="0" placeholder="Nominal metode 2 (Rp)" class="w-full p-2 rounded text-sm glass-input font-bold">
+  <input id="in-jumlah-1b" type="text" inputmode="numeric" oninput="formatNominalInput(this)" min="0" placeholder="Nominal metode 2 (Rp)" class="w-full p-2 rounded text-sm glass-input font-bold">
   <select id="in-metode-1b" class="w-full p-2 rounded text-sm glass-input font-bold"><option value="QRIS">QRIS</option><option value="Cash">Cash</option><option value="Transfer">Transfer</option></select>
 </div>
 </div>
@@ -9645,14 +9645,14 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 <select class="w-full p-2 rounded text-sm glass-input font-bold" id="in-status-2" onchange="hitungOtomatisBiaya()">
 <option value="Non-Member">Non-Member</option><option value="Member">Member</option>
 </select>
-<input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-jumlah-2" placeholder="Nominal pembayaran sekarang (Rp)" type="number"/>
-<div class="grid grid-cols-2 gap-2"><div><label class="block text-[10px] font-black text-emerald-950 mb-1">DP Manual (Rp)</label><input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-dp-2" min="0" type="number" placeholder="Jika sudah DP"/></div><div><label class="block text-[10px] font-black text-emerald-950 mb-1">Tanggal DP</label><input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-tgl-dp-2" type="date"/></div></div>
+<input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-jumlah-2" placeholder="Nominal pembayaran sekarang (Rp)" type="text" inputmode="numeric" oninput="formatNominalInput(this)"/>
+<div class="grid grid-cols-2 gap-2"><div><label class="block text-[10px] font-black text-emerald-950 mb-1">DP Manual (Rp)</label><input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-dp-2" min="0" type="text" inputmode="numeric" oninput="formatNominalInput(this)" placeholder="Jika sudah DP"/></div><div><label class="block text-[10px] font-black text-emerald-950 mb-1">Tanggal DP</label><input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-tgl-dp-2" type="date"/></div></div>
 <select class="w-full p-2 rounded text-sm glass-input font-bold" id="in-metode-2" onchange="toggleFreePaymentInput(2)">
 <option value="Belum Bayar">Belum Bayar</option><option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option><option value="Free">Free / Gratis</option><option value="Campuran">Campuran (2 Metode)</option>
 </select>
 <label class="flex items-center gap-2 text-[10px] font-black text-emerald-900 cursor-pointer"><input id="in-campuran-2" type="checkbox" class="w-4 h-4" onchange="toggleMixedPayment(2)"> Bayar dengan 2 metode</label>
 <div id="in-campuran-box-2" class="hidden grid grid-cols-2 gap-2">
-  <input id="in-jumlah-2b" type="number" min="0" placeholder="Nominal metode 2 (Rp)" class="w-full p-2 rounded text-sm glass-input font-bold">
+  <input id="in-jumlah-2b" type="text" inputmode="numeric" oninput="formatNominalInput(this)" min="0" placeholder="Nominal metode 2 (Rp)" class="w-full p-2 rounded text-sm glass-input font-bold">
   <select id="in-metode-2b" class="w-full p-2 rounded text-sm glass-input font-bold"><option value="QRIS">QRIS</option><option value="Cash">Cash</option><option value="Transfer">Transfer</option></select>
 </div>
 </div>
@@ -9906,7 +9906,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 <option value="9">9 Pcs</option>
 <option value="10">10 Pcs</option>
 </select>
-<input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="m-total" placeholder="Total Harga (Rp)" required="" type="number"/>
+<input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="m-total" placeholder="Total Harga (Rp)" required="" type="text" inputmode="numeric" oninput="formatNominalInput(this)"/>
 <select class="minuman-payment-select w-full p-3 rounded-xl text-sm font-black" id="m-metode">
   <option value="Cash" selected>METODE PEMBAYARAN: CASH</option>
   <option value="QRIS">METODE PEMBAYARAN: QRIS</option>
@@ -9971,7 +9971,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 <h2 class="text-base sm:text-lg font-black mb-4 text-rose-950 text-center uppercase w-full">UANG KELUAR</h2>
 <form onsubmit="submitData(event, 'pengeluaran')">
 <input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="k-ket" placeholder="Keterangan Pengeluaran" required="" type="text"/>
-<input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="k-jumlah" placeholder="Nominal (Rp)" required="" type="number"/>
+<input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="k-jumlah" placeholder="Nominal (Rp)" required="" type="text" inputmode="numeric" oninput="formatNominalInput(this)"/>
 <label class="block text-xs font-bold mb-1 text-slate-900">TANGGAL PENGELUARAN</label>
 <input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="k-tgl" required="" type="date"/>
 <div class="keluar-sumber-cash-simple mb-3">
@@ -10328,7 +10328,7 @@ window.__APP_FIREBASE_GET__ = get;
                     document.getElementById('m-jumlah-pcs').value = 1;
                     pcs = 1;
                 }
-                document.getElementById('m-total').value = hargaSatuan * pcs;
+                document.getElementById('m-total').value = formatNominalInputValue(hargaSatuan * pcs);
             }
         }
 
@@ -10338,7 +10338,7 @@ window.__APP_FIREBASE_GET__ = get;
             if(option) selectEl.value = nama;
             document.getElementById('m-produk').value = nama;
             const pcs = Number(document.getElementById('m-jumlah-pcs').value || 1);
-            document.getElementById('m-total').value = harga * pcs;
+            document.getElementById('m-total').value = formatNominalInputValue(harga * pcs);
 
             document.querySelectorAll('.minuman-btn').forEach(btn => btn.classList.remove('selected'));
             const tombol = Array.from(document.querySelectorAll('.minuman-btn')).find(btn => btn.dataset.nama === nama);
@@ -10351,7 +10351,7 @@ window.__APP_FIREBASE_GET__ = get;
             let hargaSatuan = Number(selectedOption.getAttribute('data-harga') || 0);
             let pcs = Number(document.getElementById('m-jumlah-pcs').value || 0);
             if(hargaSatuan > 0) {
-                document.getElementById('m-total').value = hargaSatuan * pcs;
+                document.getElementById('m-total').value = formatNominalInputValue(hargaSatuan * pcs);
             }
         }
 
@@ -10535,7 +10535,7 @@ window.__APP_FIREBASE_GET__ = get;
             const pakaiRompi1 = !!document.getElementById('in-sewa-rompi-1')?.checked;
             const pakaiRompi2 = !!document.getElementById('in-sewa-rompi-2')?.checked;
             const pakaiDiskonKhusus = !!document.getElementById('in-diskon-khusus-100')?.checked;
-            const diskonManualInput = Number(document.getElementById('in-diskon-manual')?.value || 0);
+            const diskonManualInput = parseNominalInputValue(document.getElementById("in-diskon-manual")?.value || "");
             const diskonManual = Math.max(0, Number.isFinite(diskonManualInput) ? diskonManualInput : 0);
             const diskonManualAlokasi = document.querySelector('input[name="diskon-manual-alokasi"]:checked')?.value || 'tim1';
 
@@ -10973,17 +10973,17 @@ window.__APP_FIREBASE_GET__ = get;
 
         function getBookingForPaymentTeam(nama,tgl,jam){const target=String(nama||'').trim().toLowerCase(),j=String(jam||'').substring(0,5);if(!target||!tgl)return null;return Object.entries(globalCache.booking||{}).find(([k,b])=>b&&String(b.tgl||'').split('T')[0]===String(tgl)&&String(b.tgl||'').split('T')[1]?.substring(0,5)===j&&String(b.nama||'').trim().toLowerCase()===target)||null;}
         function getSparingTeamNamesForPayment(nama,tgl,jam){const cur=String(nama||'').trim(),rec=getSparingForTeam(cur,tgl,String(jam||'').substring(0,5)),s=rec?.[1];if(!s||String(s.status||'').toLowerCase()!=='matched')return {tim1:cur,tim2:''};const a=String(s.timA||'').trim(),b=String(s.timB||'').trim(),x=cur.toLowerCase();return {tim1:a.toLowerCase()===x?a:(b.toLowerCase()===x?b:cur),tim2:a.toLowerCase()===x?b:(b.toLowerCase()===x?a:b)};}
-        function loadManualDpFields(nama,tgl,jam){const n=getSparingTeamNamesForPayment(nama,tgl,jam),b1=getBookingForPaymentTeam(n.tim1,tgl,jam),b2=n.tim2?getBookingForPaymentTeam(n.tim2,tgl,jam):null;const d1=document.getElementById('in-dp-1'),d2=document.getElementById('in-dp-2'),t1=document.getElementById('in-tgl-dp-1'),t2=document.getElementById('in-tgl-dp-2');if(d1)d1.value=Number(b1?.[1]?.dp||0)||'';if(t1)t1.value=b1?.[1]?.tglDp||'';if(d2)d2.value=Number(b2?.[1]?.dp||0)||'';if(t2)t2.value=b2?.[1]?.tglDp||'';}
+        function loadManualDpFields(nama,tgl,jam){const n=getSparingTeamNamesForPayment(nama,tgl,jam),b1=getBookingForPaymentTeam(n.tim1,tgl,jam),b2=n.tim2?getBookingForPaymentTeam(n.tim2,tgl,jam):null;const d1=document.getElementById('in-dp-1'),d2=document.getElementById('in-dp-2'),t1=document.getElementById('in-tgl-dp-1'),t2=document.getElementById('in-tgl-dp-2');if(d1)d1.value=formatNominalInputValue(Number(b1?.[1]?.dp||0));if(t1)t1.value=b1?.[1]?.tglDp||'';if(d2)d2.value=formatNominalInputValue(Number(b2?.[1]?.dp||0));if(t2)t2.value=b2?.[1]?.tglDp||'';}
         async function simpanDpManualPembayaran(nama,tgl,jam,isSparing){
             // DP Manual bersifat OPSIONAL / darurat.
             // Kosong = jangan mengubah DP booking yang sudah ada, tetapi proses
             // penyimpanan Uang Masuk tetap harus berjalan normal.
             const n=getSparingTeamNamesForPayment(nama,tgl,jam);
             const items=[
-                {nama:n.tim1,dp:Number(document.getElementById('in-dp-1')?.value||0),tglDp:document.getElementById('in-tgl-dp-1')?.value||''}
+                {nama:n.tim1,dp:parseNominalInputValue(document.getElementById('in-dp-1')?.value||''),tglDp:document.getElementById('in-tgl-dp-1')?.value||''}
             ];
             if(isSparing&&n.tim2){
-                items.push({nama:n.tim2,dp:Number(document.getElementById('in-dp-2')?.value||0),tglDp:document.getElementById('in-tgl-dp-2')?.value||''});
+                items.push({nama:n.tim2,dp:parseNominalInputValue(document.getElementById('in-dp-2')?.value||''),tglDp:document.getElementById('in-tgl-dp-2')?.value||''});
             }
             for(const x of items){
                 // Tidak ada DP manual: lewati saja. JANGAN pernah menulis 0
@@ -11052,7 +11052,7 @@ window.__APP_FIREBASE_GET__ = get;
                 const namaBooking = document.getElementById('b-nama').value.trim();
                 const waBooking = document.getElementById('b-wa')?.value.trim() || '';
 
-                const dpInput = Number(document.getElementById('b-dp').value || 0);
+                const dpInput = parseNominalInputValue(document.getElementById("b-dp").value || "");
                 const tanggalDp = document.getElementById('b-tanggal-dp').value || getLocalDateString();
 
                 if(dpInput > 0 && !tanggalDp) {
@@ -11125,9 +11125,9 @@ window.__APP_FIREBASE_GET__ = get;
                 const met2b = document.getElementById('in-metode-2b')?.value || 'QRIS';
                 let jenisPembayaran = document.getElementById('in-jenis-pembayaran')?.value || 'internal';
                 let isSparingPayment = jenisPembayaran === 'sparing';
-                let jml1 = (met1 === 'Free' || met1 === 'Belum Bayar') ? 0 : Number(document.getElementById('in-jumlah-1').value || 0);
-                const jml1b = campur1 ? Number(document.getElementById('in-jumlah-1b')?.value || 0) : 0;
-                const jml2Input = Number(document.getElementById('in-jumlah-2').value || 0);
+                let jml1 = (met1 === 'Free' || met1 === 'Belum Bayar') ? 0 : parseNominalInputValue(document.getElementById("in-jumlah-1").value || "");
+                const jml1b = campur1 ? parseNominalInputValue(document.getElementById("in-jumlah-1b")?.value || "") : 0;
+                const jml2Input = parseNominalInputValue(document.getElementById("in-jumlah-2").value || "");
                 // Untuk SPARING, nominal Tim 2 yang benar-benar diisi admin adalah
                 // pembayaran nyata dari tim lawan. Jangan sampai nominal ini hilang
                 // hanya karena dropdown metode masih berada di "Belum Bayar".
@@ -11138,14 +11138,14 @@ window.__APP_FIREBASE_GET__ = get;
                     if(met2El) met2El.value = 'Cash';
                 }
                 let jml2 = (met2 === 'Free') ? 0 : jml2Input;
-                const jml2b = campur2 ? Number(document.getElementById('in-jumlah-2b')?.value || 0) : 0;
+                const jml2b = campur2 ? parseNominalInputValue(document.getElementById("in-jumlah-2b")?.value || "") : 0;
                 if((campur1 && jml1b <= 0) || (campur2 && jml2b <= 0)) { alert('Nominal metode kedua harus diisi jika pembayaran campuran dipilih.'); return; }
                 const kaosKakiAktif = !!document.getElementById('in-kaos-kaki')?.checked;
                 const jumlahKaosKaki = kaosKakiAktif ? Number(document.getElementById('in-kaos-kaki-qty')?.value || 1) : 0;
                 const totalKaosKaki = jumlahKaosKaki * 30000;
                 let tgl = document.getElementById('in-tgl').value;
-                const dpManual1 = Number(document.getElementById('in-dp-1')?.value || 0);
-                const dpManual2 = Number(document.getElementById('in-dp-2')?.value || 0);
+                const dpManual1 = parseNominalInputValue(document.getElementById("in-dp-1")?.value || "");
+                const dpManual2 = parseNominalInputValue(document.getElementById("in-dp-2")?.value || "");
                 const tglDpManual1 = document.getElementById('in-tgl-dp-1')?.value || '';
                 const tglDpManual2 = document.getElementById('in-tgl-dp-2')?.value || '';
 
@@ -11236,7 +11236,7 @@ window.__APP_FIREBASE_GET__ = get;
                             return (btgl === tgl && bjam === String(jamMain || '').substring(0,5) && bnama === namaBayar)
                                 ? Math.max(maxDp, Number(b?.dp || 0)) : maxDp;
                         }, 0);
-                        const dibayarSekarang = Number(document.getElementById('in-jumlah-1')?.value || 0);
+                        const dibayarSekarang = parseNominalInputValue(document.getElementById("in-jumlah-1")?.value || "");
                         return dpBayar + dibayarSekarang >= totalTagihanPenyesuaian;
                     })(),
                     jumlah: totalTim1 + (campur1 ? jml1b : 0) + jml2 + (isSparingPayment && campur2 ? jml2b : 0) + totalKaosKaki,
@@ -11246,7 +11246,7 @@ window.__APP_FIREBASE_GET__ = get;
                 data = { 
                     produk: document.getElementById('m-produk').value, 
                     jumlahPcs: Number(document.getElementById('m-jumlah-pcs').value),
-                    total: Number(document.getElementById('m-total').value),
+                    total: parseNominalInputValue(document.getElementById('m-total').value),
                     metode: document.getElementById('m-metode').value,
                     tgl: document.getElementById('m-tgl').value,
                     // Waktu transaksi dipakai untuk menampilkan transaksi terbaru di paling atas.
@@ -11255,7 +11255,7 @@ window.__APP_FIREBASE_GET__ = get;
             } else if(type === 'pengeluaran') {
                 data = { 
                     ket: document.getElementById('k-ket').value, 
-                    jumlah: Number(document.getElementById('k-jumlah').value),
+                    jumlah: parseNominalInputValue(document.getElementById('k-jumlah').value),
                     tgl: document.getElementById('k-tgl').value,
                     sumberTgl: document.getElementById('k-sumber-tgl').value 
                 };
@@ -12215,10 +12215,10 @@ window.__APP_FIREBASE_GET__ = get;
                             <div><label class="text-xs font-black text-slate-700">Tanggal</label><input id="edit-in-tgl" type="date" value="${tgl}" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"></div>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <div><label class="text-xs font-black text-slate-700">Jumlah Tim 1</label><input id="edit-in-jml1" type="number" min="0" value="${jml1}" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"></div>
-                            <div><label class="text-xs font-black text-slate-700">Metode Tim 1</label><select id="edit-in-met1" onchange="toggleEditFreePaymentInput(1)" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"><option value="Cash" ${met1==='Cash'?'selected':''}>Cash</option><option value="QRIS" ${met1==='QRIS'?'selected':''}>QRIS</option><option value="Transfer" ${met1==='Transfer'?'selected':''}>Transfer</option><option value="Free" ${met1==='Free'?'selected':''}>Free / Gratis</option><option value="Campuran" ${mixed1?'selected':''}>Campuran (2 Metode)</option></select><label class="flex items-center gap-2 text-[10px] font-black text-slate-700 mt-1"><input id="edit-in-campuran-1" type="checkbox" ${mixed1?'checked':''} onchange="toggleEditMixedPayment(1)"> Bayar dengan 2 metode</label><div id="edit-in-campuran-box-1" class="${mixed1?'':'hidden '}grid grid-cols-2 gap-2 mt-1"><input id="edit-in-jml1b" type="number" min="0" value="${jml1b}" class="w-full border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"><select id="edit-in-met1b" class="w-full border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"><option value="QRIS" ${met1b==='QRIS'?'selected':''}>QRIS</option><option value="Cash" ${met1b==='Cash'?'selected':''}>Cash</option><option value="Transfer" ${met1b==='Transfer'?'selected':''}>Transfer</option></select></div></div>
-                            <div><label class="text-xs font-black text-slate-700">Jumlah Tim 2</label><input id="edit-in-jml2" type="number" min="0" value="${jml2}" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"></div>
-                            <div><label class="text-xs font-black text-slate-700">Metode Tim 2</label><select id="edit-in-met2" onchange="toggleEditFreePaymentInput(2)" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"><option value="Cash" ${met2==='Cash'?'selected':''}>Cash</option><option value="QRIS" ${met2==='QRIS'?'selected':''}>QRIS</option><option value="Transfer" ${met2==='Transfer'?'selected':''}>Transfer</option><option value="Free" ${met2==='Free'?'selected':''}>Free / Gratis</option><option value="Campuran" ${mixed2?'selected':''}>Campuran (2 Metode)</option></select><label class="flex items-center gap-2 text-[10px] font-black text-slate-700 mt-1"><input id="edit-in-campuran-2" type="checkbox" ${mixed2?'checked':''} onchange="toggleEditMixedPayment(2)"> Bayar dengan 2 metode</label><div id="edit-in-campuran-box-2" class="${mixed2?'':'hidden '}grid grid-cols-2 gap-2 mt-1"><input id="edit-in-jml2b" type="number" min="0" value="${jml2b}" class="w-full border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"><select id="edit-in-met2b" class="w-full border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"><option value="QRIS" ${met2b==='QRIS'?'selected':''}>QRIS</option><option value="Cash" ${met2b==='Cash'?'selected':''}>Cash</option><option value="Transfer" ${met2b==='Transfer'?'selected':''}>Transfer</option></select></div></div>
+                            <div><label class="text-xs font-black text-slate-700">Jumlah Tim 1</label><input id="edit-in-jml1" type="text" inputmode="numeric" oninput="formatNominalInput(this)" min="0" value="${formatNominalInputValue(jml1)}" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"></div>
+                            <div><label class="text-xs font-black text-slate-700">Metode Tim 1</label><select id="edit-in-met1" onchange="toggleEditFreePaymentInput(1)" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"><option value="Cash" ${met1==='Cash'?'selected':''}>Cash</option><option value="QRIS" ${met1==='QRIS'?'selected':''}>QRIS</option><option value="Transfer" ${met1==='Transfer'?'selected':''}>Transfer</option><option value="Free" ${met1==='Free'?'selected':''}>Free / Gratis</option><option value="Campuran" ${mixed1?'selected':''}>Campuran (2 Metode)</option></select><label class="flex items-center gap-2 text-[10px] font-black text-slate-700 mt-1"><input id="edit-in-campuran-1" type="checkbox" ${mixed1?'checked':''} onchange="toggleEditMixedPayment(1)"> Bayar dengan 2 metode</label><div id="edit-in-campuran-box-1" class="${mixed1?'':'hidden '}grid grid-cols-2 gap-2 mt-1"><input id="edit-in-jml1b" type="text" inputmode="numeric" oninput="formatNominalInput(this)" min="0" value="${formatNominalInputValue(jml1b)}" class="w-full border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"><select id="edit-in-met1b" class="w-full border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"><option value="QRIS" ${met1b==='QRIS'?'selected':''}>QRIS</option><option value="Cash" ${met1b==='Cash'?'selected':''}>Cash</option><option value="Transfer" ${met1b==='Transfer'?'selected':''}>Transfer</option></select></div></div>
+                            <div><label class="text-xs font-black text-slate-700">Jumlah Tim 2</label><input id="edit-in-jml2" type="text" inputmode="numeric" oninput="formatNominalInput(this)" min="0" value="${formatNominalInputValue(jml2)}" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"></div>
+                            <div><label class="text-xs font-black text-slate-700">Metode Tim 2</label><select id="edit-in-met2" onchange="toggleEditFreePaymentInput(2)" class="w-full mt-1 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"><option value="Cash" ${met2==='Cash'?'selected':''}>Cash</option><option value="QRIS" ${met2==='QRIS'?'selected':''}>QRIS</option><option value="Transfer" ${met2==='Transfer'?'selected':''}>Transfer</option><option value="Free" ${met2==='Free'?'selected':''}>Free / Gratis</option><option value="Campuran" ${mixed2?'selected':''}>Campuran (2 Metode)</option></select><label class="flex items-center gap-2 text-[10px] font-black text-slate-700 mt-1"><input id="edit-in-campuran-2" type="checkbox" ${mixed2?'checked':''} onchange="toggleEditMixedPayment(2)"> Bayar dengan 2 metode</label><div id="edit-in-campuran-box-2" class="${mixed2?'':'hidden '}grid grid-cols-2 gap-2 mt-1"><input id="edit-in-jml2b" type="text" inputmode="numeric" oninput="formatNominalInput(this)" min="0" value="${formatNominalInputValue(jml2b)}" class="w-full border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"><select id="edit-in-met2b" class="w-full border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900"><option value="QRIS" ${met2b==='QRIS'?'selected':''}>QRIS</option><option value="Cash" ${met2b==='Cash'?'selected':''}>Cash</option><option value="Transfer" ${met2b==='Transfer'?'selected':''}>Transfer</option></select></div></div>
                         </div>
                         <div class="flex gap-2 pt-2">
                             <button type="button" onclick="simpanEditDataKeuangan('pemasukan','${key}')" class="flex-1 bg-blue-700 hover:bg-blue-800 text-white px-4 py-2.5 rounded-xl font-black shadow">Simpan Perubahan</button>
@@ -12255,10 +12255,10 @@ window.__APP_FIREBASE_GET__ = get;
             const met2 = document.getElementById('edit-in-met2')?.value || 'Cash';
             const mixed1 = met1 === 'Campuran' || document.getElementById('edit-in-campuran-1')?.checked;
             const mixed2 = met2 === 'Campuran' || document.getElementById('edit-in-campuran-2')?.checked;
-            const jml1 = met1 === 'Free' ? 0 : Number(document.getElementById('edit-in-jml1')?.value || 0);
-            const jml2 = met2 === 'Free' ? 0 : Number(document.getElementById('edit-in-jml2')?.value || 0);
-            const jml1b = mixed1 ? Number(document.getElementById('edit-in-jml1b')?.value || 0) : 0;
-            const jml2b = mixed2 ? Number(document.getElementById('edit-in-jml2b')?.value || 0) : 0;
+            const jml1 = met1 === 'Free' ? 0 : parseNominalInputValue(document.getElementById("edit-in-jml1")?.value || "");
+            const jml2 = met2 === 'Free' ? 0 : parseNominalInputValue(document.getElementById("edit-in-jml2")?.value || "");
+            const jml1b = mixed1 ? parseNominalInputValue(document.getElementById("edit-in-jml1b")?.value || "") : 0;
+            const jml2b = mixed2 ? parseNominalInputValue(document.getElementById("edit-in-jml2b")?.value || "") : 0;
             const met1b = document.getElementById('edit-in-met1b')?.value || 'QRIS';
             const met2b = document.getElementById('edit-in-met2b')?.value || 'QRIS';
             if((mixed1 && jml1b<=0) || (mixed2 && jml2b<=0)) { alert('Nominal metode kedua harus diisi.'); return; }
@@ -12689,7 +12689,7 @@ window.__APP_FIREBASE_GET__ = get;
             if(!el) return;
             const nama = document.getElementById('pm-member')?.value || '';
             const month = getPelunasanMonth();
-            const amount = Number(document.getElementById('pm-jumlah')?.value || 0);
+            const amount = parseNominalInputValue(document.getElementById("pm-jumlah")?.value || "");
             if(!nama || amount<=0) { el.textContent='Pilih member, tanggal jadwal, dan masukkan jumlah pembayaran.'; return; }
             const selectedDate = document.getElementById('pm-tanggal-jadwal')?.value || '';
             let dues = getOpenDuesForMember(nama, month).filter(d=>d.sisa>0);
@@ -12707,7 +12707,7 @@ window.__APP_FIREBASE_GET__ = get;
         window.simpanPelunasanMember = async () => {
             const nama = document.getElementById('pm-member')?.value || '';
             const month = getPelunasanMonth();
-            const jumlah = Number(document.getElementById('pm-jumlah')?.value || 0);
+            const jumlah = parseNominalInputValue(document.getElementById("pm-jumlah")?.value || "");
             const metode = document.getElementById('pm-metode')?.value || 'Cash';
             const selectedDate = document.getElementById('pm-tanggal-jadwal')?.value || '';
             const tanggalBayar = document.getElementById('pm-tanggal-bayar')?.value || '';
@@ -13288,6 +13288,25 @@ window.__APP_FIREBASE_GET__ = get;
 
             return harga;
         }
+
+        // Formatter nominal rupiah untuk input admin: 100000 -> 100.000
+        function formatNominalInputValue(value) {
+            const digits = String(value ?? '').replace(/\D/g, '');
+            return digits ? Number(digits).toLocaleString('id-ID') : '';
+        }
+        function parseNominalInputValue(value) {
+            const digits = String(value ?? '').replace(/\D/g, '');
+            return digits ? Number(digits) : 0;
+        }
+        window.formatNominalInput = function(el) {
+            if (!el) return;
+            const raw = el.value;
+            const formatted = formatNominalInputValue(raw);
+            el.value = formatted;
+            if (typeof el.selectionStart === 'number') {
+                try { el.setSelectionRange(formatted.length, formatted.length); } catch(e) {}
+            }
+        };
 
         function formatRupiah(nominal) {
             return 'Rp ' + Number(nominal || 0).toLocaleString('id-ID');
@@ -21290,6 +21309,39 @@ window.refreshOpsiMemberTanpaJadwal = refreshOpsiMemberTanpaJadwal;
   }
   document.addEventListener('pointerup',hitSaveAtPoint,true);
   document.addEventListener('touchend',hitSaveAtPoint,true);
+})();
+</script>
+<script id="nominal-input-fix-v66">
+(function(){
+  const nominalIds = [
+    'in-jumlah-1','in-jumlah-1b','in-dp-1','in-jumlah-2','in-jumlah-2b','in-dp-2',
+    'in-diskon-manual','k-jumlah','m-total','pm-jumlah','b-dp',
+    'edit-in-jml1','edit-in-jml1b','edit-in-jml2','edit-in-jml2b'
+  ];
+  function applyNominalFormat(el){
+    if(!el || !nominalIds.includes(el.id)) return;
+    const digits = String(el.value ?? '').replace(/\D/g,'');
+    const formatted = digits ? Number(digits).toLocaleString('id-ID') : '';
+    if(el.value !== formatted) el.value = formatted;
+  }
+  function bindNominalInputs(){
+    nominalIds.forEach(id=>{
+      const el=document.getElementById(id);
+      if(!el) return;
+      el.type='text';
+      el.setAttribute('inputmode','numeric');
+      el.addEventListener('input', function(){
+        applyNominalFormat(this);
+      }, {passive:true});
+      applyNominalFormat(el);
+    });
+  }
+  document.addEventListener('input', function(e){
+    if(e.target && nominalIds.includes(e.target.id)) applyNominalFormat(e.target);
+  }, true);
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', bindNominalInputs);
+  else bindNominalInputs();
+  window.addEventListener('load', bindNominalInputs);
 })();
 </script>
 </body>
