@@ -12100,18 +12100,22 @@ kaosKakiTerjual: jumlahKaosKaki,
         }
 
         window.aturLiburMember = async (key) => {
-            const member = globalCache.member;
+            const memberCache = globalCache.member || {};
             let nama = '';
             let raw = null;
-            Object.values(member || {}).forEach(perHari => {
+
+            Object.values(memberCache).forEach(perHari => {
                 Object.values(perHari || {}).forEach(cell => {
-                    if(cell && cell.key === key) { nama = cell.nama || nama; raw = cell; }
+                    if(cell && String(cell.key || '') === String(key)) {
+                        nama = cell.nama || nama;
+                        raw = cell;
+                    }
                 });
             });
             if(!raw) { alert('Data member tidak ditemukan.'); return; }
 
-            // Tampilkan hanya tanggal yang jatuh pada hari jadwal member.
-            // Contoh: member Jumat -> pilihan hanya Jumat, bukan hari lain.
+            // Tombol LIBUR berada pada kartu member yang menggabungkan beberapa
+            // slot. Semua slot dengan nama + hari yang sama harus ikut diliburkan.
             const namaHari = String(raw.hari || '').trim();
             const hariIndex = {
                 'Minggu': 0, 'Senin': 1, 'Selasa': 2, 'Rabu': 3,
@@ -12123,89 +12127,198 @@ kaosKakiTerjual: jumlahKaosKaki,
                 return;
             }
 
-            const existing = raw.liburTanggal && !Array.isArray(raw.liburTanggal)
-                ? { ...raw.liburTanggal }
-                : Object.fromEntries((raw.liburTanggal || []).map(d => [d, true]));
+            const namaTarget = String(nama || '').trim().toLowerCase();
+            const targetEntries = [];
+            Object.values(memberCache).forEach(perHari => {
+                Object.values(perHari || {}).forEach(cell => {
+                    if(!cell || !cell.key || cell.type === 'off') return;
+                    if(String(cell.nama || '').trim().toLowerCase() !== namaTarget) return;
+                    if(String(cell.hari || '').trim() !== namaHari) return;
+                    targetEntries.push(cell);
+                });
+            });
+            if(!targetEntries.length) targetEntries.push(raw);
 
             const pad = n => String(n).padStart(2, '0');
             const toDateString = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-            const hariNamaPendek = ['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
-            const hariNamaPanjang = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+            const fromDateString = str => {
+                const [y,m,d] = String(str).split('-').map(Number);
+                return new Date(y, (m || 1)-1, d || 1);
+            };
             const today = new Date();
             today.setHours(0,0,0,0);
+            const todayStr = toDateString(today);
+            const monthNames = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+            const dayNames = ['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
 
-            // Ambil 16 jadwal berikutnya yang benar-benar jatuh pada hari member.
-            // Hari ini ikut ditampilkan jika memang sesuai harinya.
-            const pilihan = [];
-            const cursor = new Date(today);
-            for(let i = 0; i < 140 && pilihan.length < 16; i++) {
-                if(cursor.getDay() === targetDay) {
-                    const value = toDateString(cursor);
-                    pilihan.push({ value, label: `${hariNamaPanjang[targetDay]}, ${pad(cursor.getDate())}-${pad(cursor.getMonth()+1)}-${cursor.getFullYear()}` });
-                }
-                cursor.setDate(cursor.getDate() + 1);
-            }
-
-            const options = pilihan.map(item => {
-                const isLibur = existing[item.value] === true;
-                return `<option value="${item.value}" ${isLibur ? 'data-libur="1"' : ''}>${item.label}${isLibur ? ' — SEDANG LIBUR' : ''}</option>`;
-            }).join('');
+            // Menyatukan status libur dari seluruh slot. Jika semua slot sudah libur,
+            // tanggal ditampilkan sebagai sedang libur dan klik akan mengembalikannya.
+            const isLiburForAllSlots = dateStr => targetEntries.every(cell => isMemberLiburOnDate(cell, dateStr));
+            const isLiburForAnySlot = dateStr => targetEntries.some(cell => isMemberLiburOnDate(cell, dateStr));
+            const slotText = targetEntries.map(cell => String(cell.jam || '').substring(0,5)).filter(Boolean).sort().join(', ');
 
             document.getElementById('modal-libur-member')?.remove();
             const modal = document.createElement('div');
             modal.id = 'modal-libur-member';
-            modal.className = 'fixed inset-0 z-[120] flex items-center justify-center p-3 bg-slate-900/70 backdrop-blur-sm';
+            modal.className = 'fixed inset-0 flex items-center justify-center p-3 bg-slate-900/70 backdrop-blur-sm';
+            modal.style.cssText = 'position:fixed;inset:0;z-index:2147483647 !important;display:flex;align-items:center;justify-content:center;padding:12px;box-sizing:border-box;';
             modal.innerHTML = `
-                <div class="w-full max-w-md rounded-2xl border border-white/40 bg-white shadow-2xl p-5 text-slate-900">
-                    <div class="flex items-center justify-between mb-3">
-                        <div>
-                            <h3 class="font-black text-base sm:text-lg text-indigo-950">📅 ATUR LIBUR MEMBER</h3>
-                            <p class="text-xs text-slate-500 mt-1">${nama || 'Member'} • Jadwal setiap ${namaHari}</p>
+                <div id="libur-calendar-card" class="w-full max-w-md rounded-3xl bg-white text-slate-900 shadow-2xl overflow-hidden" style="position:relative;z-index:2147483647;max-height:92vh;overflow-y:auto;">
+                    <div class="bg-gradient-to-r from-indigo-700 to-blue-600 px-5 pt-5 pb-4 text-white">
+                        <button type="button" id="btn-tutup-libur" aria-label="Tutup" class="absolute right-4 top-4 w-9 h-9 rounded-full bg-white/15 hover:bg-white/25 border border-white/20 flex items-center justify-center text-white text-xl font-black transition">×</button>
+                        <div class="pr-12">
+                            <div class="text-[11px] font-black uppercase tracking-widest opacity-80">ATUR LIBUR MEMBER</div>
+                            <h3 class="mt-1 text-xl font-black">${escapeHtmlSparing(nama || 'Member')}</h3>
+                            <p class="mt-1 text-xs font-bold text-white/85">Setiap ${escapeHtmlSparing(namaHari)} • ${targetEntries.length} slot • ${escapeHtmlSparing(slotText)}</p>
                         </div>
-                        <button type="button" id="btn-tutup-libur" class="text-slate-500 hover:text-slate-900 text-xl font-black">✕</button>
                     </div>
-                    <label class="block text-xs font-black text-slate-700 mb-1">Pilih tanggal ${namaHari}</label>
-                    <select id="select-tanggal-libur" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        ${options}
-                    </select>
-                    <p class="text-[11px] text-slate-500 mt-2">Hanya tanggal ${namaHari} yang ditampilkan. Minggu berikutnya tetap masuk jadwal seperti biasa.</p>
-                    <div class="flex gap-2 mt-4">
-                        <button type="button" id="btn-batal-libur" class="flex-1 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2.5 text-xs font-black">BATAL</button>
-                        <button type="button" id="btn-simpan-libur" class="flex-1 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 text-xs font-black">SIMPAN LIBUR</button>
+
+                    <div class="p-4 sm:p-5">
+                        <div class="flex items-center justify-between mb-4">
+                            <button type="button" id="libur-prev-month" class="w-10 h-10 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-black text-lg shadow-sm">‹</button>
+                            <div id="libur-month-title" class="text-base sm:text-lg font-black text-indigo-950 text-center"></div>
+                            <button type="button" id="libur-next-month" class="w-10 h-10 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-black text-lg shadow-sm">›</button>
+                        </div>
+
+                        <div class="grid grid-cols-7 gap-1 mb-2">
+                            ${dayNames.map(d => `<div class="text-center text-[10px] font-black text-slate-400 py-1">${d}</div>`).join('')}
+                        </div>
+                        <div id="libur-calendar-grid" class="grid grid-cols-7 gap-1"></div>
+
+                        <div class="flex items-center gap-3 mt-4 text-[10px] font-bold text-slate-500">
+                            <span class="inline-flex items-center gap-1"><i class="w-3 h-3 rounded-full bg-indigo-600"></i> Pilih</span>
+                            <span class="inline-flex items-center gap-1"><i class="w-3 h-3 rounded-full bg-amber-400"></i> Sedang libur</span>
+                            <span class="inline-flex items-center gap-1"><i class="w-3 h-3 rounded-full bg-slate-200"></i> Bukan ${escapeHtmlSparing(namaHari)}</span>
+                        </div>
+
+                        <div id="libur-selected-info" class="mt-4 rounded-2xl bg-indigo-50 border border-indigo-100 px-4 py-3 text-xs font-bold text-indigo-900">
+                            Pilih tanggal ${escapeHtmlSparing(namaHari)} pada kalender.
+                        </div>
+
+                        <div class="flex gap-2 mt-4">
+                            <button type="button" id="btn-batal-libur" class="flex-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-3 text-xs font-black">BATAL</button>
+                            <button type="button" id="btn-simpan-libur" class="flex-1 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-3 text-xs font-black shadow-lg shadow-indigo-200">SIMPAN LIBUR</button>
+                        </div>
                     </div>
                 </div>`;
             document.body.appendChild(modal);
+
+            let selectedDate = '';
+            let viewDate = new Date(today.getFullYear(), today.getMonth(), 1);
 
             const close = () => modal.remove();
             document.getElementById('btn-tutup-libur').onclick = close;
             document.getElementById('btn-batal-libur').onclick = close;
             modal.addEventListener('click', e => { if(e.target === modal) close(); });
 
+            const renderCalendar = () => {
+                const year = viewDate.getFullYear();
+                const month = viewDate.getMonth();
+                const title = document.getElementById('libur-month-title');
+                const grid = document.getElementById('libur-calendar-grid');
+                if(!title || !grid) return;
+                title.textContent = `${monthNames[month]} ${year}`;
+
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                let html = '';
+
+                for(let i = 0; i < firstDay; i++) html += `<div class="h-10 sm:h-11"></div>`;
+
+                for(let day = 1; day <= daysInMonth; day++) {
+                    const dateObj = new Date(year, month, day);
+                    const dateStr = toDateString(dateObj);
+                    const isTargetDay = dateObj.getDay() === targetDay;
+                    const isPast = dateStr < todayStr;
+                    const isSelected = selectedDate === dateStr;
+                    const isAllOff = isLiburForAllSlots(dateStr);
+                    const isAnyOff = isLiburForAnySlot(dateStr);
+                    const canChoose = isTargetDay && !isPast;
+
+                    let cls = 'relative h-10 sm:h-11 rounded-xl flex items-center justify-center text-xs sm:text-sm font-black transition border ';
+                    if(!isTargetDay) {
+                        cls += 'bg-slate-50 border-transparent text-slate-300 cursor-not-allowed';
+                    } else if(isPast) {
+                        cls += 'bg-slate-100 border-slate-100 text-slate-300 cursor-not-allowed';
+                    } else if(isSelected) {
+                        cls += 'bg-indigo-600 border-indigo-600 text-white shadow-md scale-[1.03] cursor-pointer';
+                    } else if(isAllOff) {
+                        cls += 'bg-amber-100 border-amber-300 text-amber-800 hover:bg-amber-200 cursor-pointer';
+                    } else if(isAnyOff) {
+                        cls += 'bg-amber-50 border-amber-200 text-amber-700 hover:bg-amber-100 cursor-pointer';
+                    } else {
+                        cls += 'bg-white border-slate-200 text-slate-700 hover:bg-indigo-50 hover:border-indigo-300 hover:text-indigo-700 cursor-pointer';
+                    }
+
+                    html += `<button type="button" ${canChoose ? '' : 'disabled'} data-libur-date="${dateStr}" class="${cls}" title="${isAllOff ? 'Sedang libur — klik untuk mengaktifkan kembali' : (canChoose ? `Pilih ${dateStr}` : 'Tidak tersedia')}" aria-label="${dateStr}">
+                        <span>${day}</span>
+                        ${isAllOff ? '<span class="absolute bottom-1 w-1.5 h-1.5 rounded-full bg-amber-500"></span>' : ''}
+                    </button>`;
+                }
+                grid.innerHTML = html;
+
+                grid.querySelectorAll('[data-libur-date]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        selectedDate = btn.dataset.liburDate || '';
+                        const info = document.getElementById('libur-selected-info');
+                        const allOff = isLiburForAllSlots(selectedDate);
+                        if(info) {
+                            const d = fromDateString(selectedDate);
+                            const label = `${dayNames[d.getDay()]}, ${pad(d.getDate())} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+                            info.innerHTML = allOff
+                                ? `📅 <strong>${label}</strong><br><span class="text-amber-700">Tanggal ini sedang libur untuk semua slot. Simpan untuk mengaktifkan kembali.</span>`
+                                : `📅 <strong>${label}</strong><br><span>Semua slot ${escapeHtmlSparing(namaHari)} (${escapeHtmlSparing(slotText)}) akan diliburkan.</span>`;
+                        }
+                        renderCalendar();
+                    });
+                });
+            };
+
+            document.getElementById('libur-prev-month').onclick = () => {
+                viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1);
+                renderCalendar();
+            };
+            document.getElementById('libur-next-month').onclick = () => {
+                viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1);
+                renderCalendar();
+            };
+
             document.getElementById('btn-simpan-libur').onclick = async () => {
-                const select = document.getElementById('select-tanggal-libur');
-                const tgl = select?.value;
-                if(!tgl) return;
+                const tgl = selectedDate;
+                if(!tgl) {
+                    alert(`Pilih tanggal ${namaHari} terlebih dahulu.`);
+                    return;
+                }
+                if(tgl < todayStr) {
+                    alert('Tanggal yang sudah lewat tidak dapat diubah.');
+                    return;
+                }
 
-                const alreadyOff = existing[tgl] === true;
-                const next = { ...existing };
-                if(alreadyOff) delete next[tgl];
-                else next[tgl] = true;
-
+                const alreadyOff = isLiburForAllSlots(tgl);
                 try {
-                    await update(ref(db, 'member/' + key), { liburTanggal: next });
+                    await Promise.all(targetEntries.map(cell => {
+                        const existing = cell.liburTanggal && !Array.isArray(cell.liburTanggal)
+                            ? { ...cell.liburTanggal }
+                            : Object.fromEntries((cell.liburTanggal || []).map(d => [d, true]));
+                        if(alreadyOff) delete existing[tgl];
+                        else existing[tgl] = true;
+                        return update(ref(db, 'member/' + cell.key), { liburTanggal: existing });
+                    }));
+
                     close();
                     if(alreadyOff) {
-                        alert(`${nama || 'Member'} kembali masuk jadwal pada ${tgl}.`);
+                        alert(`${nama || 'Member'} kembali masuk jadwal pada ${tgl} untuk semua slot: ${slotText}.`);
                     } else {
-                        alert(`${nama || 'Member'} diliburkan pada ${tgl}. Jadwal ${namaHari} berikutnya tetap berjalan.`);
+                        alert(`${nama || 'Member'} diliburkan pada ${tgl}. Semua slot ${namaHari}: ${slotText} dihilangkan dari Booking Schedule.`);
                     }
                 } catch(error) {
                     console.error(error);
                     alert('Gagal mengubah jadwal libur: ' + error.message);
                 }
             };
-        }
 
+            renderCalendar();
+        };
 
         // =========================================================
         // BOOKING SCHEDULE — PINDAH JADWAL MEMBER UNTUK 1 HARI
@@ -14516,9 +14629,27 @@ kaosKakiTerjual: jumlahKaosKaki,
             }
 
             const key = getTeamLogoKey(teamName);
+            const progressStartedAt = Date.now();
+            const waitForLogoProgress = async (minimumMs = 3000) => {
+                const elapsed = Date.now() - progressStartedAt;
+                const remaining = Math.max(0, minimumMs - elapsed);
+                if(remaining > 0) await new Promise(resolve => setTimeout(resolve, remaining));
+            };
             try {
-                showTeamLogoProgress(logo ? 'Menyimpan logo...' : 'Menghapus logo...', logo ? 'Mengirim logo ke Firebase. Mohon tunggu...' : 'Menghapus data logo dari Firebase...');
-                setTeamLogoProgress(10, logo ? 'Menyimpan logo...' : 'Menghapus logo...', 'Menghubungkan ke Firebase...');
+                // Tampilkan progress secara langsung dan pertahankan beberapa detik
+                // agar admin benar-benar melihat bahwa proses sedang berjalan,
+                // termasuk ketika Firebase merespons sangat cepat.
+                showTeamLogoProgress(logo ? 'Menyimpan logo...' : 'Menghapus logo...', logo ? 'Logo sedang diproses dan dikirim ke Firebase. Mohon tunggu...' : 'Logo sedang dihapus dari Firebase. Mohon tunggu...');
+                setTeamLogoProgress(8, logo ? 'Menyimpan logo...' : 'Menghapus logo...', 'Menyiapkan proses penyimpanan...');
+                let progressTimer = setInterval(() => {
+                    const overlay = document.getElementById('team-logo-progress-overlay');
+                    if(!overlay) return;
+                    const current = Number(overlay.querySelector('[data-logo-progress-percent]')?.textContent?.replace('%','') || 8);
+                    if(current < 82) {
+                        const next = Math.min(82, current + 4);
+                        setTeamLogoProgress(next, logo ? 'Menyimpan logo...' : 'Menghapus logo...', next < 40 ? 'Menyiapkan data...' : 'Sedang menyinkronkan dengan Firebase...');
+                    }
+                }, 180);
                 if(logo) {
                     // Simpan logo pada satu key kanonik berdasarkan nama tim.
                     // Semua Booking History, Member, Jadwal, dan Sparing mengambil
@@ -14548,7 +14679,9 @@ kaosKakiTerjual: jumlahKaosKaki,
                     renderTabelBooking();
                     refreshTeamLogoIndicators();
                     if (typeof renderSparing === 'function') renderSparing();
-                    finishTeamLogoProgress(true, `Logo ${teamName} berhasil disimpan dan disinkronkan.`, 1300);
+                    await waitForLogoProgress(3000);
+                    clearInterval(progressTimer);
+                    finishTeamLogoProgress(true, `Logo ${teamName} berhasil disimpan dan disinkronkan.`, 900);
                     showSuccessPopup(`Logo ${teamName} berhasil disimpan dan disinkronkan.`);
                 } else {
                     await remove(ref(db, 'teamLogos/' + key));
@@ -14560,12 +14693,16 @@ kaosKakiTerjual: jumlahKaosKaki,
                     renderTabelBooking();
                     refreshTeamLogoIndicators();
                     if (typeof renderSparing === 'function') renderSparing();
-                    finishTeamLogoProgress(true, `Logo ${teamName} berhasil dihapus.`, 1300);
+                    await waitForLogoProgress(3000);
+                    clearInterval(progressTimer);
+                    finishTeamLogoProgress(true, `Logo ${teamName} berhasil dihapus.`, 900);
                     showSuccessPopup(`Logo ${teamName} dihapus.`);
                 }
                 closeTeamLogoEditor();
+                clearInterval(progressTimer);
             } catch(error) {
                 console.error(error);
+                if(progressTimer) clearInterval(progressTimer);
                 finishTeamLogoProgress(false, 'Gagal menyimpan logo tim: ' + error.message, 2200);
                 alert('Gagal menyimpan logo tim: ' + error.message);
             }
@@ -17626,7 +17763,16 @@ return;
 }
 </style>
 
-<style id="daily-report-download-progress-style">.daily-download-progress-overlay{position:fixed;inset:0;z-index:2147483646;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.42);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}.daily-download-progress-modal{width:min(100%,390px);padding:24px;border-radius:22px;background:rgba(255,255,255,.97);border:1px solid rgba(255,255,255,.9);box-shadow:0 25px 70px rgba(15,23,42,.28);text-align:center}.daily-download-progress-icon{width:54px;height:54px;margin:0 auto 12px;display:grid;place-items:center;border-radius:17px;background:linear-gradient(135deg,#2563eb,#4f46e5);color:#fff;font-size:24px}.daily-download-progress-title{margin:0;color:#0f172a;font-size:17px;font-weight:900}.daily-download-progress-text{margin:6px 0 16px;color:#64748b;font-size:12px;font-weight:700}.daily-download-progress-track{width:100%;height:12px;border-radius:999px;background:#e2e8f0;overflow:hidden}.daily-download-progress-bar{width:0%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#2563eb,#4f46e5,#7c3aed);transition:width .3s ease}.daily-download-progress-percent{margin-top:9px;color:#1e3a8a;font-size:12px;font-weight:900}.daily-download-progress-modal.is-success .daily-download-progress-icon{background:linear-gradient(135deg,#10b981,#059669)}.daily-download-progress-modal.is-error .daily-download-progress-icon{background:linear-gradient(135deg,#ef4444,#dc2626)}</style><script id="daily-report-admin-jpg-script">
+<style id="daily-report-download-progress-style">.daily-download-progress-overlay{position:fixed;inset:0;z-index:2147483646;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.42);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}.daily-download-progress-modal{width:min(100%,390px);padding:24px;border-radius:22px;background:rgba(255,255,255,.97);border:1px solid rgba(255,255,255,.9);box-shadow:0 25px 70px rgba(15,23,42,.28);text-align:center}.daily-download-progress-icon{width:54px;height:54px;margin:0 auto 12px;display:grid;place-items:center;border-radius:17px;background:linear-gradient(135deg,#2563eb,#4f46e5);color:#fff;font-size:24px}.daily-download-progress-title{margin:0;color:#0f172a;font-size:17px;font-weight:900}.daily-download-progress-text{margin:6px 0 16px;color:#64748b;font-size:12px;font-weight:700}.daily-download-progress-track{width:100%;height:12px;border-radius:999px;background:#e2e8f0;overflow:hidden}.daily-download-progress-bar{width:0%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#2563eb,#4f46e5,#7c3aed);transition:width .3s ease}.daily-download-progress-percent{margin-top:9px;color:#1e3a8a;font-size:12px;font-weight:900}.daily-download-progress-modal.is-success .daily-download-progress-icon{background:linear-gradient(135deg,#10b981,#059669)}.daily-download-progress-modal.is-error .daily-download-progress-icon{background:linear-gradient(135deg,#ef4444,#dc2626)}</style>
+<style id="daily-report-full-export-enhancement">
+#daily-report-jpg-canvas .report-minuman-full-rekap{margin:14px 0 16px;padding:14px;border:1px solid #f59e0b55;border-radius:16px;background:#fffdf7}
+#daily-report-jpg-canvas .report-minuman-full-title{font-size:13px;font-weight:900;color:#92400e;text-align:center;margin-bottom:10px;letter-spacing:.2px}
+#daily-report-jpg-canvas .report-minuman-full-table{width:100%;border-collapse:collapse;background:#fff;font-size:11px}
+#daily-report-jpg-canvas .report-minuman-full-table th{padding:8px 9px;background:#0f172a;color:#fff;border:1px solid #0f172a;text-align:center;font-weight:900}
+#daily-report-jpg-canvas .report-minuman-full-table td{padding:8px 9px;border:1px solid #cbd5e1;font-weight:800;text-align:center}
+#daily-report-jpg-canvas .report-minuman-full-table td:first-child{text-align:left}
+#daily-report-jpg-canvas .report-empty-state{margin-top:10px;padding:12px 14px;border:1px dashed #94a3b8;border-radius:12px;background:#f8fafc;color:#64748b;text-align:center;font-size:11px;font-weight:800}
+</style><script id="daily-report-admin-jpg-script">
 window.downloadDailyRecapJPGFull = async function() {
     const downloadButton = document.querySelector('.daily-report-jpg-button');
     if (downloadButton?.dataset.downloadBusy === '1') return;
@@ -17776,6 +17922,85 @@ window.downloadDailyRecapJPGFull = async function() {
         clone.querySelectorAll('input, button, select, textarea').forEach(el => el.remove());
         clone.querySelectorAll('[style*="display:none"], [style*="display: none"]').forEach(el => el.remove());
 
+        // Versi lengkap tetap mempertahankan detail transaksi, tetapi juga
+        // memastikan 8 pilihan minuman selalu terlihat dalam rekap produk.
+        if (item.key === 'minuman') {
+            const daftarMinuman = [
+                'Air Mineral',
+                'Air Mineral + 3 Permen',
+                'Pocari Sweat',
+                'Fanta',
+                'Sprite',
+                'Coca Cola',
+                'Teh Pucuk Harum',
+                'Milo'
+            ];
+            const qtyProduk = Object.fromEntries(daftarMinuman.map(nama => [nama, 0]));
+            const totalProduk = Object.fromEntries(daftarMinuman.map(nama => [nama, 0]));
+
+            // Gunakan tabel riwayat transaksi yang sudah dirender oleh Daily Recap
+            // sebagai sumber utama. Tabel ini memakai filter tanggal yang sama
+            // dengan laporan, sehingga jumlah per produk pasti sinkron dengan
+            // baris transaksi yang terlihat di bawahnya.
+            const tabelSumber = clone.querySelector('#tabel-minuman');
+            const barisTransaksi = tabelSumber ? Array.from(tabelSumber.querySelectorAll('tr')) : [];
+            barisTransaksi.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                if (cells.length < 3) return;
+                const nama = String(cells[0].textContent || '').trim();
+                if (!Object.prototype.hasOwnProperty.call(qtyProduk, nama)) return;
+
+                const pcsText = String(cells[1].textContent || '');
+                const totalText = String(cells[2].textContent || '');
+                const pcsMatch = pcsText.match(/-?\d+(?:[.,]\d+)?/);
+                const totalMatch = totalText.replace(/[^0-9-]/g, '');
+                const pcs = pcsMatch ? Number(String(pcsMatch[0]).replace(',', '.')) : 0;
+                const total = totalMatch ? Number(totalMatch) : 0;
+
+                qtyProduk[nama] += Number.isFinite(pcs) ? pcs : 0;
+                totalProduk[nama] += Number.isFinite(total) ? total : 0;
+            });
+
+            // Fallback untuk kondisi tabel belum sempat dirender. Tanggal
+            // dinormalisasi agar data lama dengan timestamp tetap terbaca.
+            if (barisTransaksi.length === 0) {
+                const dataMinuman = (window.globalCache && window.globalCache.minuman) || {};
+                Object.values(dataMinuman).forEach(data => {
+                    if (!data) return;
+                    const dataDate = String(data.tgl || '').split('T')[0];
+                    if (dataDate !== rawDate) return;
+                    const nama = String(data.produk || '').trim();
+                    if (!Object.prototype.hasOwnProperty.call(qtyProduk, nama)) return;
+                    qtyProduk[nama] += Number(data.jumlahPcs || 0) || 0;
+                    totalProduk[nama] += Number(data.total || 0) || 0;
+                });
+            }
+
+            // Versi lengkap cukup menampilkan tabel riwayat transaksi minuman di bawah.
+            // Rekap produk di atas sengaja dihilangkan agar tidak terjadi duplikasi.
+            const ringkasanMinumanBox = clone.querySelector('#ringkasan-minuman-box');
+            if (ringkasanMinumanBox) ringkasanMinumanBox.remove();
+
+            // Hilangkan kartu ringkasan produk seperti "Teh Pucuk Harum - 1 Pcs Terjual".
+            // Detail transaksi yang sebenarnya tetap ditampilkan pada tabel riwayat di bawah.
+            clone.querySelectorAll('#ringkasan-minuman-box, .report-minuman-full-rekap').forEach(el => el.remove());
+
+        // Jika tidak ada transaksi, tampilkan keterangan yang jelas agar
+        // tabel kosong tidak terlihat seperti data gagal dimuat.
+        if (item.key === 'lapangan' || item.key === 'pengeluaran') {
+            const table = clone.querySelector('table');
+            const tbody = table?.querySelector('tbody');
+            if (tbody && !tbody.children.length) {
+                const empty = document.createElement('div');
+                empty.className = 'report-empty-state';
+                empty.textContent = item.key === 'lapangan'
+                    ? 'Tidak ada transaksi lapangan hari ini'
+                    : 'Tidak ada pengeluaran hari ini';
+                const wrapper = table.closest('.shadow, .overflow-hidden') || table.parentElement;
+                wrapper?.appendChild(empty);
+            }
+        }
+
         // Laporan JPG dibuat ringkas: tanggal dan kontrol admin tidak ikut.
         clone.querySelectorAll('#label-tanggal-lapangan, #label-tanggal-minuman, #label-tanggal-keluar, #label-tanggal-ringkasan').forEach(el => {
             el.remove();
@@ -17849,7 +18074,9 @@ window.downloadDailyRecapJPGFull = async function() {
 
         setProgress(92, 'Menyiapkan file...', 'JPG hampir selesai dibuat.');
         const link = document.createElement('a');
-        link.download = `Daily-Report-${rawDate}.jpg`;
+        link.download = (typeof window.getDailyReportFullFileName === 'function')
+            ? window.getDailyReportFullFileName()
+            : `Daily Report ${rawDate} - Versi Lengkap.jpg`;
         link.href = canvas.toDataURL('image/jpeg', .95);
         link.click();
         showResult(true, 'Laporan JPG berhasil disimpan ke perangkat.');
@@ -22322,10 +22549,97 @@ body.minuman-history-modal-open{overflow:hidden !important}
       pr.set(30,'Mengambil data...','Data laporan sedang disiapkan.');
       const root=document.createElement('div');root.style.cssText='position:fixed;left:-100000px;top:0;width:900px;box-sizing:border-box;padding:46px;background:#f8fafc;color:#0f172a;font-family:Arial,sans-serif';
       const safe=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-      const totalLap=money('rekap-lapangan-cash'),totalMin=money('rekap-minuman-cash'),qrisTf=money('daily-total-qris'),keluar=money('rekap-keluar'),pemasukan=money('rekap-total-pemasukan'),hasil=money('rekap-hasil-bersih');
-      const cashLap=money('rekap-sisa-cash-lapangan'),cashMin=money('rekap-sisa-cash-minuman'),cashTotal=money('rekap-total-sisa-cash');
-      let pcs='0';const data=(window.globalCache&&window.globalCache.minuman)||{};Object.values(data).forEach(x=>{if(x&&String(x.tgl||'')===raw)pcs+=Number(x.jumlahPcs||0)||0});
-      root.innerHTML=`<div style="text-align:center;border-bottom:2px solid #e2e8f0;padding-bottom:24px;margin-bottom:22px"><div style="font-size:40px;font-weight:900;letter-spacing:1px">DAILY REPORT</div><div style="font-size:22px;font-weight:800;margin-top:6px">${tanggal}</div><div style="font-size:15px;color:#64748b;margin-top:5px">ADMIN SHIFT: ${safe(admin)}</div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px"><b>⚽ LAPANGAN</b><div style="font-size:27px;font-weight:900;margin-top:8px">${totalLap}</div></div><div style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px"><b>🥤 MINUMAN</b><div style="font-size:27px;font-weight:900;margin-top:8px">${totalMin}</div><div style="font-size:15px;color:#64748b;margin-top:4px">${pcs} pcs terjual</div></div><div style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px"><b>💰 TOTAL PEMASUKAN</b><div style="font-size:27px;font-weight:900;margin-top:8px">${pemasukan}</div></div><div style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px"><b>💳 QRIS / TRANSFER</b><div style="font-size:27px;font-weight:900;margin-top:8px">${qrisTf}</div><div style="font-size:14px;color:#64748b;margin-top:4px">Total masuk non-cash</div></div><div style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:22px"><b>💸 PENGELUARAN</b><div style="font-size:27px;font-weight:900;margin-top:8px">${keluar}</div></div><div style="grid-column:1/-1;background:#0f172a;color:#fff;border-radius:22px;padding:25px;text-align:center"><div style="font-size:15px;color:#cbd5e1;font-weight:800">HASIL BERSIH</div><div style="font-size:42px;font-weight:900;margin-top:5px">${hasil}</div></div></div><div style="margin:30px 0 14px;text-align:center;font-size:22px;font-weight:900">💵 SISA CASH</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px"><div style="background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:20px;text-align:center"><div style="font-weight:800;color:#64748b">Sisa Cash Lapangan</div><div style="font-size:27px;font-weight:900;margin-top:6px">${cashLap}</div></div><div style="background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:20px;text-align:center"><div style="font-weight:800;color:#64748b">Sisa Cash Minuman</div><div style="font-size:27px;font-weight:900;margin-top:6px">${cashMin}</div></div><div style="grid-column:1/-1;background:#fff;border:2px solid #0f172a;border-radius:20px;padding:23px;text-align:center"><div style="font-size:17px;font-weight:900">TOTAL CASH TERSISA</div><div style="font-size:39px;font-weight:900;margin-top:5px">${cashTotal}</div></div></div>`;
+      const lapanganCash=money('rekap-lapangan-cash');
+      const lapanganQris=money('rekap-lapangan-qrif');
+      const minumanCash=money('rekap-minuman-cash');
+      const minumanQris=money('rekap-minuman-qrif');
+      const totalMasuk=money('rekap-total-pemasukan');
+      const totalKeluar=money('rekap-keluar');
+      const cashLap=money('rekap-sisa-cash-lapangan');
+      const cashMin=money('rekap-sisa-cash-minuman');
+      const cashTotal=money('rekap-total-sisa-cash');
+
+      // Seluruh 8 pilihan minuman selalu ditampilkan, termasuk yang terjual 0 pcs.
+      const daftarMinuman=[
+        'Air Mineral',
+        'Air Mineral + 3 Permen',
+        'Pocari Sweat',
+        'Fanta',
+        'Sprite',
+        'Coca Cola',
+        'Teh Pucuk Harum',
+        'Milo'
+      ];
+      const qtyMinuman={};
+      daftarMinuman.forEach(nama=>qtyMinuman[nama]=0);
+      const dataMinuman=(window.globalCache&&window.globalCache.minuman)||{};
+      Object.values(dataMinuman).forEach(item=>{
+        if(!item || String(item.tgl||'')!==raw) return;
+        const nama=String(item.produk||'');
+        if(Object.prototype.hasOwnProperty.call(qtyMinuman,nama)){
+          qtyMinuman[nama]+=Number(item.jumlahPcs||0)||0;
+        }
+      });
+      const formatPcs=n=>`${Number(n)||0} pcs`;
+      const minumanRows=daftarMinuman.map(nama=>`
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:12px 15px">
+          <div style="font-size:16px;font-weight:800;color:#0f172a">${safe(nama)}</div>
+          <div style="font-size:17px;font-weight:900;color:#1e3a8a;white-space:nowrap">${formatPcs(qtyMinuman[nama])}</div>
+        </div>
+      `).join('');
+
+      root.innerHTML=`<div style="text-align:center;border-bottom:2px solid #e2e8f0;padding-bottom:24px;margin-bottom:22px">
+        <div style="font-size:40px;font-weight:900;letter-spacing:1px">DAILY REPORT</div>
+        <div style="font-size:22px;font-weight:800;margin-top:6px">${tanggal}</div>
+        <div style="font-size:15px;color:#64748b;margin-top:5px">ADMIN SHIFT: ${safe(admin)}</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:18px">
+          <div style="font-size:14px;font-weight:900;color:#475569">⚽ LAPANGAN CASH</div>
+          <div style="font-size:27px;font-weight:900;margin-top:7px">${lapanganCash}</div>
+        </div>
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:18px">
+          <div style="font-size:14px;font-weight:900;color:#475569">🥤 MINUMAN CASH</div>
+          <div style="font-size:27px;font-weight:900;margin-top:7px">${minumanCash}</div>
+        </div>
+
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:18px">
+          <div style="font-size:14px;font-weight:900;color:#475569">💳 LAPANGAN TF/QRIS</div>
+          <div style="font-size:27px;font-weight:900;margin-top:7px">${lapanganQris}</div>
+        </div>
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:18px">
+          <div style="font-size:14px;font-weight:900;color:#475569">💳 MINUMAN TF/QRIS</div>
+          <div style="font-size:27px;font-weight:900;margin-top:7px">${minumanQris}</div>
+        </div>
+
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:18px">
+          <div style="font-size:14px;font-weight:900;color:#475569">💰 TOTAL MASUK</div>
+          <div style="font-size:27px;font-weight:900;margin-top:7px">${totalMasuk}</div>
+        </div>
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:18px">
+          <div style="font-size:14px;font-weight:900;color:#475569">💸 TOTAL KELUAR</div>
+          <div style="font-size:27px;font-weight:900;margin-top:7px">${totalKeluar}</div>
+        </div>
+
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:18px">
+          <div style="font-size:14px;font-weight:900;color:#475569">💵 SISA CASH LAPANGAN</div>
+          <div style="font-size:27px;font-weight:900;margin-top:7px">${cashLap}</div>
+        </div>
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:18px">
+          <div style="font-size:14px;font-weight:900;color:#475569">💵 SISA CASH MINUMAN</div>
+          <div style="font-size:27px;font-weight:900;margin-top:7px">${cashMin}</div>
+        </div>
+
+        <div style="grid-column:1/-1;background:#0f172a;color:#fff;border-radius:20px;padding:22px;text-align:center">
+          <div style="font-size:15px;color:#cbd5e1;font-weight:900;letter-spacing:.02em">TOTAL CASH AKTUAL TERSISA</div>
+          <div style="font-size:39px;font-weight:900;margin-top:5px">${cashTotal}</div>
+        </div>
+      </div>
+
+      <div style="margin:28px 0 12px;text-align:center;font-size:22px;font-weight:900">🥤 DETAIL MINUMAN</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">${minumanRows}</div>`;
+
       document.body.appendChild(root);await new Promise(r=>setTimeout(r,100));pr.set(62,'Membuat gambar...','Menyiapkan JPG versi singkat.');const canvas=await html2canvas(root,{scale:2,backgroundColor:'#f8fafc',useCORS:true,logging:false,width:900,windowWidth:900});pr.set(92,'Menyiapkan file...','JPG hampir selesai dibuat.');const a=document.createElement('a');a.download=`Daily Report ${dateLabel(raw)} - Versi Singkat.jpg`;a.href=canvas.toDataURL('image/jpeg',.95);a.click();pr.ok();setTimeout(()=>pr.o.remove(),1800);root.remove();
     }catch(e){console.error(e);pr.err(e.message||'Terjadi kesalahan saat membuat laporan.');setTimeout(()=>pr.o.remove(),2200)}finally{if(btn){delete btn.dataset.downloadBusy;btn.disabled=false}}
   };
@@ -29347,5 +29661,65 @@ html, body {
     width:35px !important;height:35px !important;min-width:35px !important;
   }
   #minuman-history-modal-overlay .minuman-history-time{font-size:13px !important}
+}
+</style>
+
+<style id="sparing-desktop-logo-final-fix">
+/* FINAL — khusus JADWAL HARI INI desktop.
+   Dua logo sparing dikembalikan ke area kiri seperti logo tunggal:
+   terpusat vertikal, ukuran proporsional, dan tidak mengganggu area nama.
+   Mobile sengaja tidak disentuh. */
+@media (min-width: 641px) {
+  #today-schedule-panel .schedule-card:has(.today-schedule-logo-sparing) .today-schedule-main-row > .today-schedule-logo-sparing {
+    position: absolute !important;
+    left: 8px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 24% !important;
+    min-width: 0 !important;
+    max-width: 24% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-direction: row !important;
+    gap: 4% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    z-index: 3 !important;
+  }
+
+  #today-schedule-panel .schedule-card:has(.today-schedule-logo-sparing) .today-schedule-main-row > .today-schedule-logo-sparing img,
+  #today-schedule-panel .schedule-card:has(.today-schedule-logo-sparing) .today-schedule-main-row > .today-schedule-logo-sparing > span {
+    flex: 0 0 43% !important;
+    width: 43% !important;
+    max-width: 43% !important;
+    height: 82% !important;
+    max-height: 82% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 2px !important;
+    object-fit: contain !important;
+    object-position: center center !important;
+    box-sizing: border-box !important;
+  }
+}
+</style>
+
+<style id="sparing-desktop-logo-width-match-total">
+/* Desktop: area dua logo sparing dibuat selebar tepat 1 kolom TOTAL di bawah. */
+@media (min-width: 641px) {
+  #today-schedule-panel .schedule-card:has(.today-schedule-logo-sparing) .today-schedule-main-row > .today-schedule-logo-sparing {
+    left: 0 !important;
+    width: calc((100% - (var(--sg) * 2)) / 3) !important;
+    max-width: calc((100% - (var(--sg) * 2)) / 3) !important;
+    min-width: 0 !important;
+  }
 }
 </style>
