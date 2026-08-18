@@ -8885,6 +8885,23 @@ body.minuman-edit-modal-open{overflow:hidden !important}
   }
 }
 </style>
+
+<style id="fix-quick-nav-minuman-icon-size-v1">
+/* HP: ikon Minuman (🥤) secara visual lebih kecil dari ikon menu lain karena
+   glyph emoji-nya memang memiliki bounding box berbeda. Samakan ukurannya
+   tanpa mengubah ukuran Jadwal, Daily Recap, Uang Keluar, atau Lainnya. */
+@media (max-width: 640px){
+  #quick-bottom-nav .quick-nav-item[data-quick="minuman"] .quick-nav-icon{
+    transform:scale(1.18) !important;
+    transform-origin:center !important;
+  }
+}
+@media (max-width: 380px){
+  #quick-bottom-nav .quick-nav-item[data-quick="minuman"] .quick-nav-icon{
+    transform:scale(1.18) !important;
+  }
+}
+</style>
 </head>
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium">
 <!-- Header -->
@@ -9919,6 +9936,11 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
   </select>
 </div>
 <div id="info-tagihan-tim" class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3"></div>
+<div class="flex justify-center mb-4">
+  <button type="button" id="btn-tampilkan-customer" class="customer-display-btn" onclick="tampilkanTagihanUntukCustomer()" disabled>
+    👁️ Tampilkan untuk Customer
+  </button>
+</div>
 <div class="p-3 rounded-xl border border-emerald-500/40 mb-3 space-y-3 bg-white/30 uang-masuk-option-panel">
 <label class="block text-xs font-black text-emerald-950">⚽ Opsi Tambahan Sewa (Opsional)</label>
 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -9984,7 +10006,11 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 </div>
 <div class="p-3 rounded-xl border border-emerald-500/40 space-y-2 bg-white/30 uang-masuk-payment-card">
 <label id="label-pembayaran-tim-2" class="block text-xs font-black text-emerald-950">Tim 2 · Lawan Sparing</label>
-<input class="w-full p-2 rounded text-sm glass-input font-bold bg-slate-100/70" id="in-tim-2-nama" type="text" placeholder="Nama Tim 2 otomatis dari Jadwal Hari Ini" readonly/>
+<input class="w-full p-2 rounded text-sm glass-input font-bold bg-slate-100/70" id="in-tim-2-nama" type="text" placeholder="Nama Tim 2 otomatis dari Jadwal Hari Ini — ketik manual jika kosong" autocomplete="off" oninput="if(typeof hitungOtomatisBiaya==='function') hitungOtomatisBiaya()"/>
+<div id="tim-2-nama-save-row" class="hidden flex items-center justify-between gap-2 rounded-xl border border-blue-300/60 bg-blue-50/50 px-3 py-2">
+  <span class="text-[10px] font-bold text-slate-600">Belum bayar? Simpan nama Tim 2 dulu agar tidak perlu mengetik ulang.</span>
+  <button type="button" id="btn-simpan-nama-tim-2" onclick="simpanNamaTim2Sementara()" class="shrink-0 bg-blue-700 hover:bg-blue-800 text-white px-3 py-2 rounded-lg text-[10px] font-black shadow">💾 Simpan Nama</button>
+</div>
 <select class="w-full p-2 rounded text-sm glass-input font-bold" id="in-status-2" onchange="hitungOtomatisBiaya()">
 <option value="Non-Member">Non-Member</option><option value="Member">Member</option>
 </select>
@@ -11080,12 +11106,12 @@ const diskonManualEl = document.getElementById('in-diskon-manual');
             if (bookingSlots.length) {
                 hargaTotalLapangan = bookingSlots.reduce((sum, b) => {
                     const bj = (b.tgl.split('T')[1] || '').substring(0,5);
-                    return sum + getHargaLapangan(tgl, bj, selectedStatus);
+                    return sum + getHargaLapangan(tgl, bj, isSparingPayment ? 'Non-Member' : selectedStatus);
                 }, 0);
                 const lastJam = String(bookingSlots[bookingSlots.length - 1]?.tgl || '').split('T')[1]?.substring(0,5) || '';
                 if (lastJam) jamAkhirBooking = `${String((parseInt(lastJam.split(':')[0]) + 1) % 24).padStart(2,'0')}:00`;
             } else if (jam && tgl) {
-                hargaTotalLapangan = getHargaLapangan(tgl, jam, selectedStatus);
+                hargaTotalLapangan = getHargaLapangan(tgl, jam, isSparingPayment ? 'Non-Member' : selectedStatus);
                 jamAkhirBooking = `${String((parseInt(jam.split(':')[0]) + 1) % 24).padStart(2,'0')}:00`;
             }
             // Penyesuaian waktu dihitung secara matematis berdasarkan DURASI EFEKTIF.
@@ -11096,7 +11122,7 @@ const diskonManualEl = document.getElementById('in-diskon-manual');
             if (tambahanMenit > 0 && tgl && jamAkhirBooking) {
                 // Waktu tambahan dimulai setelah jam booking terakhir.
                 // +30 menit = 50% tarif jam berikutnya.
-                const tarifJamBerikutnya = getHargaLapangan(tgl, jamAkhirBooking, selectedStatus);
+                const tarifJamBerikutnya = getHargaLapangan(tgl, jamAkhirBooking, isSparingPayment ? 'Non-Member' : selectedStatus);
                 biayaTambahanWaktu = Math.round(tarifJamBerikutnya * tambahanJam);
             } else if (tambahanMenit < 0 && tgl) {
                 // Waktu yang dikurangi selalu diambil dari jam terakhir booking.
@@ -11109,7 +11135,7 @@ const diskonManualEl = document.getElementById('in-diskon-manual');
                 if (!jamTerakhir) jamTerakhir = jam;
 
                 if (jamTerakhir) {
-                    const tarifJamTerakhir = getHargaLapangan(tgl, jamTerakhir, selectedStatus);
+                    const tarifJamTerakhir = getHargaLapangan(tgl, jamTerakhir, isSparingPayment ? 'Non-Member' : selectedStatus);
                     biayaTambahanWaktu = -Math.round(tarifJamTerakhir * Math.abs(tambahanJam));
                 }
             }
@@ -13101,7 +13127,7 @@ kaosKakiTerjual: jumlahKaosKaki,
         const listJam = ["07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00"];
         const listHariKey = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
 
-        let globalCache = { member: {}, booking: {}, pemasukan: {}, minuman: {}, pengeluaran: {}, adminJaga: {}, sparring: {}, teamLogos: {}, pelunasanMember: {}, lunasDarurat: {} };
+        let globalCache = { member: {}, booking: {}, pemasukan: {}, minuman: {}, pengeluaran: {}, adminJaga: {}, sparring: {}, teamLogos: {}, pelunasanMember: {}, lunasDarurat: {}, pendingSparingNames: {} };
 
         function getNamaHari(dateStr) {
             let days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
@@ -14052,6 +14078,7 @@ kaosKakiTerjual: jumlahKaosKaki,
             renderTabelBooking();
         });
 
+        onValue(ref(db, 'pendingSparingNames'), (snapshot) => { globalCache.pendingSparingNames = snapshot.val() || {}; });
         onValue(ref(db, 'pemasukan'), (snapshot) => {
             globalCache.pemasukan = snapshot.val() || {};
             // Pelunasan disimpan di node pemasukan. Karena jadwal halaman awal
@@ -14350,6 +14377,116 @@ kaosKakiTerjual: jumlahKaosKaki,
             // Kembalikan fokus ke bagian atas form Uang Masuk.
             document.getElementById('page-masuk')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         };
+
+        // ===== DRAFT NAMA TIM 2 (BELUM BAYAR) =====
+        // Nama lawan sparing dapat disimpan terpisah dari transaksi Uang Masuk.
+        // Tujuannya agar admin bisa menyimpan nama terlebih dahulu dan saat pembayaran
+        // dilakukan nanti nama tersebut otomatis muncul kembali.
+        function getPendingSparingKey(nama,tgl,jam){
+            const n=String(nama||'').trim().toLowerCase();
+            const d=String(tgl||'').substring(0,10);
+            const j=String(jam||'').substring(0,5);
+            if(!n||!d||!j) return '';
+            return encodeURIComponent(`${d}|${j}|${n}`);
+        }
+
+        function getUangMasukTeamName(){
+            const sel=document.getElementById('in-tim');
+            return String(sel?.selectedOptions?.[0]?.textContent || sel?.value || '')
+                .replace(/\s*\(Booking\)$/i,'').trim();
+        }
+
+        function getUangMasukJam(){
+            const source=String(document.getElementById('in-jadwal-source-jam')?.value || '').substring(0,5);
+            if(source) return source;
+            const opt=document.getElementById('in-tim')?.selectedOptions?.[0];
+            return String(opt?.getAttribute('data-jam') || '').substring(0,5);
+        }
+
+        async function simpanNamaTim2Sementara(){
+            const mode=document.getElementById('in-jenis-pembayaran')?.value || 'internal';
+            if(mode !== 'sparing'){
+                alert('Pilih mode Sparing terlebih dahulu.');
+                return;
+            }
+            const nama1=getUangMasukTeamName();
+            const nama2=String(document.getElementById('in-tim-2-nama')?.value || '').trim();
+            const tgl=String(document.getElementById('in-tgl')?.value || '').substring(0,10);
+            const jam=getUangMasukJam();
+            if(!nama1 || !tgl || !jam){
+                alert('Pilih tanggal, tim, dan jam main terlebih dahulu.');
+                return;
+            }
+            if(!nama2){
+                alert('Nama Tim 2 belum diisi. Silakan ketik nama Tim 2 terlebih dahulu.');
+                document.getElementById('in-tim-2-nama')?.focus();
+                return;
+            }
+            const key=getPendingSparingKey(nama1,tgl,jam);
+            if(!key){
+                alert('Data jadwal belum lengkap sehingga nama Tim 2 belum bisa disimpan.');
+                return;
+            }
+            const btn=document.getElementById('btn-simpan-nama-tim-2');
+            const oldText=btn?.textContent;
+            if(btn){ btn.disabled=true; btn.textContent='⏳ Menyimpan...'; }
+            try{
+                const payload={
+                    namaTim1:nama1,
+                    namaTim2:nama2,
+                    tanggal:tgl,
+                    jam:jam,
+                    jenisPembayaran:'sparing',
+                    updatedAt:Date.now()
+                };
+                await update(ref(db,'pendingSparingNames/'+key),payload);
+                globalCache.pendingSparingNames=globalCache.pendingSparingNames||{};
+                globalCache.pendingSparingNames[key]=payload;
+                if(btn) btn.textContent='✓ Tersimpan';
+                setTimeout(()=>{ if(btn) btn.textContent=oldText || '💾 Simpan Nama'; },1600);
+            }catch(error){
+                console.error(error);
+                alert('Gagal menyimpan nama Tim 2: ' + error.message);
+                if(btn) btn.textContent=oldText || '💾 Simpan Nama';
+            }finally{
+                if(btn) btn.disabled=false;
+            }
+        }
+        window.simpanNamaTim2Sementara=simpanNamaTim2Sementara;
+
+        async function muatNamaTim2Tersimpan(){
+            const mode=document.getElementById('in-jenis-pembayaran')?.value || 'internal';
+            const row=document.getElementById('tim-2-nama-save-row');
+            if(row) row.classList.toggle('hidden',mode!=='sparing');
+            if(mode!=='sparing') return;
+            const nama1=getUangMasukTeamName();
+            const tgl=String(document.getElementById('in-tgl')?.value || '').substring(0,10);
+            const jam=getUangMasukJam();
+            const key=getPendingSparingKey(nama1,tgl,jam);
+            if(!key) return;
+            const input=document.getElementById('in-tim-2-nama');
+            if(!input) return;
+            const cached=globalCache.pendingSparingNames?.[key];
+            if(cached?.namaTim2){
+                input.value=String(cached.namaTim2).trim();
+                if(typeof window.hitungOtomatisBiaya==='function') window.hitungOtomatisBiaya();
+                return;
+            }
+            try{
+                const snap=await get(ref(db,'pendingSparingNames/'+key));
+                const val=snap.val();
+                if(val?.namaTim2){
+                    globalCache.pendingSparingNames=globalCache.pendingSparingNames||{};
+                    globalCache.pendingSparingNames[key]=val;
+                    // Jangan menimpa nama yang baru saja diketik admin.
+                    if(!String(input.value||'').trim()) input.value=String(val.namaTim2).trim();
+                    if(typeof window.hitungOtomatisBiaya==='function') window.hitungOtomatisBiaya();
+                }
+            }catch(error){
+                console.warn('Nama Tim 2 tersimpan belum dapat dimuat:',error);
+            }
+        }
+        window.muatNamaTim2Tersimpan=muatNamaTim2Tersimpan;
 
         window.hapusJadwalHariIniDariPembayaran = async () => {
             const key = document.getElementById('in-jadwal-source-key')?.value || '';
@@ -23488,6 +23625,456 @@ body.minuman-history-modal-open{overflow:hidden !important}
   box-sizing: border-box !important;
 }
 </style>
+
+<style id="customer-tagihan-display-v1">
+/* =========================================================
+   TAMPILKAN TAGIHAN UNTUK CUSTOMER
+   Hanya menampilkan nama tim + jumlah tagihan yang harus dibayar.
+   Tidak menampilkan field admin, DP, diskon, metode pembayaran,
+   biaya tambahan, maupun data internal lainnya.
+   ========================================================= */
+.customer-display-btn{
+  display:inline-flex !important;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-height:44px;
+  padding:10px 18px;
+  border:1px solid rgba(37,99,235,.25);
+  border-radius:12px;
+  background:linear-gradient(135deg,#2563eb,#4f46e5);
+  color:#fff;
+  font-size:13px;
+  font-weight:900;
+  box-shadow:0 8px 18px rgba(37,99,235,.18);
+  cursor:pointer;
+  transition:transform .15s ease,filter .15s ease,box-shadow .15s ease;
+}
+.customer-display-btn:hover:not(:disabled){
+  transform:translateY(-1px);
+  filter:brightness(1.04);
+  box-shadow:0 11px 24px rgba(37,99,235,.24);
+}
+.customer-display-btn:active:not(:disabled){transform:scale(.98);}
+.customer-display-btn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  box-shadow:none;
+}
+
+#customer-tagihan-overlay{
+  position:fixed !important;
+  inset:0 !important;
+  z-index:2147483646 !important;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(93,140,255,.18), transparent 34%),
+    rgba(10,20,35,.66);
+  backdrop-filter:blur(22px) saturate(125%);
+  -webkit-backdrop-filter:blur(22px) saturate(125%);
+  color:#eef4ff;
+}
+#customer-tagihan-overlay.is-open{display:flex !important;}
+
+.customer-tagihan-screen{
+  position:relative;
+  width:min(920px,100%);
+  max-height:calc(100vh - 48px);
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:clamp(34px,5vw,58px) clamp(24px,5vw,58px) clamp(30px,4vw,44px);
+  border:1px solid rgba(226,236,255,.42);
+  border-radius:30px;
+  background:
+    linear-gradient(145deg,rgba(106,123,149,.70),rgba(35,50,72,.72));
+  box-shadow:
+    0 34px 90px rgba(0,8,22,.50),
+    0 10px 28px rgba(13,27,49,.25),
+    inset 0 1px 0 rgba(255,255,255,.48),
+    inset 0 -1px 0 rgba(255,255,255,.08);
+  backdrop-filter:blur(30px) saturate(145%);
+  -webkit-backdrop-filter:blur(30px) saturate(145%);
+  text-align:center;
+  isolation:isolate;
+}
+.customer-tagihan-screen::before{
+  content:"";
+  position:absolute;
+  inset:1px;
+  border-radius:29px;
+  pointer-events:none;
+  background:linear-gradient(112deg,rgba(255,255,255,.16),transparent 28%,transparent 72%,rgba(157,203,255,.08));
+  opacity:.9;
+  z-index:-1;
+}
+.customer-tagihan-screen::after{
+  content:"";
+  position:absolute;
+  width:58%;
+  height:28%;
+  top:-16%;
+  left:21%;
+  border-radius:50%;
+  background:rgba(188,220,255,.12);
+  filter:blur(34px);
+  pointer-events:none;
+  z-index:-1;
+}
+.customer-tagihan-kicker{
+  margin:0 0 9px;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.20em;
+  text-transform:uppercase;
+  color:#e8f0fc;
+  text-shadow:0 1px 8px rgba(0,0,0,.18);
+}
+.customer-tagihan-title{
+  margin:0;
+  font-size:clamp(28px,5vw,46px);
+  line-height:1.02;
+  font-weight:950;
+  color:#f7faff;
+  letter-spacing:-.045em;
+  text-shadow:0 3px 18px rgba(8,18,35,.24);
+}
+.customer-tagihan-list{
+  width:min(790px,100%);
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px;
+  margin:30px 0 23px;
+}
+.customer-tagihan-list.single{grid-template-columns:minmax(0,1fr);max-width:650px;}
+.customer-tagihan-card{
+  position:relative;
+  overflow:hidden;
+  padding:22px 22px 23px;
+  border:1px solid rgba(224,237,255,.40);
+  border-radius:23px;
+  background:
+    linear-gradient(145deg,rgba(158,178,205,.34),rgba(57,73,98,.40));
+  box-shadow:
+    0 14px 30px rgba(9,20,37,.18),
+    inset 0 1px 0 rgba(255,255,255,.30),
+    inset 0 -1px 0 rgba(255,255,255,.06);
+  backdrop-filter:blur(20px) saturate(135%);
+  -webkit-backdrop-filter:blur(20px) saturate(135%);
+}
+.customer-tagihan-card::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:12%;
+  width:76%;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.72),transparent);
+}
+.customer-tagihan-team{
+  margin:0 0 10px;
+  font-size:clamp(17px,3vw,25px);
+  line-height:1.18;
+  font-weight:950;
+  color:#dce8ff;
+  overflow-wrap:anywhere;
+  text-shadow:0 2px 10px rgba(6,17,35,.25);
+}
+.customer-tagihan-status{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:34px;
+  margin:0 auto 13px;
+}
+.customer-tagihan-status img{
+  display:block;
+  width:auto;
+  height:34px;
+  max-width:118px;
+  object-fit:contain;
+  filter:drop-shadow(0 4px 8px rgba(5,15,30,.20));
+}
+.customer-tagihan-status-fallback{
+  display:none;
+  align-items:center;
+  justify-content:center;
+  min-width:96px;
+  height:30px;
+  padding:0 11px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.35);
+  background:rgba(255,255,255,.12);
+  color:#f4f8ff;
+  font-size:9px;
+  font-weight:950;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+}
+.customer-tagihan-label{
+  margin:0 0 5px;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#dce6f4;
+}
+.customer-tagihan-amount{
+  margin:0;
+  font-size:clamp(32px,6vw,54px);
+  line-height:1;
+  font-weight:950;
+  color:#ffffff;
+  letter-spacing:-.035em;
+  text-shadow:0 4px 18px rgba(4,13,27,.28);
+}
+.customer-tagihan-close{
+  position:absolute;
+  top:15px;
+  right:15px;
+  width:48px;
+  height:48px;
+  min-height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  border:1px solid rgba(226,237,255,.50);
+  border-radius:15px;
+  background:rgba(183,199,220,.27);
+  color:#e9f1ff;
+  font-size:25px;
+  line-height:1;
+  font-weight:400;
+  cursor:pointer;
+  box-shadow:0 8px 20px rgba(8,18,35,.20),inset 0 1px 0 rgba(255,255,255,.40);
+  backdrop-filter:blur(16px) saturate(135%);
+  -webkit-backdrop-filter:blur(16px) saturate(135%);
+  transition:transform .18s ease,background .18s ease,box-shadow .18s ease;
+}
+.customer-tagihan-close:hover{
+  background:rgba(205,219,239,.38);
+  transform:translateY(-1px);
+  box-shadow:0 10px 24px rgba(8,18,35,.25),inset 0 1px 0 rgba(255,255,255,.48);
+}
+.customer-tagihan-close:active{transform:scale(.95);}
+.customer-tagihan-note{
+  margin:0;
+  color:#dce6f3;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.01em;
+  text-shadow:0 1px 6px rgba(0,0,0,.18);
+}
+@media(max-width:640px){
+  #customer-tagihan-overlay{padding:12px;background:rgba(10,20,35,.68);}
+  .customer-tagihan-screen{
+    max-height:calc(100vh - 24px);
+    padding:38px 14px 26px;
+    border-radius:24px;
+    background:linear-gradient(145deg,rgba(105,123,149,.72),rgba(34,49,70,.76));
+  }
+  .customer-tagihan-screen::before{border-radius:23px;}
+  .customer-tagihan-list{
+    grid-template-columns:1fr;
+    margin:22px 0 18px;
+    gap:11px;
+  }
+  .customer-tagihan-list.single{max-width:none;}
+  .customer-tagihan-card{padding:19px 14px 18px;border-radius:19px;}
+  .customer-tagihan-status{min-height:30px;margin-bottom:9px;}
+  .customer-tagihan-status img{height:30px;max-width:108px;}
+  .customer-tagihan-team{margin-bottom:9px;}
+  .customer-tagihan-amount{font-size:clamp(30px,10vw,46px);}
+  .customer-tagihan-close{top:10px;right:10px;width:42px;height:42px;font-size:22px;border-radius:13px;}
+}
+</style>
+
+<style id="customer-tagihan-cap-images">
+.customer-tagihan-status{
+  width:86px !important;
+  height:86px !important;
+  margin:0 auto .55rem !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  overflow:visible !important;
+}
+.customer-tagihan-status img{
+  display:block !important;
+  width:82px !important;
+  height:82px !important;
+  object-fit:contain !important;
+  background:transparent !important;
+  border:0 !important;
+  filter:drop-shadow(0 4px 7px rgba(15,23,42,.18));
+}
+.customer-tagihan-status-fallback{display:none !important;}
+@media (max-width:640px){
+  .customer-tagihan-status{width:72px !important;height:72px !important;margin-bottom:.35rem !important;}
+  .customer-tagihan-status img{width:68px !important;height:68px !important;}
+}
+</style>
+
+<div id="customer-tagihan-overlay" aria-hidden="true">
+  <div class="customer-tagihan-screen" role="dialog" aria-modal="true" aria-label="Tagihan customer">
+    <p class="customer-tagihan-kicker">Informasi Pembayaran</p>
+    <h2 class="customer-tagihan-title">Jumlah Tagihan</h2>
+    <div id="customer-tagihan-list" class="customer-tagihan-list"></div>
+    <p class="customer-tagihan-note">Silakan melakukan pembayaran sesuai jumlah tagihan di atas.</p>
+    <button type="button" class="customer-tagihan-close" aria-label="Tutup" title="Tutup" onclick="tutupTagihanUntukCustomer()">✕</button>
+  </div>
+</div>
+
+<script id="customer-tagihan-display-v1-script">
+(function(){
+  function rupiahCustomer(n){
+    try {
+      if(typeof window.formatRupiah === 'function') return window.formatRupiah(Number(n)||0);
+    } catch(e){}
+    return 'Rp ' + new Intl.NumberFormat('id-ID').format(Number(n)||0);
+  }
+
+  function getCustomerTagihanData(){
+    const calc = window.__pelunasanCalc || {};
+    const jenisEl = document.getElementById('in-jenis-pembayaran');
+    const jenis = jenisEl?.value || 'internal';
+    const jenisLabel = jenisEl?.selectedOptions?.[0]?.textContent || '';
+    const boxTim2 = document.getElementById('in-jumlah-2')?.closest('.uang-masuk-payment-card');
+    const sparingMode = jenis === 'sparing' || /sparing/i.test(jenisLabel) ||
+      !!(boxTim2 && getComputedStyle(boxTim2).display !== 'none');
+
+    const nama1 = String(
+      calc.nama1 ||
+      document.getElementById('in-tim')?.selectedOptions?.[0]?.textContent ||
+      ''
+    ).replace(/\s*\(Booking\)$/i,'').trim();
+
+    const nama2 = String(
+      document.getElementById('in-tim-2-nama')?.value ||
+      ''
+    ).replace(/\s*\(Booking\)$/i,'').trim();
+
+    const sisa1 = Math.max(0, Number(calc.sisa1 || 0));
+    const sisa2 = Math.max(0, Number(calc.sisa2 || 0));
+    const status1 = String(calc.selectedStatus || 'Non-Member').trim() || 'Non-Member';
+    const status2 = String(document.getElementById('in-status-2')?.value || 'Non-Member').trim() || 'Non-Member';
+
+    if(!nama1 || !calc || typeof calc.sisa1 === 'undefined') return [];
+
+    // Tim Internal = hanya Tim 1.
+    // Sparing = WAJIB menampilkan Tim 1 dan Tim 2 sebagai dua kartu.
+    // Jika nama Tim 2 belum terisi pada field otomatis, tetap tampilkan
+    // kartu kedua dengan nama fallback agar mode Sparing tidak berubah
+    // menjadi tampilan satu tim di sisi customer.
+    // Data admin lain tetap tidak ikut ditampilkan.
+    const result = [{ nama:nama1, sisa:sisa1, status:status1 }];
+    if(sparingMode){
+      result.push({
+        nama: nama2 || 'Tim 2 / Sparing',
+        sisa: sisa2,
+        status: status2
+      });
+    }
+    return result;
+  }
+
+  window.updateCustomerTagihanButton = function(){
+    const btn=document.getElementById('btn-tampilkan-customer');
+    if(!btn) return;
+    const data=getCustomerTagihanData();
+    btn.disabled = data.length === 0;
+  };
+
+  window.tampilkanTagihanUntukCustomer = function(){
+    // Pastikan nominal tagihan dihitung ulang tepat saat tombol ditekan,
+    // sehingga perubahan DP/pembayaran/diskon terakhir langsung tercermin.
+    try {
+      if(typeof window.hitungOtomatisBiaya === 'function') window.hitungOtomatisBiaya();
+    } catch(e){}
+    const data=getCustomerTagihanData();
+    if(!data.length){
+      alert('Tagihan customer belum tersedia. Pilih jadwal/tim terlebih dahulu.');
+      return;
+    }
+
+    const list=document.getElementById('customer-tagihan-list');
+    const overlay=document.getElementById('customer-tagihan-overlay');
+    if(!list || !overlay) return;
+
+    list.className='customer-tagihan-list' + (data.length===1 ? ' single' : '');
+    list.innerHTML=data.map(item => `
+      <div class="customer-tagihan-card">
+        <div class="customer-tagihan-status" aria-label="${String(item.status).toLowerCase() === 'member' ? 'Member' : 'Non-Member'}">
+          <img src="${String(item.status).toLowerCase() === 'member' ? './capmember.png' : './capnonmember.png'}" alt="${String(item.status).toLowerCase() === 'member' ? 'MEMBER' : 'NON-MEMBER'}" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+          <span class="customer-tagihan-status-fallback">${String(item.status).toLowerCase() === 'member' ? 'MEMBER' : 'NON-MEMBER'}</span>
+        </div>
+        <p class="customer-tagihan-team">${item.nama}</p>
+        <p class="customer-tagihan-label">${item.sisa > 0 ? 'Tagihan yang harus dibayar' : 'Status pembayaran'}</p>
+        <p class="customer-tagihan-amount">${item.sisa > 0 ? rupiahCustomer(item.sisa) : 'LUNAS'}</p>
+      </div>
+    `).join('');
+
+    overlay.classList.add('is-open');
+    overlay.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+  };
+
+  window.tutupTagihanUntukCustomer = function(){
+    const overlay=document.getElementById('customer-tagihan-overlay');
+    if(!overlay) return;
+    overlay.classList.remove('is-open');
+    overlay.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+  };
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){
+      const overlay=document.getElementById('customer-tagihan-overlay');
+      if(overlay?.classList.contains('is-open')) window.tutupTagihanUntukCustomer();
+    }
+  });
+
+  document.addEventListener('change',function(e){
+    if(['in-tgl','in-tim','in-jenis-pembayaran','in-status-2'].includes(e.target?.id)){
+      setTimeout(window.updateCustomerTagihanButton,50);
+    }
+  });
+  document.addEventListener('input',function(e){
+    if(['in-dp-1','in-dp-2','in-jumlah-1','in-jumlah-2','in-diskon-manual'].includes(e.target?.id)){
+      setTimeout(window.updateCustomerTagihanButton,50);
+    }
+  });
+
+  const oldHitung = window.hitungOtomatisBiaya;
+  if(typeof oldHitung === 'function'){
+    window.hitungOtomatisBiaya = function(){
+      const result=oldHitung.apply(this,arguments);
+      setTimeout(window.updateCustomerTagihanButton,0);
+      return result;
+    };
+  }
+
+  document.addEventListener('DOMContentLoaded',function(){
+    setTimeout(window.updateCustomerTagihanButton,100);
+    setTimeout(()=>{ if(typeof window.muatNamaTim2Tersimpan==='function') window.muatNamaTim2Tersimpan(); },150);
+  });
+  document.addEventListener('change',function(e){
+    if(['in-tgl','in-tim','in-jenis-pembayaran'].includes(e.target?.id)){
+      setTimeout(()=>{ if(typeof window.muatNamaTim2Tersimpan==='function') window.muatNamaTim2Tersimpan(); },80);
+    }
+  });
+})();
+</script>
+
 </body>
 
 <style id="FINAL_FIX_UANG_KELUAR_ONE_BIG_GLASS_CARD">
