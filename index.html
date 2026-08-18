@@ -8638,6 +8638,15 @@ body.minuman-edit-modal-open{overflow:hidden !important}
  .glass-date-day{height:40px}
  .glass-select-menu{max-width:92vw}
 }
+/* SELECT UANG MASUK — sama seperti popup PILIH TANGGAL: tengah layar, kaca, dan X. */
+.glass-select-backdrop{align-items:center !important;justify-content:center !important;background:rgba(15,23,42,.38) !important;backdrop-filter:blur(10px) saturate(120%) !important;-webkit-backdrop-filter:blur(10px) saturate(120%) !important;}
+.glass-select-card{width:min(94vw,390px) !important;max-height:min(78vh,640px) !important;overflow:hidden !important;}
+.glass-select-card .glass-native-popup-body{max-height:calc(min(78vh,640px) - 70px) !important;overflow:auto !important;overscroll-behavior:contain !important;}
+.glass-select-options{display:grid !important;gap:8px !important;}
+.glass-select-option{width:100% !important;min-height:48px !important;display:flex !important;align-items:center !important;padding:10px 13px !important;border:1px solid rgba(148,163,184,.22) !important;border-radius:13px !important;background:rgba(255,255,255,.50) !important;font-size:12px !important;font-weight:900 !important;color:#334155 !important;cursor:pointer !important;text-align:left !important;touch-action:pan-y !important;user-select:none !important;-webkit-user-select:none !important;}
+.glass-select-option:hover,.glass-select-option:focus-visible{background:rgba(255,255,255,.82) !important;border-color:rgba(245,158,11,.35) !important;outline:none !important;}
+.glass-select-option.is-selected{background:linear-gradient(135deg,rgba(245,158,11,.24),rgba(251,191,36,.16)) !important;color:#92400e !important;border-color:rgba(245,158,11,.34) !important;}
+@media(max-width:640px){.glass-select-card{width:94vw !important;border-radius:20px !important}.glass-select-option{min-height:50px !important;font-size:12.5px !important}}
 </style>
 
 <style id="sparing-logo-desktop-align-total-v1">
@@ -20972,7 +20981,8 @@ window.downloadDailyRecapJPGFull = async function() {
     const refresh=()=>updateCard(id,displayId,fallback);
     el.addEventListener('change',refresh); el.addEventListener('input',refresh); refresh();
     card.addEventListener('click',function(e){
-      if(e.target===el) return;
+      if(e.defaultPrevented) return;
+      if(window.__openGlassNativePopupFor){ window.__openGlassNativePopupFor(el); return; }
       try { if(typeof el.showPicker==='function') el.showPicker(); else { el.focus(); el.click(); } } catch(_) { el.focus(); el.click(); }
     });
   }
@@ -23094,27 +23104,34 @@ body.minuman-history-modal-open{overflow:hidden !important}
     if(select && select.id==='edit-b-jam'){ openEditBookingJamPicker(select); return; }
     closePopup(); activeSelect=select;
     const overlay=document.createElement('div'); overlay.className='glass-native-popup-backdrop glass-select-backdrop';
-    const menu=document.createElement('div'); menu.className='glass-select-menu'; overlay.appendChild(menu); document.body.appendChild(overlay); activePopup=overlay;
-    const r=select.getBoundingClientRect();
-    let left=Math.min(Math.max(8,r.left),window.innerWidth-190); let top=r.bottom+7;
-    if(top+300>window.innerHeight) top=Math.max(8,r.top-310);
-    menu.style.left=left+'px'; menu.style.top=top+'px'; menu.style.width=Math.max(r.width,190)+'px';
-    Array.from(select.options).forEach((opt,i)=>{
-      if(opt.disabled) return;
-      const b=document.createElement('div'); b.className='glass-select-option'+(opt.value===select.value?' is-selected':''); b.textContent=opt.textContent;
-      b.onclick=()=>{select.value=opt.value;fireChange(select);closePopup();}; menu.appendChild(b);
+    const card=document.createElement('div'); card.className='glass-native-popup-card glass-select-card';
+    card.innerHTML=`<div class="glass-native-popup-head"><div><div class="glass-native-popup-title">⌄ ${esc(select?.closest('.masuk-field-card')?.getAttribute('aria-label') || 'PILIH OPSI')}</div><div class="glass-native-popup-sub">Pilih salah satu pilihan</div></div><button class="glass-native-popup-close glass-select-close" type="button" aria-label="Tutup">✕</button></div><div class="glass-native-popup-body"><div class="glass-select-options" data-options></div></div>`;
+    overlay.appendChild(card); document.body.appendChild(overlay); activePopup=overlay;
+    const grid=card.querySelector('[data-options]');
+    Array.from(select.options).forEach(opt=>{
+      if(opt.disabled || opt.hidden) return;
+      const b=document.createElement('button'); b.type='button'; b.className='glass-select-option'+(opt.value===select.value?' is-selected':''); b.textContent=opt.textContent || opt.value;
+      let moved=false, sx=0, sy=0;
+      b.addEventListener('pointerdown',ev=>{sx=ev.clientX;sy=ev.clientY;moved=false;ev.stopPropagation();});
+      b.addEventListener('pointermove',ev=>{if(Math.hypot(ev.clientX-sx,ev.clientY-sy)>10)moved=true;});
+      b.addEventListener('pointerup',ev=>{ev.preventDefault();ev.stopPropagation();if(moved)return;select.value=opt.value;fireChange(select);closePopup();});
+      grid.appendChild(b);
     });
+    card.querySelector('.glass-select-close').onclick=closePopup;
     overlay.addEventListener('pointerdown',e=>{if(e.target===overlay)closePopup();});
   }
 
-  // Tangkap klik sebelum browser menampilkan popup native.
-  document.addEventListener('pointerdown',function(e){
-    const el=e.target?.closest?.('input[type="date"],input[type="time"],input[type="month"],select');
+  // Expose the custom popup so Uang Masuk cards can open it without ever
+  // invoking the native HP/laptop picker.
+  window.__openGlassNativePopupFor = function(el){
     if(!el || el.disabled || el.readOnly) return;
-    e.preventDefault(); e.stopPropagation();
-    if(isDate(el)) openDatePicker(el); else if(isTime(el)) openTimePicker(el); else if(isMonth(el)) openMonthPicker(el); else if(isSelect(el)) openSelectMenu(el);
-  },true);
+    if(isDate(el)) openDatePicker(el);
+    else if(isTime(el)) openTimePicker(el);
+    else if(isMonth(el)) openMonthPicker(el);
+    else if(isSelect(el)) openSelectMenu(el);
+  };
 
+  // Keyboard remains accessible.
   document.addEventListener('keydown',function(e){
     const el=e.target;
     if(!el || el.disabled || el.readOnly) return;
@@ -30157,6 +30174,7 @@ body.daily-sub-modal-v6-open > main #sub-page-ringkasan{
   opacity: 0 !important;
   cursor: pointer !important;
   z-index: 3 !important;
+  pointer-events: none !important;
 }
 /* Tetap flat untuk bagian lain agar tidak muncul kaca bertumpuk. */
 #page-masuk .uang-masuk-option-panel,
@@ -31595,3 +31613,255 @@ body:has(#modal-edit-booking) {
   }
 }
 </style>
+
+<!-- UANG MASUK — CUSTOM DROPDOWN MODAL V2
+     Semua SELECT memakai modal custom terpusat; tidak memakai dropdown bawaan HP/laptop.
+     Sentuhan saat scroll tidak akan memilih item secara tidak sengaja. -->
+<style id="uang-masuk-custom-dropdown-v2">
+  #uang-masuk-custom-dropdown-overlay{
+    position:fixed !important;
+    inset:0 !important;
+    z-index:2147483000 !important;
+    display:none !important;
+    align-items:center !important;
+    justify-content:center !important;
+    padding:18px !important;
+    background:rgba(15,23,42,.52) !important;
+    backdrop-filter:blur(7px) saturate(110%) !important;
+    -webkit-backdrop-filter:blur(7px) saturate(110%) !important;
+  }
+  #uang-masuk-custom-dropdown-overlay.is-open{display:flex !important;}
+  #uang-masuk-custom-dropdown-card{
+    width:min(520px, calc(100vw - 32px)) !important;
+    max-height:min(78vh, 680px) !important;
+    overflow:hidden !important;
+    border-radius:24px !important;
+    border:1px solid rgba(255,255,255,.58) !important;
+    background:linear-gradient(145deg,rgba(224,242,254,.78),rgba(255,255,255,.58)) !important;
+    box-shadow:0 24px 70px rgba(15,23,42,.32), inset 0 1px 0 rgba(255,255,255,.78) !important;
+    backdrop-filter:blur(22px) saturate(135%) !important;
+    -webkit-backdrop-filter:blur(22px) saturate(135%) !important;
+    transform:translateZ(0) !important;
+    animation:uangDropdownPop .16s ease-out !important;
+  }
+  @keyframes uangDropdownPop{
+    from{opacity:0;transform:translateY(8px) scale(.985)}
+    to{opacity:1;transform:translateY(0) scale(1)}
+  }
+  #uang-masuk-custom-dropdown-head{
+    position:relative !important;
+    display:flex !important;
+    align-items:center !important;
+    min-height:70px !important;
+    padding:16px 66px 14px 20px !important;
+    border-bottom:1px solid rgba(255,255,255,.55) !important;
+  }
+  #uang-masuk-custom-dropdown-title{
+    margin:0 !important;
+    font-size:16px !important;
+    line-height:1.2 !important;
+    font-weight:950 !important;
+    color:#172033 !important;
+  }
+  #uang-masuk-custom-dropdown-subtitle{
+    margin:4px 0 0 !important;
+    font-size:10px !important;
+    font-weight:750 !important;
+    color:#64748b !important;
+  }
+  #uang-masuk-custom-dropdown-close{
+    position:absolute !important;
+    top:12px !important;
+    right:12px !important;
+    width:42px !important;
+    height:42px !important;
+    border-radius:13px !important;
+    border:1px solid rgba(255,255,255,.72) !important;
+    background:rgba(255,255,255,.38) !important;
+    color:#334155 !important;
+    font-size:25px !important;
+    line-height:1 !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    cursor:pointer !important;
+    box-shadow:0 5px 16px rgba(15,23,42,.10) !important;
+  }
+  #uang-masuk-custom-dropdown-options{
+    padding:12px !important;
+    max-height:calc(min(78vh, 680px) - 70px) !important;
+    overflow-y:auto !important;
+    overscroll-behavior:contain !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+  .uang-custom-option{
+    width:100% !important;
+    min-height:52px !important;
+    margin:0 0 8px !important;
+    padding:11px 14px !important;
+    border-radius:15px !important;
+    border:1px solid rgba(255,255,255,.55) !important;
+    background:rgba(255,255,255,.38) !important;
+    color:#172033 !important;
+    font-size:13px !important;
+    font-weight:850 !important;
+    text-align:left !important;
+    cursor:pointer !important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.58) !important;
+    touch-action:manipulation !important;
+  }
+  .uang-custom-option:last-child{margin-bottom:0 !important;}
+  .uang-custom-option:hover,.uang-custom-option:focus-visible{
+    background:rgba(255,255,255,.68) !important;
+    border-color:rgba(16,185,129,.45) !important;
+    outline:none !important;
+  }
+  .uang-custom-option.is-selected{
+    background:linear-gradient(135deg,rgba(59,130,246,.90),rgba(99,102,241,.90)) !important;
+    color:#fff !important;
+    border-color:rgba(255,255,255,.62) !important;
+    box-shadow:0 7px 18px rgba(37,99,235,.20) !important;
+  }
+  @media(max-width:640px){
+    #uang-masuk-custom-dropdown-overlay{padding:12px !important;}
+    #uang-masuk-custom-dropdown-card{width:calc(100vw - 24px) !important;max-height:76vh !important;border-radius:21px !important;}
+    #uang-masuk-custom-dropdown-head{min-height:64px !important;padding:14px 58px 12px 16px !important;}
+    #uang-masuk-custom-dropdown-close{width:38px !important;height:38px !important;top:10px !important;right:10px !important;}
+    #uang-masuk-custom-dropdown-options{max-height:calc(76vh - 64px) !important;padding:10px !important;}
+    .uang-custom-option{min-height:50px !important;font-size:12.5px !important;}
+  }
+</style>
+<div id="uang-masuk-custom-dropdown-overlay" aria-hidden="true">
+  <div id="uang-masuk-custom-dropdown-card" role="dialog" aria-modal="true" aria-labelledby="uang-masuk-custom-dropdown-title">
+    <div id="uang-masuk-custom-dropdown-head">
+      <div>
+        <p id="uang-masuk-custom-dropdown-title">Pilih</p>
+        <p id="uang-masuk-custom-dropdown-subtitle">Pilih salah satu opsi</p>
+      </div>
+      <button type="button" id="uang-masuk-custom-dropdown-close" aria-label="Tutup">✕</button>
+    </div>
+    <div id="uang-masuk-custom-dropdown-options"></div>
+  </div>
+</div>
+<script id="uang-masuk-custom-dropdown-v2-script">
+(function(){
+  let activeSelect = null;
+  let suppressNextClick = false;
+  let touchStartX = 0, touchStartY = 0, touchMoved = false;
+
+  const overlay = () => document.getElementById('uang-masuk-custom-dropdown-overlay');
+  const card = () => document.getElementById('uang-masuk-custom-dropdown-card');
+
+  function labelForSelect(sel){
+    const id = sel?.id || '';
+    const labels = {
+      'in-tim':'Pilih Tim',
+      'in-tambahan-waktu':'Tambahan Waktu',
+      'in-jenis-pembayaran':'Jenis Pembayaran',
+      'in-status-2':'Status Tim 2',
+      'in-metode-1':'Metode Pembayaran Tim 1',
+      'in-metode-1b':'Metode Kedua Tim 1',
+      'in-metode-2':'Metode Pembayaran Tim 2',
+      'in-metode-2b':'Metode Kedua Tim 2',
+      'in-kaos-kaki-qty':'Jumlah Kaos Kaki'
+    };
+    return labels[id] || sel?.closest('.masuk-field-card')?.getAttribute('aria-label') || 'Pilih Opsi';
+  }
+
+  function closeDropdown(){
+    const ov=overlay();
+    if(!ov) return;
+    ov.classList.remove('is-open');
+    ov.setAttribute('aria-hidden','true');
+    activeSelect=null;
+    document.body.style.overflow='';
+  }
+
+  function openDropdown(sel){
+    if(!sel || sel.disabled || sel.offsetParent===null) return;
+    const ov=overlay(), opts=document.getElementById('uang-masuk-custom-dropdown-options');
+    const title=document.getElementById('uang-masuk-custom-dropdown-title');
+    const subtitle=document.getElementById('uang-masuk-custom-dropdown-subtitle');
+    if(!ov || !opts || !title || !subtitle) return;
+    activeSelect=sel;
+    title.textContent=labelForSelect(sel);
+    subtitle.textContent='Pilih salah satu opsi';
+    opts.innerHTML='';
+
+    Array.from(sel.options || []).forEach((option, index)=>{
+      if(option.hidden) return;
+      const btn=document.createElement('button');
+      btn.type='button';
+      btn.className='uang-custom-option' + (option.selected ? ' is-selected' : '');
+      btn.textContent=option.textContent || option.value || ('Pilihan '+(index+1));
+      btn.dataset.value=option.value;
+      btn.addEventListener('click',function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        if(!activeSelect) return;
+        const targetValue=this.dataset.value;
+        activeSelect.value=targetValue;
+        activeSelect.dispatchEvent(new Event('change',{bubbles:true}));
+        activeSelect.dispatchEvent(new Event('input',{bubbles:true}));
+        closeDropdown();
+      });
+      opts.appendChild(btn);
+    });
+
+    ov.classList.add('is-open');
+    ov.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+  }
+
+  // Klik kartu field Uang Masuk: buka modal custom, bukan native select.
+  // Capture=true membuat handler ini berjalan sebelum listener lama yang
+  // memanggil showPicker()/click() pada kontrol transparan.
+  document.addEventListener('click',function(e){
+    if(suppressNextClick){ suppressNextClick=false; return; }
+    const page=document.getElementById('page-masuk');
+    if(!page) return;
+    const field=e.target.closest?.('.masuk-field-card');
+    if(field && page.contains(field)){
+      const id=field.getAttribute('data-control');
+      const sel=document.getElementById(id);
+      if(sel && sel.tagName==='SELECT'){
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        openDropdown(sel);
+        return;
+      }
+    }
+    // SELECT lain di Uang Masuk (metode pembayaran, status, jumlah kaos kaki, dll).
+    const sel=e.target.closest?.('select');
+    if(sel && page.contains(sel)){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      openDropdown(sel);
+    }
+  },true);
+
+  // Sentuhan yang berubah menjadi scroll tidak boleh dianggap sebagai pilihan.
+  document.addEventListener('touchstart',function(e){
+    const t=e.touches?.[0]; if(!t) return;
+    touchStartX=t.clientX; touchStartY=t.clientY; touchMoved=false;
+  },{passive:true,capture:true});
+  document.addEventListener('touchmove',function(e){
+    const t=e.touches?.[0]; if(!t) return;
+    if(Math.abs(t.clientX-touchStartX)>8 || Math.abs(t.clientY-touchStartY)>8){
+      touchMoved=true;
+      suppressNextClick=true;
+    }
+  },{passive:true,capture:true});
+
+  document.getElementById('uang-masuk-custom-dropdown-close')?.addEventListener('click',closeDropdown);
+  overlay()?.addEventListener('click',function(e){
+    if(e.target===this) closeDropdown();
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape' && overlay()?.classList.contains('is-open')){
+      e.preventDefault(); closeDropdown();
+    }
+  });
+
+})();
+</script>
