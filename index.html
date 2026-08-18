@@ -10025,7 +10025,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
   <input class="masuk-native-control" id="in-jam-main" placeholder="Jam main akan otomatis terisi" readonly="" type="text"/>
 </div>
 <div class="masuk-field-card" data-control="in-tambahan-waktu" aria-label="Tambahan waktu">
-  <div class="masuk-field-value"><span id="in-tambahan-waktu-display">Tidak ada perubahan</span><span class="masuk-field-icon">⌄</span></div>
+  <div class="masuk-field-value"><span id="in-tambahan-waktu-display">TAMBAHAN WAKTU</span><span class="masuk-field-icon">⌄</span></div>
   <select class="masuk-native-control" id="in-tambahan-waktu" onchange="hitungOtomatisBiaya()">
     <option value="0">Tidak ada perubahan</option>
     <option value="30">+ 30 menit</option>
@@ -10033,18 +10033,14 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
   </select>
 </div>
 <div class="masuk-field-card" data-control="in-jenis-pembayaran" aria-label="Jenis pembayaran">
-  <div class="masuk-field-value"><span id="in-jenis-pembayaran-display">🏠 Tim Internal · 1 Tim Bayar</span><span class="masuk-field-icon">⌄</span></div>
+  <div class="masuk-field-value"><span id="in-jenis-pembayaran-display">JUMLAH TIM BAYAR</span><span class="masuk-field-icon">⌄</span></div>
   <select class="masuk-native-control" id="in-jenis-pembayaran" onchange="hitungOtomatisBiaya()">
     <option value="internal">🏠 Tim Internal · 1 Tim Bayar</option>
     <option value="sparing">⚽ Sparing · 2 Tim Bayar</option>
   </select>
 </div>
 <div id="info-tagihan-tim" class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3"></div>
-<div class="flex justify-center mb-4">
-  <button type="button" id="btn-tampilkan-customer" class="customer-display-btn" onclick="tampilkanTagihanUntukCustomer()" disabled>
-    👁️ Tampilkan untuk Customer
-  </button>
-</div>
+
 <div class="p-3 rounded-xl border border-emerald-500/40 mb-3 space-y-3 bg-white/30 uang-masuk-option-panel">
 <label class="block text-xs font-black text-emerald-950">⚽ Opsi Tambahan Sewa (Opsional)</label>
 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -10134,9 +10130,13 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 <input type="hidden" id="in-jadwal-source-type" value="">
 <input type="hidden" id="in-jadwal-source-tgl" value="">
 <input type="hidden" id="in-jadwal-source-jam" value="">
-<div class="flex justify-end gap-2">
-<button type="button" id="btn-hapus-dari-jadwal" onclick="hapusJadwalHariIniDariPembayaran()" class="hidden bg-rose-700 hover:bg-rose-800 text-white px-4 py-2 rounded text-sm font-bold border border-rose-500/50 shadow">🗑️ Hapus Jadwal</button>
-<button type="submit" id="btn-simpan-pemasukan" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded text-sm font-bold border border-emerald-500/50 shadow relative z-[100] touch-manipulation">Simpan</button>
+<div id="uang-masuk-sticky-actions" class="uang-masuk-sticky-actions">
+  <button type="button" id="btn-hapus-dari-jadwal" onclick="hapusJadwalHariIniDariPembayaran()" class="hidden uang-masuk-action-btn uang-masuk-action-delete">🗑️ <span>Hapus</span></button>
+  <button type="button" id="btn-tampilkan-customer" class="customer-display-btn uang-masuk-action-btn uang-masuk-action-customer" onclick="tampilkanTagihanUntukCustomer()" disabled>
+    <span class="customer-label-desktop">👁️ Harga Customer</span>
+    <span class="customer-label-mobile">👁️ Harga Customer</span>
+  </button>
+  <button type="submit" id="btn-simpan-pemasukan" class="uang-masuk-action-btn uang-masuk-action-save relative z-[100] touch-manipulation">💾 <span>Simpan</span></button>
 </div>
 </form>
 </div>
@@ -11483,6 +11483,23 @@ const diskonManualEl = document.getElementById('in-diskon-manual');
             if (pay2 && document.activeElement !== pay2 && document.getElementById('in-metode-2')?.value !== 'Free' && document.getElementById('in-metode-2')?.value !== 'Belum Bayar') pay2.value = sisa2;
         };
 
+        window.closeSuccessPopupAndReturnToJadwal = () => {
+            document.getElementById('app-success-overlay')?.remove();
+
+            // Jika popup Uang Masuk sedang terbuka dari Jadwal Hari Ini,
+            // tutup backdrop + kembalikan #page-masuk ke posisi asalnya.
+            // closeModal() juga memanggil showPage('jadwal'), sehingga setelah
+            // admin menekan OK langsung kembali ke Jadwal Hari Ini.
+            if (document.body.classList.contains('jadwal-uang-masuk-modal-active')) {
+                if (typeof window.__closeJadwalUangMasukModal === 'function') {
+                    window.__closeJadwalUangMasukModal();
+                } else if (typeof window.showPage === 'function') {
+                    window.showPage('jadwal');
+                }
+                return;
+            }
+        };
+
         window.showSuccessPopup = (message = 'Data berhasil disimpan!') => {
             const old = document.getElementById('app-success-overlay');
             if(old) old.remove();
@@ -11494,7 +11511,7 @@ const diskonManualEl = document.getElementById('in-diskon-manual');
                     <div class="app-success-icon">✓</div>
                     <h3 id="app-success-title" class="app-success-title">Berhasil disimpan</h3>
                     <p class="app-success-message">${message}</p>
-                    <button type="button" class="app-success-button" onclick="document.getElementById('app-success-overlay')?.remove()">OK, Mengerti</button>
+                    <button type="button" class="app-success-button" onclick="window.closeSuccessPopupAndReturnToJadwal()">OK, Mengerti</button>
                 </div>`;
             document.body.appendChild(overlay);
             overlay.addEventListener('click', (event) => {
@@ -20971,6 +20988,8 @@ window.downloadDailyRecapJPGFull = async function() {
     if(!el || !out) return;
     let text='';
     if(el.type==='date') text = el.value ? new Date(el.value+'T00:00:00').toLocaleDateString('id-ID',{day:'2-digit',month:'2-digit',year:'numeric'}) : fallback;
+    else if(id==='in-tambahan-waktu') text = 'TAMBAHAN WAKTU';
+    else if(id==='in-jenis-pembayaran') text = 'JUMLAH TIM BAYAR';
     else if(el.tagName==='SELECT') text = el.value ? (el.options[el.selectedIndex]?.text || fallback) : fallback;
     else text = el.value || fallback;
     out.textContent=text;
@@ -20990,15 +21009,15 @@ window.downloadDailyRecapJPGFull = async function() {
     updateCard('in-tgl','in-tgl-display','Pilih tanggal');
     updateCard('in-tim','in-tim-display','Pilih tim yang main');
     updateCard('in-jam-main','in-jam-main-display','Jam main otomatis');
-    updateCard('in-tambahan-waktu','in-tambahan-waktu-display','Tidak ada perubahan');
-    updateCard('in-jenis-pembayaran','in-jenis-pembayaran-display','Pilih jenis pembayaran');
+    updateCard('in-tambahan-waktu','in-tambahan-waktu-display','TAMBAHAN WAKTU');
+    updateCard('in-jenis-pembayaran','in-jenis-pembayaran-display','JUMLAH TIM BAYAR');
   }
   function init(){
     bind('in-tgl','in-tgl-display','Pilih tanggal');
     bind('in-tim','in-tim-display','Pilih tim yang main');
     bind('in-jam-main','in-jam-main-display','Jam main otomatis');
-    bind('in-tambahan-waktu','in-tambahan-waktu-display','Tidak ada perubahan');
-    bind('in-jenis-pembayaran','in-jenis-pembayaran-display','Pilih jenis pembayaran');
+    bind('in-tambahan-waktu','in-tambahan-waktu-display','TAMBAHAN WAKTU');
+    bind('in-jenis-pembayaran','in-jenis-pembayaran-display','JUMLAH TIM BAYAR');
     refreshAll();
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
@@ -24408,6 +24427,122 @@ body.minuman-history-modal-open{overflow:hidden !important}
     height:28px !important; min-height:28px !important; max-height:28px !important;
     padding:0 4px !important; font-size:7px !important;
   }
+}
+</style>
+
+<style id="jadwal-uang-masuk-modal-v1">
+#jadwal-uang-masuk-modal-backdrop{position:fixed!important;inset:0!important;z-index:2147483000!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:18px!important;box-sizing:border-box!important;background:rgba(15,23,42,.42)!important;backdrop-filter:blur(7px)!important;-webkit-backdrop-filter:blur(7px)!important}
+body.jadwal-uang-masuk-modal-active{overflow:hidden!important} body.jadwal-uang-masuk-modal-active main{overflow:visible!important}
+body.jadwal-uang-masuk-modal-active #page-masuk{display:block!important;visibility:visible!important;opacity:1!important;position:fixed!important;inset:auto!important;left:50%!important;top:50%!important;width:min(94vw,560px)!important;max-width:560px!important;max-height:min(88vh,760px)!important;margin:0!important;padding:16px 18px 18px!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;scrollbar-width:none!important;-ms-overflow-style:none!important;transform:translate(-50%,-50%)!important;z-index:2147483001!important;box-sizing:border-box!important;border-radius:24px!important;background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(239,246,255,.84))!important;border:1px solid rgba(255,255,255,.86)!important;box-shadow:0 28px 80px rgba(15,23,42,.30),inset 0 1px 0 rgba(255,255,255,.95)!important;backdrop-filter:blur(24px) saturate(145%)!important;-webkit-backdrop-filter:blur(24px) saturate(145%)!important;color:#172033!important;animation:jadwalUangMasukIn .18s ease-out!important}
+#jadwal-uang-masuk-modal-backdrop #page-masuk::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
+body.jadwal-uang-masuk-modal-active #page-masuk > h2{position:sticky!important;top:-16px!important;z-index:15!important;margin:-16px -18px 16px!important;padding:16px 58px 12px 16px!important;min-height:48px!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;background:linear-gradient(180deg,rgba(255,255,255,.97),rgba(239,246,255,.90))!important;border-bottom:1px solid rgba(148,163,184,.20)!important;border-radius:24px 24px 0 0!important;box-shadow:0 6px 16px rgba(15,23,42,.05)!important;color:#172033!important;letter-spacing:.01em!important}
+#jadwal-uang-masuk-modal-close{position:sticky!important;top:0!important;float:right!important;z-index:30!important;width:38px!important;height:38px!important;margin:-7px -6px 0 8px!important;border:1px solid rgba(148,163,184,.25)!important;border-radius:12px!important;background:rgba(255,255,255,.72)!important;color:#334155!important;font-size:18px!important;line-height:1!important;font-weight:950!important;display:flex!important;align-items:center!important;justify-content:center!important;box-shadow:0 5px 14px rgba(15,23,42,.10)!important;cursor:pointer!important;touch-action:manipulation!important}
+#jadwal-uang-masuk-modal-close:active{transform:scale(.94)}
+@keyframes jadwalUangMasukIn{from{opacity:0;transform:translate(-50%,-47%) scale(.975)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+.glass-native-popup-backdrop,#uang-masuk-custom-dropdown-overlay{z-index:2147483647!important}
+.glass-native-popup-card,#uang-masuk-custom-dropdown-card{position:relative!important;z-index:2147483647!important}
+@media(max-width:640px){#jadwal-uang-masuk-modal-backdrop{padding:10px!important}body.jadwal-uang-masuk-modal-active #page-masuk{width:calc(100vw - 20px)!important;max-height:calc(100dvh - 20px)!important;padding:14px 14px 16px!important;border-radius:20px!important}body.jadwal-uang-masuk-modal-active #page-masuk > h2{top:-14px!important;margin:-14px -14px 14px!important;padding:14px 52px 11px 14px!important;border-radius:20px 20px 0 0!important}#jadwal-uang-masuk-modal-close{width:36px!important;height:36px!important;margin:-5px -4px 0 6px!important}}
+</style>
+
+<style id="uang-masuk-popup-above-modal-final-v1">
+/* Semua popup dari field Uang Masuk harus berada DI ATAS modal Uang Masuk.
+   Ini penting karena modal Uang Masuk sendiri memakai z-index 2147483001. */
+body.jadwal-uang-masuk-modal-active #uang-masuk-custom-dropdown-overlay,
+body.jadwal-uang-masuk-modal-active .glass-native-popup-backdrop {
+  z-index:2147483647 !important;
+}
+body.jadwal-uang-masuk-modal-active #uang-masuk-custom-dropdown-card,
+body.jadwal-uang-masuk-modal-active .glass-native-popup-card {
+  z-index:2147483647 !important;
+}
+</style>
+
+<script id="jadwal-uang-masuk-modal-v1-script">
+(function(){
+'use strict';let modalOpen=false;
+function getPage(){return document.getElementById('page-masuk')}
+function ensureCloseButton(page){if(!page||document.getElementById('jadwal-uang-masuk-modal-close'))return;const btn=document.createElement('button');btn.type='button';btn.id='jadwal-uang-masuk-modal-close';btn.setAttribute('aria-label','Tutup Uang Masuk');btn.textContent='✕';btn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();closeModal()});page.insertBefore(btn,page.firstChild)}
+function openModal(){
+  const page=getPage();
+  if(!page)return;
+  let backdrop=document.getElementById('jadwal-uang-masuk-modal-backdrop');
+  if(!backdrop){
+    backdrop=document.createElement('div');
+    backdrop.id='jadwal-uang-masuk-modal-backdrop';
+    backdrop.setAttribute('aria-hidden','false');
+    document.body.appendChild(backdrop);
+    backdrop.addEventListener('pointerdown',function(e){if(e.target===backdrop)closeModal()});
+  }
+
+  // PENTING: #page-masuk awalnya adalah anak <main>. Jika dibiarkan di sana,
+  // beberapa stacking context/transform parent membuat backdrop berada di atas
+  // form sehingga yang terlihat hanya efek blur. Untuk modal, pindahkan node
+  // form yang sama langsung ke <body>, lalu kembalikan ke posisi semula saat tutup.
+  if(!page.__uangMasukModalOriginalParent){
+    page.__uangMasukModalOriginalParent=page.parentNode;
+    page.__uangMasukModalOriginalNext=page.nextSibling;
+  }
+  if(page.parentNode!==document.body){
+    document.body.appendChild(page);
+  }
+
+  ensureCloseButton(page);
+  // Tombol X ditempatkan di dalam header <h2> yang sticky.
+  // Karena tombol absolute dan header sticky, X tetap diam saat isi form di-scroll
+  // dan tidak ikut memengaruhi posisi center judul.
+  const closeBtn=document.getElementById('jadwal-uang-masuk-modal-close');
+  const header=page.querySelector(':scope > h2');
+  if(closeBtn && header && closeBtn.parentNode!==header){
+    header.appendChild(closeBtn);
+  }
+  document.body.classList.add('jadwal-uang-masuk-modal-active');
+  page.classList.remove('hidden');
+  page.classList.add('jadwal-uang-masuk-modal-page');
+  page.style.display='block';
+  page.style.visibility='visible';
+  page.style.opacity='1';
+  modalOpen=true;
+  requestAnimationFrame(function(){
+    if(!modalOpen)return;
+    page.scrollTop=0;
+  });
+}
+function closeModal(){
+  const page=getPage(),backdrop=document.getElementById('jadwal-uang-masuk-modal-backdrop');
+  modalOpen=false;
+  document.body.classList.remove('jadwal-uang-masuk-modal-active');
+  if(page){
+    page.classList.remove('jadwal-uang-masuk-modal-page');
+    page.style.display='';
+    page.style.visibility='';
+    page.style.opacity='';
+    const parent=page.__uangMasukModalOriginalParent;
+    const next=page.__uangMasukModalOriginalNext;
+    if(parent){
+      if(next && next.parentNode===parent) parent.insertBefore(page,next);
+      else parent.appendChild(page);
+    }
+    page.__uangMasukModalOriginalParent=null;
+    page.__uangMasukModalOriginalNext=null;
+  }
+  if(backdrop)backdrop.remove();
+  if(typeof window.showPage==='function')window.showPage('jadwal');
+}
+window.__openJadwalUangMasukModal=openModal;window.__closeJadwalUangMasukModal=closeModal;
+function wrap(){if(typeof window.bukaUangMasukDariJadwal!=='function')return false;if(window.bukaUangMasukDariJadwal.__modalWrapped)return true;const original=window.bukaUangMasukDariJadwal;const wrapped=function(namaTim,jam,tanggal){openModal();original.apply(this,arguments);openModal()};wrapped.__modalWrapped=true;wrapped.__original=original;window.bukaUangMasukDariJadwal=wrapped;return true}
+if(!wrap()){let tries=0;const timer=setInterval(function(){if(wrap()||++tries>100)clearInterval(timer)},100)}
+document.addEventListener('click',function(){if(modalOpen)document.body.style.overflow='hidden'},true);
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&modalOpen){const popup=document.querySelector('.glass-native-popup-backdrop.is-open,#uang-masuk-custom-dropdown-overlay.is-open');if(!popup)closeModal()}},true);
+})();
+</script>
+
+<style id="jadwal-uang-masuk-no-flash-final-v1">
+/* Tidak ada frame normal Uang Masuk yang sempat terlihat saat card Jadwal Hari Ini diklik. */
+body.jadwal-uang-masuk-modal-active #page-masuk {
+  transition:none !important;
+}
+#jadwal-uang-masuk-modal-backdrop {
+  will-change:opacity,backdrop-filter !important;
 }
 </style>
 </body>
@@ -31621,7 +31756,7 @@ body:has(#modal-edit-booking) {
   #uang-masuk-custom-dropdown-overlay{
     position:fixed !important;
     inset:0 !important;
-    z-index:2147483000 !important;
+    z-index:2147483647 !important;
     display:none !important;
     align-items:center !important;
     justify-content:center !important;
@@ -31757,7 +31892,7 @@ body:has(#modal-edit-booking) {
     const labels = {
       'in-tim':'Pilih Tim',
       'in-tambahan-waktu':'Tambahan Waktu',
-      'in-jenis-pembayaran':'Jenis Pembayaran',
+      'in-jenis-pembayaran':'Jumlah Tim Bayar',
       'in-status-2':'Status Tim 2',
       'in-metode-1':'Metode Pembayaran Tim 1',
       'in-metode-1b':'Metode Kedua Tim 1',
@@ -31865,3 +32000,1081 @@ body:has(#modal-edit-booking) {
 
 })();
 </script>
+
+<style id="jadwal-uang-masuk-modal-sticky-header-final">
+/* FINAL: Header UANG MASUK tetap diam saat isi modal di-scroll.
+   Isi form bergerak di bawah header, tanpa terlihat menembus area judul. */
+body.jadwal-uang-masuk-modal-active #page-masuk > h2{
+  position:sticky !important;
+  top:0 !important;
+  z-index:100 !important;
+  margin:-14px -14px 14px !important;
+  padding:14px 58px 12px 14px !important;
+  min-height:50px !important;
+  box-sizing:border-box !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  background:linear-gradient(180deg,rgba(255,255,255,.995) 0%,rgba(248,251,255,.985) 100%) !important;
+  border-bottom:1px solid rgba(148,163,184,.22) !important;
+  border-radius:20px 20px 0 0 !important;
+  box-shadow:0 7px 18px rgba(15,23,42,.07) !important;
+  isolation:isolate !important;
+}
+
+body.jadwal-uang-masuk-modal-active #page-masuk > h2::after{
+  content:"" !important;
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  bottom:-1px !important;
+  height:3px !important;
+  background:linear-gradient(90deg,#315bea,#20b7e8) !important;
+  border-radius:3px !important;
+  pointer-events:none !important;
+}
+
+/* Tombol X ikut menempel di area header ketika form di-scroll. */
+body.jadwal-uang-masuk-modal-active #jadwal-uang-masuk-modal-close{
+  position:sticky !important;
+  top:8px !important;
+  z-index:110 !important;
+  margin:-6px -4px -38px auto !important;
+  width:38px !important;
+  height:38px !important;
+  flex:none !important;
+}
+
+@media(max-width:640px){
+  body.jadwal-uang-masuk-modal-active #page-masuk > h2{
+    top:0 !important;
+    margin:-14px -14px 14px !important;
+    padding:14px 52px 11px 14px !important;
+    min-height:48px !important;
+  }
+  body.jadwal-uang-masuk-modal-active #jadwal-uang-masuk-modal-close{
+    top:7px !important;
+    margin:-5px -4px -36px auto !important;
+    width:36px !important;
+    height:36px !important;
+  }
+}
+</style>
+
+
+<style id="uang-masuk-sticky-actions-final-v2">
+/* =========================================================
+   UANG MASUK MODAL — HEADER + FOOTER STICKY FINAL
+   - Header benar-benar center; tombol X tidak ikut memengaruhi posisi judul.
+   - Footer selalu terlihat saat isi form di-scroll.
+   - Urutan: Hapus | Tampilkan untuk Customer | Simpan.
+   - Satu card tagihan dipusatkan; dua card tetap berjejer.
+   ========================================================= */
+body.jadwal-uang-masuk-modal-active #page-masuk > h2{
+  position:sticky !important;
+  top:0 !important;
+  z-index:120 !important;
+  width:100% !important;
+  margin:0 0 14px !important;
+  padding:14px 54px 12px !important;
+  min-height:52px !important;
+  box-sizing:border-box !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  background:linear-gradient(180deg,rgba(255,255,255,.995),rgba(247,250,255,.985)) !important;
+  border-bottom:1px solid rgba(148,163,184,.20) !important;
+  border-radius:18px 18px 0 0 !important;
+  box-shadow:0 6px 16px rgba(15,23,42,.06) !important;
+  isolation:isolate !important;
+}
+body.jadwal-uang-masuk-modal-active #page-masuk > h2::after{
+  content:"" !important;
+  position:absolute !important;
+  left:0 !important;
+  bottom:-1px !important;
+  width:72px !important;
+  height:3px !important;
+  background:linear-gradient(90deg,#315bea,#20b7e8) !important;
+  border-radius:3px !important;
+  pointer-events:none !important;
+}
+body.jadwal-uang-masuk-modal-active #jadwal-uang-masuk-modal-close{
+  position:absolute !important;
+  top:10px !important;
+  right:10px !important;
+  z-index:140 !important;
+  float:none !important;
+  margin:0 !important;
+  width:40px !important;
+  height:40px !important;
+  border-radius:13px !important;
+}
+
+/* Sticky footer berada di dalam viewport modal, bukan ikut menghilang saat scroll. */
+body.jadwal-uang-masuk-modal-active #uang-masuk-sticky-actions{
+  position:sticky !important;
+  bottom:-18px !important;
+  z-index:125 !important;
+  display:flex !important;
+  align-items:stretch !important;
+  justify-content:center !important;
+  gap:10px !important;
+  margin:18px -18px -18px !important;
+  padding:12px 18px 14px !important;
+  background:linear-gradient(180deg,rgba(248,251,255,.90),rgba(255,255,255,.98)) !important;
+  border-top:1px solid rgba(148,163,184,.22) !important;
+  box-shadow:0 -8px 20px rgba(15,23,42,.07) !important;
+  backdrop-filter:blur(18px) saturate(135%) !important;
+  -webkit-backdrop-filter:blur(18px) saturate(135%) !important;
+}
+.uang-masuk-action-btn{
+  min-height:46px !important;
+  flex:1 1 0 !important;
+  min-width:0 !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:6px !important;
+  padding:10px 12px !important;
+  border-radius:12px !important;
+  font-size:13px !important;
+  font-weight:900 !important;
+  line-height:1.15 !important;
+  white-space:nowrap !important;
+  box-sizing:border-box !important;
+  touch-action:manipulation !important;
+}
+.uang-masuk-action-delete.hidden{display:none !important;}
+.uang-masuk-action-delete{
+  background:#dc2626 !important;
+  border:1px solid #ef4444 !important;
+  color:#fff !important;
+  box-shadow:0 7px 16px rgba(220,38,38,.18) !important;
+}
+.uang-masuk-action-customer{
+  background:linear-gradient(135deg,#2563eb,#4f46e5) !important;
+  border:1px solid rgba(37,99,235,.25) !important;
+  color:#fff !important;
+  box-shadow:0 8px 18px rgba(37,99,235,.18) !important;
+}
+.uang-masuk-action-save{
+  background:#16a34a !important;
+  border:1px solid #22c55e !important;
+  color:#fff !important;
+  box-shadow:0 7px 16px rgba(22,163,74,.18) !important;
+}
+.customer-label-mobile{display:none !important;}
+
+/* Jika hanya ada satu kartu tim, pusatkan; dua kartu tetap 2 kolom. */
+#info-tagihan-tim:has(> :only-child){
+  grid-template-columns:minmax(0,1fr) !important;
+  justify-items:center !important;
+}
+#info-tagihan-tim:has(> :only-child) > *{
+  width:min(100%,430px) !important;
+}
+
+@media(max-width:640px){
+  body.jadwal-uang-masuk-modal-active #page-masuk > h2{
+    margin:0 0 12px !important;
+    padding:13px 48px 11px !important;
+    min-height:48px !important;
+    border-radius:16px 16px 0 0 !important;
+  }
+  body.jadwal-uang-masuk-modal-active #jadwal-uang-masuk-modal-close{
+    top:7px !important;
+    right:7px !important;
+    width:38px !important;
+    height:38px !important;
+  }
+  body.jadwal-uang-masuk-modal-active #uang-masuk-sticky-actions{
+    bottom:-16px !important;
+    gap:7px !important;
+    margin:14px -14px -16px !important;
+    padding:10px 12px 12px !important;
+  }
+  .uang-masuk-action-btn{
+    min-height:44px !important;
+    padding:9px 8px !important;
+    font-size:12px !important;
+    border-radius:11px !important;
+  }
+  .customer-label-desktop{display:none !important;}
+  .customer-label-mobile{display:inline !important;}
+}
+</style>
+
+<style id="uang-masuk-action-layout-harga-customer-v3">
+/* FINAL V3: Desktop = 3 tombol sejajar; HP = Harga Customer di atas, Hapus + Simpan di bawah. */
+.uang-masuk-sticky-actions{
+  flex-wrap:wrap !important;
+}
+@media (min-width:641px){
+  body.jadwal-uang-masuk-modal-active #uang-masuk-sticky-actions{
+    flex-wrap:nowrap !important;
+  }
+  body.jadwal-uang-masuk-modal-active .uang-masuk-action-customer{
+    flex:1.15 1 0 !important;
+  }
+}
+@media (max-width:640px){
+  body.jadwal-uang-masuk-modal-active #uang-masuk-sticky-actions{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+    grid-template-areas:
+      "customer customer"
+      "delete save" !important;
+    gap:7px !important;
+  }
+  body.jadwal-uang-masuk-modal-active #btn-tampilkan-customer{
+    grid-area:customer !important;
+    width:100% !important;
+    min-width:0 !important;
+  }
+  body.jadwal-uang-masuk-modal-active #btn-hapus-dari-jadwal{
+    grid-area:delete !important;
+    width:100% !important;
+    min-width:0 !important;
+  }
+  body.jadwal-uang-masuk-modal-active #btn-simpan-pemasukan{
+    grid-area:save !important;
+    width:100% !important;
+    min-width:0 !important;
+  }
+  .customer-label-desktop,.customer-label-mobile{
+    display:inline !important;
+  }
+}
+</style>
+<style id="uang-masuk-centered-field-text-final">
+/* FINAL: teks kontrol utama UANG MASUK benar-benar simetris. */
+#page-masuk .masuk-field-card{padding:0 !important;}
+#page-masuk .masuk-field-value{position:relative !important;min-height:58px !important;width:100% !important;padding:0 52px !important;display:flex !important;align-items:center !important;justify-content:center !important;text-align:center !important;box-sizing:border-box !important;}
+#page-masuk .masuk-field-value > span:first-child{display:block !important;width:100% !important;text-align:center !important;line-height:1.25 !important;}
+#page-masuk .masuk-field-icon{position:absolute !important;right:18px !important;top:50% !important;transform:translateY(-50%) !important;margin:0 !important;width:24px !important;text-align:center !important;display:flex !important;align-items:center !important;justify-content:center !important;}
+@media(max-width:640px){#page-masuk .masuk-field-value{min-height:56px !important;padding:0 48px !important;}#page-masuk .masuk-field-icon{right:14px !important;}}
+</style>
+
+
+<style id="uang-masuk-close-sticky-final">
+/* Tombol X menjadi bagian dari header sticky, sehingga tetap diam saat isi modal di-scroll.
+   Posisi judul tetap benar-benar center karena tombol tidak ikut menjadi flex item judul. */
+body.jadwal-uang-masuk-modal-active #page-masuk > h2{
+  position:sticky !important;
+  top:0 !important;
+  z-index:120 !important;
+}
+body.jadwal-uang-masuk-modal-active #page-masuk > h2 #jadwal-uang-masuk-modal-close{
+  position:absolute !important;
+  top:10px !important;
+  right:10px !important;
+  z-index:150 !important;
+  float:none !important;
+  margin:0 !important;
+  width:40px !important;
+  height:40px !important;
+  flex:none !important;
+  transform:none !important;
+}
+body.jadwal-uang-masuk-modal-active #page-masuk > h2 #jadwal-uang-masuk-modal-close:active{
+  transform:scale(.94) !important;
+}
+@media(max-width:640px){
+  body.jadwal-uang-masuk-modal-active #page-masuk > h2 #jadwal-uang-masuk-modal-close{
+    top:7px !important;
+    right:7px !important;
+    width:38px !important;
+    height:38px !important;
+  }
+}
+</style>
+
+
+<style id="uang-masuk-header-match-footer-final">
+/* HEADER FINAL — dibuat sebagai bidang sticky yang menutup seluruh area atas
+   seperti footer, sehingga isi yang di-scroll tidak pernah terlihat di atas header. */
+body.jadwal-uang-masuk-modal-active #page-masuk > h2{
+  position:sticky !important;
+  top:-16px !important;
+  z-index:1000 !important;
+  width:calc(100% + 36px) !important;
+  margin:-16px -18px 16px !important;
+  padding:16px 58px 12px 18px !important;
+  min-height:66px !important;
+  box-sizing:border-box !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  background:rgba(248,251,255,.995) !important;
+  border:0 !important;
+  border-bottom:1px solid rgba(148,163,184,.22) !important;
+  border-radius:24px 24px 0 0 !important;
+  box-shadow:0 8px 20px rgba(15,23,42,.08) !important;
+  isolation:isolate !important;
+  overflow:visible !important;
+}
+body.jadwal-uang-masuk-modal-active #page-masuk > h2::before{
+  content:"" !important;
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  top:0 !important;
+  bottom:0 !important;
+  background:rgba(248,251,255,.995) !important;
+  border-radius:24px 24px 0 0 !important;
+  z-index:-1 !important;
+  pointer-events:none !important;
+}
+body.jadwal-uang-masuk-modal-active #page-masuk > h2::after{
+  content:"" !important;
+  position:absolute !important;
+  left:0 !important;
+  bottom:-1px !important;
+  width:90px !important;
+  height:3px !important;
+  background:linear-gradient(90deg,#315bea,#20b7e8) !important;
+  border-radius:0 3px 3px 0 !important;
+  pointer-events:none !important;
+  z-index:2 !important;
+}
+body.jadwal-uang-masuk-modal-active #page-masuk > h2 #jadwal-uang-masuk-modal-close{
+  position:absolute !important;
+  top:10px !important;
+  right:10px !important;
+  z-index:10 !important;
+  margin:0 !important;
+  width:40px !important;
+  height:40px !important;
+  flex:none !important;
+}
+
+@media(max-width:640px){
+  body.jadwal-uang-masuk-modal-active #page-masuk > h2{
+    top:-14px !important;
+    width:calc(100% + 28px) !important;
+    margin:-14px -14px 14px !important;
+    padding:14px 52px 11px 14px !important;
+    min-height:62px !important;
+    border-radius:20px 20px 0 0 !important;
+  }
+  body.jadwal-uang-masuk-modal-active #page-masuk > h2::before{
+    border-radius:20px 20px 0 0 !important;
+  }
+  body.jadwal-uang-masuk-modal-active #page-masuk > h2 #jadwal-uang-masuk-modal-close{
+    top:7px !important;
+    right:7px !important;
+    width:38px !important;
+    height:38px !important;
+  }
+}
+</style>
+
+
+<style id="uang-keluar-popup-same-as-masuk-v1">
+/* =========================================================
+   UANG KELUAR — POPUP SAMA DENGAN UANG MASUK
+   - langsung modal, tanpa sempat menampilkan halaman normal
+   - header sticky + X
+   - footer Simpan sticky
+   - scrollbar disembunyikan
+   ========================================================= */
+#jadwal-uang-keluar-modal-backdrop{
+  position:fixed !important;
+  inset:0 !important;
+  z-index:2147483000 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:18px !important;
+  box-sizing:border-box !important;
+  background:rgba(15,23,42,.42) !important;
+  backdrop-filter:blur(7px) !important;
+  -webkit-backdrop-filter:blur(7px) !important;
+}
+body.jadwal-uang-keluar-modal-active{
+  overflow:hidden !important;
+}
+body.jadwal-uang-keluar-modal-active main{
+  overflow:visible !important;
+}
+body.jadwal-uang-keluar-modal-active #page-keluar{
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  position:fixed !important;
+  inset:auto !important;
+  left:50% !important;
+  top:50% !important;
+  width:min(94vw,560px) !important;
+  max-width:560px !important;
+  max-height:min(88vh,760px) !important;
+  margin:0 !important;
+  padding:16px 18px 0 !important;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  overscroll-behavior:contain !important;
+  scrollbar-width:none !important;
+  -ms-overflow-style:none !important;
+  transform:translate(-50%,-50%) !important;
+  z-index:2147483001 !important;
+  box-sizing:border-box !important;
+  border-radius:24px !important;
+  background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(239,246,255,.84)) !important;
+  border:1px solid rgba(255,255,255,.86) !important;
+  box-shadow:0 28px 80px rgba(15,23,42,.30),inset 0 1px 0 rgba(255,255,255,.95) !important;
+  backdrop-filter:blur(24px) saturate(145%) !important;
+  -webkit-backdrop-filter:blur(24px) saturate(145%) !important;
+  color:#172033 !important;
+  animation:jadwalUangKeluarIn .18s ease-out !important;
+}
+#jadwal-uang-keluar-modal-backdrop #page-keluar::-webkit-scrollbar{
+  display:none !important;
+  width:0 !important;
+  height:0 !important;
+}
+body.jadwal-uang-keluar-modal-active #page-keluar > h2{
+  position:sticky !important;
+  top:-16px !important;
+  z-index:15 !important;
+  margin:-16px -18px 16px !important;
+  padding:16px 58px 12px 16px !important;
+  min-height:48px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(239,246,255,.94)) !important;
+  border-bottom:1px solid rgba(148,163,184,.20) !important;
+  border-radius:24px 24px 0 0 !important;
+  box-shadow:0 6px 16px rgba(15,23,42,.05) !important;
+  color:#172033 !important;
+  letter-spacing:.01em !important;
+}
+#jadwal-uang-keluar-modal-close{
+  position:absolute !important;
+  top:9px !important;
+  right:9px !important;
+  z-index:30 !important;
+  width:40px !important;
+  height:40px !important;
+  margin:0 !important;
+  border:1px solid rgba(148,163,184,.25) !important;
+  border-radius:12px !important;
+  background:rgba(255,255,255,.78) !important;
+  color:#334155 !important;
+  font-size:18px !important;
+  line-height:1 !important;
+  font-weight:950 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  box-shadow:0 5px 14px rgba(15,23,42,.10) !important;
+  cursor:pointer !important;
+  touch-action:manipulation !important;
+}
+#jadwal-uang-keluar-modal-close:active{transform:scale(.94)}
+body.jadwal-uang-keluar-modal-active #page-keluar > form{
+  padding-bottom:82px !important;
+}
+body.jadwal-uang-keluar-modal-active #page-keluar > form > .flex.justify-end{
+  position:sticky !important;
+  bottom:-1px !important;
+  z-index:20 !important;
+  margin:16px -18px -1px !important;
+  padding:12px 18px 14px !important;
+  background:linear-gradient(180deg,rgba(255,255,255,.84),rgba(239,246,255,.98)) !important;
+  border-top:1px solid rgba(148,163,184,.20) !important;
+  box-shadow:0 -8px 20px rgba(15,23,42,.08) !important;
+}
+body.jadwal-uang-keluar-modal-active #page-keluar > form > .flex.justify-end button[type="submit"]{
+  width:100% !important;
+  min-height:50px !important;
+  border-radius:14px !important;
+  font-weight:900 !important;
+  font-size:14px !important;
+  background:linear-gradient(135deg,#16a34a,#0f9f4b) !important;
+  box-shadow:0 8px 20px rgba(22,163,74,.22) !important;
+  touch-action:manipulation !important;
+}
+@keyframes jadwalUangKeluarIn{
+  from{opacity:0;transform:translate(-50%,-47%) scale(.975)}
+  to{opacity:1;transform:translate(-50%,-50%) scale(1)}
+}
+@media(max-width:640px){
+  #jadwal-uang-keluar-modal-backdrop{padding:10px !important}
+  body.jadwal-uang-keluar-modal-active #page-keluar{
+    width:calc(100vw - 20px) !important;
+    max-height:calc(100dvh - 20px) !important;
+    padding:14px 14px 0 !important;
+    border-radius:20px !important;
+  }
+  body.jadwal-uang-keluar-modal-active #page-keluar > h2{
+    top:-14px !important;
+    margin:-14px -14px 14px !important;
+    padding:14px 52px 11px 14px !important;
+    min-height:62px !important;
+    border-radius:20px 20px 0 0 !important;
+  }
+  #jadwal-uang-keluar-modal-close{
+    top:7px !important;
+    right:7px !important;
+    width:38px !important;
+    height:38px !important;
+  }
+  body.jadwal-uang-keluar-modal-active #page-keluar > form{
+    padding-bottom:78px !important;
+  }
+  body.jadwal-uang-keluar-modal-active #page-keluar > form > .flex.justify-end{
+    margin:14px -14px -1px !important;
+    padding:10px 14px 12px !important;
+  }
+}
+</style>
+
+<script id="uang-keluar-popup-same-as-masuk-v1-script">
+(function(){
+  'use strict';
+  let modalOpen=false;
+
+  function getPage(){
+    return document.getElementById('page-keluar');
+  }
+
+  function ensureCloseButton(page){
+    if(!page || document.getElementById('jadwal-uang-keluar-modal-close')) return;
+    const btn=document.createElement('button');
+    btn.type='button';
+    btn.id='jadwal-uang-keluar-modal-close';
+    btn.setAttribute('aria-label','Tutup Uang Keluar');
+    btn.textContent='✕';
+    btn.addEventListener('click',function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      closeModal();
+    });
+    const header=page.querySelector(':scope > h2');
+    if(header) header.appendChild(btn);
+    else page.insertBefore(btn,page.firstChild);
+  }
+
+  function openModal(){
+    const page=getPage();
+    if(!page) return;
+
+    let backdrop=document.getElementById('jadwal-uang-keluar-modal-backdrop');
+    if(!backdrop){
+      backdrop=document.createElement('div');
+      backdrop.id='jadwal-uang-keluar-modal-backdrop';
+      backdrop.setAttribute('aria-hidden','false');
+      document.body.appendChild(backdrop);
+      backdrop.addEventListener('pointerdown',function(e){
+        if(e.target===backdrop) closeModal();
+      });
+    }
+
+    if(!page.__uangKeluarModalOriginalParent){
+      page.__uangKeluarModalOriginalParent=page.parentNode;
+      page.__uangKeluarModalOriginalNext=page.nextSibling;
+    }
+
+    /* Pindahkan node form yang sama ke body agar tidak terjebak stacking context. */
+    if(page.parentNode!==document.body){
+      document.body.appendChild(page);
+    }
+
+    ensureCloseButton(page);
+
+    document.body.classList.add('jadwal-uang-keluar-modal-active');
+    document.body.classList.add('sub-menu-active');
+
+    page.classList.remove('hidden');
+    page.classList.add('jadwal-uang-keluar-modal-page');
+    page.style.display='block';
+    page.style.visibility='visible';
+    page.style.opacity='1';
+
+    modalOpen=true;
+
+    /* Jalankan fungsi existing yang memang dipanggil saat membuka Uang Keluar. */
+    if(typeof window.cekSaldoSumberCash==='function'){
+      try{ window.cekSaldoSumberCash(); }catch(e){ console.warn(e); }
+    }
+
+    requestAnimationFrame(function(){
+      if(!modalOpen) return;
+      page.scrollTop=0;
+    });
+  }
+
+  function closeModal(){
+    const page=getPage();
+    const backdrop=document.getElementById('jadwal-uang-keluar-modal-backdrop');
+
+    modalOpen=false;
+    document.body.classList.remove('jadwal-uang-keluar-modal-active');
+
+    if(page){
+      page.classList.remove('jadwal-uang-keluar-modal-page');
+      page.style.display='';
+      page.style.visibility='';
+      page.style.opacity='';
+
+      const parent=page.__uangKeluarModalOriginalParent;
+      const next=page.__uangKeluarModalOriginalNext;
+
+      if(parent){
+        if(next && next.parentNode===parent) parent.insertBefore(page,next);
+        else parent.appendChild(page);
+      }
+
+      page.__uangKeluarModalOriginalParent=null;
+      page.__uangKeluarModalOriginalNext=null;
+      page.classList.add('hidden');
+    }
+
+    if(backdrop) backdrop.remove();
+
+    if(typeof window.showPage==='function'){
+      window.showPage('jadwal');
+    }
+  }
+
+  window.__openJadwalUangKeluarModal=openModal;
+  window.__closeJadwalUangKeluarModal=closeModal;
+
+  function wrapQuick(){
+    if(typeof window.quickOpenPage!=='function') return false;
+    if(window.quickOpenPage.__uangKeluarModalWrapped) return true;
+
+    const original=window.quickOpenPage;
+    const wrapped=function(id){
+      if(id==='keluar'){
+        /* Modal dibuka lebih dulu sehingga tidak ada frame halaman normal. */
+        openModal();
+        return;
+      }
+      return original.apply(this,arguments);
+    };
+
+    wrapped.__uangKeluarModalWrapped=true;
+    wrapped.__original=original;
+    window.quickOpenPage=wrapped;
+    return true;
+  }
+
+  if(!wrapQuick()){
+    let tries=0;
+    const timer=setInterval(function(){
+      if(wrapQuick() || ++tries>100) clearInterval(timer);
+    },100);
+  }
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape' && modalOpen){
+      closeModal();
+    }
+  },true);
+
+})();
+</script>
+
+
+<style id="uang-keluar-popup-match-uang-masuk-final-v2">
+/* FINAL: UANG KELUAR dibuat benar-benar mengikuti shell UANG MASUK.
+   Wrapper, posisi, header, scroll area, dan footer dibuat satu sistem. */
+#jadwal-uang-keluar-modal-backdrop{
+  position:fixed !important;
+  inset:0 !important;
+  z-index:2147483000 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:18px !important;
+  box-sizing:border-box !important;
+  background:rgba(15,23,42,.42) !important;
+  backdrop-filter:blur(7px) !important;
+  -webkit-backdrop-filter:blur(7px) !important;
+}
+body.jadwal-uang-keluar-modal-active{
+  overflow:hidden !important;
+}
+body.jadwal-uang-keluar-modal-active #page-keluar{
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  position:fixed !important;
+  left:50% !important;
+  top:50% !important;
+  right:auto !important;
+  bottom:auto !important;
+  inset:auto auto auto 50% !important;
+  width:min(94vw,560px) !important;
+  max-width:560px !important;
+  max-height:min(88vh,760px) !important;
+  height:auto !important;
+  margin:0 !important;
+  padding:16px 18px 18px !important;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  overscroll-behavior:contain !important;
+  scrollbar-width:none !important;
+  -ms-overflow-style:none !important;
+  transform:translate(-50%,-50%) !important;
+  z-index:2147483001 !important;
+  box-sizing:border-box !important;
+  border-radius:24px !important;
+  background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(239,246,255,.84)) !important;
+  border:1px solid rgba(255,255,255,.86) !important;
+  box-shadow:0 28px 80px rgba(15,23,42,.30),inset 0 1px 0 rgba(255,255,255,.95) !important;
+  backdrop-filter:blur(24px) saturate(145%) !important;
+  -webkit-backdrop-filter:blur(24px) saturate(145%) !important;
+  color:#172033 !important;
+  animation:jadwalUangKeluarMatchIn .18s ease-out !important;
+}
+#jadwal-uang-keluar-modal-backdrop #page-keluar::-webkit-scrollbar{
+  display:none !important;
+  width:0 !important;
+  height:0 !important;
+}
+
+/* Header sama prinsipnya dengan Uang Masuk: pembungkus menutup penuh bagian atas,
+   sehingga isi form tidak pernah terlihat menembus dari atas ketika scroll. */
+body.jadwal-uang-keluar-modal-active #page-keluar > h2{
+  position:sticky !important;
+  top:0 !important;
+  z-index:120 !important;
+  width:100% !important;
+  margin:0 0 14px !important;
+  padding:14px 54px 12px !important;
+  min-height:52px !important;
+  box-sizing:border-box !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  background:linear-gradient(180deg,rgba(255,255,255,.995),rgba(247,250,255,.985)) !important;
+  border-bottom:1px solid rgba(148,163,184,.20) !important;
+  border-radius:18px 18px 0 0 !important;
+  box-shadow:0 6px 16px rgba(15,23,42,.06) !important;
+  isolation:isolate !important;
+  color:#172033 !important;
+}
+body.jadwal-uang-keluar-modal-active #page-keluar > h2::after{
+  content:"" !important;
+  position:absolute !important;
+  left:0 !important;
+  bottom:-1px !important;
+  width:72px !important;
+  height:3px !important;
+  background:linear-gradient(90deg,#f59e0b,#fbbf24) !important;
+  border-radius:3px !important;
+  pointer-events:none !important;
+}
+#jadwal-uang-keluar-modal-close{
+  position:absolute !important;
+  top:10px !important;
+  right:10px !important;
+  z-index:140 !important;
+  float:none !important;
+  margin:0 !important;
+  width:40px !important;
+  height:40px !important;
+  border:1px solid rgba(148,163,184,.25) !important;
+  border-radius:13px !important;
+  background:rgba(255,255,255,.82) !important;
+  color:#334155 !important;
+  font-size:18px !important;
+  line-height:1 !important;
+  font-weight:950 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  box-shadow:0 5px 14px rgba(15,23,42,.10) !important;
+  cursor:pointer !important;
+  touch-action:manipulation !important;
+}
+#jadwal-uang-keluar-modal-close:active{transform:scale(.94) !important}
+
+/* Footer dibuat sebagai pembungkus yang menyatu dengan shell, seperti Uang Masuk. */
+body.jadwal-uang-keluar-modal-active #page-keluar > form{
+  padding-bottom:82px !important;
+}
+body.jadwal-uang-keluar-modal-active #page-keluar > form > .flex.justify-end{
+  position:sticky !important;
+  bottom:-18px !important;
+  z-index:125 !important;
+  display:flex !important;
+  align-items:stretch !important;
+  justify-content:center !important;
+  gap:10px !important;
+  margin:18px -18px -18px !important;
+  padding:12px 18px 14px !important;
+  background:linear-gradient(180deg,rgba(248,251,255,.90),rgba(255,255,255,.98)) !important;
+  border-top:1px solid rgba(148,163,184,.22) !important;
+  box-shadow:0 -8px 20px rgba(15,23,42,.07) !important;
+  backdrop-filter:blur(18px) saturate(135%) !important;
+  -webkit-backdrop-filter:blur(18px) saturate(135%) !important;
+}
+body.jadwal-uang-keluar-modal-active #page-keluar > form > .flex.justify-end button[type="submit"]{
+  width:100% !important;
+  min-height:46px !important;
+  border-radius:12px !important;
+  font-weight:900 !important;
+  font-size:13px !important;
+  line-height:1.15 !important;
+  background:#16a34a !important;
+  color:#fff !important;
+  border:1px solid #22c55e !important;
+  box-shadow:0 7px 16px rgba(22,163,74,.18) !important;
+  touch-action:manipulation !important;
+}
+@keyframes jadwalUangKeluarMatchIn{
+  from{opacity:0;transform:translate(-50%,-47%) scale(.975)}
+  to{opacity:1;transform:translate(-50%,-50%) scale(1)}
+}
+@media(max-width:640px){
+  #jadwal-uang-keluar-modal-backdrop{padding:10px !important}
+  body.jadwal-uang-keluar-modal-active #page-keluar{
+    left:50% !important;
+    top:50% !important;
+    width:calc(100vw - 20px) !important;
+    max-width:none !important;
+    max-height:calc(100dvh - 20px) !important;
+    padding:14px 14px 16px !important;
+    border-radius:20px !important;
+  }
+  body.jadwal-uang-keluar-modal-active #page-keluar > h2{
+    top:0 !important;
+    margin:0 0 12px !important;
+    padding:13px 48px 11px !important;
+    min-height:48px !important;
+    border-radius:16px 16px 0 0 !important;
+  }
+  #jadwal-uang-keluar-modal-close{
+    top:7px !important;
+    right:7px !important;
+    width:38px !important;
+    height:38px !important;
+  }
+  body.jadwal-uang-keluar-modal-active #page-keluar > form{
+    padding-bottom:78px !important;
+  }
+  body.jadwal-uang-keluar-modal-active #page-keluar > form > .flex.justify-end{
+    bottom:-16px !important;
+    gap:7px !important;
+    margin:14px -14px -16px !important;
+    padding:10px 12px 12px !important;
+  }
+  body.jadwal-uang-keluar-modal-active #page-keluar > form > .flex.justify-end button[type="submit"]{
+    min-height:44px !important;
+    font-size:12px !important;
+    border-radius:11px !important;
+  }
+}
+</style>
+
+
+<style id="uang-keluar-popup-shell-hard-fix-v3">
+/* HARD FIX V3: shell terpisah agar UANG KELUAR tidak pernah mengikuti layout halaman asal. */
+#jadwal-uang-keluar-modal-backdrop{
+  position:fixed !important; inset:0 !important; z-index:2147483000 !important;
+  display:flex !important; align-items:center !important; justify-content:center !important;
+  padding:18px !important; box-sizing:border-box !important;
+  background:rgba(15,23,42,.42) !important;
+  backdrop-filter:blur(7px) !important; -webkit-backdrop-filter:blur(7px) !important;
+}
+#jadwal-uang-keluar-modal-shell{
+  position:relative !important;
+  width:min(94vw,560px) !important;
+  height:min(88vh,760px) !important;
+  max-width:560px !important;
+  max-height:760px !important;
+  min-height:240px !important;
+  margin:0 !important;
+  flex:0 0 auto !important;
+  box-sizing:border-box !important;
+  overflow:hidden !important;
+  border-radius:24px !important;
+  background:linear-gradient(145deg,rgba(255,255,255,.97),rgba(239,246,255,.90)) !important;
+  border:1px solid rgba(255,255,255,.90) !important;
+  box-shadow:0 28px 80px rgba(15,23,42,.30),inset 0 1px 0 rgba(255,255,255,.95) !important;
+  backdrop-filter:blur(24px) saturate(145%) !important;
+  -webkit-backdrop-filter:blur(24px) saturate(145%) !important;
+  z-index:2147483001 !important;
+  animation:uangKeluarShellIn .18s ease-out !important;
+}
+body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar{
+  position:relative !important;
+  inset:auto !important;
+  left:auto !important; top:auto !important; right:auto !important; bottom:auto !important;
+  transform:none !important;
+  width:100% !important; max-width:none !important;
+  height:100% !important; max-height:none !important;
+  min-height:0 !important;
+  margin:0 !important;
+  padding:16px 18px 18px !important;
+  box-sizing:border-box !important;
+  display:block !important; visibility:visible !important; opacity:1 !important;
+  overflow-y:auto !important; overflow-x:hidden !important;
+  scrollbar-width:none !important; -ms-overflow-style:none !important;
+  background:transparent !important; border:0 !important; border-radius:0 !important;
+  box-shadow:none !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important;
+  color:#172033 !important;
+}
+#jadwal-uang-keluar-modal-shell #page-keluar::-webkit-scrollbar{display:none !important;width:0 !important;height:0 !important}
+body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar > h2{
+  position:sticky !important; top:-16px !important; z-index:120 !important;
+  width:calc(100% + 36px) !important; margin:-16px -18px 14px !important;
+  padding:14px 54px 12px !important; min-height:52px !important; box-sizing:border-box !important;
+  display:flex !important; align-items:center !important; justify-content:center !important;
+  text-align:center !important; background:linear-gradient(180deg,rgba(255,255,255,.995),rgba(247,250,255,.985)) !important;
+  border-bottom:1px solid rgba(148,163,184,.20) !important; border-radius:24px 24px 0 0 !important;
+  box-shadow:0 6px 16px rgba(15,23,42,.06) !important; isolation:isolate !important;
+  color:#172033 !important; letter-spacing:.01em !important;
+}
+body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar > h2::after{
+  content:"" !important; position:absolute !important; left:0 !important; bottom:-1px !important;
+  width:72px !important; height:3px !important; background:linear-gradient(90deg,#f59e0b,#fbbf24) !important;
+  border-radius:3px !important; pointer-events:none !important;
+}
+#jadwal-uang-keluar-modal-shell #jadwal-uang-keluar-modal-close{
+  position:absolute !important; top:10px !important; right:10px !important; z-index:140 !important;
+  width:40px !important; height:40px !important; margin:0 !important; float:none !important;
+  border:1px solid rgba(148,163,184,.25) !important; border-radius:13px !important;
+  background:rgba(255,255,255,.82) !important; color:#334155 !important;
+  font-size:18px !important; line-height:1 !important; font-weight:950 !important;
+  display:flex !important; align-items:center !important; justify-content:center !important;
+  box-shadow:0 5px 14px rgba(15,23,42,.10) !important; cursor:pointer !important; touch-action:manipulation !important;
+}
+body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar > form{padding-bottom:82px !important}
+body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar > form > .flex.justify-end{
+  position:sticky !important; bottom:-18px !important; z-index:125 !important;
+  display:flex !important; align-items:stretch !important; justify-content:center !important; gap:10px !important;
+  margin:18px -18px -18px !important; padding:12px 18px 14px !important;
+  background:linear-gradient(180deg,rgba(248,251,255,.90),rgba(255,255,255,.98)) !important;
+  border-top:1px solid rgba(148,163,184,.22) !important; box-shadow:0 -8px 20px rgba(15,23,42,.07) !important;
+  backdrop-filter:blur(18px) saturate(135%) !important; -webkit-backdrop-filter:blur(18px) saturate(135%) !important;
+}
+body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar > form > .flex.justify-end button[type="submit"]{
+  width:100% !important; min-height:46px !important; border-radius:12px !important; font-weight:900 !important;
+  font-size:13px !important; line-height:1.15 !important; background:#16a34a !important; color:#fff !important;
+  border:1px solid #22c55e !important; box-shadow:0 7px 16px rgba(22,163,74,.18) !important; touch-action:manipulation !important;
+}
+@keyframes uangKeluarShellIn{from{opacity:0;transform:scale(.975)}to{opacity:1;transform:scale(1)}}
+@media(max-width:640px){
+  #jadwal-uang-keluar-modal-backdrop{padding:10px !important}
+  #jadwal-uang-keluar-modal-shell{width:calc(100vw - 20px) !important; max-width:none !important;height:calc(100dvh - 20px) !important;max-height:none !important;border-radius:20px !important}
+  body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar{padding:14px 14px 16px !important}
+  body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar > h2{top:-14px !important;width:calc(100% + 28px) !important;margin:-14px -14px 12px !important;padding:13px 48px 11px !important;min-height:48px !important;border-radius:20px 20px 0 0 !important}
+  #jadwal-uang-keluar-modal-shell #jadwal-uang-keluar-modal-close{top:7px !important;right:7px !important;width:38px !important;height:38px !important}
+  body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar > form{padding-bottom:78px !important}
+  body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar > form > .flex.justify-end{bottom:-16px !important;gap:7px !important;margin:14px -14px -16px !important;padding:10px 12px 12px !important}
+}
+</style>
+<script id="uang-keluar-popup-shell-hard-fix-v3-script">
+(function(){
+  'use strict';
+  let modalOpen=false;
+  function page(){return document.getElementById('page-keluar')}
+  function closeBtn(p){
+    if(!p || document.getElementById('jadwal-uang-keluar-modal-close')) return;
+    const b=document.createElement('button'); b.type='button'; b.id='jadwal-uang-keluar-modal-close'; b.textContent='✕'; b.setAttribute('aria-label','Tutup Uang Keluar');
+    b.onclick=function(e){e.preventDefault();e.stopPropagation();closeModal()};
+    const h=p.querySelector(':scope > h2'); if(h) h.appendChild(b); else p.insertBefore(b,p.firstChild);
+  }
+  function openModal(){
+    const p=page(); if(!p) return;
+    let bd=document.getElementById('jadwal-uang-keluar-modal-backdrop');
+    if(!bd){bd=document.createElement('div');bd.id='jadwal-uang-keluar-modal-backdrop';document.body.appendChild(bd);bd.addEventListener('pointerdown',e=>{if(e.target===bd)closeModal()})}
+    let sh=document.getElementById('jadwal-uang-keluar-modal-shell');
+    if(!sh){sh=document.createElement('div');sh.id='jadwal-uang-keluar-modal-shell';bd.appendChild(sh)}
+    if(!p.__ukOrigParent){p.__ukOrigParent=p.parentNode;p.__ukOrigNext=p.nextSibling}
+    if(p.parentNode!==sh) sh.appendChild(p);
+    closeBtn(p);
+    document.body.classList.add('jadwal-uang-keluar-modal-active');
+    p.classList.remove('hidden');p.style.display='block';p.style.visibility='visible';p.style.opacity='1';
+    modalOpen=true;
+    if(typeof window.cekSaldoSumberCash==='function'){try{window.cekSaldoSumberCash()}catch(e){}}
+    requestAnimationFrame(()=>{if(modalOpen)p.scrollTop=0})
+  }
+  function closeModal(){
+    const p=page(),bd=document.getElementById('jadwal-uang-keluar-modal-backdrop'); modalOpen=false;
+    document.body.classList.remove('jadwal-uang-keluar-modal-active');
+    if(p){const par=p.__ukOrigParent,nxt=p.__ukOrigNext;p.style.display='';p.style.visibility='';p.style.opacity='';if(par){if(nxt&&nxt.parentNode===par)par.insertBefore(p,nxt);else par.appendChild(p)}p.__ukOrigParent=null;p.__ukOrigNext=null;p.classList.add('hidden')}
+    if(bd)bd.remove(); if(typeof window.showPage==='function')window.showPage('jadwal');
+  }
+  window.__openJadwalUangKeluarModal=openModal;window.__closeJadwalUangKeluarModal=closeModal;
+  function wrap(){
+    if(typeof window.quickOpenPage!=='function')return false;
+    if(window.quickOpenPage.__ukShellWrapped)return true;
+    const orig=window.quickOpenPage;
+    const w=function(id){if(id==='keluar'){openModal();return}return orig.apply(this,arguments)};
+    w.__ukShellWrapped=true;w.__original=orig;window.quickOpenPage=w;return true;
+  }
+  if(!wrap()){let n=0,t=setInterval(()=>{if(wrap()||++n>100)clearInterval(t)},100)}
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modalOpen)closeModal()},true);
+})();
+</script>
+<style id="uang-keluar-popup-footer-fit-final">
+/* FINAL: shell Uang Keluar mengikuti tinggi isi, tidak menyisakan ruang kosong di bawah footer. */
+#jadwal-uang-keluar-modal-shell{
+  height:auto !important;
+  max-height:calc(100dvh - 36px) !important;
+  min-height:0 !important;
+  overflow:hidden !important;
+}
+body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar{
+  height:auto !important;
+  max-height:calc(100dvh - 36px) !important;
+  min-height:0 !important;
+  overflow-y:auto !important;
+}
+@media(max-width:640px){
+  #jadwal-uang-keluar-modal-shell{
+    height:auto !important;
+    max-height:calc(100dvh - 20px) !important;
+  }
+  body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar{
+    height:auto !important;
+    max-height:calc(100dvh - 20px) !important;
+  }
+}
+</style>
+
+<style id="uang-keluar-popup-remove-bottom-gap-final">
+/* FINAL: footer menjadi bagian paling bawah popup tanpa ruang kosong setelahnya. */
+#jadwal-uang-keluar-modal-shell{
+  height:auto !important;
+  min-height:0 !important;
+  max-height:calc(100dvh - 36px) !important;
+}
+body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar{
+  height:auto !important;
+  min-height:0 !important;
+  max-height:calc(100dvh - 36px) !important;
+  overflow-y:auto !important;
+}
+body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar > form{
+  height:auto !important;
+  min-height:0 !important;
+  padding-bottom:0 !important;
+}
+body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar > form > .flex.justify-end{
+  margin-bottom:0 !important;
+}
+@media(max-width:640px){
+  #jadwal-uang-keluar-modal-shell{
+    max-height:calc(100dvh - 20px) !important;
+  }
+  body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar{
+    max-height:calc(100dvh - 20px) !important;
+  }
+  body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar > form{
+    padding-bottom:0 !important;
+  }
+}
+</style>
