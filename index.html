@@ -13011,7 +13011,7 @@ kaosKakiTerjual: jumlahKaosKaki,
                     <div class="bg-gradient-to-r from-blue-950 to-blue-700 px-5 py-4 text-white">
                         <div class="flex items-center justify-between gap-3">
                             <div><h3 class="font-black text-lg">Edit Uang Lapangan</h3><p class="text-xs text-blue-100">Perbarui data pemasukan tanpa mengubah fungsi lainnya.</p></div>
-                            <button type="button" onclick="document.getElementById('modal-edit-pemasukan')?.remove()" class="text-white/80 hover:text-white text-xl font-black">×</button>
+                            <button type="button" onclick="document.getElementById('modal-edit-pemasukan')?.remove()" class="edit-pemasukan-close" aria-label="Tutup" title="Tutup">×</button>
                         </div>
                     </div>
                     <div class="p-5 space-y-3">
@@ -13033,6 +13033,12 @@ kaosKakiTerjual: jumlahKaosKaki,
                     </div>
                 </div>`;
             document.body.appendChild(modal);
+            modal.style.setProperty('z-index', '2147483647', 'important');
+            modal.style.setProperty('position', 'fixed', 'important');
+            modal.style.setProperty('inset', '0', 'important');
+            modal.setAttribute('role', 'dialog');
+            modal.setAttribute('aria-modal', 'true');
+            if (modal.parentElement === document.body) document.body.appendChild(modal);
             toggleEditFreePaymentInput(1);
             toggleEditFreePaymentInput(2);
         };
@@ -22277,11 +22283,17 @@ window.refreshOpsiMemberTanpaJadwal = refreshOpsiMemberTanpaJadwal;
 #modal-edit-pemasukan {
     position: fixed !important;
     inset: 0 !important;
-    z-index: 2147483646 !important;
+    z-index: 2147483647 !important;
+    isolation: isolate !important;
+}
+body > #modal-edit-pemasukan {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 2147483647 !important;
 }
 #modal-edit-pemasukan > div {
     position: relative !important;
-    z-index: 2 !important;
+    z-index: 2147483647 !important;
 }
 #modern-dialog-root {
     position: fixed !important;
@@ -22297,6 +22309,16 @@ window.refreshOpsiMemberTanpaJadwal = refreshOpsiMemberTanpaJadwal;
     position: relative !important;
     z-index: 2 !important;
 }
+    #modal-edit-pemasukan .edit-pemasukan-close {
+        position: absolute !important; top: 10px !important; right: 10px !important; z-index: 2147483647 !important;
+        width: 38px !important; height: 38px !important; min-width: 38px !important; min-height: 38px !important;
+        display: inline-flex !important; align-items: center !important; justify-content: center !important;
+        padding: 0 !important; margin: 0 !important; border: 1px solid rgba(255,255,255,.28) !important;
+        border-radius: 10px !important; background: rgba(255,255,255,.12) !important; color: #fff !important;
+        font-size: 25px !important; line-height: 1 !important; font-weight: 900 !important; cursor: pointer !important;
+    }
+    #modal-edit-pemasukan .edit-pemasukan-close:hover { background: rgba(255,255,255,.24) !important; border-color: rgba(255,255,255,.55) !important; }
+    @media (max-width: 640px) { #modal-edit-pemasukan .edit-pemasukan-close { top: 8px !important; right: 8px !important; width: 36px !important; height: 36px !important; min-width: 36px !important; min-height: 36px !important; font-size: 24px !important; } }
 </style>
 
 <style id="uang-masuk-save-button-final-hit-fix">
