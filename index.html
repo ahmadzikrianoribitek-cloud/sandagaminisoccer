@@ -8641,6 +8641,250 @@ body.minuman-edit-modal-open{overflow:hidden !important}
   }
 }
 </style>
+<style id="kelola-member-clean-redesign-v2">
+/* =========================================================
+   KELOLA MEMBER — CLEAN REDESIGN
+   Flat, clean UI. Tidak ada glass bertumpuk / backdrop blur.
+   Visual only: tidak mengubah JS, Firebase, ID, atau event.
+   ========================================================= */
+#page-atur-member.sub-menu-modern{
+  background:#f8fafc !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:18px !important;
+  box-shadow:0 8px 28px rgba(15,23,42,.07) !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  padding:20px !important;
+  color:#0f172a !important;
+}
+#page-atur-member.sub-menu-modern::before{display:none !important;}
+
+/* Header */
+#page-atur-member > div:first-child{
+  margin:0 0 18px !important;
+  padding:0 0 14px !important;
+  border-bottom:1px solid #e2e8f0 !important;
+}
+#page-atur-member > div:first-child h2{
+  position:relative !important;
+  color:#0f172a !important;
+  font-size:1.05rem !important;
+  font-weight:900 !important;
+  letter-spacing:.02em !important;
+  padding:0 !important;
+  margin:0 !important;
+}
+#page-atur-member > div:first-child h2::after{
+  display:none !important;
+}
+
+/* Form tambah jadwal — satu panel bersih */
+#page-atur-member > form#form-member{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:12px !important;
+  padding:16px !important;
+  margin:0 0 22px !important;
+  background:#ffffff !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:14px !important;
+  box-shadow:0 3px 12px rgba(15,23,42,.05) !important;
+}
+#page-atur-member > form#form-member > h3{
+  grid-column:1/-1 !important;
+  color:#1e293b !important;
+  font-size:.86rem !important;
+  margin:0 0 2px !important;
+  padding:0 !important;
+}
+#page-atur-member > form#form-member > input,
+#page-atur-member > form#form-member > select,
+#page-atur-member > form#form-member > div{
+  background:#f8fafc !important;
+  border:1px solid #cbd5e1 !important;
+  border-radius:10px !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+#page-atur-member > form#form-member > input,
+#page-atur-member > form#form-member > select{
+  min-height:44px !important;
+  padding:10px 12px !important;
+}
+#page-atur-member > form#form-member > div{
+  grid-column:1/-1 !important;
+  padding:10px 12px !important;
+}
+#page-atur-member > form#form-member > div label{
+  color:#475569 !important;
+  font-size:11px !important;
+  font-weight:800 !important;
+}
+#page-atur-member > form#form-member .glass-input{
+  background:#f8fafc !important;
+  border:1px solid #cbd5e1 !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+#page-atur-member > form#form-member .glass-input:focus{
+  background:#fff !important;
+  border-color:#6366f1 !important;
+  box-shadow:0 0 0 3px rgba(99,102,241,.12) !important;
+  outline:none !important;
+}
+#page-atur-member > form#form-member > button{
+  grid-column:1/-1 !important;
+  justify-self:start !important;
+  width:170px !important;
+  min-height:42px !important;
+  margin:2px 0 0 !important;
+  border-radius:10px !important;
+  background:#4f46e5 !important;
+  box-shadow:none !important;
+  border:0 !important;
+}
+
+/* Panel member tanpa jadwal tetap ditampilkan: fungsi dipertahankan, tampilan dibuat clean */
+#page-atur-member #member-tanpa-jadwal-panel{
+  display:block !important;
+}
+
+/* Judul daftar */
+#page-atur-member > h3{
+  margin:0 0 10px !important;
+  color:#1e293b !important;
+  font-size:.88rem !important;
+  font-weight:900 !important;
+  padding:0 !important;
+}
+
+/* Grid member */
+#page-atur-member .member-cards-grid{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:12px !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  padding:0 !important;
+}
+
+/* Card member — satu permukaan putih, tanpa kaca */
+#page-atur-member .member-card{
+  min-width:0 !important;
+  padding:14px !important;
+  background:#ffffff !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:14px !important;
+  box-shadow:0 3px 12px rgba(15,23,42,.05) !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+#page-atur-member .member-card-main{
+  display:grid !important;
+  grid-template-columns:minmax(145px,38%) minmax(0,1fr) !important;
+  gap:12px !important;
+  align-items:start !important;
+}
+#page-atur-member .member-team-identity{
+  min-width:0 !important;
+}
+#page-atur-member .member-team-logo-indicator{
+  background:#f8fafc !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:10px !important;
+}
+#page-atur-member .member-team-copy{
+  min-width:0 !important;
+}
+#page-atur-member .member-team-name{
+  color:#0f172a !important;
+  font-weight:900 !important;
+}
+#page-atur-member .member-team-count{
+  color:#64748b !important;
+}
+
+/* Jadwal dalam card: flat, chip sederhana */
+#page-atur-member .member-schedule-box,
+#page-atur-member .member-meta-item{
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+#page-atur-member .member-schedule-box{padding:0 !important}
+#page-atur-member .member-meta-item{padding:7px 4px !important}
+#page-atur-member .member-schedule-chip{
+  background:#eef2ff !important;
+  border:1px solid #c7d2fe !important;
+  color:#3730a3 !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+#page-atur-member .member-schedule-chip.stopped{
+  background:#fff7ed !important;
+  border-color:#fed7aa !important;
+  color:#c2410c !important;
+}
+#page-atur-member .member-day-label{
+  color:#475569 !important;
+  font-weight:800 !important;
+}
+#page-atur-member .member-meta-item span{
+  color:#64748b !important;
+}
+#page-atur-member .member-meta-item strong{
+  color:#1e293b !important;
+}
+
+/* Actions */
+#page-atur-member .member-actions{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  gap:7px !important;
+  margin-top:12px !important;
+  padding-top:12px !important;
+  border-top:1px solid #e2e8f0 !important;
+}
+#page-atur-member .member-actions button{
+  border:0 !important;
+  border-radius:8px !important;
+  box-shadow:none !important;
+  min-height:34px !important;
+  padding:7px 10px !important;
+  font-size:11px !important;
+  font-weight:800 !important;
+}
+
+@media (max-width: 800px){
+  #page-atur-member.sub-menu-modern{padding:14px !important;border-radius:14px !important}
+  #page-atur-member > form#form-member{
+    grid-template-columns:1fr !important;
+    padding:13px !important;
+  }
+  #page-atur-member > form#form-member > h3,
+  #page-atur-member > form#form-member > input,
+  #page-atur-member > form#form-member > select,
+  #page-atur-member > form#form-member > div,
+  #page-atur-member > form#form-member > button{
+    grid-column:1 !important;
+  }
+  #page-atur-member > form#form-member > button{
+    width:100% !important;
+  }
+  #page-atur-member .member-cards-grid{
+    grid-template-columns:1fr !important;
+  }
+  #page-atur-member .member-card-main{
+    grid-template-columns:1fr !important;
+  }
+}
+</style>
 </head>
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium">
 <!-- Header -->
@@ -12514,7 +12758,7 @@ kaosKakiTerjual: jumlahKaosKaki,
             const jamLama = (tglParts[1] || '07:00').substring(0, 5);
 
             const formHtml = `
-                <div id="modal-edit-booking" class="fixed inset-0 z-[100] flex items-center justify-center p-3 bg-slate-900/70 backdrop-blur-sm">
+                <div id="modal-edit-booking" class="fixed inset-0 z-[2147483647] flex items-center justify-center p-3 bg-slate-900/70 backdrop-blur-sm">
                     <div class="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl border border-white/40 bg-white/95 shadow-2xl p-4 sm:p-6 text-slate-900">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="font-black text-base sm:text-lg text-indigo-950">✏️ EDIT DATA BOOKING</h3>
@@ -12546,10 +12790,15 @@ kaosKakiTerjual: jumlahKaosKaki,
 
                             <div>
                                 <label class="block text-xs font-black mb-1">Status Tim</label>
-                                <select id="edit-b-status" class="w-full p-2.5 rounded-xl border border-slate-300 bg-white font-bold text-sm">
-                                    <option value="Non-Member" ${item.status === 'Non-Member' ? 'selected' : ''}>Non-Member</option>
-                                    <option value="Member" ${item.status === 'Member' ? 'selected' : ''}>Member</option>
-                                </select>
+                                <input id="edit-b-status" type="hidden" value="${item.status === 'Member' ? 'Member' : 'Non-Member'}">
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button type="button" id="edit-b-status-member" onclick="setEditBookingStatus('Member')" class="p-2.5 rounded-xl border font-black text-sm transition ${item.status === 'Member' ? 'bg-blue-600 text-white border-blue-600 shadow' : 'bg-white text-slate-600 border-slate-300 hover:bg-blue-50'}">
+                                        👤 Member
+                                    </button>
+                                    <button type="button" id="edit-b-status-nonmember" onclick="setEditBookingStatus('Non-Member')" class="p-2.5 rounded-xl border font-black text-sm transition ${item.status === 'Non-Member' ? 'bg-rose-600 text-white border-rose-600 shadow' : 'bg-white text-slate-600 border-slate-300 hover:bg-rose-50'}">
+                                        👥 Non Member
+                                    </button>
+                                </div>
                             </div>
 
                             <div>
@@ -12581,6 +12830,26 @@ kaosKakiTerjual: jumlahKaosKaki,
 
             document.body.insertAdjacentHTML('beforeend', formHtml);
         }
+
+        window.setEditBookingStatus = (status) => {
+            const value = status === 'Member' ? 'Member' : 'Non-Member';
+            const input = document.getElementById('edit-b-status');
+            if(input) input.value = value;
+
+            const memberBtn = document.getElementById('edit-b-status-member');
+            const nonMemberBtn = document.getElementById('edit-b-status-nonmember');
+
+            if(memberBtn) {
+                memberBtn.className = value === 'Member'
+                    ? 'p-2.5 rounded-xl border font-black text-sm transition bg-blue-600 text-white border-blue-600 shadow'
+                    : 'p-2.5 rounded-xl border font-black text-sm transition bg-white text-slate-600 border-slate-300 hover:bg-blue-50';
+            }
+            if(nonMemberBtn) {
+                nonMemberBtn.className = value === 'Non-Member'
+                    ? 'p-2.5 rounded-xl border font-black text-sm transition bg-rose-600 text-white border-rose-600 shadow'
+                    : 'p-2.5 rounded-xl border font-black text-sm transition bg-white text-slate-600 border-slate-300 hover:bg-rose-50';
+            }
+        };
 
         window.tutupEditBooking = () => {
             const modal = document.getElementById('modal-edit-booking');
@@ -22672,6 +22941,508 @@ body.minuman-history-modal-open{overflow:hidden !important}
 })();
 </script>
 
+
+<style id="member-tanpa-jadwal-clean-v2">
+/* Member tanpa jadwal tetap: tampilkan kembali, tetapi tetap flat/clean */
+#page-atur-member #member-tanpa-jadwal-panel{
+  display:block !important;
+  margin:16px 0 18px !important;
+  padding:16px !important;
+  background:#fff !important;
+  border:1px solid #dbe4ea !important;
+  border-radius:14px !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+#page-atur-member .member-tanpa-jadwal-head{
+  margin-bottom:12px !important;
+  padding-bottom:10px !important;
+  border-bottom:1px solid #e7edf2 !important;
+}
+#page-atur-member .member-tanpa-jadwal-title{
+  color:#172033 !important;
+  font-size:14px !important;
+  font-weight:900 !important;
+}
+#page-atur-member .member-tanpa-jadwal-subtitle{
+  color:#64748b !important;
+  font-size:11px !important;
+  font-weight:600 !important;
+}
+#page-atur-member .member-tanpa-jadwal-form{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto !important;
+  gap:10px !important;
+  align-items:end !important;
+}
+#page-atur-member .member-tanpa-jadwal-input{
+  min-height:42px !important;
+  background:#f8fafc !important;
+  border:1px solid #cbd5e1 !important;
+  border-radius:10px !important;
+  box-shadow:none !important;
+}
+#page-atur-member .member-tanpa-jadwal-input:focus{
+  background:#fff !important;
+  border-color:#6366f1 !important;
+  outline:none !important;
+  box-shadow:0 0 0 3px rgba(99,102,241,.10) !important;
+}
+#page-atur-member .member-tanpa-jadwal-actions{
+  display:flex !important;
+  gap:8px !important;
+}
+#page-atur-member .member-tanpa-jadwal-btn{
+  min-height:42px !important;
+  border-radius:10px !important;
+  box-shadow:none !important;
+}
+@media (max-width:700px){
+  #page-atur-member .member-tanpa-jadwal-form{
+    grid-template-columns:1fr !important;
+  }
+  #page-atur-member .member-tanpa-jadwal-actions{
+    width:100% !important;
+  }
+  #page-atur-member .member-tanpa-jadwal-actions .member-tanpa-jadwal-btn{
+    flex:1 !important;
+  }
+}
+</style>
+
+<style id="kelola-member-clean-final-v3">
+/* =========================================================
+   KELOLA MEMBER — CLEAN FLAT REDESIGN v3
+   VISUAL ONLY. ID / EVENT / JS / FIREBASE TIDAK DIUBAH.
+   ========================================================= */
+
+/* Page utama: satu bidang solid, tanpa kaca */
+#page-atur-member.sub-menu-modern,
+#page-atur-member.glass-panel {
+  background:#f8fafc !important;
+  background-image:none !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:18px !important;
+  box-shadow:0 8px 24px rgba(15,23,42,.06) !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  padding:20px !important;
+  color:#172033 !important;
+}
+
+/* Judul */
+#page-atur-member > div:first-child {
+  margin:0 0 18px !important;
+  padding:0 !important;
+}
+#page-atur-member > div:first-child h2 {
+  text-align:left !important;
+  width:auto !important;
+  color:#172033 !important;
+  font-size:18px !important;
+  font-weight:900 !important;
+  letter-spacing:.01em !important;
+  padding:0 !important;
+  margin:0 !important;
+}
+#page-atur-member > div:first-child h2::after {
+  display:none !important;
+}
+
+/* Semua bidang/form internal dibuat flat */
+#page-atur-member #form-member {
+  margin:0 0 18px !important;
+  padding:18px !important;
+  background:#ffffff !important;
+  border:1px solid #dbe3ea !important;
+  border-radius:14px !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+#page-atur-member #form-member h3 {
+  margin:0 0 14px !important;
+  color:#172033 !important;
+  font-size:14px !important;
+  font-weight:900 !important;
+}
+#page-atur-member #form-member .grid {
+  display:grid !important;
+  grid-template-columns:2fr 1.4fr 1fr 1fr !important;
+  gap:10px !important;
+}
+#page-atur-member #form-member .sm\:col-span-3 {
+  grid-column:1 / -1 !important;
+}
+#page-atur-member #form-member label {
+  color:#475569 !important;
+}
+#page-atur-member #form-member p {
+  color:#64748b !important;
+}
+#page-atur-member #form-member input,
+#page-atur-member #form-member select,
+#page-atur-member #form-member .glass-input {
+  width:100% !important;
+  min-height:42px !important;
+  box-sizing:border-box !important;
+  background:#f8fafc !important;
+  color:#172033 !important;
+  border:1px solid #cbd5e1 !important;
+  border-radius:9px !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+#page-atur-member #form-member input:focus,
+#page-atur-member #form-member select:focus {
+  outline:none !important;
+  border-color:#6366f1 !important;
+  box-shadow:0 0 0 3px rgba(99,102,241,.10) !important;
+}
+#page-atur-member #form-member > button[type="submit"] {
+  display:block !important;
+  width:190px !important;
+  min-height:42px !important;
+  margin:14px auto 0 !important;
+  border:0 !important;
+  border-radius:9px !important;
+  background:#4f46e5 !important;
+  box-shadow:none !important;
+  font-size:12px !important;
+}
+
+/* Member tanpa jadwal: tetap ada, tapi sebagai section sederhana */
+#page-atur-member #member-tanpa-jadwal-panel {
+  display:block !important;
+  margin:0 0 20px !important;
+  padding:18px !important;
+  background:#ffffff !important;
+  border:1px solid #dbe3ea !important;
+  border-radius:14px !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+#page-atur-member .member-tanpa-jadwal-head {
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+  margin:0 0 14px !important;
+  padding:0 0 12px !important;
+  border-bottom:1px solid #e5e7eb !important;
+}
+#page-atur-member .member-tanpa-jadwal-title {
+  color:#172033 !important;
+  font-size:14px !important;
+  font-weight:900 !important;
+}
+#page-atur-member .member-tanpa-jadwal-subtitle {
+  margin-top:4px !important;
+  color:#64748b !important;
+  font-size:11px !important;
+  line-height:1.45 !important;
+}
+#page-atur-member .member-tanpa-jadwal-form {
+  display:grid !important;
+  grid-template-columns:1.4fr 1.1fr auto !important;
+  gap:10px !important;
+  align-items:end !important;
+  padding:0 !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+#page-atur-member .member-tanpa-jadwal-label {
+  display:block !important;
+  margin:0 0 5px !important;
+  color:#475569 !important;
+  font-size:10px !important;
+  font-weight:800 !important;
+}
+#page-atur-member .member-tanpa-jadwal-input {
+  width:100% !important;
+  min-height:42px !important;
+  box-sizing:border-box !important;
+  background:#f8fafc !important;
+  color:#172033 !important;
+  border:1px solid #cbd5e1 !important;
+  border-radius:9px !important;
+  box-shadow:none !important;
+}
+#page-atur-member .member-tanpa-jadwal-btn {
+  min-height:42px !important;
+  padding:0 16px !important;
+  border-radius:9px !important;
+  box-shadow:none !important;
+  font-size:11px !important;
+}
+#page-atur-member .member-tanpa-jadwal-btn-primary {
+  background:#334155 !important;
+  border:1px solid #334155 !important;
+  color:#fff !important;
+}
+#page-atur-member .member-tanpa-jadwal-btn-secondary {
+  background:#fff !important;
+  border:1px solid #cbd5e1 !important;
+  color:#475569 !important;
+}
+
+/* List member tanpa jadwal: baris sederhana */
+#page-atur-member .member-tanpa-jadwal-list {
+  margin-top:12px !important;
+  padding:0 !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+#page-atur-member .member-tanpa-jadwal-list .member-card {
+  background:#f8fafc !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:10px !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+
+/* Heading daftar */
+#page-atur-member > h3 {
+  margin:0 0 10px !important;
+  padding:0 !important;
+  color:#172033 !important;
+  font-size:14px !important;
+  font-weight:900 !important;
+}
+
+/* Grid daftar member */
+#page-atur-member .member-cards-grid {
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:10px !important;
+  width:100% !important;
+}
+#page-atur-member .member-card {
+  min-width:0 !important;
+  padding:14px !important;
+  background:#ffffff !important;
+  border:1px solid #dbe3ea !important;
+  border-radius:12px !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+#page-atur-member .member-card-main {
+  display:grid !important;
+  grid-template-columns:155px minmax(0,1fr) !important;
+  gap:12px !important;
+  align-items:center !important;
+}
+#page-atur-member .member-schedule-box {
+  background:#f8fafc !important;
+  border:1px solid #e5e7eb !important;
+  border-radius:9px !important;
+  box-shadow:none !important;
+  padding:9px !important;
+}
+#page-atur-member .member-card-meta {
+  border-top:1px solid #eef2f7 !important;
+}
+#page-atur-member .member-card-actions button {
+  box-shadow:none !important;
+  border-radius:8px !important;
+}
+
+/* Hilangkan efek kaca yang mungkin diwariskan dari class lama */
+#page-atur-member .glass-panel,
+#page-atur-member .glass-input,
+#page-atur-member [class*="glass"] {
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+  #page-atur-member.sub-menu-modern,
+  #page-atur-member.glass-panel {
+    padding:14px !important;
+    border-radius:14px !important;
+  }
+  #page-atur-member #form-member {
+    padding:14px !important;
+  }
+  #page-atur-member #form-member .grid {
+    grid-template-columns:1fr !important;
+  }
+  #page-atur-member #form-member .sm\:col-span-3 {
+    grid-column:auto !important;
+  }
+  #page-atur-member #form-member > button[type="submit"] {
+    width:100% !important;
+    margin-top:12px !important;
+  }
+  #page-atur-member .member-tanpa-jadwal-form {
+    grid-template-columns:1fr !important;
+    align-items:stretch !important;
+  }
+  #page-atur-member .member-tanpa-jadwal-btn {
+    width:100% !important;
+  }
+  #page-atur-member .member-cards-grid {
+    grid-template-columns:1fr !important;
+  }
+  #page-atur-member .member-card-main {
+    grid-template-columns:1fr !important;
+  }
+}
+</style>
+
+
+<style id="kelola-member-title-center-v4">
+/* Kelola Member — kedua section dibuat konsisten */
+#page-atur-member .member-form-title,
+#page-atur-member .member-tanpa-jadwal-title,
+#page-atur-member .member-tanpa-jadwal-header,
+#page-atur-member .member-add-title {
+  text-align:center !important;
+  justify-content:center !important;
+  width:100% !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+}
+#page-atur-member .member-tanpa-jadwal-title,
+#page-atur-member .member-tanpa-jadwal-header h3,
+#page-atur-member .member-tanpa-jadwal-header h4 {
+  text-align:center !important;
+}
+/* Hilangkan ikon yang ikut mendorong judul, bila ada */
+#page-atur-member .member-tanpa-jadwal-header {
+  display:flex !important;
+  align-items:center !important;
+}
+#page-atur-member .member-tanpa-jadwal-header > * {
+  text-align:center !important;
+}
+</style>
+
+<style id="kelola-member-title-center-final">
+/* FINAL: judul kedua section benar-benar sejajar dan rata tengah */
+#page-atur-member .member-tanpa-jadwal-head {
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  width:100% !important;
+  gap:6px !important;
+}
+#page-atur-member .member-tanpa-jadwal-title {
+  width:100% !important;
+  text-align:center !important;
+  justify-content:center !important;
+  font-size:1rem !important;
+  font-weight:900 !important;
+  margin:0 !important;
+}
+#page-atur-member .member-tanpa-jadwal-subtitle {
+  width:100% !important;
+  text-align:center !important;
+  margin:0 !important;
+}
+#page-atur-member #member-tanpa-jadwal-panel {
+  padding:18px !important;
+}
+#page-atur-member > div h3.font-black.text-sm.text-indigo-950 {
+  text-align:center !important;
+  width:100% !important;
+}
+</style>
+
+<style id="kelola-member-exact-fix-v6">
+/* =========================================================
+   KELOLA MEMBER — EXACT FIX
+   Hanya bagian yang diminta: judul + Member Tanpa Jadwal.
+   Form Tambah Jadwal tidak diberi container/kaca baru.
+   ========================================================= */
+
+/* 1. Judul Tambah Jadwal / Status Baru benar-benar rata tengah */
+#page-atur-member > form#form-member > h3,
+#page-atur-member #form-member > h3 {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  display: block !important;
+  text-align: center !important;
+  justify-self: stretch !important;
+  box-sizing: border-box !important;
+  margin: 0 0 1px !important;
+  padding: 0 2px !important;
+}
+
+/* Kembalikan form Tambah Jadwal: TIDAK ada kaca/container tambahan.
+   Kaca hanya tetap pada field-field yang sudah ada sebelumnya. */
+#page-atur-member > form#form-member {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 0 !important;
+  margin: 0 0 1.15rem !important;
+}
+
+/* 2. Member Tanpa Jadwal Tetap mengikuti bahasa glass form member.
+   Hanya panel ini yang diberi permukaan glass; tidak membuat panel baru. */
+#page-atur-member #member-tanpa-jadwal-panel {
+  background: rgba(255,255,255,.30) !important;
+  border: 1px solid rgba(255,255,255,.72) !important;
+  border-radius: 15px !important;
+  box-shadow: 0 10px 28px rgba(15,23,42,.08), inset 0 1px 0 rgba(255,255,255,.65) !important;
+  backdrop-filter: blur(10px) saturate(125%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(125%) !important;
+}
+
+/* Input Member Tanpa Jadwal dibuat seirama dengan glass-input yang sudah ada. */
+#page-atur-member #member-tanpa-jadwal-panel .member-tanpa-jadwal-input {
+  background: rgba(255,255,255,.66) !important;
+  border: 1px solid rgba(255,255,255,.72) !important;
+  box-shadow: inset 0 1px 2px rgba(15,23,42,.04) !important;
+  backdrop-filter: blur(8px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(120%) !important;
+}
+
+/* Header Member Tanpa Jadwal tetap center */
+#page-atur-member .member-tanpa-jadwal-head > div {
+  width: 100% !important;
+  text-align: center !important;
+}
+#page-atur-member .member-tanpa-jadwal-title {
+  width: 100% !important;
+  display: block !important;
+  text-align: center !important;
+}
+#page-atur-member .member-tanpa-jadwal-subtitle {
+  width: 100% !important;
+  text-align: center !important;
+}
+</style>
+
+
+<style id="FIX-TAMBAH-JADWAL-TITLE-CENTER">
+#page-atur-member #form-member > h3.font-black.text-sm.text-indigo-950 {
+  display: flex !important;
+  width: 100% !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  box-sizing: border-box !important;
+}
+</style>
 </body>
 
 <style id="FINAL_FIX_UANG_KELUAR_ONE_BIG_GLASS_CARD">
@@ -29720,6 +30491,157 @@ html, body {
     width: calc((100% - (var(--sg) * 2)) / 3) !important;
     max-width: calc((100% - (var(--sg) * 2)) / 3) !important;
     min-width: 0 !important;
+  }
+}
+</style>
+
+
+<style id="booking-edit-modal-top-layer-v1">
+/* BOOKING SCHEDULE — popup edit selalu berada di atas dock / floating bar,
+   mengikuti level popup kalender dan tetap terpusat di layar. */
+#modal-edit-booking {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2147483647 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 12px !important;
+  box-sizing: border-box !important;
+}
+#modal-edit-booking > div {
+  position: relative !important;
+  z-index: 2147483647 !important;
+  max-height: 92vh !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+/* Header dan tombol X tetap terlihat; hanya isi form yang scroll. */
+#modal-edit-booking > div > .flex.items-center.justify-between.mb-4 {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 20 !important;
+  flex: 0 0 auto !important;
+  margin-bottom: 12px !important;
+  padding: 2px 0 10px !important;
+  background: rgba(255,255,255,.97) !important;
+  backdrop-filter: blur(10px) !important;
+}
+#modal-edit-booking > div > .space-y-3 {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  padding-right: 2px !important;
+}
+#modal-edit-booking > div > .flex.gap-2.mt-5 {
+  flex: 0 0 auto !important;
+  margin-top: 12px !important;
+  padding-top: 10px !important;
+  background: rgba(255,255,255,.97) !important;
+  backdrop-filter: blur(10px) !important;
+}
+#modal-edit-booking .text-slate-500.hover\:text-slate-900 {
+  flex: 0 0 auto !important;
+  width: 38px !important;
+  height: 38px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 12px !important;
+  background: rgba(241,245,249,.9) !important;
+}
+body:has(#modal-edit-booking) {
+  overflow: hidden !important;
+}
+</style>
+
+
+
+
+<style id="kelola-member-title-and-glass-v5">
+/* =========================================================
+   KELOLA MEMBER — FINAL POLISH
+   1) Judul Tambah Jadwal benar-benar rata tengah
+   2) Member Tanpa Jadwal memakai glass style yang sama
+      dengan form Tambah Jadwal Member / Status Baru
+   ========================================================= */
+
+/* JUDUL TAMBAH JADWAL / STATUS BARU */
+#page-atur-member #form-member > h3 {
+  width: 100% !important;
+  display: block !important;
+  text-align: center !important;
+  margin: 0 0 12px !important;
+  padding: 0 !important;
+  color: #172554 !important;
+}
+
+/* FORM TAMBAH JADWAL — jadikan acuan glass */
+#page-atur-member #form-member {
+  background: rgba(255,255,255,.30) !important;
+  border: 1px solid rgba(255,255,255,.72) !important;
+  border-radius: 15px !important;
+  box-shadow: 0 10px 28px rgba(15,23,42,.08), inset 0 1px 0 rgba(255,255,255,.65) !important;
+  backdrop-filter: blur(10px) saturate(125%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(125%) !important;
+  padding: 15px !important;
+}
+
+/* MEMBER TANPA JADWAL — glass yang sama, bukan flat putih */
+#page-atur-member #member-tanpa-jadwal-panel {
+  background: rgba(255,255,255,.30) !important;
+  border: 1px solid rgba(255,255,255,.72) !important;
+  border-radius: 15px !important;
+  box-shadow: 0 10px 28px rgba(15,23,42,.08), inset 0 1px 0 rgba(255,255,255,.65) !important;
+  backdrop-filter: blur(10px) saturate(125%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(125%) !important;
+  padding: 15px !important;
+}
+
+/* Header kedua tetap clean tetapi menyatu dengan glass */
+#page-atur-member .member-tanpa-jadwal-head {
+  padding-bottom: 10px !important;
+  margin-bottom: 12px !important;
+  border-bottom: 1px solid rgba(255,255,255,.62) !important;
+}
+
+#page-atur-member .member-tanpa-jadwal-title {
+  color: #172554 !important;
+  text-align: center !important;
+  width: 100% !important;
+  display: block !important;
+  font-size: 1rem !important;
+  font-weight: 900 !important;
+  margin: 0 !important;
+}
+
+#page-atur-member .member-tanpa-jadwal-subtitle {
+  color: #52677b !important;
+  text-align: center !important;
+  width: 100% !important;
+  margin: 5px 0 0 !important;
+}
+
+/* Struktur header kedua jangan membuat wrapper tambahan */
+#page-atur-member .member-tanpa-jadwal-head > div {
+  width: 100% !important;
+  text-align: center !important;
+}
+
+/* Input kedua mengikuti nuansa input form pertama */
+#page-atur-member .member-tanpa-jadwal-input {
+  background: rgba(255,255,255,.78) !important;
+  border: 1px solid rgba(255,255,255,.88) !important;
+  box-shadow: inset 0 1px 2px rgba(15,23,42,.04) !important;
+}
+
+@media (max-width:700px) {
+  #page-atur-member #form-member,
+  #page-atur-member #member-tanpa-jadwal-panel {
+    border-radius: 14px !important;
+    padding: 12px !important;
   }
 }
 </style>
