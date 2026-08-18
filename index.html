@@ -13011,7 +13011,7 @@ kaosKakiTerjual: jumlahKaosKaki,
                     <div class="bg-gradient-to-r from-blue-950 to-blue-700 px-5 py-4 text-white">
                         <div class="flex items-center justify-between gap-3">
                             <div><h3 class="font-black text-lg">Edit Uang Lapangan</h3><p class="text-xs text-blue-100">Perbarui data pemasukan tanpa mengubah fungsi lainnya.</p></div>
-                            <button type="button" onclick="document.getElementById('modal-edit-pemasukan')?.remove()" class="edit-pemasukan-close" aria-label="Tutup" title="Tutup">×</button>
+                            <button type="button" onclick="document.getElementById('modal-edit-pemasukan')?.remove()" class="text-white/80 hover:text-white text-xl font-black">×</button>
                         </div>
                     </div>
                     <div class="p-5 space-y-3">
@@ -13033,12 +13033,6 @@ kaosKakiTerjual: jumlahKaosKaki,
                     </div>
                 </div>`;
             document.body.appendChild(modal);
-            modal.style.setProperty('z-index', '2147483647', 'important');
-            modal.style.setProperty('position', 'fixed', 'important');
-            modal.style.setProperty('inset', '0', 'important');
-            modal.setAttribute('role', 'dialog');
-            modal.setAttribute('aria-modal', 'true');
-            if (modal.parentElement === document.body) document.body.appendChild(modal);
             toggleEditFreePaymentInput(1);
             toggleEditFreePaymentInput(2);
         };
@@ -13651,6 +13645,10 @@ kaosKakiTerjual: jumlahKaosKaki,
             // =========================================================
             const memberGroups = new Map();
             const memberRawEntries = [];
+            // Simpan seluruh record Member mentah. Jangan hanya mengandalkan
+            // globalCache.member karena struktur jam/hari dapat menimpa record
+            // duplikat pada slot yang sama dan menyebabkan WA hilang dari cache.
+            globalCache.memberRawEntries = [];
 
             if (snapshot.exists()) {
                 snapshot.forEach((child) => {
@@ -13675,6 +13673,7 @@ kaosKakiTerjual: jumlahKaosKaki,
                     };
 
                     memberRawEntries.push(entry);
+                    globalCache.memberRawEntries.push(entry);
 
                     if (!memberGroups.has(nameKey)) {
                         memberGroups.set(nameKey, {
@@ -14415,17 +14414,74 @@ kaosKakiTerjual: jumlahKaosKaki,
         // 2) WA yang diisi admin saat Edit Sparing untuk tim, tanggal, dan jam yang sama
         // 3) WA yang disimpan admin pada data Member dengan nama tim yang sama
         // Dengan begitu nomor dari Booking, Sparing, atau Member semuanya bisa dipakai oleh tombol Hubungi.
+        function normalizeScheduleTeamName(value) {
+            return String(value || '')
+                .trim()
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '');
+        }
+
+        function getMemberWhatsAppFromSchedule(nama, tanggal = '', jam = '') {
+            const target = normalizeScheduleTeamName(nama);
+            if(!target) return '';
+
+            const targetHari = tanggal ? String(getNamaHari(tanggal) || '').trim() : '';
+            const targetJam = String(jam || '').replace('.', ':').substring(0, 5);
+            const members = Array.isArray(globalCache.memberRawEntries)
+                ? globalCache.memberRawEntries
+                : [];
+
+            let fallback = '';
+
+            // PENTING: gunakan record Member mentah, bukan cache [jam][hari].
+            // Cache lama hanya menyimpan satu record per slot sehingga jika ada
+            // dua record dengan nama/hari/jam sama, record tanpa WA bisa menimpa
+            // record yang sebenarnya mempunyai nomor WA.
+            for(const cell of members) {
+                if(!cell || cell.isOff || cell.type === 'off') continue;
+                if(normalizeScheduleTeamName(cell.nama) !== target) continue;
+
+                const wa = String(
+                    cell.wa ?? cell.whatsapp ?? cell.nomorWa ?? cell.noWa ?? cell.noWhatsapp ?? ''
+                ).trim();
+                if(!wa) continue;
+
+                const cellHari = String(cell.hari || '').trim();
+                const cellJam = String(cell.jam || '').replace('.', ':').substring(0, 5);
+
+                // Prioritas utama: nama + hari + jam yang persis sama.
+                if(targetHari && targetJam && cellHari === targetHari && cellJam === targetJam) {
+                    return wa;
+                }
+
+                // Fallback: nama tim sama dan memiliki WA.
+                if(!fallback) fallback = wa;
+            }
+
+            // Fallback kedua untuk kompatibilitas data/cache lama.
+            for(const perHari of Object.values(globalCache.member || {})) {
+                for(const cell of Object.values(perHari || {})) {
+                    if(!cell || cell.type === 'off') continue;
+                    if(normalizeScheduleTeamName(cell.nama) !== target) continue;
+                    const wa = String(cell.wa || '').trim();
+                    if(wa) return wa;
+                }
+            }
+
+            return fallback;
+        }
+
+        // Satu sumber nomor WA untuk Jadwal Hari Ini.
+        // Prioritas: Booking -> Sparing -> Member.
+        // Untuk Member, pencarian dibuat toleran terhadap perbedaan format nama,
+        // spasi/tanda baca, serta perbedaan format jam 20:00 / 20.00.
         function getScheduleWhatsApp(item) {
-            // Prioritas nomor WA untuk Jadwal Hari Ini:
-            // 1) WA dari Booking (customer / edit admin di Booking Schedule)
-            // 2) WA yang admin masukkan saat Edit Sparing untuk tim + tanggal + jam yang sama
-            // 3) WA Member yang disimpan admin
             const direct = String(item?.wa || '').trim();
             if(direct) return direct;
 
-            const target = String(item?.nama || '').trim().toLowerCase();
+            const target = String(item?.nama || '').trim();
             const tanggal = String(item?.tanggal || item?.tgl || '').split('T')[0];
-            const jam = String(item?.jam || '').substring(0, 5);
+            const jam = String(item?.jam || '').replace('.', ':').substring(0, 5);
 
             if(target && tanggal && jam) {
                 const sparing = getSparingForTeam(target, tanggal, jam);
@@ -14433,41 +14489,23 @@ kaosKakiTerjual: jumlahKaosKaki,
                 if(waSparing) return waSparing;
             }
 
-            if(!target) return '';
-
-            let found = '';
-            Object.values(globalCache.member || {}).forEach(perHari => {
-                Object.values(perHari || {}).forEach(cell => {
-                    if(!cell || found) return;
-                    const namaMember = String(cell.nama || '').trim().toLowerCase();
-                    const waMember = String(cell.wa || '').trim();
-                    if(namaMember === target && waMember) found = waMember;
-                });
-            });
-            return found;
+            return getMemberWhatsAppFromSchedule(target, tanggal, jam);
         }
 
         function getScheduleWhatsAppSource(item) {
             const direct = String(item?.wa || '').trim();
             if(direct) return 'booking';
 
-            const target = String(item?.nama || '').trim().toLowerCase();
+            const target = String(item?.nama || '').trim();
             const tanggal = String(item?.tanggal || item?.tgl || '').split('T')[0];
-            const jam = String(item?.jam || '').substring(0, 5);
+            const jam = String(item?.jam || '').replace('.', ':').substring(0, 5);
+
             if(target && tanggal && jam) {
                 const sparing = getSparingForTeam(target, tanggal, jam);
                 if(String(sparing?.[1]?.wa || '').trim()) return 'sparing';
             }
 
-            if(!target) return '';
-            let found = '';
-            Object.values(globalCache.member || {}).forEach(perHari => {
-                Object.values(perHari || {}).forEach(cell => {
-                    if(!cell || found) return;
-                    if(String(cell.nama || '').trim().toLowerCase() === target && String(cell.wa || '').trim()) found = 'member';
-                });
-            });
-            return found;
+            return getMemberWhatsAppFromSchedule(target, tanggal, jam) ? 'member' : '';
         }
 
         // Tombol Hubungi di JADWAL HARI INI.
@@ -15543,7 +15581,8 @@ return;
                 dpGabungan = aktif.reduce((sum, x) => sum + x.dp, 0);
                 const sisaGabungan = Math.max(0, aktif.reduce((sum, x) => sum + x.sisa, 0));
                 const namaTampil = String(group.nama || '-').trim().toUpperCase();
-                const hasWa = !!getScheduleWhatsApp(first);
+                const scheduleWa = getScheduleWhatsApp(first);
+                const hasWa = !!scheduleWa;
                 const jamPertama = aktif[0].jam;
 
                 // Jika slot ini sedang tercatat sebagai sparing, tampilkan
@@ -15589,7 +15628,7 @@ return;
                             ${isFirstConsecutiveTeamSchedule(schedules, jamList, jamPertama, first) ? getAdminReminderTimerHtml(today, jamPertama, hasWa) : ''}
                             ${lateTimers}
                         </div>
-                        ${hasWa ? `<button type="button" onclick="event.stopPropagation(); return hubungiJadwalHariIni(decodeURIComponent('${encodeURIComponent(String(getScheduleWhatsApp(first)))}'), decodeURIComponent('${encodeURIComponent(String(first.nama || ''))}'), decodeURIComponent('${encodeURIComponent(String(aktif.map(x => x.jam.replace(':','.')).join(' & ')))}'))" class="today-remind-btn" aria-label="Ingatkan via WhatsApp" title="Ingatkan via WhatsApp"><img src="ikonwa.png" alt="WA" class="today-remind-icon"><span>Ingatkan</span></button>` : ''}
+                        ${hasWa ? `<button type="button" onclick="event.stopPropagation(); return hubungiJadwalHariIni(decodeURIComponent('${encodeURIComponent(String(scheduleWa))}'), decodeURIComponent('${encodeURIComponent(String(first.nama || ''))}'), decodeURIComponent('${encodeURIComponent(String(aktif.map(x => x.jam.replace(':','.')).join(' & ')))}'))" class="today-remind-btn" aria-label="Ingatkan via WhatsApp" title="Ingatkan via WhatsApp"><img src="ikonwa.png" alt="WA" class="today-remind-icon"><span>Ingatkan</span></button>` : ''}
                     </div>
                     <div class="grid grid-cols-3 gap-1.5 mt-2 text-center text-[9px] sm:text-[10px] font-black">
                         <div class="schedule-money rounded-lg border p-1.5">
@@ -22283,17 +22322,11 @@ window.refreshOpsiMemberTanpaJadwal = refreshOpsiMemberTanpaJadwal;
 #modal-edit-pemasukan {
     position: fixed !important;
     inset: 0 !important;
-    z-index: 2147483647 !important;
-    isolation: isolate !important;
-}
-body > #modal-edit-pemasukan {
-    position: fixed !important;
-    inset: 0 !important;
-    z-index: 2147483647 !important;
+    z-index: 2147483646 !important;
 }
 #modal-edit-pemasukan > div {
     position: relative !important;
-    z-index: 2147483647 !important;
+    z-index: 2 !important;
 }
 #modern-dialog-root {
     position: fixed !important;
@@ -22309,16 +22342,6 @@ body > #modal-edit-pemasukan {
     position: relative !important;
     z-index: 2 !important;
 }
-    #modal-edit-pemasukan .edit-pemasukan-close {
-        position: absolute !important; top: 10px !important; right: 10px !important; z-index: 2147483647 !important;
-        width: 38px !important; height: 38px !important; min-width: 38px !important; min-height: 38px !important;
-        display: inline-flex !important; align-items: center !important; justify-content: center !important;
-        padding: 0 !important; margin: 0 !important; border: 1px solid rgba(255,255,255,.28) !important;
-        border-radius: 10px !important; background: rgba(255,255,255,.12) !important; color: #fff !important;
-        font-size: 25px !important; line-height: 1 !important; font-weight: 900 !important; cursor: pointer !important;
-    }
-    #modal-edit-pemasukan .edit-pemasukan-close:hover { background: rgba(255,255,255,.24) !important; border-color: rgba(255,255,255,.55) !important; }
-    @media (max-width: 640px) { #modal-edit-pemasukan .edit-pemasukan-close { top: 8px !important; right: 8px !important; width: 36px !important; height: 36px !important; min-width: 36px !important; min-height: 36px !important; font-size: 24px !important; } }
 </style>
 
 <style id="uang-masuk-save-button-final-hit-fix">
