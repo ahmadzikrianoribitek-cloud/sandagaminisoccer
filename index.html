@@ -24545,6 +24545,119 @@ body.jadwal-uang-masuk-modal-active #page-masuk {
   will-change:opacity,backdrop-filter !important;
 }
 </style>
+
+<style id="uang-keluar-mobile-header-match-uang-masuk-final">
+/* FINAL HP: header UANG KELUAR disamakan dengan header UANG MASUK.
+   Judul tetap benar-benar center dan tombol X tidak ikut menggeser judul. */
+@media(max-width:640px){
+  body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar > h2{
+    position:sticky !important;
+    top:-14px !important;
+    z-index:1000 !important;
+    width:calc(100% + 28px) !important;
+    margin:-14px -14px 14px !important;
+    padding:14px 52px 11px 14px !important;
+    min-height:62px !important;
+    box-sizing:border-box !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    text-align:center !important;
+    background:rgba(248,251,255,.995) !important;
+    border:0 !important;
+    border-bottom:1px solid rgba(148,163,184,.22) !important;
+    border-radius:20px 20px 0 0 !important;
+    box-shadow:0 8px 20px rgba(15,23,42,.08) !important;
+    isolation:isolate !important;
+    overflow:visible !important;
+  }
+  body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar > h2::before{
+    content:"" !important;
+    position:absolute !important;
+    left:0 !important; right:0 !important; top:0 !important; bottom:0 !important;
+    background:rgba(248,251,255,.995) !important;
+    border-radius:20px 20px 0 0 !important;
+    z-index:-1 !important;
+    pointer-events:none !important;
+  }
+  body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar > h2::after{
+    content:"" !important;
+    position:absolute !important;
+    left:0 !important; bottom:-1px !important;
+    width:46px !important; height:3px !important;
+    background:linear-gradient(90deg,#f59e0b,#fbbf24) !important;
+    border-radius:0 3px 3px 0 !important;
+    pointer-events:none !important;
+    z-index:2 !important;
+  }
+  #jadwal-uang-keluar-modal-shell #jadwal-uang-keluar-modal-close{
+    position:absolute !important;
+    top:7px !important;
+    right:7px !important;
+    z-index:1100 !important;
+    width:38px !important;
+    height:38px !important;
+    margin:0 !important;
+    float:none !important;
+    flex:none !important;
+    transform:none !important;
+  }
+  #jadwal-uang-keluar-modal-shell #jadwal-uang-keluar-modal-close:active{
+    transform:scale(.94) !important;
+  }
+}
+</style>
+
+<style id="FINAL_MOBILE_UANG_MASUK_HEADER_MATCH_UANG_KELUAR_V1">
+/* UANG MASUK HP — samakan header dengan UANG KELUAR yang sudah pas.
+   Header dibuat selebar card popup, bukan hanya selebar area konten.
+   Tombol X berada di kanan header dan judul benar-benar center terhadap
+   seluruh lebar popup. Desktop tidak disentuh. */
+@media (max-width:640px){
+  body.jadwal-uang-masuk-modal-active #page-masuk > h2{
+    position:sticky !important;
+    top:0 !important;
+    z-index:120 !important;
+
+    /* Lepaskan header dari padding kiri/kanan modal */
+    width:calc(100% + 28px) !important;
+    max-width:none !important;
+    margin:-14px -14px 14px !important;
+
+    min-height:58px !important;
+    padding:13px 58px 11px !important;
+    box-sizing:border-box !important;
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    text-align:center !important;
+
+    border-radius:20px 20px 0 0 !important;
+    background:linear-gradient(180deg,rgba(255,255,255,.995),rgba(247,250,255,.985)) !important;
+    isolation:isolate !important;
+  }
+
+  body.jadwal-uang-masuk-modal-active #page-masuk > h2::after{
+    left:0 !important;
+    right:auto !important;
+    bottom:-1px !important;
+    width:72px !important;
+    height:3px !important;
+  }
+
+  body.jadwal-uang-masuk-modal-active #jadwal-uang-masuk-modal-close{
+    position:absolute !important;
+    top:8px !important;
+    right:10px !important;
+    float:none !important;
+    margin:0 !important;
+    width:38px !important;
+    height:38px !important;
+    z-index:140 !important;
+  }
+}
+</style>
 </body>
 
 <style id="FINAL_FIX_UANG_KELUAR_ONE_BIG_GLASS_CARD">
@@ -33148,3 +33261,127 @@ body:not(.jadwal-uang-masuk-modal-active) #page-masuk{
   },true);
 })();
 </script>
+
+<style id="final-mobile-uang-keluar-header-and-customer-fix-v2">
+/* =========================================================
+   FINAL MOBILE FIX UANG KELUAR
+   1. Header dibuat mengikuti proporsi header UANG MASUK.
+   2. Tombol X benar-benar menempel di kanan atas header.
+   3. Hanya SATU label "Harga Customer" yang tampil di HP.
+   Desktop tidak disentuh.
+   ========================================================= */
+@media (max-width:640px){
+  #jadwal-uang-keluar-modal-backdrop{
+    padding:8px !important;
+    align-items:center !important;
+    justify-content:center !important;
+  }
+
+  #jadwal-uang-keluar-modal-shell{
+    width:calc(100vw - 16px) !important;
+    max-width:none !important;
+    border-radius:20px !important;
+    overflow:hidden !important;
+  }
+
+  body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar{
+    padding:14px 14px 16px !important;
+    box-sizing:border-box !important;
+  }
+
+  /* Header Uang Keluar = satu bidang penuh seperti header Uang Masuk */
+  body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar > h2{
+    position:sticky !important;
+    top:-14px !important;
+    z-index:1000 !important;
+    width:calc(100% + 28px) !important;
+    margin:-14px -14px 12px !important;
+    min-height:60px !important;
+    padding:12px 52px 10px 18px !important;
+    box-sizing:border-box !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    text-align:center !important;
+    white-space:nowrap !important;
+    background:linear-gradient(180deg,rgba(255,255,255,.995),rgba(247,250,255,.985)) !important;
+    border:0 !important;
+    border-bottom:1px solid rgba(148,163,184,.20) !important;
+    border-radius:20px 20px 0 0 !important;
+    box-shadow:0 6px 16px rgba(15,23,42,.06) !important;
+    isolation:isolate !important;
+  }
+
+  body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar > h2::after{
+    content:"" !important;
+    position:absolute !important;
+    left:0 !important;
+    bottom:-1px !important;
+    width:46px !important;
+    height:3px !important;
+    background:#f59e0b !important;
+    border-radius:0 3px 3px 0 !important;
+    pointer-events:none !important;
+  }
+
+  /* X tidak lagi mengikuti layout teks/judul */
+  #jadwal-uang-keluar-modal-shell #jadwal-uang-keluar-modal-close{
+    position:absolute !important;
+    top:8px !important;
+    right:8px !important;
+    left:auto !important;
+    bottom:auto !important;
+    z-index:1200 !important;
+    width:38px !important;
+    height:38px !important;
+    min-width:38px !important;
+    min-height:38px !important;
+    margin:0 !important;
+    padding:0 !important;
+    float:none !important;
+    transform:none !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    box-sizing:border-box !important;
+  }
+
+  /* Jangan biarkan dua span tampil bersamaan */
+  #btn-tampilkan-customer .customer-label-desktop{
+    display:none !important;
+  }
+  #btn-tampilkan-customer .customer-label-mobile{
+    display:inline !important;
+  }
+}
+</style>
+
+<style id="final-mobile-uang-keluar-header-width-fix-v3">
+/* FINAL V3 — HP: header harus selebar shell, bukan selebar area konten.
+   Desktop sengaja tidak disentuh. */
+@media (max-width:640px){
+  body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-keluar > h2{
+    width:auto !important;
+    max-width:none !important;
+    margin-left:-14px !important;
+    margin-right:-14px !important;
+    padding-left:18px !important;
+    padding-right:52px !important;
+    box-sizing:border-box !important;
+  }
+
+  /* Pastikan tombol X berada di ujung kanan header penuh. */
+  #jadwal-uang-keluar-modal-shell #jadwal-uang-keluar-modal-close{
+    right:8px !important;
+    left:auto !important;
+  }
+
+  /* Hanya satu teks Harga Customer yang boleh tampil. */
+  #btn-tampilkan-customer .customer-label-desktop{
+    display:none !important;
+  }
+  #btn-tampilkan-customer .customer-label-mobile{
+    display:inline !important;
+  }
+}
+</style>
