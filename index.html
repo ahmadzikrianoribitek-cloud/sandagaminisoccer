@@ -33078,3 +33078,73 @@ body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-kelua
   }
 }
 </style>
+
+<style id="fix-uang-masuk-scroll-from-menu-lainnya-v1">
+/* FIX: UANG MASUK dari Menu Lainnya harus kembali menjadi halaman normal.
+   Jangan biarkan state modal/overflow dari popup sebelumnya mengunci scroll. */
+body:not(.jadwal-uang-masuk-modal-active) #page-masuk{
+  position:relative !important;
+  inset:auto !important;
+  left:auto !important;
+  top:auto !important;
+  transform:none !important;
+  max-height:none !important;
+  overflow:visible !important;
+  overflow-y:visible !important;
+  overflow-x:visible !important;
+}
+</style>
+
+<script id="fix-uang-masuk-scroll-from-menu-lainnya-v1-script">
+(function(){
+  'use strict';
+  function restoreNormalScrollIfMasuk(){
+    const page=document.getElementById('page-masuk');
+    if(!page) return;
+    if(document.body.classList.contains('jadwal-uang-masuk-modal-active')) return;
+
+    // Bersihkan state scroll-lock yang mungkin tertinggal dari popup/dropdown.
+    document.body.style.overflow='';
+    document.documentElement.style.overflow='';
+    document.body.classList.remove('quick-more-open');
+
+    // Pastikan form Uang Masuk tidak mewarisi state fixed/modal.
+    page.classList.remove('jadwal-uang-masuk-modal-page');
+    page.style.position='';
+    page.style.inset='';
+    page.style.left='';
+    page.style.top='';
+    page.style.transform='';
+    page.style.maxHeight='';
+    page.style.overflow='';
+    page.style.overflowY='';
+    page.style.overflowX='';
+  }
+
+  // Tangkap perpindahan ke halaman Uang Masuk, termasuk dari Menu Lainnya.
+  const originalShowPage=window.showPage;
+  if(typeof originalShowPage==='function' && !originalShowPage.__uangMasukScrollFixed){
+    const wrapped=function(id){
+      const result=originalShowPage.apply(this,arguments);
+      if(id==='masuk'){
+        restoreNormalScrollIfMasuk();
+        requestAnimationFrame(restoreNormalScrollIfMasuk);
+        setTimeout(restoreNormalScrollIfMasuk,80);
+      }
+      return result;
+    };
+    wrapped.__uangMasukScrollFixed=true;
+    wrapped.__original=originalShowPage;
+    window.showPage=wrapped;
+  }
+
+  // Fallback untuk klik langsung pada tombol/link Menu Lainnya.
+  document.addEventListener('click',function(e){
+    const trigger=e.target.closest?.('[onclick*="showPage(\'masuk\')"], [onclick*="showPage(\"masuk\")"]');
+    if(trigger){
+      setTimeout(restoreNormalScrollIfMasuk,0);
+      setTimeout(restoreNormalScrollIfMasuk,80);
+    }
+  },true);
+})();
+</script>
