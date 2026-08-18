@@ -756,6 +756,63 @@
             font-size: .58rem;
             font-weight: 900;
         }
+
+        /* Pesan positif ketika seluruh tagihan jadwal hari ini sudah lunas. */
+        .today-all-paid-card {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 1.35rem 1rem 1.25rem;
+            border-radius: 1.15rem;
+            border: 1px solid rgba(34,197,94,.30);
+            background: linear-gradient(135deg, rgba(240,253,244,.96), rgba(236,253,245,.88));
+            box-shadow: 0 10px 28px rgba(15,23,42,.10), inset 0 1px 0 rgba(255,255,255,.85);
+            text-align: center;
+            color: #14532d;
+        }
+        .today-all-paid-icon {
+            font-size: clamp(2rem, 7vw, 3rem);
+            line-height: 1;
+            margin-bottom: .55rem;
+            filter: drop-shadow(0 4px 8px rgba(22,101,52,.12));
+        }
+        .today-all-paid-title {
+            font-size: clamp(.8rem, 2.5vw, 1.05rem);
+            line-height: 1.25;
+            font-weight: 1000;
+            letter-spacing: .02em;
+            color: #166534;
+        }
+        .today-all-paid-subtitle {
+            margin-top: .38rem;
+            font-size: clamp(.62rem, 1.8vw, .78rem);
+            line-height: 1.45;
+            font-weight: 800;
+            color: #4b7c5d;
+        }
+        .today-all-paid-check {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: .35rem;
+            margin-top: .7rem;
+            padding: .42rem .72rem;
+            border-radius: 999px;
+            border: 1px solid rgba(34,197,94,.24);
+            background: rgba(255,255,255,.72);
+            color: #15803d;
+            font-size: clamp(.58rem, 1.7vw, .72rem);
+            font-weight: 900;
+        }
+        @media (max-width: 640px) {
+            .today-all-paid-card {
+                padding: 1.05rem .72rem 1rem;
+                border-radius: .95rem;
+            }
+            .today-all-paid-title { font-size: .72rem; }
+            .today-all-paid-subtitle { font-size: .58rem; }
+            .today-all-paid-check { font-size: .55rem; padding: .36rem .58rem; }
+        }
+
         #today-schedule-list.today-schedule-list-modern {
             display: grid;
             gap: .55rem;
@@ -15878,7 +15935,7 @@ return;
                 groupMap.get(nameKey).slots.push({ ...item, jam });
             });
 
-            listEl.innerHTML = grouped.map(group => {
+            const renderedScheduleCards = grouped.map(group => {
                 const slots = group.slots.sort((a,b) => String(a.jam).localeCompare(String(b.jam)));
                 const first = slots[0];
                 const isMember = slots.every(item => String(item.status || '').toLowerCase() === 'member');
@@ -16031,6 +16088,21 @@ return;
                     </div>
                 </div>`;
             }).join('');
+
+            // Jika jadwal hari ini memang ada, tetapi seluruh tagihan sudah lunas,
+            // jangan biarkan area jadwal terlihat kosong. Tampilkan pesan positif
+            // agar admin langsung tahu bahwa semua pembayaran hari ini sudah beres.
+            if (jamList.length > 0 && !renderedScheduleCards.trim()) {
+                listEl.innerHTML = `
+                    <div class="today-all-paid-card" role="status" aria-live="polite">
+                        <div class="today-all-paid-icon">🎉</div>
+                        <div class="today-all-paid-title">SEMUA TAGIHAN HARI INI SUDAH LUNAS!</div>
+                        <div class="today-all-paid-subtitle">Alhamdulillah, semua pembayaran jadwal hari ini sudah beres.</div>
+                        <div class="today-all-paid-check">✓ Tidak ada tagihan yang perlu ditagih</div>
+                    </div>`;
+            } else {
+                listEl.innerHTML = renderedScheduleCards;
+            }
 
             // Ukuran logo mengikuti 90% tinggi card setelah layout selesai.
             requestAnimationFrame(() => {
@@ -18693,14 +18765,62 @@ window.downloadDailyRecapJPGFull = async function() {
                 });
             }
 
-            // Versi lengkap cukup menampilkan tabel riwayat transaksi minuman di bawah.
-            // Rekap produk di atas sengaja dihilangkan agar tidak terjadi duplikasi.
+            // Tambahkan ringkasan jumlah pcs khusus untuk Versi Lengkap.
+            // Sumber angka berasal dari tabel transaksi yang sama, sehingga
+            // ringkasan pasti sinkron dengan detail yang ikut di-download.
+            const totalPcsMinuman = Object.values(qtyProduk).reduce(
+                (sum, qty) => sum + (Number.isFinite(Number(qty)) ? Number(qty) : 0), 0
+            );
+
+            const summaryBox = document.createElement('div');
+            summaryBox.className = 'report-minuman-full-rekap';
+            summaryBox.style.cssText = [
+                'margin:0 0 14px',
+                'padding:14px 16px',
+                'border:1px solid #bfdbfe',
+                'border-radius:14px',
+                'background:#eff6ff',
+                'box-sizing:border-box'
+            ].join(';');
+
+            const summaryTitle = document.createElement('div');
+            summaryTitle.textContent = 'RINGKASAN JUMLAH PCS MINUMAN';
+            summaryTitle.style.cssText = 'font-size:12px;font-weight:900;color:#1e3a8a;margin-bottom:10px;text-align:center;letter-spacing:.03em';
+            summaryBox.appendChild(summaryTitle);
+
+            const summaryTotal = document.createElement('div');
+            summaryTotal.textContent = `${totalPcsMinuman.toLocaleString('id-ID')} PCS`;
+            summaryTotal.style.cssText = 'font-size:24px;font-weight:900;color:#0f172a;text-align:center;margin-bottom:10px';
+            summaryBox.appendChild(summaryTotal);
+
+            const summaryGrid = document.createElement('div');
+            summaryGrid.style.cssText = 'display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px';
+
+            daftarMinuman.forEach(nama => {
+                const card = document.createElement('div');
+                card.style.cssText = 'padding:8px 10px;border:1px solid #dbeafe;border-radius:10px;background:#fff;text-align:center;box-sizing:border-box';
+                card.innerHTML = `<div style="font-size:10px;font-weight:800;color:#475569;line-height:1.2">${nama.replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}</div><div style="font-size:14px;font-weight:900;color:#1e3a8a;margin-top:3px">${(Number(qtyProduk[nama])||0).toLocaleString('id-ID')} Pcs</div>`;
+                summaryGrid.appendChild(card);
+            });
+
+            summaryBox.appendChild(summaryGrid);
+
+            // Hilangkan ringkasan lama dari halaman sumber agar tidak terjadi
+            // duplikasi, lalu pasang ringkasan baru tepat sebelum tabel transaksi.
             const ringkasanMinumanBox = clone.querySelector('#ringkasan-minuman-box');
             if (ringkasanMinumanBox) ringkasanMinumanBox.remove();
+            clone.querySelectorAll('.report-minuman-full-rekap').forEach(el => el.remove());
 
-            // Hilangkan kartu ringkasan produk seperti "Teh Pucuk Harum - 1 Pcs Terjual".
-            // Detail transaksi yang sebenarnya tetap ditampilkan pada tabel riwayat di bawah.
-            clone.querySelectorAll('#ringkasan-minuman-box, .report-minuman-full-rekap').forEach(el => el.remove());
+            const tabelMinuman = clone.querySelector('#tabel-minuman');
+            const tabelWrapper = tabelMinuman?.closest('.overflow-x-auto, .overflow-hidden, .shadow, table')?.parentElement
+                || tabelMinuman?.parentElement
+                || clone;
+            if (tabelWrapper && tabelWrapper !== clone) {
+                tabelWrapper.parentNode.insertBefore(summaryBox, tabelWrapper);
+            } else {
+                clone.insertBefore(summaryBox, clone.firstChild);
+            }
+        }
 
         // Jika tidak ada transaksi, tampilkan keterangan yang jelas agar
         // tabel kosong tidak terlihat seperti data gagal dimuat.
@@ -23296,15 +23416,22 @@ body.minuman-history-modal-open{overflow:hidden !important}
       pr.set(30,'Mengambil data...','Data laporan sedang disiapkan.');
       const root=document.createElement('div');root.style.cssText='position:fixed;left:-100000px;top:0;width:900px;box-sizing:border-box;padding:46px;background:#f8fafc;color:#0f172a;font-family:Arial,sans-serif';
       const safe=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-      const lapanganCash=money('rekap-lapangan-cash');
-      const lapanganQris=money('rekap-lapangan-qrif');
-      const minumanCash=money('rekap-minuman-cash');
-      const minumanQris=money('rekap-minuman-qrif');
-      const totalMasuk=money('rekap-total-pemasukan');
-      const totalKeluar=money('rekap-keluar');
-      const cashLap=money('rekap-sisa-cash-lapangan');
-      const cashMin=money('rekap-sisa-cash-minuman');
-      const cashTotal=money('rekap-total-sisa-cash');
+      // Daily Report versi singkat harus mengambil angka dari hasil Daily Recap
+      // yang benar-benar tampil, bukan dari elemen yang mungkin tidak ada /
+      // belum diisi (contoh: #rekap-total-pemasukan).
+      const moneyNumber=value=>{
+        const n=Number(String(value??'').replace(/[^0-9-]/g,''));
+        return Number.isFinite(n)?n:0;
+      };
+      const moneyValue=id=>money(id);
+      const lapanganCash=moneyValue('rekap-lapangan-cash');
+      const lapanganQris=moneyValue('rekap-lapangan-qrif');
+      const minumanCashEl=moneyValue('rekap-minuman-cash');
+      const minumanQrisEl=moneyValue('rekap-minuman-qrif');
+      const totalKeluar=moneyValue('rekap-keluar');
+      const cashLap=moneyValue('rekap-sisa-cash-lapangan');
+      const cashMin=moneyValue('rekap-sisa-cash-minuman');
+      const cashTotal=moneyValue('rekap-total-sisa-cash');
 
       // Seluruh 8 pilihan minuman selalu ditampilkan, termasuk yang terjual 0 pcs.
       const daftarMinuman=[
@@ -23319,14 +23446,63 @@ body.minuman-history-modal-open{overflow:hidden !important}
       ];
       const qtyMinuman={};
       daftarMinuman.forEach(nama=>qtyMinuman[nama]=0);
-      const dataMinuman=(window.globalCache&&window.globalCache.minuman)||{};
-      Object.values(dataMinuman).forEach(item=>{
-        if(!item || String(item.tgl||'')!==raw) return;
-        const nama=String(item.produk||'');
-        if(Object.prototype.hasOwnProperty.call(qtyMinuman,nama)){
-          qtyMinuman[nama]+=Number(item.jumlahPcs||0)||0;
-        }
-      });
+
+      let minumanCashNumber=0;
+      let minumanQrisNumber=0;
+      let adaBarisMinuman=false;
+
+      // Sumber utama adalah tabel transaksi Daily Recap yang sudah dirender.
+      // Dengan cara ini tanggal, pcs, nominal, dan metode pasti sama dengan
+      // data yang sedang terlihat pada halaman.
+      const tabelMinuman=document.getElementById('tabel-minuman');
+      if(tabelMinuman){
+        Array.from(tabelMinuman.querySelectorAll('tr')).forEach(row=>{
+          const cells=row.querySelectorAll('td');
+          if(cells.length<3) return;
+          const nama=String(cells[0].textContent||'').trim();
+          if(!Object.prototype.hasOwnProperty.call(qtyMinuman,nama)) return;
+
+          const pcsText=String(cells[1].textContent||'');
+          const transaksiText=String(cells[2].textContent||'');
+          const pcsMatch=pcsText.match(/-?\d+(?:[.,]\d+)?/);
+          const pcs=pcsMatch ? Number(String(pcsMatch[0]).replace(',','.')) : 0;
+          const total=moneyNumber(transaksiText);
+          const metode=(transaksiText.match(/\(([^)]+)\)\s*$/)?.[1]||'Cash').trim();
+
+          qtyMinuman[nama]+=Number.isFinite(pcs)?Math.max(0,pcs):0;
+          if(metode==='Cash') minumanCashNumber+=total;
+          else minumanQrisNumber+=total;
+          adaBarisMinuman=true;
+        });
+      }
+
+      // Fallback: jika tabel belum sempat dirender, baca globalCache.
+      if(!adaBarisMinuman){
+        const dataMinuman=(window.globalCache&&window.globalCache.minuman)||{};
+        const normalizeReportDate=v=>String(v||'').split('T')[0].trim();
+
+        Object.values(dataMinuman).forEach(item=>{
+          if(!item || normalizeReportDate(item.tgl)!==raw) return;
+          const nama=String(item.produk||'').trim();
+          if(!Object.prototype.hasOwnProperty.call(qtyMinuman,nama)) return;
+
+          const pcsRaw=item.jumlahPcs ?? item.quantity ?? item.qty ?? item.pcs ?? 0;
+          const pcs=Number(pcsRaw);
+          const total=Number(item.total||0);
+          const metode=String(item.metode||'Cash');
+
+          qtyMinuman[nama]+=Number.isFinite(pcs)?Math.max(0,pcs):0;
+          if(metode==='Cash') minumanCashNumber+=Number.isFinite(total)?total:0;
+          else minumanQrisNumber+=Number.isFinite(total)?total:0;
+        });
+      }
+
+      // Angka cash/QRIS minuman dari tabel dipakai untuk memastikan hasil
+      // download tetap benar walaupun kartu dashboard stale.
+      const minumanCash=`Rp ${minumanCashNumber.toLocaleString('id-ID')}`;
+      const minumanQris=`Rp ${minumanQrisNumber.toLocaleString('id-ID')}`;
+
+      const totalPcsMinuman=Object.values(qtyMinuman).reduce((sum,n)=>sum+(Number(n)||0),0);
       const formatPcs=n=>`${Number(n)||0} pcs`;
       const minumanRows=daftarMinuman.map(nama=>`
         <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:12px 15px">
@@ -23361,10 +23537,6 @@ body.minuman-history-modal-open{overflow:hidden !important}
         </div>
 
         <div style="background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:18px">
-          <div style="font-size:14px;font-weight:900;color:#475569">💰 TOTAL MASUK</div>
-          <div style="font-size:27px;font-weight:900;margin-top:7px">${totalMasuk}</div>
-        </div>
-        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:18px">
           <div style="font-size:14px;font-weight:900;color:#475569">💸 TOTAL KELUAR</div>
           <div style="font-size:27px;font-weight:900;margin-top:7px">${totalKeluar}</div>
         </div>
@@ -23385,6 +23557,10 @@ body.minuman-history-modal-open{overflow:hidden !important}
       </div>
 
       <div style="margin:28px 0 12px;text-align:center;font-size:22px;font-weight:900">🥤 DETAIL MINUMAN</div>
+      <div style="margin-bottom:12px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:14px;padding:13px;text-align:center">
+        <div style="font-size:12px;font-weight:900;color:#1e3a8a;letter-spacing:.03em">TOTAL PCS MINUMAN</div>
+        <div style="font-size:24px;font-weight:900;color:#0f172a;margin-top:3px">${totalPcsMinuman.toLocaleString('id-ID')} PCS</div>
+      </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">${minumanRows}</div>`;
 
       document.body.appendChild(root);await new Promise(r=>setTimeout(r,100));pr.set(62,'Membuat gambar...','Menyiapkan JPG versi singkat.');const canvas=await html2canvas(root,{scale:2,backgroundColor:'#f8fafc',useCORS:true,logging:false,width:900,windowWidth:900});pr.set(92,'Menyiapkan file...','JPG hampir selesai dibuat.');const a=document.createElement('a');a.download=`Daily Report ${dateLabel(raw)} - Versi Singkat.jpg`;a.href=canvas.toDataURL('image/jpeg',.95);a.click();pr.ok();setTimeout(()=>pr.o.remove(),1800);root.remove();
