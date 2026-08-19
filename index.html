@@ -3386,6 +3386,22 @@ html {
 </style>
 
 
+<style id="minuman-history-date-button-style">
+#minuman-history-panel .minuman-history-date-row{width:100%;position:relative}
+#minuman-history-panel #minuman-history-date{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;overflow:hidden!important}
+#minuman-history-panel .minuman-history-date-button{
+  width:100%!important; min-height:48px!important; display:flex!important; align-items:center!important; justify-content:flex-start!important; gap:10px!important;
+  padding:11px 14px!important; border-radius:14px!important; border:1px solid rgba(148,163,184,.22)!important;
+  background:rgba(255,255,255,.62)!important; color:#243b63!important; box-shadow:inset 0 1px 0 rgba(255,255,255,.72),0 3px 10px rgba(15,23,42,.04)!important;
+  font-size:12px!important; font-weight:900!important; cursor:pointer!important; text-align:left!important;
+}
+#minuman-history-panel .minuman-history-date-button:hover{background:rgba(255,255,255,.82)!important}
+#minuman-history-panel .minuman-history-date-button:active{transform:scale(.995)}
+#minuman-history-panel .minuman-history-date-icon{font-size:18px!important;line-height:1!important;flex:0 0 auto}
+#minuman-history-panel .minuman-history-date-text{flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#minuman-history-panel .minuman-history-date-chevron{font-size:16px!important;line-height:1!important;color:#64748b!important;flex:0 0 auto}
+@media(max-width:640px){#minuman-history-panel .minuman-history-date-button{min-height:50px!important;padding:12px 13px!important}}
+</style>
 <style id="minuman-history-style">
 .minuman-history-panel{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .minuman-history-table{width:100%;border-collapse:separate;border-spacing:0;font-size:11px}
@@ -9063,6 +9079,60 @@ body.minuman-edit-modal-open{overflow:hidden !important}
 }
 </style>
 
+
+<style id="today-schedule-history-v1">
+.today-schedule-head-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.today-history-btn{border:1px solid rgba(30,64,175,.22);background:linear-gradient(135deg,#eff6ff,#dbeafe);color:#1e3a8a;border-radius:12px;padding:8px 12px;font-size:10px;font-weight:950;letter-spacing:.02em;box-shadow:0 4px 12px rgba(15,23,42,.08);cursor:pointer;transition:transform .12s ease,filter .12s ease}
+.today-history-btn:hover{filter:brightness(.98);transform:translateY(-1px)}
+.today-history-overlay{position:fixed;inset:0;z-index:10050;display:flex;align-items:center;justify-content:center;padding:14px;background:rgba(15,23,42,.52);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
+.today-history-modal{width:min(920px,100%);max-height:min(88vh,820px);overflow:hidden;background:rgba(255,255,255,.97);border:1px solid rgba(255,255,255,.9);border-radius:24px;box-shadow:0 24px 70px rgba(15,23,42,.28);color:#0f172a;display:flex;flex-direction:column}
+.today-history-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px;border-bottom:1px solid #e2e8f0}
+.today-history-title{font-size:15px;font-weight:950;color:#0f172a}
+.today-history-subtitle{font-size:10px;font-weight:800;color:#64748b;margin-top:3px}
+.today-history-close{width:36px;height:36px;border:0;border-radius:11px;background:#f1f5f9;color:#334155;font-size:18px;font-weight:900;cursor:pointer}
+.today-history-body{padding:16px;overflow:auto}
+.today-history-calendar-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.today-history-month{font-size:14px;font-weight:950;color:#1e3a8a;text-align:center;flex:1}
+.today-history-nav{width:38px;height:36px;border:1px solid #dbeafe;background:#eff6ff;color:#1d4ed8;border-radius:11px;font-weight:950;cursor:pointer}
+.today-history-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin-bottom:5px}
+.today-history-week span{text-align:center;font-size:9px;font-weight:950;color:#64748b;padding:5px 0}
+.today-history-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.today-history-day{min-height:54px;border:1px solid #e2e8f0;background:#fff;border-radius:12px;padding:5px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-weight:900;color:#334155}
+.today-history-day:hover{background:#eff6ff;border-color:#93c5fd}
+.today-history-day.muted{opacity:.35;cursor:default;background:#f8fafc}
+.today-history-day.today{border:2px solid #2563eb;background:#eff6ff;color:#1d4ed8}
+.today-history-day.has-data{box-shadow:inset 0 -3px 0 #bfdbfe}
+.today-history-day-number{font-size:12px;font-weight:950}
+.today-history-day-count{font-size:7px;color:#64748b;font-weight:900}
+.today-history-back{border:0;background:#f1f5f9;color:#334155;border-radius:10px;padding:7px 10px;font-size:9px;font-weight:950;cursor:pointer}
+.today-history-selected-date{font-size:13px;font-weight:950;color:#1e3a8a;text-align:center;margin:2px 0 12px}
+.today-history-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.today-history-card{border:1px solid #e2e8f0;border-radius:15px;padding:11px;background:#fff;box-shadow:0 4px 14px rgba(15,23,42,.06)}
+.today-history-card-top{display:flex;align-items:center;gap:9px;min-width:0}
+.today-history-time{flex:0 0 auto;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;border-radius:9px;padding:6px 8px;font-size:10px;font-weight:950}
+.today-history-team{min-width:0;flex:1;font-size:12px;font-weight:950;color:#0f172a;overflow-wrap:anywhere}
+.today-history-kind{font-size:8px;font-weight:900;color:#64748b;margin-top:2px}
+.today-history-status{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:5px 8px;font-size:8px;font-weight:950;white-space:nowrap}
+.today-history-status.lunas{background:#dcfce7;color:#166534;border:1px solid #86efac}
+.today-history-status.batal{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
+.today-history-status.belum{background:#fef3c7;color:#92400e;border:1px solid #fcd34d}
+.today-history-status.free{background:#e0e7ff;color:#3730a3;border:1px solid #a5b4fc}
+.today-history-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-top:9px}
+.today-history-meta-item{border-radius:9px;background:#f8fafc;border:1px solid #e2e8f0;padding:6px 4px;text-align:center}
+.today-history-meta-item span{display:block;font-size:7px;color:#64748b;font-weight:900;text-transform:uppercase}
+.today-history-meta-item strong{display:block;margin-top:2px;font-size:9px;color:#0f172a;font-weight:950;overflow-wrap:anywhere}
+.today-history-empty{padding:24px 12px;border:1px dashed #cbd5e1;border-radius:15px;background:#f8fafc;text-align:center;color:#64748b;font-size:11px;font-weight:850}
+@media(max-width:640px){
+  .today-schedule-head-actions{width:100%;justify-content:space-between;margin-top:4px}
+  .today-history-btn{padding:7px 10px;font-size:9px}
+  .today-history-overlay{padding:8px}
+  .today-history-modal{max-height:92vh;border-radius:19px}
+  .today-history-body{padding:11px}
+  .today-history-list{grid-template-columns:1fr}
+  .today-history-day{min-height:48px;border-radius:10px}
+  .today-history-day-count{font-size:6.5px}
+}
+</style>
 </head>
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium">
 <!-- Header -->
@@ -9078,9 +9148,12 @@ body.minuman-edit-modal-open{overflow:hidden !important}
 <div class="today-schedule-head">
 <div class="today-title-wrap">
 <span class="today-icon">📅</span>
+<span class="today-date-badge" id="today-schedule-date"></span>
 <div><h3>JADWAL HARI INI</h3></div>
 </div>
-<span class="today-date-badge" id="today-schedule-date"></span>
+<div class="today-schedule-head-actions">
+<button type="button" class="today-history-btn" onclick="bukaRiwayatJadwalHariIni()" title="Lihat riwayat jadwal berdasarkan tanggal">📋 RIWAYAT</button>
+</div>
 </div>
 <div class="today-schedule-list-modern" id="today-schedule-list"></div>
 </section>
@@ -10551,9 +10624,13 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
         </div>
         <button type="button" onclick="tutupRiwayatMinuman()" class="minuman-history-close-btn" aria-label="Tutup riwayat">✕</button>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-[auto_minmax(0,1fr)] gap-2 mb-3">
-        <input id="minuman-history-date" type="date" onchange="renderMinumanHistory()" class="glass-input rounded-xl px-3 py-2 text-xs font-bold border border-amber-200/80">
-        <input id="minuman-history-search" type="search" placeholder="🔎 Cari nama minuman..." oninput="renderMinumanHistory()" class="glass-input w-full rounded-xl px-3 py-2 text-xs font-bold border border-amber-200/80">
+    <div class="minuman-history-date-row mb-3">
+        <input id="minuman-history-date" type="date" onchange="renderMinumanHistory(); updateMinumanHistoryDateButton()" aria-hidden="true" tabindex="-1">
+        <button type="button" id="minuman-history-date-button" class="minuman-history-date-button" aria-label="Pilih tanggal riwayat minuman">
+            <span class="minuman-history-date-icon">📅</span>
+            <span class="minuman-history-date-text">Pilih tanggal</span>
+            <span class="minuman-history-date-chevron">⌄</span>
+        </button>
     </div>
     <div id="minuman-history-list" class="overflow-x-auto rounded-xl border border-slate-200 bg-white/70"></div>
 </div>
@@ -11982,6 +12059,7 @@ kaosKakiTerjual: jumlahKaosKaki,
             const tglForm = document.getElementById('m-tgl')?.value || getLocalDateString();
             const tglHistory = document.getElementById('minuman-history-date');
             if (tglHistory) tglHistory.value = tglForm;
+            window.updateMinumanHistoryDateButton?.();
 
             // Simpan posisi asli sekali saja.
             if (!window.__minumanHistoryPortal) {
@@ -12073,20 +12151,70 @@ kaosKakiTerjual: jumlahKaosKaki,
             return '--:--';
         }
 
+        // RIWAYAT MINUMAN — tombol tanggal custom. Input date asli disembunyikan
+        // dan hanya dipakai sebagai penyimpan nilai YYYY-MM-DD.
+        function formatMinumanHistoryDateLabel(value){
+            if(!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return 'Pilih tanggal';
+            const d = new Date(value + 'T00:00:00');
+            if(Number.isNaN(d.getTime())) return 'Pilih tanggal';
+            return d.toLocaleDateString('id-ID',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+        }
+
+        window.updateMinumanHistoryDateButton = function(){
+            const input=document.getElementById('minuman-history-date');
+            const button=document.getElementById('minuman-history-date-button');
+            const text=button?.querySelector('.minuman-history-date-text');
+            if(text) text.textContent=formatMinumanHistoryDateLabel(input?.value || getLocalDateString());
+        };
+
+        function bindMinumanHistoryCustomCalendar(){
+            const button=document.getElementById('minuman-history-date-button');
+            const input=document.getElementById('minuman-history-date');
+            if(!button || !input || button.dataset.customCalendarBound==='1') {
+                if(button && input) window.updateMinumanHistoryDateButton();
+                return;
+            }
+            button.dataset.customCalendarBound='1';
+            const open=function(e){
+                if(e){ e.preventDefault(); e.stopPropagation(); }
+                if(typeof window.__openGlassNativePopupFor==='function'){
+                    window.__openGlassNativePopupFor(input);
+                }
+                return false;
+            };
+            button.addEventListener('pointerdown',open,true);
+            button.addEventListener('mousedown',function(e){e.preventDefault();e.stopPropagation();},true);
+            button.addEventListener('touchstart',open,{capture:true,passive:false});
+            button.addEventListener('click',open,true);
+            window.updateMinumanHistoryDateButton();
+        }
+
+        if(document.readyState==='loading'){
+            document.addEventListener('DOMContentLoaded',bindMinumanHistoryCustomCalendar);
+        } else {
+            bindMinumanHistoryCustomCalendar();
+        }
+
+        if(typeof MutationObserver !== 'undefined'){
+            const minumanHistoryCalendarObserver = new MutationObserver(function(){
+                bindMinumanHistoryCustomCalendar();
+            });
+            minumanHistoryCalendarObserver.observe(document.documentElement,{childList:true,subtree:true});
+        }
+
         window.renderMinumanHistory = () => {
             const list = document.getElementById('minuman-history-list');
             if (!list) return;
 
             setDefaultMinumanHistoryDate();
             const tanggal = document.getElementById('minuman-history-date')?.value || getLocalDateString();
-            const cari = String(document.getElementById('minuman-history-search')?.value || '').trim().toLowerCase();
+            window.updateMinumanHistoryDateButton?.();
 
             const rows = Object.entries(globalCache.minuman || {})
                 .map(([key, item]) => ({key, item}))
                 .filter(({item}) => {
                     if (!item || item.tgl !== tanggal) return false;
-                    if (!cari) return true;
-                    return String(item.produk || '').toLowerCase().includes(cari);
+                    return true;
                 })
                 // Tetap terbaru di atas berdasarkan waktu transaksi.
                 .sort((a,b) => {
@@ -13305,7 +13433,9 @@ kaosKakiTerjual: jumlahKaosKaki,
         const listJam = ["07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00"];
         const listHariKey = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
 
-        let globalCache = { member: {}, booking: {}, pemasukan: {}, minuman: {}, pengeluaran: {}, adminJaga: {}, sparring: {}, teamLogos: {}, pelunasanMember: {}, lunasDarurat: {}, bookingBatal: {}, pendingSparingNames: {} };
+        let globalCache = { member: {}, booking: {}, pemasukan: {}, minuman: {}, pengeluaran: {}, adminJaga: {}, sparring: {}, teamLogos: {}, pelunasanMember: {}, lunasDarurat: {}, bookingBatal: {}, riwayatStatusManual: {}, pendingSparingNames: {} };
+        // Riwayat Jadwal berada di scope script terpisah, sehingga cache utama diekspos secara read-only ke modul riwayat.
+        window.__sandagaGlobalCache = globalCache;
 
         function getNamaHari(dateStr) {
             let days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
@@ -14244,6 +14374,11 @@ kaosKakiTerjual: jumlahKaosKaki,
             globalCache.bookingBatal = snapshot.val() || {};
             renderTodaySchedule();
             renderMonthlyRecap();
+        });
+        // Koreksi manual status Riwayat Jadwal. Tidak mengubah data booking/pemasukan asli.
+        onValue(ref(db, 'riwayatStatusManual'), (snapshot) => {
+            globalCache.riwayatStatusManual = snapshot.val() || {};
+            if (typeof window.__refreshRiwayatJadwal === 'function') window.__refreshRiwayatJadwal();
         });
 
         onValue(ref(db, 'pelunasanMember'), (snapshot) => {
@@ -24834,6 +24969,602 @@ body.jadwal-uang-masuk-modal-active #page-masuk {
   }
 }
 </style>
+
+<style id="history-summary-mobile-fix">
+@media (max-width:640px){#today-schedule-history-modal .today-history-summary{grid-template-columns:1fr 1fr 1fr !important;gap:5px !important;}#today-schedule-history-modal .today-history-summary div{padding:8px 4px !important;}#today-schedule-history-modal .today-history-summary div div:last-child{font-size:16px !important;}}
+</style>
+
+<style id="history-status-edit-v1-css">
+#today-schedule-history-modal .today-history-card-top{position:relative !important;padding-right:40px !important;}
+#today-schedule-history-modal .today-history-edit{position:absolute !important;right:0 !important;bottom:0 !important;width:30px !important;height:30px !important;border:1px solid #dbeafe !important;border-radius:9px !important;background:#eff6ff !important;color:#1d4ed8 !important;font-size:13px !important;font-weight:900 !important;cursor:pointer !important;display:flex !important;align-items:center !important;justify-content:center !important;}
+#today-schedule-history-modal .today-history-edit:active{transform:scale(.94) !important;}
+@media (max-width:640px){#today-schedule-history-modal .today-history-edit{width:28px !important;height:28px !important;font-size:12px !important;right:0 !important;bottom:0 !important;}}
+</style>
+<script id="today-schedule-history-v1-js">
+(function(){
+    let historyCalendarDate = new Date();
+    let historySelectedDate = '';
+
+
+    const getHistoryCache = () => window.__sandagaGlobalCache || {booking:{},member:{},pemasukan:{},pelunasanMember:{},lunasDarurat:{},bookingBatal:{},riwayatStatusManual:{}};
+    const historyGetNamaHari = dateStr => { const d=new Date(String(dateStr)+'T00:00:00'); return ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][d.getDay()]; };
+    const historyMemberScheduled = (member,dateStr) => {
+        if(!member || !dateStr) return false;
+        const mulai=String(member.mulai||''); const berhenti=String(member.berhenti||'');
+        if(mulai && dateStr < mulai) return false;
+        if(berhenti && dateStr >= berhenti) return false;
+        const libur=member.liburTanggal||{};
+        return !(Array.isArray(libur) ? libur.includes(dateStr) : libur[dateStr]===true);
+    };
+    const historyBookingCancelled = (tanggal,nama,jam) => {
+        const tgl=String(tanggal||'').split('T')[0], jt=String(jam||'').substring(0,5), nt=normName(nama);
+        if(!tgl || !jt || !nt) return false;
+        return Object.values(getHistoryCache().bookingBatal||{}).some(item=>item && item.aktif!==false && String(item.tanggal||'').split('T')[0]===tgl && String(item.jam||'').substring(0,5)===jt && normName(item.nama)===nt);
+    };
+    const historyHargaLapangan = (tanggalStr,jamStr,status) => {
+        const d=new Date(String(tanggalStr)+'T00:00:00'); if(isNaN(d.getTime())) return 0;
+        const hari=d.getDay(), jam=parseInt(String(jamStr).substring(0,2),10); let harga=0;
+        if(hari>=1 && hari<=5){ if(jam>=7&&jam<=9) harga=200000; else if(jam>=10&&jam<=14) harga=250000; else if(jam>=15&&jam<=17) harga=300000; if(hari<=4){if(jam>=18&&jam<=24) harga=350000;} else {if(jam>=18&&jam<=19) harga=350000; else if(jam>=20&&jam<=24) harga=400000;}}
+        else {if(jam>=7&&jam<=14) harga=300000; else if(jam>=15&&jam<=17) harga=350000; else if(jam>=18&&jam<=24) harga=400000;}
+        if(String(status||'').toLowerCase()==='member' && harga>0) harga=Math.max(0,harga-50000);
+        return harga;
+    };
+    const historyFormatRupiah = n => 'Rp ' + Number(n||0).toLocaleString('id-ID');
+
+    const normName = value => String(value || '').replace(/\s*\(Booking\)$/i,'').trim().toLowerCase();
+    const dateOnly = value => String(value || '').split('T')[0];
+    const timeOnly = value => String(value || '').split('T')[1]?.substring(0,5) || String(value || '').substring(0,5);
+    // Lokal, tidak bergantung pada helper admin-jaga yang berada di scope lain.
+    const adminDateKey = value => {
+        const d = value instanceof Date ? value : new Date(value);
+        if (isNaN(d.getTime())) return '';
+        const y = d.getFullYear();
+        const m = String(d.getMonth()+1).padStart(2,'0');
+        const day = String(d.getDate()).padStart(2,'0');
+        return `${y}-${m}-${day}`;
+    };
+    const esc = value => typeof escapeHtmlSparing === 'function' ? escapeHtmlSparing(value) : String(value ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+
+    function historyDateLabel(dateKey){
+        const d = new Date(dateKey + 'T00:00:00');
+        return isNaN(d.getTime()) ? dateKey : d.toLocaleDateString('id-ID',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+    }
+
+    function getHistoryBookings(dateKey){
+        const map = new Map();
+        Object.entries(getHistoryCache().booking || {}).forEach(([key,item])=>{
+            if(!item || dateOnly(item.tgl)!==dateKey || !item.nama) return;
+            const jam=timeOnly(item.tgl);
+            if(!jam) return;
+            const groupKey=String(item.bookingGroupId || key);
+            const uniqueKey=groupKey+'|'+normName(item.nama);
+            if(!map.has(uniqueKey)) map.set(uniqueKey,{nama:item.nama,status:item.status||'Non-Member',booking:true,keys:[],slots:[]});
+            const g=map.get(uniqueKey);
+            g.keys.push(key);
+            g.slots.push({key,jam,item});
+        });
+        return [...map.values()];
+    }
+
+    function getHistoryMemberSchedules(dateKey, existingNames){
+        const result=[];
+        const hari=historyGetNamaHari(dateKey);
+        Object.entries(getHistoryCache().member || {}).forEach(([jam,perHari])=>{
+            const cell=perHari?.[hari];
+            if(!cell || !cell.nama || cell.type==='off' || !historyMemberScheduled(cell,dateKey)) return;
+            const jamKey=String(jam).substring(0,5);
+            if(historyBookingCancelled(dateKey,cell.nama,jamKey)) return;
+            const key=normName(cell.nama)+'|'+jamKey;
+            // Booking pada slot yang sama menjadi sumber utama.
+            if(existingNames.has(key)) return;
+            result.push({nama:cell.nama,status:'Member',booking:false,keys:[],slots:[{jam:jamKey,item:{nama:cell.nama,status:'Member',dp:0,memberCell:cell}}]});
+        });
+        return result;
+    }
+
+    function isHistoryCancelled(dateKey, name, slots){
+        return slots.length>0 && slots.every(slot=>slot.item?.batal===true || historyBookingCancelled(dateKey,name,slot.jam));
+    }
+
+    function getHistoryPayment(name,dateKey,slots,totalTagihan){
+        const target=normName(name);
+        let paid=0, free=false, found=false, effectiveTotal=Number(totalTagihan||0);
+        const cache=getHistoryCache();
+        const slotTimes=new Set(slots.map(slot=>String(slot.jam||'').substring(0,5)));
+
+        // DP yang memang melekat pada booking tanggal tersebut.
+        slots.forEach(slot=>{ paid += Math.max(0,Number(slot.item?.dp||0)); });
+
+        // Cari tanggal booking berikutnya dengan nama + jam yang sama. Ini dipakai
+        // sebagai batas agar pelunasan yang benar-benar untuk booking berikutnya
+        // tidak ikut dihitung ke histori tanggal sebelumnya.
+        let nextBookingDate='';
+        Object.values(cache.booking||{}).forEach(b=>{
+            if(!b || normName(b.nama)!==target) return;
+            const bd=dateOnly(b.tgl), bt=timeOnly(b.tgl);
+            if(!bd || !slotTimes.has(bt) || bd<=dateKey) return;
+            if(!nextBookingDate || bd<nextBookingDate) nextBookingDate=bd;
+        });
+
+        // Pelunasan bisa dicatat pada tanggal setelah tanggal jadwal. Karena itu
+        // histori tidak boleh hanya membaca pay.tgl === dateKey. Cocokkan nama+jam,
+        // prioritaskan transaksi pada tanggal jadwal, lalu izinkan transaksi sesudah
+        // tanggal jadwal sampai sebelum booking berikutnya.
+        const payments=Object.values(cache.pemasukan||{}).filter(pay=>{
+            if(!pay) return false;
+            const payDate=dateOnly(pay.tgl);
+            if(!payDate || payDate<dateKey) return false;
+            if(nextBookingDate && payDate>=nextBookingDate) return false;
+            const nama1=normName(pay.timNamaBersih||'');
+            const nama2=normName(pay.timNama2||'');
+            const ket=String(pay.ket||'');
+            if(!ket.toLowerCase().includes('pelunasan')) return false;
+            const jamMatch=ket.match(/\((\d{1,2}:\d{2})/);
+            const jamMatchKey=jamMatch ? jamMatch[1].padStart(5,'0') : '';
+            if(jamMatchKey && !slotTimes.has(jamMatchKey)) return false;
+            return nama1===target || nama2===target;
+        }).sort((a,b)=>{
+            const ad=dateOnly(a.tgl), bd=dateOnly(b.tgl);
+            return (ad===dateKey?0:1)-(bd===dateKey?0:1) || ad.localeCompare(bd);
+        });
+
+        payments.forEach(pay=>{
+            const nama1=normName(pay.timNamaBersih||'');
+            const nama2=normName(pay.timNama2||'');
+            const has2=!!nama2 || Number(pay.jumlah2||0)>0 || !!String(pay.metode2||'').trim();
+            const matches1=nama1===target;
+            const matches2=has2 && nama2===target;
+            if(!matches1 && !matches2) return;
+            found=true;
+
+            const jamMatch=String(pay.ket||'').match(/\((\d{1,2}:\d{2})/);
+            const jamPay=jamMatch ? jamMatch[1].padStart(5,'0') : '';
+            if(jamPay && !slotTimes.has(jamPay)) return;
+
+            // Gunakan tagihan efektif yang tersimpan saat transaksi dibuat.
+            // Ini penting untuk diskon manual maupun penyesuaian waktu.
+            if(matches1){
+                const storedEffective=Number(pay.totalTagihanSetelahPenyesuaian||0);
+                const diskon=Number(pay.diskonManualTim1||0);
+                if(storedEffective>0) effectiveTotal=Math.min(effectiveTotal,storedEffective);
+                else if(diskon>0) effectiveTotal=Math.max(0,effectiveTotal-diskon);
+            } else if(matches2){
+                const storedEffective=Number(pay.totalTagihanSetelahPenyesuaianTim2||0);
+                const diskon=Number(pay.diskonManualTim2||0);
+                if(storedEffective>0) effectiveTotal=Math.min(effectiveTotal,storedEffective);
+                else if(diskon>0) effectiveTotal=Math.max(0,effectiveTotal-diskon);
+            }
+
+            const isTim2=matches2 && !matches1;
+            const metode=isTim2 ? String(pay.metode2||pay.metode||'') : String(pay.metode1||pay.metode||'');
+            if(metode==='Free' || String(pay.metode||'')==='Free') free=true;
+
+            // Jika transaksi menyimpan penanda bahwa tagihan efektif sudah lunas,
+            // jangan hitung ulang terhadap harga normal.
+            if(!isTim2 && pay.lunasSetelahPenyesuaian===true) {
+                paid=Math.max(paid,effectiveTotal);
+                return;
+            }
+
+            if(!free){
+                const amount=window.getPaymentTotal
+                    ? Number(window.getPaymentTotal(pay,isTim2?2:1)||0)
+                    : Number(isTim2 ? (pay.jumlah2||0) : (pay.jumlah1 ?? pay.jumlah ?? 0));
+                paid += Math.max(0,amount);
+            }
+        });
+
+        // Pelunasan member bulanan memang dialokasikan berdasarkan tanggal + jam jadwal.
+        if(!free){
+            Object.values(cache.pelunasanMember||{}).forEach(rec=>{
+                if(normName(rec.member)!==target) return;
+                (rec.alokasi||[]).forEach(a=>{
+                    if(String(a.tanggal||'')===dateKey && slotTimes.has(String(a.jam||'').substring(0,5))) {
+                        paid += Number(a.amount||0); found=true;
+                    }
+                });
+            });
+        }
+
+        const hasEmergency=slots.some(slot=>slot.item?.lunasDarurat===true) ||
+            Object.values(cache.lunasDarurat||{}).some(x=>x && x.aktif!==false && dateOnly(x.tanggal)===dateKey && normName(x.nama)===target && slotTimes.has(String(x.jam||'').substring(0,5)));
+        if(hasEmergency) return {status:'LUNAS',className:'lunas',paid:effectiveTotal,total:effectiveTotal,free:false,found:true};
+        if(free) return {status:'LUNAS',className:'lunas',paid:effectiveTotal,total:effectiveTotal,free:true,found:true};
+        if(effectiveTotal>0 && paid >= effectiveTotal-0.5) return {status:'LUNAS',className:'lunas',paid:Math.min(paid,effectiveTotal),total:effectiveTotal,free:false,found};
+        return {status:'TIDAK LUNAS',className:'belum',paid:Math.min(paid,effectiveTotal),total:effectiveTotal,free:false,found};
+    }
+
+
+    const historyManualKey = row => encodeURIComponent(`${row.dateKey||''}|${row.jamKey||''}|${row.identity||row.nama||''}`);
+    const getHistoryManualStatus = row => getHistoryCache().riwayatStatusManual?.[historyManualKey(row)] || null;
+    const historyAutoStatus = row => row.autoStatus || row.status;
+    const historyStatusClass = status => status==='LUNAS' ? 'lunas' : (status==='BATAL BOOKING' ? 'batal' : 'belum');
+
+    function buildHistoryRows(dateKey){
+        const bookings=getHistoryBookings(dateKey);
+        const bookingSlotKeys=new Set();
+        bookings.forEach(g=>g.slots.forEach(slot=>bookingSlotKeys.add(normName(g.nama)+'|'+slot.jam)));
+        const members=getHistoryMemberSchedules(dateKey,bookingSlotKeys);
+        const groups=[...bookings,...members];
+        groups.sort((a,b)=>String(a.slots?.[0]?.jam||'').localeCompare(String(b.slots?.[0]?.jam||'')) || String(a.nama).localeCompare(String(b.nama),'id'));
+
+        return groups.map(g=>{
+            const slots=[...g.slots].sort((a,b)=>a.jam.localeCompare(b.jam));
+            const jamKey=slots.map(x=>x.jam).join('|');
+            const identity=g.booking ? `booking:${g.keys.join('|')}` : `member:${dateKey}|${jamKey}|${normName(g.nama)}`;
+            const base={dateKey,jamKey,identity,nama:g.nama,kind:g.status==='Member'?'MEMBER':'BOOKING'};
+            const canceled=g.booking && isHistoryCancelled(dateKey,g.nama,slots);
+            if(canceled){
+                const row={...base,status:'BATAL BOOKING',autoStatus:'BATAL BOOKING',className:'batal',paid:0,total:0,dp:slots.reduce((s,x)=>s+Number(x.item?.dp||0),0),manual:null};
+                const manual=getHistoryManualStatus(row);
+                if(manual?.status){ row.manual=manual; row.status=manual.status; row.className=historyStatusClass(manual.status); }
+                return row;
+            }
+            let total=0;
+            slots.forEach(slot=>{
+                const status=slot.item?.status || (slot.item?.memberCell ? 'Member' : g.status);
+                total += Number(historyHargaLapangan(dateKey,slot.jam,status)||0);
+            });
+            const payment=getHistoryPayment(g.nama,dateKey,slots,total);
+            const row={...base,status:payment.status,autoStatus:payment.status,className:payment.className,paid:payment.paid,total,dp:slots.reduce((s,x)=>s+Number(x.item?.dp||0),0),manual:null};
+            const manual=getHistoryManualStatus(row);
+            if(manual?.status){ row.manual=manual; row.status=manual.status; row.className=historyStatusClass(manual.status); }
+            return row;
+        });
+    }
+
+    async function saveHistoryManualStatus(row,status){
+        const updateFn=window.__APP_FIREBASE_UPDATE__, refFn=window.__APP_FIREBASE_REF__, dbRef=window.__APP_FIREBASE_DB__;
+        if(typeof updateFn!=='function' || typeof refFn!=='function' || !dbRef) throw new Error('Koneksi Firebase belum siap.');
+        const key=historyManualKey(row);
+        await updateFn(refFn(dbRef,'riwayatStatusManual/'+key),{
+            status,
+            tanggal:row.dateKey,
+            jam:row.jamKey,
+            nama:row.nama,
+            identity:row.identity,
+            updatedAt:Date.now()
+        });
+    }
+
+    async function removeHistoryManualStatus(row){
+        const removeFn=window.__APP_FIREBASE_REMOVE__, refFn=window.__APP_FIREBASE_REF__, dbRef=window.__APP_FIREBASE_DB__;
+        if(typeof removeFn!=='function' || typeof refFn!=='function' || !dbRef) throw new Error('Koneksi Firebase belum siap.');
+        await removeFn(refFn(dbRef,'riwayatStatusManual/'+historyManualKey(row)));
+    }
+
+    function closeHistoryEditModal(){ document.getElementById('riwayat-edit-status-modal')?.remove(); }
+
+    window.editStatusRiwayatJadwal=async (encodedRow)=>{
+        try{
+            const row=JSON.parse(decodeURIComponent(encodedRow));
+            const manual=getHistoryManualStatus(row);
+            document.getElementById('riwayat-edit-status-modal')?.remove();
+            const overlay=document.createElement('div');
+            overlay.id='riwayat-edit-status-modal';
+            overlay.style.cssText='position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;padding:14px;box-sizing:border-box;background:rgba(15,23,42,.62);backdrop-filter:blur(10px);';
+            overlay.innerHTML=`<div role="dialog" aria-modal="true" style="width:min(420px,calc(100vw - 28px));background:#fff;border-radius:22px;box-shadow:0 24px 70px rgba(15,23,42,.3);overflow:hidden;">
+                <div style="padding:16px 18px;border-bottom:1px solid #e2e8f0;background:linear-gradient(135deg,#eef6ff,#fff);position:relative;">
+                    <button type="button" data-close style="position:absolute;right:12px;top:12px;width:36px;height:36px;border:0;border-radius:11px;background:#f1f5f9;color:#334155;font-size:20px;font-weight:950;cursor:pointer;">×</button>
+                    <div style="font-size:12px;font-weight:950;color:#0f172a;">EDIT STATUS RIWAYAT</div>
+                    <div style="font-size:11px;font-weight:800;color:#64748b;margin-top:4px;">${esc(row.nama)} · ${esc(row.jamKey.replace(/\|/g,' • '))}</div>
+                </div>
+                <div style="padding:16px;">
+                    <div style="font-size:10px;font-weight:900;color:#64748b;margin-bottom:8px;">STATUS YANG DIPILIH</div>
+                    <div style="display:grid;gap:8px;">
+                        ${['LUNAS','TIDAK LUNAS','BATAL BOOKING'].map(st=>`<label style="display:flex;align-items:center;gap:10px;border:1px solid ${st==='LUNAS'?'#bbf7d0':st==='BATAL BOOKING'?'#fecaca':'#fde68a'};background:${st==='LUNAS'?'#f0fdf4':st==='BATAL BOOKING'?'#fef2f2':'#fffbeb'};border-radius:13px;padding:11px 12px;cursor:pointer;font-size:11px;font-weight:950;color:${st==='LUNAS'?'#166534':st==='BATAL BOOKING'?'#991b1b':'#92400e'};"><input type="radio" name="riwayat-status-choice" value="${st}" ${((manual?.status||row.status)===st)?'checked':''} style="accent-color:#2563eb;width:16px;height:16px;"> ${st}</label>`).join('')}
+                    </div>
+                    <div style="display:flex;gap:8px;margin-top:14px;">
+                        <button type="button" data-restore style="flex:1;border:1px solid #cbd5e1;background:#f8fafc;color:#334155;border-radius:12px;padding:10px 8px;font-size:10px;font-weight:950;${manual?'':'opacity:.45;cursor:not-allowed;'}">↩ KEMBALIKAN OTOMATIS</button>
+                        <button type="button" data-save style="flex:1;border:0;background:#1d4ed8;color:#fff;border-radius:12px;padding:10px 8px;font-size:10px;font-weight:950;cursor:pointer;">SIMPAN</button>
+                    </div>
+                </div>
+            </div>`;
+            document.body.appendChild(overlay);
+            overlay.querySelector('[data-close]').onclick=closeHistoryEditModal;
+            overlay.addEventListener('click',e=>{if(e.target===overlay) closeHistoryEditModal();});
+            overlay.querySelector('[data-restore]').onclick=async()=>{
+                if(!manual) return;
+                const btn=overlay.querySelector('[data-restore]'); btn.disabled=true;
+                try{ await removeHistoryManualStatus(row); closeHistoryEditModal(); if(window.__refreshRiwayatJadwal) window.__refreshRiwayatJadwal(); }
+                catch(err){ console.error(err); alert('Gagal mengembalikan status otomatis: '+err.message); btn.disabled=false; }
+            };
+            overlay.querySelector('[data-save]').onclick=async()=>{
+                const selected=overlay.querySelector('input[name="riwayat-status-choice"]:checked')?.value;
+                if(!selected) return;
+                const btn=overlay.querySelector('[data-save]'); btn.disabled=true; btn.textContent='MENYIMPAN...';
+                try{ await saveHistoryManualStatus(row,selected); closeHistoryEditModal(); if(window.__refreshRiwayatJadwal) window.__refreshRiwayatJadwal(); }
+                catch(err){ console.error(err); alert('Gagal menyimpan status: '+err.message); btn.disabled=false; btn.textContent='SIMPAN'; }
+            };
+        }catch(err){ console.error('Edit status riwayat:',err); alert('Data riwayat tidak dapat diedit.'); }
+    };
+
+    function renderHistoryCalendar(){
+        const year=historyCalendarDate.getFullYear(),month=historyCalendarDate.getMonth();
+        const first=new Date(year,month,1),last=new Date(year,month+1,0);
+        const offset=(first.getDay()+6)%7;
+        const today=getLocalDateString();
+        const dataDates=new Set();
+        Object.values(getHistoryCache().booking||{}).forEach(b=>{if(b && dateOnly(b.tgl)) dataDates.add(dateOnly(b.tgl));});
+        const monthLabel=historyCalendarDate.toLocaleDateString('id-ID',{month:'long',year:'numeric'});
+        let html='';
+        for(let i=0;i<offset;i++) html+='<button type="button" class="today-history-day muted" tabindex="-1"></button>';
+        for(let day=1;day<=last.getDate();day++){
+            const d=new Date(year,month,day),key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+            const isToday=key===today;
+            // Kalender harus tetap tampil meskipun ada data lama yang tidak lengkap.
+            // Hitung jumlah tim secara aman; jika data tidak bisa dibaca, hari tetap bisa dipilih.
+            let count = 0;
+            try { count = buildHistoryRows(key).length; } catch (err) { console.warn('Riwayat: gagal membaca data tanggal', key, err); count = 0; }
+            html+=`<button type="button" class="today-history-day ${isToday?'today ':''}${count?'has-data':''}" onclick="pilihTanggalRiwayatJadwal('${key}')"><span class="today-history-day-number">${day}</span>${count?`<span class="today-history-day-count">${count} tim</span>`:''}</button>`;
+        }
+        const total=offset+last.getDate(),tail=(7-total%7)%7;
+        for(let i=0;i<tail;i++) html+='<button type="button" class="today-history-day muted" tabindex="-1"></button>';
+        const modal=document.getElementById('today-schedule-history-modal');
+        if(!modal) return;
+        const title=modal.querySelector('[data-history-title]');
+        const body=modal.querySelector('[data-history-body]');
+        if(title) title.textContent='RIWAYAT JADWAL';
+        if(body) body.innerHTML=`<div class="today-history-calendar-head"><button type="button" class="today-history-nav" onclick="ubahBulanRiwayatJadwal(-1)">‹</button><div class="today-history-month">${monthLabel}</div><button type="button" class="today-history-nav" onclick="ubahBulanRiwayatJadwal(1)">›</button></div><div class="today-history-week">${['Sen','Sel','Rab','Kam','Jum','Sab','Min'].map(x=>`<span>${x}</span>`).join('')}</div><div class="today-history-days">${html}</div><div style="display:flex;justify-content:center;margin-top:10px"><button type="button" class="today-history-back" onclick="pilihTanggalRiwayatJadwal('${today}')">📅 Kembali ke Hari Ini</button></div>`;
+    }
+
+    function renderHistoryResult(dateKey){
+        const modal=document.getElementById('today-schedule-history-modal');
+        if(!modal) return;
+        const body=modal.querySelector('[data-history-body]');
+        const rows=buildHistoryRows(dateKey);
+        const title=modal.querySelector('[data-history-title]');
+        if(title) title.textContent='RIWAYAT JADWAL';
+
+        const totalLunas=rows.filter(r=>r.status==='LUNAS').length;
+        const totalTidakLunas=rows.filter(r=>r.status==='TIDAK LUNAS').length;
+        const totalBatal=rows.filter(r=>r.status==='BATAL BOOKING').length;
+
+        const cards=rows.map(row=>{
+            const payload=encodeURIComponent(JSON.stringify({dateKey:row.dateKey,jamKey:row.jamKey,identity:row.identity,nama:row.nama,status:row.status,autoStatus:row.autoStatus})).replace(/'/g,'%27');
+            return `<article class="today-history-card">
+                <div class="today-history-card-top">
+                    <div class="today-history-time">⏰ ${esc(row.jam.replace(/:/g,'.'))}</div>
+                    <div class="today-history-team">${esc(row.nama)}<div class="today-history-kind">${esc(row.kind)}</div></div>
+                    <span class="today-history-status ${row.className}">${esc(row.status)}</span>
+                    <button type="button" class="today-history-edit" onclick="editStatusRiwayatJadwal('${payload}')" aria-label="Edit status">✏️</button>
+                </div>
+            </article>`;
+        }).join('');
+
+        const summary=`<div class="today-history-summary" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 12px;">
+            <div style="border:1px solid #bbf7d0;background:#f0fdf4;border-radius:14px;padding:10px;text-align:center;">
+                <div style="font-size:9px;font-weight:950;color:#166534;text-transform:uppercase;">LUNAS</div>
+                <div style="font-size:22px;font-weight:950;color:#15803d;line-height:1.1;margin-top:3px;">${totalLunas} TIM</div>
+            </div>
+            <div style="border:1px solid #fde68a;background:#fffbeb;border-radius:14px;padding:10px;text-align:center;">
+                <div style="font-size:9px;font-weight:950;color:#92400e;text-transform:uppercase;">TIDAK LUNAS</div>
+                <div style="font-size:22px;font-weight:950;color:#b45309;line-height:1.1;margin-top:3px;">${totalTidakLunas} TIM</div>
+            </div>
+            <div style="border:1px solid #fecaca;background:#fef2f2;border-radius:14px;padding:10px;text-align:center;">
+                <div style="font-size:9px;font-weight:950;color:#991b1b;text-transform:uppercase;">BATAL BOOKING</div>
+                <div style="font-size:22px;font-weight:950;color:#dc2626;line-height:1.1;margin-top:3px;">${totalBatal} TIM</div>
+            </div>
+        </div>`;
+
+        if(body) body.innerHTML=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><button type="button" class="today-history-back" onclick="kembaliKalenderRiwayatJadwal()">← Kalender</button><div class="today-history-selected-date" style="flex:1;margin:0">${esc(historyDateLabel(dateKey))}</div></div>${summary}${cards?`<div class="today-history-list">${cards}</div>`:'<div class="today-history-empty">Tidak ada jadwal yang tercatat pada tanggal ini.</div>'}`;
+    }
+
+    function bukaPemilihTanggalRiwayat(){
+        document.getElementById('riwayat-date-picker-overlay')?.remove();
+        const pad=n=>String(n).padStart(2,'0');
+        const toKey=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+        const months=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+        const days=['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+        const today=new Date(); today.setHours(0,0,0,0);
+        let view=new Date(today.getFullYear(),today.getMonth(),1);
+
+        const overlay=document.createElement('div');
+        overlay.id='riwayat-date-picker-overlay';
+        overlay.style.cssText='position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;padding:12px;box-sizing:border-box;background:rgba(15,23,42,.62);backdrop-filter:blur(10px);';
+        overlay.innerHTML=`
+          <div id="riwayat-date-picker-card" role="dialog" aria-modal="true" aria-label="Pilih tanggal riwayat" style="width:min(430px,calc(100vw - 24px));max-height:92vh;overflow:auto;background:#fff;border-radius:24px;box-shadow:0 24px 70px rgba(15,23,42,.28);color:#0f172a;">
+            <div style="position:relative;background:linear-gradient(135deg,#eef6ff,#ffffff);padding:18px 18px 14px;border-bottom:1px solid #e2e8f0;">
+              <button type="button" data-close-picker aria-label="Tutup" style="position:absolute;right:14px;top:14px;width:38px;height:38px;border:0;border-radius:12px;background:#f1f5f9;color:#334155;font-size:22px;font-weight:900;cursor:pointer;">×</button>
+              <div style="font-size:11px;font-weight:950;letter-spacing:.08em;color:#1e3a8a;text-transform:uppercase;">PILIH TANGGAL RIWAYAT</div>
+              <div style="font-size:12px;font-weight:800;color:#64748b;margin-top:4px;padding-right:48px;">Pilih tanggal untuk melihat status setiap tim.</div>
+            </div>
+            <div style="padding:16px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;">
+                <button type="button" data-prev style="width:42px;height:42px;border:1px solid #dbeafe;border-radius:12px;background:#eff6ff;color:#1d4ed8;font-size:20px;font-weight:950;cursor:pointer;">‹</button>
+                <div data-month style="font-size:16px;font-weight:950;color:#1e3a8a;text-align:center;"></div>
+                <button type="button" data-next style="width:42px;height:42px;border:1px solid #dbeafe;border-radius:12px;background:#eff6ff;color:#1d4ed8;font-size:20px;font-weight:950;cursor:pointer;">›</button>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin-bottom:6px;">${days.map(d=>`<div style="text-align:center;font-size:9px;font-weight:950;color:#94a3b8;padding:4px 0;">${d}</div>`).join('')}</div>
+              <div data-grid style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;"></div>
+              <div data-selected style="margin-top:14px;border:1px solid #dbeafe;background:#eff6ff;border-radius:14px;padding:11px 12px;font-size:11px;font-weight:800;color:#1e3a8a;text-align:center;">Pilih tanggal pada kalender.</div>
+            </div>
+          </div>`;
+        document.body.appendChild(overlay);
+
+        const close=()=>overlay.remove();
+        overlay.querySelector('[data-close-picker]').onclick=close;
+        overlay.addEventListener('click',e=>{if(e.target===overlay) close();});
+
+        const render=()=>{
+          const y=view.getFullYear(),m=view.getMonth();
+          overlay.querySelector('[data-month]').textContent=`${months[m]} ${y}`;
+          const grid=overlay.querySelector('[data-grid]');
+          const first=new Date(y,m,1);
+          const offset=first.getDay();
+          const daysInMonth=new Date(y,m+1,0).getDate();
+          let html='';
+          for(let i=0;i<offset;i++) html+='<div style="height:42px;"></div>';
+          for(let day=1;day<=daysInMonth;day++){
+            const d=new Date(y,m,day); d.setHours(0,0,0,0);
+            const key=toKey(d), isToday=key===toKey(today);
+            html+=`<button type="button" data-date="${key}" style="height:42px;border:1px solid ${isToday?'#2563eb':'#e2e8f0'};border-radius:12px;background:${isToday?'#eff6ff':'#fff'};color:${isToday?'#1d4ed8':'#334155'};font-size:12px;font-weight:950;cursor:pointer;position:relative;">${day}${isToday?'<span style="position:absolute;left:50%;bottom:4px;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:#2563eb;"></span>':''}</button>`;
+          }
+          const total=offset+daysInMonth, tail=(7-total%7)%7;
+          for(let i=0;i<tail;i++) html+='<div style="height:42px;"></div>';
+          grid.innerHTML=html;
+          grid.querySelectorAll('[data-date]').forEach(btn=>btn.addEventListener('click',()=>{
+            const key=btn.dataset.date;
+            const d=new Date(key+'T00:00:00');
+            const label=`${days[d.getDay()]}, ${pad(d.getDate())} ${months[d.getMonth()]} ${d.getFullYear()}`;
+            overlay.querySelector('[data-selected]').textContent=`📅 ${label}`;
+            close();
+            bukaRiwayatJadwalDenganTanggal(key);
+          }));
+        };
+        overlay.querySelector('[data-prev]').onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()-1,1);render();};
+        overlay.querySelector('[data-next]').onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()+1,1);render();};
+        render();
+    }
+
+    window.__refreshRiwayatJadwal=()=>{
+        if(!historySelectedDate) return;
+        const modal=document.getElementById('today-schedule-history-modal');
+        if(!modal) return;
+        try{ renderHistoryResult(historySelectedDate); }catch(err){ console.error('Refresh Riwayat Jadwal:',err); }
+    };
+
+    window.bukaRiwayatJadwalDenganTanggal=(dateKey)=>{
+        document.getElementById('today-schedule-history-modal')?.remove();
+        document.body.insertAdjacentHTML('beforeend',`<div id="today-schedule-history-modal" class="today-history-overlay" role="dialog" aria-modal="true" aria-label="Riwayat jadwal"><div class="today-history-modal"><div class="today-history-top"><div><div class="today-history-title" data-history-title>RIWAYAT JADWAL</div><div class="today-history-subtitle">Status jadwal berdasarkan tanggal yang dipilih.</div></div><button type="button" class="today-history-close" onclick="tutupRiwayatJadwalHariIni()" aria-label="Tutup">×</button></div><div class="today-history-body" data-history-body></div></div></div>`);
+        historySelectedDate=String(dateKey||'');
+        const overlay=document.getElementById('today-schedule-history-modal');
+        overlay?.addEventListener('click',e=>{if(e.target===overlay) tutupRiwayatJadwalHariIni();});
+        try { renderHistoryResult(historySelectedDate); } catch(err) {
+            console.error('Riwayat Jadwal: gagal menampilkan hasil',err);
+            const body=overlay?.querySelector('[data-history-body]');
+            if(body) body.innerHTML='<div class="today-history-empty">Riwayat untuk tanggal ini belum dapat ditampilkan.</div>';
+        }
+    };
+
+    window.bukaRiwayatJadwalHariIni=()=>{
+        bukaPemilihTanggalRiwayat();
+    };
+    window.tutupRiwayatJadwalHariIni=()=>document.getElementById('today-schedule-history-modal')?.remove();
+    window.ubahBulanRiwayatJadwal=(offset)=>{historyCalendarDate=new Date(historyCalendarDate.getFullYear(),historyCalendarDate.getMonth()+offset,1);renderHistoryCalendar();};
+    window.pilihTanggalRiwayatJadwal=(dateKey)=>{historySelectedDate=dateKey;renderHistoryResult(dateKey);};
+    window.kembaliKalenderRiwayatJadwal=()=>{historySelectedDate='';renderHistoryCalendar();};
+    document.addEventListener('keydown',e=>{if(e.key==='Escape') tutupRiwayatJadwalHariIni();});
+})();
+</script>
+
+<style id="jadwal-tanggal-sebelah-ikon-final">
+/* Tanggal hari ini ditempatkan di samping ikon kalender, bukan di area tombol RIWAYAT. */
+#page-jadwal #today-schedule-panel .today-schedule-head {
+    position: relative !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+}
+#page-jadwal #today-schedule-panel .today-title-wrap {
+    position: relative !important;
+    width: auto !important;
+    max-width: 100% !important;
+    display: inline-flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 8px !important;
+    text-align: center !important;
+}
+#page-jadwal #today-schedule-panel .today-title-wrap > div {
+    width: auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+}
+#page-jadwal #today-schedule-panel .today-title-wrap h3 {
+    text-align: center !important;
+    text-transform: uppercase !important;
+    margin: 0 !important;
+}
+#page-jadwal #today-schedule-panel .today-icon {
+    position: static !important;
+    flex: 0 0 auto !important;
+    z-index: 2 !important;
+}
+#page-jadwal #today-schedule-panel .today-date-badge {
+    position: static !important;
+    right: auto !important;
+    flex: 0 0 auto !important;
+    z-index: 2 !important;
+    margin: 0 !important;
+}
+#page-jadwal #today-schedule-panel .today-schedule-head-actions {
+    position: absolute !important;
+    right: 10px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 30 !important;
+    pointer-events: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+}
+#page-jadwal #today-schedule-panel .today-history-btn {
+    position: relative !important;
+    z-index: 31 !important;
+    pointer-events: auto !important;
+}
+@media (max-width: 640px) {
+    #page-jadwal #today-schedule-panel .today-schedule-head-actions {
+        right: 7px !important;
+    }
+    #page-jadwal #today-schedule-panel .today-title-wrap {
+        gap: 6px !important;
+    }
+}
+</style>
+
+<style id="daily-recap-custom-date-control-v1">
+/* DAILY RECAP — jangan biarkan browser membuka kalender native Windows/HP. */
+#daily-dashboard-date-input{
+  cursor:pointer !important;
+  caret-color:transparent !important;
+}
+#daily-dashboard-date-input::-webkit-calendar-picker-indicator{
+  opacity:.35 !important;
+  cursor:pointer !important;
+}
+</style>
+<script id="daily-recap-custom-date-control-v1">
+(function(){
+  'use strict';
+  function bindDailyRecapCustomCalendar(){
+    const input=document.getElementById('daily-dashboard-date-input');
+    if(!input || input.dataset.customCalendarBound==='1') return;
+    input.dataset.customCalendarBound='1';
+
+    const open=function(e){
+      if(e){ e.preventDefault(); e.stopPropagation(); }
+      if(typeof window.__openGlassNativePopupFor==='function'){
+        window.__openGlassNativePopupFor(input);
+      }
+      return false;
+    };
+
+    /* pointerdown wajib dicegat karena pada HP/native picker sering terbuka
+       sebelum event click berjalan. */
+    input.addEventListener('pointerdown',open,true);
+    input.addEventListener('mousedown',function(e){
+      e.preventDefault(); e.stopPropagation();
+    },true);
+    input.addEventListener('touchstart',open,{capture:true,passive:false});
+    input.addEventListener('click',open,true);
+    input.addEventListener('keydown',function(e){
+      if(e.key==='Enter' || e.key===' ' || e.key==='ArrowDown') open(e);
+    },true);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bindDailyRecapCustomCalendar);
+  else bindDailyRecapCustomCalendar();
+
+  /* Daily Recap adalah halaman yang bisa dirender ulang/ditampilkan belakangan. */
+  const observer=new MutationObserver(function(){ bindDailyRecapCustomCalendar(); });
+  observer.observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
 </body>
 
 <style id="FINAL_FIX_UANG_KELUAR_ONE_BIG_GLASS_CARD">
@@ -30101,6 +30832,29 @@ body.daily-sub-modal-v6-open > main #sub-page-ringkasan{
     z-index: 2 !important;
 }
 
+/* Tombol RIWAYAT harus berada di atas wrapper judul yang lebarnya penuh. */
+#page-jadwal #today-schedule-panel .today-schedule-head-actions {
+    position: absolute !important;
+    right: 10px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 20 !important;
+    pointer-events: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+}
+#page-jadwal #today-schedule-panel .today-history-btn {
+    position: relative !important;
+    z-index: 21 !important;
+    pointer-events: auto !important;
+}
+@media (max-width: 640px) {
+    #page-jadwal #today-schedule-panel .today-schedule-head-actions {
+        right: 7px !important;
+    }
+}
+
 @media (max-width: 640px) {
     #page-jadwal #today-schedule-panel .today-date-badge {
         right: 7px !important;
@@ -31703,8 +32457,8 @@ html, body {
   color:transparent !important;
 }
 #minuman-history-modal-overlay #minuman-history-panel > .grid input[type="date"]::-webkit-calendar-picker-indicator{
-  opacity:.72 !important;
-  cursor:pointer !important;
+  opacity:0 !important;
+  pointer-events:none !important;
 }
 #minuman-history-modal-overlay #minuman-history-list{
   max-height:calc(min(84vh,760px) - 118px) !important;
