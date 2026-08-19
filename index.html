@@ -25271,6 +25271,22 @@ body.jadwal-uang-masuk-modal-active #page-masuk {
 }
 </style>
 
+<style id="history-status-edit-button">
+#today-schedule-history-modal .today-history-edit-btn{
+  width:100%;
+  margin-top:7px;
+  min-height:34px;
+  border:1px solid rgba(59,130,246,.35);
+  border-radius:10px;
+  background:rgba(239,246,255,.95);
+  color:#1d4ed8;
+  font-size:10px;
+  font-weight:950;
+  letter-spacing:.02em;
+  cursor:pointer;
+}
+#today-schedule-history-modal .today-history-edit-btn:active{transform:scale(.99);}
+</style>
 <style id="history-summary-mobile-fix">
 @media (max-width:640px){#today-schedule-history-modal .today-history-summary{grid-template-columns:1fr 1fr 1fr !important;gap:5px !important;}#today-schedule-history-modal .today-history-summary div{padding:8px 4px !important;}#today-schedule-history-modal .today-history-summary div div:last-child{font-size:16px !important;}}
 </style>
@@ -25280,7 +25296,20 @@ body.jadwal-uang-masuk-modal-active #page-masuk {
     let historySelectedDate = '';
 
 
-    const getHistoryCache = () => window.__sandagaGlobalCache || {booking:{},member:{},pemasukan:{},pelunasanMember:{},lunasDarurat:{},bookingBatal:{}};
+    const getHistoryCache = () => window.__sandagaGlobalCache || {booking:{},member:{},pemasukan:{},pelunasanMember:{},lunasDarurat:{},bookingBatal:{},riwayatStatusManual:{}};
+    if(typeof onValue==='function' && typeof ref==='function' && typeof db!=='undefined'){
+        try {
+            onValue(ref(db,'riwayatStatusManual'),snapshot=>{
+                const cache=getHistoryCache();
+                cache.riwayatStatusManual=snapshot.val()||{};
+                if(historySelectedDate){
+                    try { renderHistoryResult(historySelectedDate); } catch(e) { console.warn('Riwayat status manual gagal dirender:',e); }
+                }
+            });
+        } catch(e) {
+            console.warn('Listener status manual riwayat gagal dipasang:',e);
+        }
+    }
     const historyGetNamaHari = dateStr => { const d=new Date(String(dateStr)+'T00:00:00'); return ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][d.getDay()]; };
     const historyMemberScheduled = (member,dateStr) => {
         if(!member || !dateStr) return false;
@@ -25360,11 +25389,28 @@ body.jadwal-uang-masuk-modal-active #page-masuk {
         return slots.length>0 && slots.every(slot=>slot.item?.batal===true || historyBookingCancelled(dateKey,name,slot.jam));
     }
 
+    function historyManualStatusKey(dateKey,name,jam){
+        return `${String(dateKey||'')}__${encodeURIComponent(normName(name))}__${String(jam||'').substring(0,5)}`;
+    }
+
     function getHistoryPayment(name,dateKey,slots,totalTagihan){
         const target=normName(name);
         let paid=0, free=false, found=false, effectiveTotal=Number(totalTagihan||0);
         const cache=getHistoryCache();
         const slotTimes=new Set(slots.map(slot=>String(slot.jam||'').substring(0,5)));
+
+        // Admin dapat mengunci status histori secara manual. Jika ada override,
+        // status tersebut menjadi sumber kebenaran untuk kartu riwayat.
+        const manualStatuses = cache.riwayatStatusManual || {};
+        let manualStatus = '';
+        for(const jam of slotTimes){
+            const item = manualStatuses[historyManualStatusKey(dateKey,target,jam)];
+            const status = String(item?.status || '').toUpperCase();
+            if(status === 'LUNAS' || status === 'TIDAK LUNAS'){
+                manualStatus = status;
+                break;
+            }
+        }
 
         // DP yang memang melekat pada booking tanggal tersebut.
         slots.forEach(slot=>{ paid += Math.max(0,Number(slot.item?.dp||0)); });
@@ -25430,8 +25476,27 @@ body.jadwal-uang-masuk-modal-active #page-masuk {
             }
 
             const isTim2=matches2 && !matches1;
-            const metode=isTim2 ? String(pay.metode2||pay.metode||'') : String(pay.metode1||pay.metode||'');
-            if(metode==='Free' || String(pay.metode||'')==='Free') free=true;
+
+            // FREE / GRATIS harus selalu dianggap LUNAS di riwayat.
+            // Data lama bisa menyimpan penanda Free pada metode maupun
+            // paymentStatus, sehingga jangan hanya bergantung pada satu field.
+            const metode = isTim2
+                ? String(pay.metode2 || pay.metode || '')
+                : String(pay.metode1 || pay.metode || '');
+            const paymentStatus = isTim2
+                ? String(pay.paymentStatus2 || '')
+                : String(pay.paymentStatus1 || '');
+            const isFreeValue = value => {
+                const normalized = String(value || '').trim().toLowerCase();
+                return normalized === 'free'
+                    || normalized === 'gratis'
+                    || normalized === 'free / gratis'
+                    || normalized.includes('free')
+                    || normalized.includes('gratis');
+            };
+            if(isFreeValue(metode) || isFreeValue(pay.metode) || isFreeValue(paymentStatus)) {
+                free = true;
+            }
 
             // Jika transaksi menyimpan penanda bahwa tagihan efektif sudah lunas,
             // jangan hitung ulang terhadap harga normal.
@@ -25463,6 +25528,8 @@ body.jadwal-uang-masuk-modal-active #page-masuk {
         const hasEmergency=slots.some(slot=>slot.item?.lunasDarurat===true) ||
             Object.values(cache.lunasDarurat||{}).some(x=>x && x.aktif!==false && dateOnly(x.tanggal)===dateKey && normName(x.nama)===target && slotTimes.has(String(x.jam||'').substring(0,5)));
         if(hasEmergency) return {status:'LUNAS',className:'lunas',paid:effectiveTotal,total:effectiveTotal,free:false,found:true};
+        if(manualStatus === 'LUNAS') return {status:'LUNAS',className:'lunas',paid:effectiveTotal,total:effectiveTotal,free:false,found:true,manual:true};
+        if(manualStatus === 'TIDAK LUNAS') return {status:'TIDAK LUNAS',className:'belum',paid:Math.min(paid,effectiveTotal),total:effectiveTotal,free:false,found:true,manual:true};
         if(free) return {status:'LUNAS',className:'lunas',paid:effectiveTotal,total:effectiveTotal,free:true,found:true};
         if(effectiveTotal>0 && paid >= effectiveTotal-0.5) return {status:'LUNAS',className:'lunas',paid:Math.min(paid,effectiveTotal),total:effectiveTotal,free:false,found};
         return {status:'TIDAK LUNAS',className:'belum',paid:Math.min(paid,effectiveTotal),total:effectiveTotal,free:false,found};
@@ -25489,7 +25556,7 @@ body.jadwal-uang-masuk-modal-active #page-masuk {
                 total += Number(historyHargaLapangan(dateKey,slot.jam,status)||0);
             });
             const payment=getHistoryPayment(g.nama,dateKey,slots,total);
-            return {nama:g.nama,jam:slots.map(x=>x.jam).join(' • '),status:payment.status,className:payment.className,kind:g.status==='Member'?'MEMBER':'BOOKING',paid:payment.paid,total,dp:slots.reduce((s,x)=>s+Number(x.item?.dp||0),0)};
+            return {dateKey,nama:g.nama,jam:slots.map(x=>x.jam).join(' • '),slotTimes:slots.map(x=>String(x.jam||'').substring(0,5)),status:payment.status,className:payment.className,kind:g.status==='Member'?'MEMBER':'BOOKING',paid:payment.paid,total,dp:slots.reduce((s,x)=>s+Number(x.item?.dp||0),0)};
         });
     }
 
@@ -25540,6 +25607,7 @@ body.jadwal-uang-masuk-modal-active #page-masuk {
                 <div class="today-history-team">${esc(row.nama)}<div class="today-history-kind">${esc(row.kind)}</div></div>
                 <span class="today-history-status ${row.className}">${esc(row.status)}</span>
             </div>
+            ${row.status !== 'BATAL BOOKING' ? `<button type="button" class="today-history-edit-btn" onclick="editStatusRiwayatJadwal('${row.dateKey}','${encodeURIComponent(String(row.nama||''))}','${encodeURIComponent(JSON.stringify(row.slotTimes||[]))}')">✏️ EDIT STATUS</button>` : ''}
         </article>`).join('');
 
         const summary=`<div class="today-history-summary" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 12px;">
@@ -25557,7 +25625,7 @@ body.jadwal-uang-masuk-modal-active #page-masuk {
             </div>
         </div>`;
 
-        if(body) body.innerHTML=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><button type="button" class="today-history-back" onclick="kembaliKalenderRiwayatJadwal()">← Kalender</button><div class="today-history-selected-date" style="flex:1;margin:0">${esc(historyDateLabel(dateKey))}</div></div>${summary}${cards?`<div class="today-history-list">${cards}</div>`:'<div class="today-history-empty">Tidak ada jadwal yang tercatat pada tanggal ini.</div>'}`;
+        if(body) body.innerHTML=`<div class="today-history-selected-date" style="width:100%;margin:2px 0 12px;text-align:center">${esc(historyDateLabel(dateKey))}</div>${summary}${cards?`<div class="today-history-list">${cards}</div>`:'<div class="today-history-empty">Tidak ada jadwal yang tercatat pada tanggal ini.</div>'}`;
     }
 
     function bukaPemilihTanggalRiwayat(){
@@ -25637,6 +25705,75 @@ body.jadwal-uang-masuk-modal-active #page-masuk {
             console.error('Riwayat Jadwal: gagal menampilkan hasil',err);
             const body=overlay?.querySelector('[data-history-body]');
             if(body) body.innerHTML='<div class="today-history-empty">Riwayat untuk tanggal ini belum dapat ditampilkan.</div>';
+        }
+    };
+
+    window.editStatusRiwayatJadwal=(dateKey,encodedName,encodedSlots)=>{
+        const nama=decodeURIComponent(encodedName||'');
+        let slotTimes=[];
+        try { slotTimes=JSON.parse(decodeURIComponent(encodedSlots||'[]')); } catch(e) {}
+        if(!dateKey || !nama || !slotTimes.length) return;
+
+        document.getElementById('modal-edit-status-riwayat')?.remove();
+        const rows=buildHistoryRows(dateKey);
+        const row=rows.find(r=>normName(r.nama)===normName(nama) && (r.slotTimes||[]).some(j=>slotTimes.includes(j)));
+        const current=row?.status || 'TIDAK LUNAS';
+
+        document.body.insertAdjacentHTML('beforeend',`
+            <div id="modal-edit-status-riwayat" class="fixed inset-0 z-[250] flex items-center justify-center p-3 bg-slate-900/70 backdrop-blur-sm">
+                <div class="w-full max-w-sm rounded-2xl border border-white/50 bg-white shadow-2xl p-4 text-slate-900">
+                    <div class="flex items-start justify-between gap-3 mb-4">
+                        <div>
+                            <div class="font-black text-base">✏️ EDIT STATUS RIWAYAT</div>
+                            <div class="text-[10px] text-slate-500 font-bold mt-1">${esc(nama)} · ${esc(slotTimes.join(' • '))}</div>
+                        </div>
+                        <button type="button" onclick="document.getElementById('modal-edit-status-riwayat')?.remove()" class="w-9 h-9 rounded-xl bg-slate-100 font-black text-slate-600">×</button>
+                    </div>
+
+                    <label class="block text-xs font-black mb-1">Status Pembayaran</label>
+                    <select id="edit-riwayat-status-value" class="w-full p-3 rounded-xl border border-slate-300 bg-white font-black text-sm">
+                        <option value="LUNAS" ${current==='LUNAS'?'selected':''}>LUNAS</option>
+                        <option value="TIDAK LUNAS" ${current==='TIDAK LUNAS'?'selected':''}>TIDAK LUNAS</option>
+                    </select>
+
+                    <div class="flex gap-2 mt-4">
+                        <button type="button" onclick="simpanStatusRiwayatJadwal('${dateKey}','${encodeURIComponent(nama)}','${encodeURIComponent(JSON.stringify(slotTimes))}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl text-sm font-black shadow">💾 Simpan</button>
+                        <button type="button" onclick="document.getElementById('modal-edit-status-riwayat')?.remove()" class="bg-slate-200 hover:bg-slate-300 text-slate-900 px-4 py-2.5 rounded-xl text-sm font-black">Batal</button>
+                    </div>
+                </div>
+            </div>
+        `);
+    };
+
+    window.simpanStatusRiwayatJadwal=async(dateKey,encodedName,encodedSlots)=>{
+        const nama=decodeURIComponent(encodedName||'');
+        let slotTimes=[];
+        try { slotTimes=JSON.parse(decodeURIComponent(encodedSlots||'[]')); } catch(e) {}
+        const status=String(document.getElementById('edit-riwayat-status-value')?.value||'').toUpperCase();
+        if(!dateKey || !nama || !slotTimes.length || !['LUNAS','TIDAK LUNAS'].includes(status)) return;
+
+        try {
+            if(typeof update!=='function' || typeof ref!=='function' || typeof db==='undefined'){
+                throw new Error('Koneksi database tidak tersedia.');
+            }
+
+            const cache=getHistoryCache();
+            cache.riwayatStatusManual=cache.riwayatStatusManual||{};
+
+            await Promise.all(slotTimes.map(jam=>{
+                const key=historyManualStatusKey(dateKey,nama,jam);
+                const data={dateKey,nama:normName(nama),jam:String(jam).substring(0,5),status,updatedAt:Date.now()};
+                cache.riwayatStatusManual[key]=data;
+                return update(ref(db,'riwayatStatusManual/'+key),data);
+            }));
+
+            document.getElementById('modal-edit-status-riwayat')?.remove();
+            renderHistoryResult(dateKey);
+            if(typeof showSuccessPopup==='function') showSuccessPopup(`Status ${nama} berhasil diubah menjadi ${status}.`);
+            else alert(`Status ${nama} berhasil diubah menjadi ${status}.`);
+        } catch(error) {
+            console.error('Edit status riwayat:',error);
+            alert('Gagal menyimpan status riwayat: '+error.message);
         }
     };
 
