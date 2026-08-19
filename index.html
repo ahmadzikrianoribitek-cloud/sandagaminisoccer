@@ -34883,3 +34883,40 @@ html:has(body > main #page-minuman:not(.hidden)) body {
   overflow-y: auto !important;
 }
 </style>
+
+
+<style id="mobile-riwayat-jadwal-final-v1">
+/* RIWAYAT JADWAL — HP saja. Desktop dipertahankan seperti semula. */
+@media (max-width: 640px) {
+    #page-jadwal #today-schedule-panel .today-schedule-head {
+        margin-bottom: 46px !important;
+    }
+
+    /* Letakkan RIWAYAT tepat di bawah judul agar header HP lebih seimbang. */
+    #page-jadwal #today-schedule-panel .today-schedule-head-actions {
+        position: absolute !important;
+        top: calc(100% + 7px) !important;
+        left: 50% !important;
+        right: auto !important;
+        transform: translateX(-50%) !important;
+        width: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        z-index: 30 !important;
+    }
+
+    #page-jadwal #today-schedule-panel .today-history-btn {
+        min-width: 112px !important;
+        height: 34px !important;
+        padding: 6px 12px !important;
+        border-radius: 11px !important;
+        font-size: 9px !important;
+        line-height: 1 !important;
+        box-shadow: 0 5px 14px rgba(15,23,42,.10) !important;
+        white-space: nowrap !important;
+    }
+}
+</style>
