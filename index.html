@@ -10949,7 +10949,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
             <input id="minuman-history-date" type="date" onchange="renderMinumanHistory(); updateMinumanHistoryDateButton()" class="minuman-history-native-date" aria-hidden="true" tabindex="-1">
             <button type="button" id="minuman-history-date-button" class="minuman-history-date-button" onclick="openMinumanHistoryCalendar()" aria-label="Pilih tanggal riwayat minuman">
                 <span class="minuman-history-date-icon" aria-hidden="true">📅</span>
-                <span class="minuman-history-date-button-text">Memuat tanggal...</span>
+                <span class="minuman-history-date-button-text">Pilih tanggal</span>
                 <span class="minuman-history-date-chevron" aria-hidden="true">⌄</span>
             </button>
         </div>
@@ -10966,10 +10966,24 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 <input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="k-ket" placeholder="Keterangan Pengeluaran" required="" type="text"/>
 <input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="k-jumlah" placeholder="Nominal (Rp)" required="" type="text" inputmode="numeric" oninput="formatNominalInput(this)"/>
 <label class="block text-xs font-bold mb-1 text-slate-900">TANGGAL PENGELUARAN</label>
-<input class="w-full p-2 rounded mb-3 text-sm glass-input font-bold" id="k-tgl" required="" type="date"/>
+<div class="uang-keluar-date-picker-wrap mb-3">
+  <input class="uang-keluar-native-date" id="k-tgl" required="" type="date" tabindex="-1" aria-hidden="true"/>
+  <button type="button" id="uang-keluar-date-button" class="uang-keluar-date-button" onclick="openUangKeluarCalendar()" aria-label="Pilih tanggal pengeluaran">
+    <span class="uang-keluar-date-icon" aria-hidden="true">📅</span>
+    <span class="uang-keluar-date-button-text">Pilih tanggal</span>
+    <span class="uang-keluar-date-chevron" aria-hidden="true">⌄</span>
+  </button>
+</div>
 <div class="keluar-sumber-cash-simple mb-3">
   <label class="block text-xs font-black text-rose-950 mb-2">CASH DIAMBIL DARI TANGGAL</label>
-  <input class="w-full p-2 rounded-xl text-sm glass-input font-bold" id="k-sumber-tgl" onchange="cekSaldoSumberCash()" required="" type="date"/>
+    <div class="uang-keluar-source-date-wrap mb-3">
+      <input class="uang-keluar-source-native-date" id="k-sumber-tgl" required="" type="date" tabindex="-1" aria-hidden="true"/>
+      <button type="button" id="uang-keluar-source-date-button" class="uang-keluar-source-date-button" onclick="openUangKeluarSourceCalendar()" aria-label="Pilih tanggal sumber cash">
+        <span class="uang-keluar-source-date-icon" aria-hidden="true">📅</span>
+        <span class="uang-keluar-source-date-text">Memuat tanggal...</span>
+        <span class="uang-keluar-source-date-chevron" aria-hidden="true">⌄</span>
+      </button>
+    </div>
   <p class="text-xs text-amber-950 font-extrabold mt-2" id="info-saldo-sumber">SISA CASH TANGGAL TERPILIH: MENGHITUNG...</p>
 </div>
 <div class="flex justify-end gap-2">
@@ -11165,7 +11179,10 @@ window.__APP_FIREBASE_GET__ = get;
             if(document.getElementById('m-tgl')) document.getElementById('m-tgl').value = todayStr;
             if(document.getElementById('m-mulai')) document.getElementById('m-mulai').value = todayStr;
             if(document.getElementById('a-tanggal')) document.getElementById('a-tanggal').value = todayStr;
-            if(document.getElementById('k-tgl')) document.getElementById('k-tgl').value = todayStr;
+            if(document.getElementById('k-tgl')) {
+                document.getElementById('k-tgl').value = todayStr;
+                if(typeof window.updateUangKeluarDateButton === 'function') window.updateUangKeluarDateButton();
+            }
             if(document.getElementById('k-sumber-tgl')) document.getElementById('k-sumber-tgl').value = todayStr;
             if(document.getElementById('pm-bulan')) document.getElementById('pm-bulan').value = todayYearMonth;
         }
@@ -12344,10 +12361,13 @@ kaosKakiTerjual: jumlahKaosKaki,
                     keluarForm.reset();
                 }
 
-                ['k-ket', 'k-jumlah', 'k-tgl', 'k-sumber-tgl'].forEach(id => {
+                ['k-ket', 'k-jumlah', 'k-sumber-tgl'].forEach(id => {
                     const el = document.getElementById(id);
                     if(el) el.value = '';
                 });
+                const kTanggal = document.getElementById('k-tgl');
+                if(kTanggal) kTanggal.value = (typeof getLocalDateString === 'function' ? getLocalDateString() : new Date().toISOString().slice(0,10));
+                if(typeof window.updateUangKeluarDateButton === 'function') window.updateUangKeluarDateButton();
 
                 const infoSaldo = document.getElementById('info-saldo-sumber');
                 if(infoSaldo) infoSaldo.textContent = '';
@@ -26367,6 +26387,182 @@ body.jadwal-uang-masuk-modal-active #page-masuk {
 })();
 </script>
 
+
+<!-- FIX FINAL: KALENDER CUSTOM TANGGAL PENGELUARAN -->
+<style id="uang-keluar-date-popup-final-fix">
+#uang-keluar-calendar-overlay.final-date-calendar-overlay{
+  position:fixed !important; inset:0 !important; z-index:2147483647 !important;
+  display:flex !important; align-items:center !important; justify-content:center !important;
+  padding:14px !important; background:rgba(15,23,42,.48) !important;
+  backdrop-filter:blur(7px) !important; -webkit-backdrop-filter:blur(7px) !important;
+}
+#uang-keluar-calendar-overlay.final-date-calendar-overlay .uang-keluar-calendar-card{
+  width:min(94vw,380px) !important; max-height:90vh !important; overflow:auto !important;
+  background:#fff !important; border:1px solid #e2e8f0 !important;
+  border-radius:22px !important; padding:16px !important;
+  box-shadow:0 25px 70px rgba(15,23,42,.30) !important;
+}
+#uang-keluar-calendar-overlay.final-date-calendar-overlay .uang-keluar-calendar-day{
+  min-height:40px !important; background:#f8fafc !important; color:#334155 !important;
+  border:1px solid #e2e8f0 !important; border-radius:10px !important;
+}
+#uang-keluar-calendar-overlay.final-date-calendar-overlay .uang-keluar-calendar-day.selected{
+  background:linear-gradient(135deg,#fbbf24,#f59e0b) !important;
+  color:#451a03 !important; border-color:#d97706 !important;
+}
+#uang-keluar-calendar-overlay.final-date-calendar-overlay .uang-keluar-calendar-day.today{
+  box-shadow:inset 0 0 0 2px rgba(245,158,11,.65) !important;
+}
+</style>
+<script id="uang-keluar-date-popup-final-fix">
+(function(){
+  'use strict';
+  const MONTHS=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const DAYS=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  let viewDate=new Date();
+  let selectedDate='';
+
+  function pad(n){return String(n).padStart(2,'0');}
+  function localKey(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+  function todayKey(){return localKey(new Date());}
+  function parseDate(v){
+    if(!v) return new Date();
+    const d=new Date(v+'T00:00:00');
+    return Number.isNaN(d.getTime()) ? new Date() : d;
+  }
+  function fullLabel(v){
+    const d=parseDate(v);
+    return DAYS[d.getDay()]+', '+pad(d.getDate())+' '+MONTHS[d.getMonth()]+' '+d.getFullYear();
+  }
+  function syncLabel(){
+    const input=document.getElementById('k-tgl');
+    const label=document.querySelector('#uang-keluar-date-button .uang-keluar-date-button-text');
+    if(input && label && input.value) label.textContent=fullLabel(input.value);
+  }
+  window.updateUangKeluarDateButton=syncLabel;
+
+  function ensureDate(){
+    const input=document.getElementById('k-tgl');
+    if(!input) return null;
+    if(!input.value) input.value=todayKey();
+    selectedDate=input.value;
+    syncLabel();
+    return input;
+  }
+
+  function closeCalendar(){
+    const overlay=document.getElementById('uang-keluar-calendar-overlay');
+    if(overlay) overlay.remove();
+    if(!document.getElementById('uang-keluar-source-calendar-overlay')) document.body.style.overflow='';
+  }
+  window.closeUangKeluarCalendar=closeCalendar;
+
+  function choose(v){
+    const input=document.getElementById('k-tgl');
+    if(!input) return;
+    input.value=v;
+    selectedDate=v;
+    input.dispatchEvent(new Event('change',{bubbles:true}));
+    syncLabel();
+    closeCalendar();
+  }
+
+  function render(){
+    const grid=document.getElementById('uang-keluar-calendar-days');
+    const title=document.getElementById('uang-keluar-calendar-month');
+    if(!grid || !title) return;
+    const y=viewDate.getFullYear(), m=viewDate.getMonth();
+    title.textContent=MONTHS[m]+' '+y;
+    const first=new Date(y,m,1).getDay();
+    const total=new Date(y,m+1,0).getDate();
+    const prevTotal=new Date(y,m,0).getDate();
+    const today=todayKey();
+    grid.innerHTML='';
+    for(let i=0;i<42;i++){
+      let day=i-first+1, yy=y, mm=m, muted=false;
+      if(day<1){day=prevTotal+day;mm=m-1;muted=true;}
+      else if(day>total){day-=total;mm=m+1;muted=true;}
+      const d=new Date(yy,mm,day), value=localKey(d);
+      const b=document.createElement('button');
+      b.type='button';
+      b.className='uang-keluar-calendar-day'+(muted?' muted':'')+(value===today?' today':'')+(value===selectedDate?' selected':'');
+      b.textContent=day;
+      b.setAttribute('aria-label',fullLabel(value));
+      b.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();choose(value);});
+      grid.appendChild(b);
+    }
+  }
+
+  window.openUangKeluarCalendar=function(){
+    const input=ensureDate();
+    if(!input) return;
+    selectedDate=input.value || todayKey();
+    viewDate=parseDate(selectedDate);
+    viewDate.setDate(1);
+
+    const old=document.getElementById('uang-keluar-calendar-overlay');
+    if(old) old.remove();
+
+    const overlay=document.createElement('div');
+    overlay.id='uang-keluar-calendar-overlay';
+    overlay.className='final-date-calendar-overlay';
+    overlay.innerHTML=`
+      <div class="uang-keluar-calendar-card" role="dialog" aria-modal="true" aria-label="Pilih tanggal pengeluaran">
+        <div class="uang-keluar-calendar-head">
+          <div><div class="uang-keluar-calendar-kicker">UANG KELUAR</div><div class="uang-keluar-calendar-title">Pilih tanggal pengeluaran</div></div>
+          <button type="button" class="uang-keluar-calendar-close" aria-label="Tutup">×</button>
+        </div>
+        <div class="uang-keluar-calendar-nav">
+          <button type="button" class="uang-keluar-calendar-nav-btn" data-prev aria-label="Bulan sebelumnya">‹</button>
+          <div id="uang-keluar-calendar-month" class="uang-keluar-calendar-month"></div>
+          <button type="button" class="uang-keluar-calendar-nav-btn" data-next aria-label="Bulan berikutnya">›</button>
+        </div>
+        <div class="uang-keluar-calendar-week">${DAYS.map(d=>'<span>'+d.slice(0,2)+'</span>').join('')}</div>
+        <div id="uang-keluar-calendar-days" class="uang-keluar-calendar-days"></div>
+        <div class="uang-keluar-calendar-footer">
+          <button type="button" class="uang-keluar-calendar-today">📅 Hari Ini</button>
+          <button type="button" class="uang-keluar-calendar-cancel">Tutup</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+    document.body.style.overflow='hidden';
+
+    overlay.querySelector('.uang-keluar-calendar-close').onclick=closeCalendar;
+    overlay.querySelector('.uang-keluar-calendar-cancel').onclick=closeCalendar;
+    overlay.querySelector('[data-prev]').onclick=function(){viewDate=new Date(viewDate.getFullYear(),viewDate.getMonth()-1,1);render();};
+    overlay.querySelector('[data-next]').onclick=function(){viewDate=new Date(viewDate.getFullYear(),viewDate.getMonth()+1,1);render();};
+    overlay.querySelector('.uang-keluar-calendar-today').onclick=function(){choose(todayKey());};
+    overlay.addEventListener('click',function(e){if(e.target===overlay) closeCalendar();});
+    render();
+  };
+
+  // Tangkap klik pada tombol sebelum handler lama/native date sempat bekerja.
+  document.addEventListener('click',function(e){
+    const btn=e.target.closest && e.target.closest('#uang-keluar-date-button');
+    if(!btn) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    window.openUangKeluarCalendar();
+  },true);
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape' && document.getElementById('uang-keluar-calendar-overlay')){
+      e.preventDefault(); closeCalendar();
+    }
+  },true);
+
+  function setup(){
+    const input=document.getElementById('k-tgl');
+    if(!input) return;
+    ensureDate();
+    input.addEventListener('change',syncLabel);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setup);
+  else setup();
+  window.addEventListener('load',setup);
+})();
+</script>
+
 </body>
 
 <style id="FINAL_FIX_UANG_KELUAR_ONE_BIG_GLASS_CARD">
@@ -34442,6 +34638,27 @@ body.jadwal-uang-keluar-modal-active #page-keluar > form > .flex.justify-end but
     page.style.visibility='visible';
     page.style.opacity='1';
 
+    // UANG KELUAR: tanggal otomatis hari ini, langsung saat modal dibuka.
+    try {
+      const kTanggal = page.querySelector('#k-tgl');
+      const kTanggalText = page.querySelector('#uang-keluar-date-button .uang-keluar-date-button-text');
+      const dNow = new Date();
+      const todayLocal = (typeof window.getLocalDateString === 'function')
+        ? window.getLocalDateString()
+        : dNow.getFullYear() + '-' + String(dNow.getMonth()+1).padStart(2,'0') + '-' + String(dNow.getDate()).padStart(2,'0');
+
+      if(kTanggal) kTanggal.value = todayLocal;
+
+      if(kTanggalText) {
+        const d = new Date(todayLocal + 'T00:00:00');
+        const bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+        const hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+        kTanggalText.textContent = hari[d.getDay()] + ', ' + String(d.getDate()).padStart(2,'0') + ' ' + bulan[d.getMonth()] + ' ' + d.getFullYear();
+      }
+    } catch(e) {
+      console.warn('Gagal mengatur tanggal Uang Keluar:', e);
+    }
+
     modalOpen=true;
 
     /* Jalankan fungsi existing yang memang dipanggil saat membuka Uang Keluar. */
@@ -34842,6 +35059,38 @@ body.jadwal-uang-keluar-modal-active #jadwal-uang-keluar-modal-shell #page-kelua
     closeBtn(p);
     document.body.classList.add('jadwal-uang-keluar-modal-active');
     p.classList.remove('hidden');p.style.display='block';p.style.visibility='visible';p.style.opacity='1';
+
+    // FINAL UANG KELUAR DATE INIT:
+    // Pengisi tanggal ditempatkan di opener yang benar-benar aktif.
+    // Setiap kali popup Uang Keluar dibuka, k-tgl = tanggal lokal hari ini
+    // dan label tombol langsung ikut diperbarui.
+    try {
+      const dateInput = p.querySelector('#k-tgl');
+      const dateLabel = p.querySelector('#uang-keluar-date-button .uang-keluar-date-button-text');
+      const now = new Date();
+      const today =
+        (typeof window.getLocalDateString === 'function')
+          ? window.getLocalDateString()
+          : now.getFullYear() + '-' +
+            String(now.getMonth()+1).padStart(2,'0') + '-' +
+            String(now.getDate()).padStart(2,'0');
+
+      if(dateInput) dateInput.value = today;
+
+      if(dateLabel) {
+        const d = new Date(today + 'T00:00:00');
+        const hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+        const bulan = ['Januari','Februari','Maret','April','Mei','Juni',
+                       'Juli','Agustus','September','Oktober','November','Desember'];
+        dateLabel.textContent =
+          hari[d.getDay()] + ', ' +
+          String(d.getDate()).padStart(2,'0') + ' ' +
+          bulan[d.getMonth()] + ' ' + d.getFullYear();
+      }
+    } catch(err) {
+      console.warn('Uang Keluar date init error:', err);
+    }
+
     modalOpen=true;
     if(typeof window.cekSaldoSumberCash==='function'){try{window.cekSaldoSumberCash()}catch(e){}}
     requestAnimationFrame(()=>{if(modalOpen)p.scrollTop=0})
@@ -35221,6 +35470,582 @@ html:has(body > main #page-minuman:not(.hidden)) body {
 </style>
 
 
+
+<style id="uang-keluar-custom-calendar-v1">
+/* =========================================================
+   UANG KELUAR — CUSTOM DATE PICKER
+   Input date asli tetap dipakai untuk kompatibilitas data,
+   tetapi kalender native Windows / Android / iOS tidak tampil.
+   ========================================================= */
+.uang-keluar-date-picker-wrap{position:relative;width:100%;min-width:0}
+.uang-keluar-native-date{
+    position:absolute !important;
+    width:1px !important;height:1px !important;
+    opacity:0 !important;pointer-events:none !important;
+    overflow:hidden !important;
+}
+.uang-keluar-date-button{
+    width:100%;min-height:42px;padding:9px 12px;
+    display:flex;align-items:center;justify-content:flex-start;gap:10px;
+    border:1px solid rgba(255,255,255,.62);
+    border-radius:.75rem;
+    background:rgba(255,255,255,.30);
+    color:#0f172a;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.48),0 4px 14px rgba(15,23,42,.05);
+    backdrop-filter:blur(12px) saturate(130%);
+    -webkit-backdrop-filter:blur(12px) saturate(130%);
+    font-size:13px;font-weight:900;cursor:pointer;text-align:left;
+    transition:transform .16s ease,background .16s ease,box-shadow .16s ease;
+}
+.uang-keluar-date-button:hover{background:rgba(255,255,255,.48)}
+.uang-keluar-date-button:active{transform:scale(.985)}
+.uang-keluar-date-icon{font-size:17px;line-height:1;flex:0 0 auto}
+.uang-keluar-date-button-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;font-weight:950}
+.uang-keluar-date-chevron{font-size:17px;line-height:1;margin-left:auto}
+
+#uang-keluar-calendar-overlay{
+    position:fixed !important;inset:0 !important;z-index:2147483647 !important;
+    display:flex;align-items:center;justify-content:center;
+    padding:16px;background:rgba(15,23,42,.46);
+    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+.uang-keluar-calendar-card{
+    width:min(94vw,370px);max-height:min(90vh,560px);overflow:auto;
+    border:1px solid rgba(255,255,255,.72);border-radius:24px;
+    background:rgba(255,255,255,.94);
+    box-shadow:0 24px 70px rgba(15,23,42,.26),inset 0 1px 0 rgba(255,255,255,.95);
+    padding:16px;
+}
+.uang-keluar-calendar-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.uang-keluar-calendar-kicker{font-size:9px;letter-spacing:.12em;color:#f59e0b;font-weight:950;text-transform:uppercase}
+.uang-keluar-calendar-title{font-size:17px;color:#0f172a;font-weight:950;margin-top:2px}
+.uang-keluar-calendar-close{
+    margin-left:auto;width:38px;height:38px;border:0;border-radius:12px;
+    background:#f1f5f9;color:#475569;font-size:20px;font-weight:900;cursor:pointer;
+}
+.uang-keluar-calendar-nav{display:grid;grid-template-columns:42px 1fr 42px;align-items:center;gap:8px;margin-bottom:10px}
+.uang-keluar-calendar-nav-btn{
+    height:42px;border:1px solid rgba(245,158,11,.25);border-radius:12px;
+    background:rgba(251,191,36,.10);color:#92400e;font-size:22px;font-weight:950;cursor:pointer;
+}
+.uang-keluar-calendar-month{text-align:center;color:#172554;font-size:14px;font-weight:950}
+.uang-keluar-calendar-week,.uang-keluar-calendar-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.uang-keluar-calendar-week{margin-bottom:5px}
+.uang-keluar-calendar-week span{text-align:center;font-size:9px;font-weight:950;color:#94a3b8;padding:4px 0}
+.uang-keluar-calendar-day{
+    min-height:38px;border:1px solid transparent;border-radius:11px;
+    background:rgba(248,250,252,.8);color:#334155;font-size:11px;font-weight:900;
+    cursor:pointer;position:relative;
+}
+.uang-keluar-calendar-day:hover{background:rgba(251,191,36,.18);border-color:rgba(245,158,11,.25)}
+.uang-keluar-calendar-day.muted{opacity:.32}
+.uang-keluar-calendar-day.today{box-shadow:inset 0 0 0 1.5px rgba(245,158,11,.70)}
+.uang-keluar-calendar-day.selected{
+    background:linear-gradient(135deg,rgba(251,191,36,.82),rgba(245,158,11,.50));
+    border-color:rgba(180,83,9,.28);color:#451a03;box-shadow:0 5px 13px rgba(180,83,9,.12)
+}
+.uang-keluar-calendar-day.selected::after{
+    content:"";position:absolute;bottom:4px;left:50%;width:4px;height:4px;border-radius:50%;
+    background:#92400e;transform:translateX(-50%)
+}
+.uang-keluar-calendar-footer{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:13px}
+.uang-keluar-calendar-today,.uang-keluar-calendar-cancel{
+    border:0;border-radius:11px;padding:9px 12px;font-size:11px;font-weight:950;cursor:pointer
+}
+.uang-keluar-calendar-today{background:rgba(251,191,36,.20);color:#92400e}
+.uang-keluar-calendar-cancel{background:rgba(226,232,240,.65);color:#475569}
+@media(max-width:640px){
+    .uang-keluar-date-button{min-height:44px}
+    #uang-keluar-calendar-overlay{padding:10px}
+    .uang-keluar-calendar-card{width:min(96vw,370px);border-radius:22px;padding:14px}
+    .uang-keluar-calendar-day{min-height:40px}
+}
+</style>
+
+
+
+<script id="uang-keluar-both-date-click-bridge-v1">
+(function(){
+  document.addEventListener('click',function(e){
+    const sourceBtn=e.target.closest && e.target.closest('#uang-keluar-source-date-button');
+    if(sourceBtn){
+      e.preventDefault();
+      e.stopPropagation();
+      if(typeof window.openUangKeluarSourceCalendar==='function') window.openUangKeluarSourceCalendar();
+      return;
+    }
+
+    const keluarBtn=e.target.closest && e.target.closest('#uang-keluar-date-button');
+    if(keluarBtn){
+      e.preventDefault();
+      e.stopPropagation();
+      if(typeof window.openUangKeluarCalendar==='function') window.openUangKeluarCalendar();
+    }
+  },true);
+})();
+</script>
+
+<script id="uang-keluar-custom-calendar-click-bridge-v2">
+(function(){
+  'use strict';
+
+  document.addEventListener('click', function(e){
+    const btn = e.target.closest && e.target.closest('#uang-keluar-date-button');
+    if(!btn) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    if(typeof window.openUangKeluarCalendar === 'function'){
+      window.openUangKeluarCalendar();
+    }
+  }, true);
+
+  // Sinkronisasi terakhir setelah semua script selesai dimuat.
+  function ensureToday(){
+    const input=document.getElementById('k-tgl');
+    const label=document.querySelector('#uang-keluar-date-button .uang-keluar-date-button-text');
+    if(!input || !label) return;
+
+    const d=new Date();
+    const today=(typeof window.getLocalDateString==='function')
+      ? window.getLocalDateString()
+      : d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+
+    if(!input.value) input.value=today;
+
+    if(typeof window.updateUangKeluarDateButton==='function'){
+      window.updateUangKeluarDateButton();
+    } else if(label.textContent==='Pilih tanggal' || label.textContent==='Memuat tanggal...'){
+      const x=new Date(input.value+'T00:00:00');
+      const hari=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+      const bulan=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+      label.textContent=hari[x.getDay()]+', '+String(x.getDate()).padStart(2,'0')+' '+bulan[x.getMonth()]+' '+x.getFullYear();
+    }
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',ensureToday);
+  } else {
+    ensureToday();
+  }
+})();
+</script>
+
+
+<style id="uang-keluar-source-custom-calendar-v1">
+.uang-keluar-source-date-wrap{position:relative;width:100%;min-width:0}
+.uang-keluar-source-native-date{
+  position:absolute !important;width:1px !important;height:1px !important;
+  opacity:0 !important;pointer-events:none !important;overflow:hidden !important;
+}
+.uang-keluar-source-date-button{
+  width:100%;min-height:42px;padding:9px 12px;
+  display:flex;align-items:center;gap:10px;
+  border:1px solid rgba(255,255,255,.62);border-radius:.75rem;
+  background:rgba(255,255,255,.30);color:#0f172a;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.48),0 4px 14px rgba(15,23,42,.05);
+  backdrop-filter:blur(12px) saturate(130%);-webkit-backdrop-filter:blur(12px) saturate(130%);
+  font-size:13px;font-weight:900;cursor:pointer;text-align:left;
+}
+.uang-keluar-source-date-button:hover{background:rgba(255,255,255,.48)}
+.uang-keluar-source-date-button:active{transform:scale(.985)}
+.uang-keluar-source-date-icon{font-size:17px;line-height:1}
+.uang-keluar-source-date-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;font-weight:950}
+.uang-keluar-source-date-chevron{margin-left:auto;font-size:17px;line-height:1}
+
+#uang-keluar-source-calendar-overlay{
+  position:fixed !important;inset:0 !important;z-index:2147483646 !important;
+  display:flex;align-items:center;justify-content:center;padding:16px;
+  background:rgba(15,23,42,.46);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+.uang-keluar-source-calendar-card{
+  width:min(94vw,370px);max-height:min(90vh,560px);overflow:auto;
+  border:1px solid rgba(255,255,255,.72);border-radius:24px;
+  background:rgba(255,255,255,.96);
+  box-shadow:0 24px 70px rgba(15,23,42,.26),inset 0 1px 0 rgba(255,255,255,.95);
+  padding:16px;
+}
+.uang-keluar-source-calendar-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.uang-keluar-source-calendar-kicker{font-size:9px;letter-spacing:.12em;color:#f59e0b;font-weight:950;text-transform:uppercase}
+.uang-keluar-source-calendar-title{font-size:17px;color:#0f172a;font-weight:950;margin-top:2px}
+.uang-keluar-source-calendar-close{
+  margin-left:auto;width:38px;height:38px;border:0;border-radius:12px;
+  background:#f1f5f9;color:#475569;font-size:20px;font-weight:900;cursor:pointer;
+}
+.uang-keluar-source-calendar-nav{display:grid;grid-template-columns:42px 1fr 42px;align-items:center;gap:8px;margin-bottom:10px}
+.uang-keluar-source-calendar-nav-btn{
+  height:42px;border:1px solid rgba(245,158,11,.25);border-radius:12px;
+  background:rgba(251,191,36,.10);color:#92400e;font-size:22px;font-weight:950;cursor:pointer;
+}
+.uang-keluar-source-calendar-month{text-align:center;color:#172554;font-size:14px;font-weight:950}
+.uang-keluar-source-calendar-week,.uang-keluar-source-calendar-days{
+  display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;
+}
+.uang-keluar-source-calendar-week{margin-bottom:5px}
+.uang-keluar-source-calendar-week span{text-align:center;font-size:9px;font-weight:950;color:#94a3b8;padding:4px 0}
+.uang-keluar-source-calendar-day{
+  min-height:38px;border:1px solid transparent;border-radius:11px;
+  background:rgba(248,250,252,.8);color:#334155;font-size:11px;font-weight:900;
+  cursor:pointer;position:relative;
+}
+.uang-keluar-source-calendar-day:hover{background:rgba(251,191,36,.18);border-color:rgba(245,158,11,.25)}
+.uang-keluar-source-calendar-day.muted{opacity:.32}
+.uang-keluar-source-calendar-day.today{box-shadow:inset 0 0 0 1.5px rgba(245,158,11,.70)}
+.uang-keluar-source-calendar-day.selected{
+  background:linear-gradient(135deg,rgba(251,191,36,.82),rgba(245,158,11,.50));
+  border-color:rgba(180,83,9,.28);color:#451a03;
+  box-shadow:0 5px 13px rgba(180,83,9,.12);
+}
+.uang-keluar-source-calendar-footer{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:13px}
+.uang-keluar-source-calendar-today,.uang-keluar-source-calendar-cancel{
+  border:0;border-radius:11px;padding:9px 12px;font-size:11px;font-weight:950;cursor:pointer;
+}
+.uang-keluar-source-calendar-today{background:rgba(251,191,36,.20);color:#92400e}
+.uang-keluar-source-calendar-cancel{background:rgba(226,232,240,.65);color:#475569}
+</style>
+
+<script id="uang-keluar-source-custom-calendar-v1">
+(function(){
+  'use strict';
+  const months=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const days=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  let viewDate=new Date(), selectedDate='';
+
+  function pad(n){return String(n).padStart(2,'0')}
+  function localDate(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+  function todayKey(){return localDate(new Date())}
+  function labelDate(v){
+    if(!v) return 'Pilih tanggal';
+    const d=new Date(v+'T00:00:00');
+    if(Number.isNaN(d.getTime())) return v;
+    return days[d.getDay()]+', '+pad(d.getDate())+' '+months[d.getMonth()]+' '+d.getFullYear();
+  }
+  function setDefault(){
+    const input=document.getElementById('k-sumber-tgl');
+    if(!input) return;
+    if(!input.value) input.value=todayKey();
+    selectedDate=input.value;
+    updateButton();
+  }
+  function updateButton(){
+    const input=document.getElementById('k-sumber-tgl');
+    const text=document.querySelector('#uang-keluar-source-date-button .uang-keluar-source-date-text');
+    if(text) text.textContent=labelDate(input?.value || selectedDate || todayKey());
+  }
+  window.updateUangKeluarSourceDateButton=updateButton;
+
+  function close(){
+    document.getElementById('uang-keluar-source-calendar-overlay')?.remove();
+    document.body.style.overflow='';
+  }
+  window.closeUangKeluarSourceCalendar=close;
+
+  function selectDate(v){
+    const input=document.getElementById('k-sumber-tgl');
+    if(!input) return;
+    selectedDate=v;
+    input.value=v;
+    updateButton();
+    input.dispatchEvent(new Event('change',{bubbles:true}));
+    close();
+  }
+
+  function render(){
+    const grid=document.getElementById('uang-keluar-source-calendar-days');
+    const title=document.getElementById('uang-keluar-source-calendar-month');
+    if(!grid||!title) return;
+    const y=viewDate.getFullYear(), m=viewDate.getMonth();
+    title.textContent=months[m]+' '+y;
+    const first=new Date(y,m,1).getDay();
+    const total=new Date(y,m+1,0).getDate();
+    const prevTotal=new Date(y,m,0).getDate();
+    const today=todayKey();
+    grid.innerHTML='';
+    for(let i=0;i<42;i++){
+      let day=i-first+1, mm=m, muted=false;
+      if(day<1){day=prevTotal+day;mm=m-1;muted=true}
+      else if(day>total){day-=total;mm=m+1;muted=true}
+      const d=new Date(y,mm,day), val=localDate(d);
+      const b=document.createElement('button');
+      b.type='button';
+      b.className='uang-keluar-source-calendar-day'+(muted?' muted':'')+(val===today?' today':'')+(val===selectedDate?' selected':'');
+      b.textContent=day;
+      b.onclick=()=>selectDate(val);
+      grid.appendChild(b);
+    }
+  }
+
+  window.openUangKeluarSourceCalendar=function(){
+    const input=document.getElementById('k-sumber-tgl');
+    if(!input) return;
+    setDefault();
+    selectedDate=input.value || todayKey();
+    const base=new Date(selectedDate+'T00:00:00');
+    viewDate=new Date(Number.isNaN(base.getTime())?new Date():base);
+    viewDate.setDate(1);
+
+    document.getElementById('uang-keluar-source-calendar-overlay')?.remove();
+    const overlay=document.createElement('div');
+    overlay.id='uang-keluar-source-calendar-overlay';
+    overlay.innerHTML=`
+      <div class="uang-keluar-source-calendar-card" role="dialog" aria-modal="true" aria-label="Pilih tanggal sumber cash">
+        <div class="uang-keluar-source-calendar-head">
+          <div>
+            <div class="uang-keluar-source-calendar-kicker">CASH DIAMBIL DARI</div>
+            <div class="uang-keluar-source-calendar-title">Pilih tanggal sumber cash</div>
+          </div>
+          <button type="button" class="uang-keluar-source-calendar-close" aria-label="Tutup">×</button>
+        </div>
+        <div class="uang-keluar-source-calendar-nav">
+          <button type="button" class="uang-keluar-source-calendar-nav-btn" id="uang-keluar-source-calendar-prev">‹</button>
+          <div id="uang-keluar-source-calendar-month" class="uang-keluar-source-calendar-month"></div>
+          <button type="button" class="uang-keluar-source-calendar-nav-btn" id="uang-keluar-source-calendar-next">›</button>
+        </div>
+        <div class="uang-keluar-source-calendar-week">${days.map(x=>'<span>'+x.slice(0,2)+'</span>').join('')}</div>
+        <div id="uang-keluar-source-calendar-days" class="uang-keluar-source-calendar-days"></div>
+        <div class="uang-keluar-source-calendar-footer">
+          <button type="button" class="uang-keluar-source-calendar-today">📅 Hari Ini</button>
+          <button type="button" class="uang-keluar-source-calendar-cancel">Tutup</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+    document.body.style.overflow='hidden';
+
+    overlay.querySelector('.uang-keluar-source-calendar-close').onclick=close;
+    overlay.querySelector('.uang-keluar-source-calendar-cancel').onclick=close;
+    overlay.querySelector('#uang-keluar-source-calendar-prev').onclick=()=>{
+      viewDate=new Date(viewDate.getFullYear(),viewDate.getMonth()-1,1);render();
+    };
+    overlay.querySelector('#uang-keluar-source-calendar-next').onclick=()=>{
+      viewDate=new Date(viewDate.getFullYear(),viewDate.getMonth()+1,1);render();
+    };
+    overlay.querySelector('.uang-keluar-source-calendar-today').onclick=()=>selectDate(todayKey());
+    overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
+    render();
+  };
+
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape' && document.getElementById('uang-keluar-source-calendar-overlay')) close();
+  });
+
+  function setup(){
+    const input=document.getElementById('k-sumber-tgl');
+    if(!input) return;
+    setDefault();
+    input.addEventListener('change',updateButton);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setup);
+  else setup();
+  window.addEventListener('load',setup);
+})();
+</script>
+
+<script id="uang-keluar-custom-calendar-v1">
+(function(){
+    const months=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+    const days=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+    let viewDate=new Date(), selectedDate='';
+
+    function pad(n){return String(n).padStart(2,'0')}
+    function localDate(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+    function todayKey(){return localDate(new Date())}
+    function labelDate(v){
+        if(!v) return 'Pilih tanggal';
+        const d=new Date(v+'T00:00:00');
+        if(Number.isNaN(d.getTime())) return v;
+        return days[d.getDay()]+', '+pad(d.getDate())+' '+months[d.getMonth()]+' '+d.getFullYear();
+    }
+    function setTodayIfEmpty(){
+        const input=document.getElementById('k-tgl');
+        if(!input) return;
+        if(!input.value) input.value=todayKey();
+        selectedDate=input.value;
+        updateButton();
+    }
+    function updateButton(){
+        const input=document.getElementById('k-tgl');
+        const text=document.querySelector('#uang-keluar-date-button .uang-keluar-date-button-text');
+        if(text) text.textContent=labelDate(input?.value || selectedDate || todayKey());
+    }
+    window.updateUangKeluarDateButton=updateButton;
+
+    function close(){
+        document.getElementById('uang-keluar-calendar-overlay')?.remove();
+        document.body.style.overflow='';
+    }
+    window.closeUangKeluarCalendar=close;
+
+    function selectDate(v){
+        const input=document.getElementById('k-tgl');
+        if(!input) return;
+        selectedDate=v; input.value=v; updateButton();
+        close();
+    }
+
+    function render(){
+        const grid=document.getElementById('uang-keluar-calendar-days');
+        const title=document.getElementById('uang-keluar-calendar-month');
+        if(!grid||!title) return;
+        const y=viewDate.getFullYear(), m=viewDate.getMonth();
+        title.textContent=months[m]+' '+y;
+        const first=new Date(y,m,1).getDay();
+        const total=new Date(y,m+1,0).getDate();
+        const prevTotal=new Date(y,m,0).getDate();
+        const today=todayKey();
+        grid.innerHTML='';
+        for(let i=0;i<42;i++){
+            let day=i-first+1, yy=y, mm=m, muted=false;
+            if(day<1){day=prevTotal+day;mm=m-1;muted=true}
+            else if(day>total){day=day-total;mm=m+1;muted=true}
+            const d=new Date(yy,mm,day), val=localDate(d);
+            const b=document.createElement('button');
+            b.type='button';
+            b.className='uang-keluar-calendar-day'+(muted?' muted':'')+(val===today?' today':'')+(val===selectedDate?' selected':'');
+            b.textContent=day;
+            b.setAttribute('aria-label',labelDate(val));
+            b.onclick=()=>selectDate(val);
+            grid.appendChild(b);
+        }
+    }
+
+    window.openUangKeluarCalendar=function(){
+        const input=document.getElementById('k-tgl');
+        if(!input) return;
+        setTodayIfEmpty();
+        selectedDate=input.value || todayKey();
+        const base=new Date(selectedDate+'T00:00:00');
+        viewDate=new Date(Number.isNaN(base.getTime())?new Date():base);
+        viewDate.setDate(1);
+
+        document.getElementById('uang-keluar-calendar-overlay')?.remove();
+        const overlay=document.createElement('div');
+        overlay.id='uang-keluar-calendar-overlay';
+        overlay.innerHTML=`
+          <div class="uang-keluar-calendar-card" role="dialog" aria-modal="true" aria-label="Pilih tanggal pengeluaran">
+            <div class="uang-keluar-calendar-head">
+              <div>
+                <div class="uang-keluar-calendar-kicker">UANG KELUAR</div>
+                <div class="uang-keluar-calendar-title">Pilih tanggal pengeluaran</div>
+              </div>
+              <button type="button" class="uang-keluar-calendar-close" aria-label="Tutup">×</button>
+            </div>
+            <div class="uang-keluar-calendar-nav">
+              <button type="button" class="uang-keluar-calendar-nav-btn" id="uang-keluar-calendar-prev" aria-label="Bulan sebelumnya">‹</button>
+              <div id="uang-keluar-calendar-month" class="uang-keluar-calendar-month"></div>
+              <button type="button" class="uang-keluar-calendar-nav-btn" id="uang-keluar-calendar-next" aria-label="Bulan berikutnya">›</button>
+            </div>
+            <div class="uang-keluar-calendar-week">${days.map(x=>'<span>'+x.slice(0,2)+'</span>').join('')}</div>
+            <div id="uang-keluar-calendar-days" class="uang-keluar-calendar-days"></div>
+            <div class="uang-keluar-calendar-footer">
+              <button type="button" class="uang-keluar-calendar-today">📅 Hari Ini</button>
+              <button type="button" class="uang-keluar-calendar-cancel">Tutup</button>
+            </div>
+          </div>`;
+        document.body.appendChild(overlay);
+        document.body.style.overflow='hidden';
+
+        overlay.querySelector('.uang-keluar-calendar-close').onclick=close;
+        overlay.querySelector('.uang-keluar-calendar-cancel').onclick=close;
+        overlay.querySelector('#uang-keluar-calendar-prev').onclick=()=>{
+            viewDate=new Date(viewDate.getFullYear(),viewDate.getMonth()-1,1);render();
+        };
+        overlay.querySelector('#uang-keluar-calendar-next').onclick=()=>{
+            viewDate=new Date(viewDate.getFullYear(),viewDate.getMonth()+1,1);render();
+        };
+        overlay.querySelector('.uang-keluar-calendar-today').onclick=()=>selectDate(todayKey());
+        overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
+        render();
+    };
+
+    function esc(e){if(e.key==='Escape' && document.getElementById('uang-keluar-calendar-overlay')) close()}
+    document.addEventListener('keydown',esc);
+
+    function refresh(){
+        const input=document.getElementById('k-tgl');
+        if(!input) return;
+        setTodayIfEmpty();
+        updateButton();
+    }
+
+    function setup(){
+        const input=document.getElementById('k-tgl');
+        if(!input) return;
+        refresh();
+        input.addEventListener('change',updateButton);
+        input.addEventListener('click',e=>e.preventDefault());
+        if(!window.__uangKeluarDateObserver){
+            const observer=new MutationObserver(()=>{
+                const current=document.getElementById('k-tgl');
+                if(current && document.getElementById('uang-keluar-date-button')){
+                    if(!current.value) current.value=todayKey();
+                    updateButton();
+                }
+            });
+            observer.observe(document.body,{childList:true,subtree:true});
+            window.__uangKeluarDateObserver=observer;
+        }
+    }
+
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setup);
+    else setup();
+    window.addEventListener('load',setup);
+
+    // Saat Uang Keluar dibuka, tanggal selalu siap dengan tanggal hari ini
+    // bila belum ada tanggal yang dipilih.
+    function wrapQuickOpen(){
+        if(typeof window.quickOpenPage!=='function' || window.quickOpenPage.__uangKeluarDateWrapped) return false;
+        const original=window.quickOpenPage;
+        const wrapped=function(id){
+            const result=original.apply(this,arguments);
+            if(id==='keluar'){
+                setTimeout(()=>{
+                    const input=document.getElementById('k-tgl');
+                    if(input && !input.value) input.value=todayKey();
+                    updateButton();
+                },0);
+            }
+            return result;
+        };
+        wrapped.__uangKeluarDateWrapped=true;
+        wrapped.__original=original;
+        window.quickOpenPage=wrapped;
+        return true;
+    }
+    if(!wrapQuickOpen()){
+        let n=0;
+        const timer=setInterval(()=>{if(wrapQuickOpen() || ++n>100) clearInterval(timer)},50);
+    }
+
+    // Kompatibel dengan script "form clean on open" yang sudah ada.
+    document.addEventListener('click',function(e){
+        const trigger=e.target.closest?.('[onclick*="quickOpenPage(\\'keluar\\')"], [onclick*="quickOpenPage(\\"keluar\\")"]');
+        if(trigger){
+            setTimeout(()=>{
+                const input=document.getElementById('k-tgl');
+                if(input) input.value=todayKey();
+                updateButton();
+            },20);
+        }
+    },true);
+
+    // Setelah form Uang Keluar selesai disimpan dan di-reset,
+    // tanggal berikutnya kembali otomatis ke hari ini.
+    const originalReset = HTMLFormElement.prototype.reset;
+    HTMLFormElement.prototype.reset = function(){
+        const result = originalReset.apply(this,arguments);
+        if(this.closest?.('#page-keluar')){
+            setTimeout(()=>{
+                const input=document.getElementById('k-tgl');
+                if(input) input.value=todayKey();
+                updateButton();
+            },0);
+        }
+        return result;
+    };
+})();
+</script>
+
 <script id="uang-keluar-form-clean-on-open-v1">
 (function(){
   'use strict';
@@ -35242,10 +36067,16 @@ html:has(body > main #page-minuman:not(.hidden)) body {
     const form = document.querySelector('#page-keluar form');
     if(form && typeof form.reset === 'function') form.reset();
 
-    ['k-ket','k-jumlah','k-tgl','k-sumber-tgl'].forEach(id=>{
+    ['k-ket','k-jumlah'].forEach(id=>{
       const el=document.getElementById(id);
       if(el) el.value='';
     });
+    const sourceTanggal=document.getElementById('k-sumber-tgl');
+    if(sourceTanggal) sourceTanggal.value=(typeof getLocalDateString==='function'?getLocalDateString():new Date().toISOString().slice(0,10));
+    if(typeof window.updateUangKeluarSourceDateButton==='function') window.updateUangKeluarSourceDateButton();
+    const kTanggal=document.getElementById('k-tgl');
+    if(kTanggal) kTanggal.value=(typeof getLocalDateString === 'function' ? getLocalDateString() : new Date().toISOString().slice(0,10));
+    if(typeof window.updateUangKeluarDateButton === 'function') window.updateUangKeluarDateButton();
 
     const info=document.getElementById('info-saldo-sumber');
     if(info) info.textContent='';
