@@ -9307,6 +9307,138 @@ body.minuman-edit-modal-open{overflow:hidden !important}
 }
 </style>
 
+
+<style id="desktop-jadwal-hari-ini-scroll-fix-v1">
+/* FIX DESKTOP — Jadwal Hari Ini dapat di-scroll tanpa mengubah tampilan HP.
+   Area scroll dibatasi pada halaman Jadwal Hari Ini agar daftar booking
+   yang panjang tetap bisa digeser dengan mouse wheel/scrollbar. */
+@media (min-width: 641px) {
+  #page-jadwal {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: calc(100vh - 190px) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    overscroll-behavior-y: contain !important;
+    scrollbar-width: auto !important;
+    box-sizing: border-box !important;
+    padding-right: 4px !important;
+  }
+
+  #page-jadwal::-webkit-scrollbar {
+    width: 8px !important;
+  }
+
+  #page-jadwal::-webkit-scrollbar-track {
+    background: rgba(148,163,184,.12) !important;
+    border-radius: 999px !important;
+  }
+
+  #page-jadwal::-webkit-scrollbar-thumb {
+    background: rgba(71,85,105,.38) !important;
+    border-radius: 999px !important;
+  }
+
+  #page-jadwal::-webkit-scrollbar-thumb:hover {
+    background: rgba(71,85,105,.55) !important;
+  }
+
+  #today-schedule-panel,
+  #today-schedule-list {
+    overflow: visible !important;
+  }
+}
+</style>
+
+
+<style id="desktop-jadwal-hide-scrollbar-v2">
+/* Desktop: scrollbar disembunyikan, tetapi area Jadwal Hari Ini
+   tetap bisa di-scroll dengan mouse wheel / touchpad. */
+@media (min-width: 641px) {
+  #page-jadwal {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  #page-jadwal::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+}
+</style>
+
+
+<style id="desktop-global-scrollbar-hidden-v3">
+/* DESKTOP FINAL:
+   Hilangkan scrollbar browser/viewport di sisi paling kanan.
+   Halaman tetap bisa di-scroll dengan mouse wheel, touchpad, PageUp/PageDown,
+   dan keyboard. Tidak mengubah HP. */
+@media (min-width: 641px) {
+  html {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    display: none !important;
+  }
+
+  body {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+}
+</style>
+
+
+<style id="desktop-single-scroll-header-fixed-v4">
+/* DESKTOP FINAL — SATU SCROLL SAJA
+   Scroll hanya pada halaman/body.
+   #page-jadwal tidak lagi menjadi area scroll kedua.
+   Header/logo tetap berada di posisi atas saat card jadwal bergerak. */
+@media (min-width: 641px) {
+  html,
+  body {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    display: none !important;
+  }
+
+  /* Matikan scroll internal yang sebelumnya membuat double-scroll. */
+  #page-jadwal {
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    overflow-y: visible !important;
+    overflow-x: visible !important;
+    overscroll-behavior: auto !important;
+    padding-right: 0 !important;
+  }
+
+  /* Logo + header tetap di tempat ketika halaman di-scroll. */
+  body > header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1000 !important;
+    flex-shrink: 0 !important;
+  }
+}
+</style>
+
 </head>
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium">
 
