@@ -12334,10 +12334,40 @@ kaosKakiTerjual: jumlahKaosKaki,
                 throw saveError;
             }
             showSuccessPopup("Data berhasil disimpan dengan sukses.");
+
+            /* UANG KELUAR:
+               Setelah berhasil disimpan, form harus benar-benar kosong,
+               modal ditutup, lalu kembali otomatis ke Jadwal Hari Ini. */
+            if(type === 'pengeluaran') {
+                const keluarForm = document.querySelector('#page-keluar form');
+                if(keluarForm && typeof keluarForm.reset === 'function') {
+                    keluarForm.reset();
+                }
+
+                ['k-ket', 'k-jumlah', 'k-tgl', 'k-sumber-tgl'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if(el) el.value = '';
+                });
+
+                const infoSaldo = document.getElementById('info-saldo-sumber');
+                if(infoSaldo) infoSaldo.textContent = '';
+
+                // Popup berhasil tampil sebentar, lalu modal Uang Keluar ditutup.
+                setTimeout(() => {
+                    if(typeof window.__closeJadwalUangKeluarModal === 'function') {
+                        window.__closeJadwalUangKeluarModal();
+                    } else if(typeof window.showPage === 'function') {
+                        window.showPage('jadwal');
+                    }
+                }, 250);
+
+                return;
+            }
+
             const formTarget = e?.target?.form || document.querySelector('#page-masuk form');
             if (formTarget && typeof formTarget.reset === 'function') formTarget.reset();
             setDefaultDates();
-            
+
             if(type === 'minuman') {
                 resetPilihanMinuman();
                 window.__savingMinuman = false;
@@ -35189,3 +35219,64 @@ html:has(body > main #page-minuman:not(.hidden)) body {
     }
 }
 </style>
+
+
+<script id="uang-keluar-form-clean-on-open-v1">
+(function(){
+  'use strict';
+
+  let freshAfterSave = false;
+
+  const originalClose = window.__closeJadwalUangKeluarModal;
+  if(typeof originalClose === 'function' && !originalClose.__freshFormWrapped){
+    const wrappedClose = function(){
+      freshAfterSave = true;
+      return originalClose.apply(this, arguments);
+    };
+    wrappedClose.__freshFormWrapped = true;
+    window.__closeJadwalUangKeluarModal = wrappedClose;
+  }
+
+  function clearFreshForm(){
+    if(!freshAfterSave) return;
+    const form = document.querySelector('#page-keluar form');
+    if(form && typeof form.reset === 'function') form.reset();
+
+    ['k-ket','k-jumlah','k-tgl','k-sumber-tgl'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el) el.value='';
+    });
+
+    const info=document.getElementById('info-saldo-sumber');
+    if(info) info.textContent='';
+    freshAfterSave=false;
+  }
+
+  document.addEventListener('click', function(e){
+    const trigger=e.target.closest?.(
+      '[onclick*="quickOpenPage(\'keluar\')"], [onclick*="quickOpenPage(\"keluar\")"]'
+    );
+    if(trigger) setTimeout(clearFreshForm, 0);
+  }, true);
+
+  // Fallback untuk pemanggilan quickOpenPage dari JavaScript.
+  const tryWrap = () => {
+    if(typeof window.quickOpenPage !== 'function' || window.quickOpenPage.__freshFormWrapped) return;
+    const original = window.quickOpenPage;
+    const wrapped = function(id){
+      const result = original.apply(this, arguments);
+      if(id === 'keluar') setTimeout(clearFreshForm, 0);
+      return result;
+    };
+    wrapped.__freshFormWrapped = true;
+    window.quickOpenPage = wrapped;
+  };
+
+  tryWrap();
+  let n=0;
+  const timer=setInterval(()=>{
+    tryWrap();
+    if(window.quickOpenPage?.__freshFormWrapped || ++n>100) clearInterval(timer);
+  }, 50);
+})();
+</script>
