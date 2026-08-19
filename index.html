@@ -3386,22 +3386,6 @@ html {
 </style>
 
 
-<style id="minuman-history-date-button-style">
-#minuman-history-panel .minuman-history-date-row{width:100%;position:relative}
-#minuman-history-panel #minuman-history-date{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;overflow:hidden!important}
-#minuman-history-panel .minuman-history-date-button{
-  width:100%!important; min-height:48px!important; display:flex!important; align-items:center!important; justify-content:flex-start!important; gap:10px!important;
-  padding:11px 14px!important; border-radius:14px!important; border:1px solid rgba(148,163,184,.22)!important;
-  background:rgba(255,255,255,.62)!important; color:#243b63!important; box-shadow:inset 0 1px 0 rgba(255,255,255,.72),0 3px 10px rgba(15,23,42,.04)!important;
-  font-size:12px!important; font-weight:900!important; cursor:pointer!important; text-align:left!important;
-}
-#minuman-history-panel .minuman-history-date-button:hover{background:rgba(255,255,255,.82)!important}
-#minuman-history-panel .minuman-history-date-button:active{transform:scale(.995)}
-#minuman-history-panel .minuman-history-date-icon{font-size:18px!important;line-height:1!important;flex:0 0 auto}
-#minuman-history-panel .minuman-history-date-text{flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#minuman-history-panel .minuman-history-date-chevron{font-size:16px!important;line-height:1!important;color:#64748b!important;flex:0 0 auto}
-@media(max-width:640px){#minuman-history-panel .minuman-history-date-button{min-height:50px!important;padding:12px 13px!important}}
-</style>
 <style id="minuman-history-style">
 .minuman-history-panel{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .minuman-history-table{width:100%;border-collapse:separate;border-spacing:0;font-size:11px}
@@ -10624,13 +10608,9 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
         </div>
         <button type="button" onclick="tutupRiwayatMinuman()" class="minuman-history-close-btn" aria-label="Tutup riwayat">✕</button>
     </div>
-    <div class="minuman-history-date-row mb-3">
-        <input id="minuman-history-date" type="date" onchange="renderMinumanHistory(); updateMinumanHistoryDateButton()" aria-hidden="true" tabindex="-1">
-        <button type="button" id="minuman-history-date-button" class="minuman-history-date-button" aria-label="Pilih tanggal riwayat minuman">
-            <span class="minuman-history-date-icon">📅</span>
-            <span class="minuman-history-date-text">Pilih tanggal</span>
-            <span class="minuman-history-date-chevron">⌄</span>
-        </button>
+    <div class="grid grid-cols-1 sm:grid-cols-[auto_minmax(0,1fr)] gap-2 mb-3">
+        <input id="minuman-history-date" type="date" onchange="renderMinumanHistory()" class="glass-input rounded-xl px-3 py-2 text-xs font-bold border border-amber-200/80">
+        <input id="minuman-history-search" type="search" placeholder="🔎 Cari nama minuman..." oninput="renderMinumanHistory()" class="glass-input w-full rounded-xl px-3 py-2 text-xs font-bold border border-amber-200/80">
     </div>
     <div id="minuman-history-list" class="overflow-x-auto rounded-xl border border-slate-200 bg-white/70"></div>
 </div>
@@ -12059,7 +12039,6 @@ kaosKakiTerjual: jumlahKaosKaki,
             const tglForm = document.getElementById('m-tgl')?.value || getLocalDateString();
             const tglHistory = document.getElementById('minuman-history-date');
             if (tglHistory) tglHistory.value = tglForm;
-            window.updateMinumanHistoryDateButton?.();
 
             // Simpan posisi asli sekali saja.
             if (!window.__minumanHistoryPortal) {
@@ -12151,70 +12130,20 @@ kaosKakiTerjual: jumlahKaosKaki,
             return '--:--';
         }
 
-        // RIWAYAT MINUMAN — tombol tanggal custom. Input date asli disembunyikan
-        // dan hanya dipakai sebagai penyimpan nilai YYYY-MM-DD.
-        function formatMinumanHistoryDateLabel(value){
-            if(!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return 'Pilih tanggal';
-            const d = new Date(value + 'T00:00:00');
-            if(Number.isNaN(d.getTime())) return 'Pilih tanggal';
-            return d.toLocaleDateString('id-ID',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
-        }
-
-        window.updateMinumanHistoryDateButton = function(){
-            const input=document.getElementById('minuman-history-date');
-            const button=document.getElementById('minuman-history-date-button');
-            const text=button?.querySelector('.minuman-history-date-text');
-            if(text) text.textContent=formatMinumanHistoryDateLabel(input?.value || getLocalDateString());
-        };
-
-        function bindMinumanHistoryCustomCalendar(){
-            const button=document.getElementById('minuman-history-date-button');
-            const input=document.getElementById('minuman-history-date');
-            if(!button || !input || button.dataset.customCalendarBound==='1') {
-                if(button && input) window.updateMinumanHistoryDateButton();
-                return;
-            }
-            button.dataset.customCalendarBound='1';
-            const open=function(e){
-                if(e){ e.preventDefault(); e.stopPropagation(); }
-                if(typeof window.__openGlassNativePopupFor==='function'){
-                    window.__openGlassNativePopupFor(input);
-                }
-                return false;
-            };
-            button.addEventListener('pointerdown',open,true);
-            button.addEventListener('mousedown',function(e){e.preventDefault();e.stopPropagation();},true);
-            button.addEventListener('touchstart',open,{capture:true,passive:false});
-            button.addEventListener('click',open,true);
-            window.updateMinumanHistoryDateButton();
-        }
-
-        if(document.readyState==='loading'){
-            document.addEventListener('DOMContentLoaded',bindMinumanHistoryCustomCalendar);
-        } else {
-            bindMinumanHistoryCustomCalendar();
-        }
-
-        if(typeof MutationObserver !== 'undefined'){
-            const minumanHistoryCalendarObserver = new MutationObserver(function(){
-                bindMinumanHistoryCustomCalendar();
-            });
-            minumanHistoryCalendarObserver.observe(document.documentElement,{childList:true,subtree:true});
-        }
-
         window.renderMinumanHistory = () => {
             const list = document.getElementById('minuman-history-list');
             if (!list) return;
 
             setDefaultMinumanHistoryDate();
             const tanggal = document.getElementById('minuman-history-date')?.value || getLocalDateString();
-            window.updateMinumanHistoryDateButton?.();
+            const cari = String(document.getElementById('minuman-history-search')?.value || '').trim().toLowerCase();
 
             const rows = Object.entries(globalCache.minuman || {})
                 .map(([key, item]) => ({key, item}))
                 .filter(({item}) => {
                     if (!item || item.tgl !== tanggal) return false;
-                    return true;
+                    if (!cari) return true;
+                    return String(item.produk || '').toLowerCase().includes(cari);
                 })
                 // Tetap terbaru di atas berdasarkan waktu transaksi.
                 .sort((a,b) => {
@@ -13433,7 +13362,7 @@ kaosKakiTerjual: jumlahKaosKaki,
         const listJam = ["07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00"];
         const listHariKey = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
 
-        let globalCache = { member: {}, booking: {}, pemasukan: {}, minuman: {}, pengeluaran: {}, adminJaga: {}, sparring: {}, teamLogos: {}, pelunasanMember: {}, lunasDarurat: {}, bookingBatal: {}, riwayatStatusManual: {}, pendingSparingNames: {} };
+        let globalCache = { member: {}, booking: {}, pemasukan: {}, minuman: {}, pengeluaran: {}, adminJaga: {}, sparring: {}, teamLogos: {}, pelunasanMember: {}, lunasDarurat: {}, bookingBatal: {}, pendingSparingNames: {} };
         // Riwayat Jadwal berada di scope script terpisah, sehingga cache utama diekspos secara read-only ke modul riwayat.
         window.__sandagaGlobalCache = globalCache;
 
@@ -14374,11 +14303,6 @@ kaosKakiTerjual: jumlahKaosKaki,
             globalCache.bookingBatal = snapshot.val() || {};
             renderTodaySchedule();
             renderMonthlyRecap();
-        });
-        // Koreksi manual status Riwayat Jadwal. Tidak mengubah data booking/pemasukan asli.
-        onValue(ref(db, 'riwayatStatusManual'), (snapshot) => {
-            globalCache.riwayatStatusManual = snapshot.val() || {};
-            if (typeof window.__refreshRiwayatJadwal === 'function') window.__refreshRiwayatJadwal();
         });
 
         onValue(ref(db, 'pelunasanMember'), (snapshot) => {
@@ -24973,20 +24897,13 @@ body.jadwal-uang-masuk-modal-active #page-masuk {
 <style id="history-summary-mobile-fix">
 @media (max-width:640px){#today-schedule-history-modal .today-history-summary{grid-template-columns:1fr 1fr 1fr !important;gap:5px !important;}#today-schedule-history-modal .today-history-summary div{padding:8px 4px !important;}#today-schedule-history-modal .today-history-summary div div:last-child{font-size:16px !important;}}
 </style>
-
-<style id="history-status-edit-v1-css">
-#today-schedule-history-modal .today-history-card-top{position:relative !important;padding-right:40px !important;}
-#today-schedule-history-modal .today-history-edit{position:absolute !important;right:0 !important;bottom:0 !important;width:30px !important;height:30px !important;border:1px solid #dbeafe !important;border-radius:9px !important;background:#eff6ff !important;color:#1d4ed8 !important;font-size:13px !important;font-weight:900 !important;cursor:pointer !important;display:flex !important;align-items:center !important;justify-content:center !important;}
-#today-schedule-history-modal .today-history-edit:active{transform:scale(.94) !important;}
-@media (max-width:640px){#today-schedule-history-modal .today-history-edit{width:28px !important;height:28px !important;font-size:12px !important;right:0 !important;bottom:0 !important;}}
-</style>
 <script id="today-schedule-history-v1-js">
 (function(){
     let historyCalendarDate = new Date();
     let historySelectedDate = '';
 
 
-    const getHistoryCache = () => window.__sandagaGlobalCache || {booking:{},member:{},pemasukan:{},pelunasanMember:{},lunasDarurat:{},bookingBatal:{},riwayatStatusManual:{}};
+    const getHistoryCache = () => window.__sandagaGlobalCache || {booking:{},member:{},pemasukan:{},pelunasanMember:{},lunasDarurat:{},bookingBatal:{}};
     const historyGetNamaHari = dateStr => { const d=new Date(String(dateStr)+'T00:00:00'); return ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][d.getDay()]; };
     const historyMemberScheduled = (member,dateStr) => {
         if(!member || !dateStr) return false;
@@ -25175,11 +25092,6 @@ body.jadwal-uang-masuk-modal-active #page-masuk {
     }
 
 
-    const historyManualKey = row => encodeURIComponent(`${row.dateKey||''}|${row.jamKey||''}|${row.identity||row.nama||''}`);
-    const getHistoryManualStatus = row => getHistoryCache().riwayatStatusManual?.[historyManualKey(row)] || null;
-    const historyAutoStatus = row => row.autoStatus || row.status;
-    const historyStatusClass = status => status==='LUNAS' ? 'lunas' : (status==='BATAL BOOKING' ? 'batal' : 'belum');
-
     function buildHistoryRows(dateKey){
         const bookings=getHistoryBookings(dateKey);
         const bookingSlotKeys=new Set();
@@ -25190,15 +25102,9 @@ body.jadwal-uang-masuk-modal-active #page-masuk {
 
         return groups.map(g=>{
             const slots=[...g.slots].sort((a,b)=>a.jam.localeCompare(b.jam));
-            const jamKey=slots.map(x=>x.jam).join('|');
-            const identity=g.booking ? `booking:${g.keys.join('|')}` : `member:${dateKey}|${jamKey}|${normName(g.nama)}`;
-            const base={dateKey,jamKey,identity,nama:g.nama,kind:g.status==='Member'?'MEMBER':'BOOKING'};
             const canceled=g.booking && isHistoryCancelled(dateKey,g.nama,slots);
             if(canceled){
-                const row={...base,status:'BATAL BOOKING',autoStatus:'BATAL BOOKING',className:'batal',paid:0,total:0,dp:slots.reduce((s,x)=>s+Number(x.item?.dp||0),0),manual:null};
-                const manual=getHistoryManualStatus(row);
-                if(manual?.status){ row.manual=manual; row.status=manual.status; row.className=historyStatusClass(manual.status); }
-                return row;
+                return {nama:g.nama,jam:slots.map(x=>x.jam).join(' • '),status:'BATAL BOOKING',className:'batal',kind:g.status==='Member'?'MEMBER':'BOOKING',paid:0,total:0,dp:slots.reduce((s,x)=>s+Number(x.item?.dp||0),0)};
             }
             let total=0;
             slots.forEach(slot=>{
@@ -25206,78 +25112,9 @@ body.jadwal-uang-masuk-modal-active #page-masuk {
                 total += Number(historyHargaLapangan(dateKey,slot.jam,status)||0);
             });
             const payment=getHistoryPayment(g.nama,dateKey,slots,total);
-            const row={...base,status:payment.status,autoStatus:payment.status,className:payment.className,paid:payment.paid,total,dp:slots.reduce((s,x)=>s+Number(x.item?.dp||0),0),manual:null};
-            const manual=getHistoryManualStatus(row);
-            if(manual?.status){ row.manual=manual; row.status=manual.status; row.className=historyStatusClass(manual.status); }
-            return row;
+            return {nama:g.nama,jam:slots.map(x=>x.jam).join(' • '),status:payment.status,className:payment.className,kind:g.status==='Member'?'MEMBER':'BOOKING',paid:payment.paid,total,dp:slots.reduce((s,x)=>s+Number(x.item?.dp||0),0)};
         });
     }
-
-    async function saveHistoryManualStatus(row,status){
-        const updateFn=window.__APP_FIREBASE_UPDATE__, refFn=window.__APP_FIREBASE_REF__, dbRef=window.__APP_FIREBASE_DB__;
-        if(typeof updateFn!=='function' || typeof refFn!=='function' || !dbRef) throw new Error('Koneksi Firebase belum siap.');
-        const key=historyManualKey(row);
-        await updateFn(refFn(dbRef,'riwayatStatusManual/'+key),{
-            status,
-            tanggal:row.dateKey,
-            jam:row.jamKey,
-            nama:row.nama,
-            identity:row.identity,
-            updatedAt:Date.now()
-        });
-    }
-
-    async function removeHistoryManualStatus(row){
-        const removeFn=window.__APP_FIREBASE_REMOVE__, refFn=window.__APP_FIREBASE_REF__, dbRef=window.__APP_FIREBASE_DB__;
-        if(typeof removeFn!=='function' || typeof refFn!=='function' || !dbRef) throw new Error('Koneksi Firebase belum siap.');
-        await removeFn(refFn(dbRef,'riwayatStatusManual/'+historyManualKey(row)));
-    }
-
-    function closeHistoryEditModal(){ document.getElementById('riwayat-edit-status-modal')?.remove(); }
-
-    window.editStatusRiwayatJadwal=async (encodedRow)=>{
-        try{
-            const row=JSON.parse(decodeURIComponent(encodedRow));
-            const manual=getHistoryManualStatus(row);
-            document.getElementById('riwayat-edit-status-modal')?.remove();
-            const overlay=document.createElement('div');
-            overlay.id='riwayat-edit-status-modal';
-            overlay.style.cssText='position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;padding:14px;box-sizing:border-box;background:rgba(15,23,42,.62);backdrop-filter:blur(10px);';
-            overlay.innerHTML=`<div role="dialog" aria-modal="true" style="width:min(420px,calc(100vw - 28px));background:#fff;border-radius:22px;box-shadow:0 24px 70px rgba(15,23,42,.3);overflow:hidden;">
-                <div style="padding:16px 18px;border-bottom:1px solid #e2e8f0;background:linear-gradient(135deg,#eef6ff,#fff);position:relative;">
-                    <button type="button" data-close style="position:absolute;right:12px;top:12px;width:36px;height:36px;border:0;border-radius:11px;background:#f1f5f9;color:#334155;font-size:20px;font-weight:950;cursor:pointer;">×</button>
-                    <div style="font-size:12px;font-weight:950;color:#0f172a;">EDIT STATUS RIWAYAT</div>
-                    <div style="font-size:11px;font-weight:800;color:#64748b;margin-top:4px;">${esc(row.nama)} · ${esc(row.jamKey.replace(/\|/g,' • '))}</div>
-                </div>
-                <div style="padding:16px;">
-                    <div style="font-size:10px;font-weight:900;color:#64748b;margin-bottom:8px;">STATUS YANG DIPILIH</div>
-                    <div style="display:grid;gap:8px;">
-                        ${['LUNAS','TIDAK LUNAS','BATAL BOOKING'].map(st=>`<label style="display:flex;align-items:center;gap:10px;border:1px solid ${st==='LUNAS'?'#bbf7d0':st==='BATAL BOOKING'?'#fecaca':'#fde68a'};background:${st==='LUNAS'?'#f0fdf4':st==='BATAL BOOKING'?'#fef2f2':'#fffbeb'};border-radius:13px;padding:11px 12px;cursor:pointer;font-size:11px;font-weight:950;color:${st==='LUNAS'?'#166534':st==='BATAL BOOKING'?'#991b1b':'#92400e'};"><input type="radio" name="riwayat-status-choice" value="${st}" ${((manual?.status||row.status)===st)?'checked':''} style="accent-color:#2563eb;width:16px;height:16px;"> ${st}</label>`).join('')}
-                    </div>
-                    <div style="display:flex;gap:8px;margin-top:14px;">
-                        <button type="button" data-restore style="flex:1;border:1px solid #cbd5e1;background:#f8fafc;color:#334155;border-radius:12px;padding:10px 8px;font-size:10px;font-weight:950;${manual?'':'opacity:.45;cursor:not-allowed;'}">↩ KEMBALIKAN OTOMATIS</button>
-                        <button type="button" data-save style="flex:1;border:0;background:#1d4ed8;color:#fff;border-radius:12px;padding:10px 8px;font-size:10px;font-weight:950;cursor:pointer;">SIMPAN</button>
-                    </div>
-                </div>
-            </div>`;
-            document.body.appendChild(overlay);
-            overlay.querySelector('[data-close]').onclick=closeHistoryEditModal;
-            overlay.addEventListener('click',e=>{if(e.target===overlay) closeHistoryEditModal();});
-            overlay.querySelector('[data-restore]').onclick=async()=>{
-                if(!manual) return;
-                const btn=overlay.querySelector('[data-restore]'); btn.disabled=true;
-                try{ await removeHistoryManualStatus(row); closeHistoryEditModal(); if(window.__refreshRiwayatJadwal) window.__refreshRiwayatJadwal(); }
-                catch(err){ console.error(err); alert('Gagal mengembalikan status otomatis: '+err.message); btn.disabled=false; }
-            };
-            overlay.querySelector('[data-save]').onclick=async()=>{
-                const selected=overlay.querySelector('input[name="riwayat-status-choice"]:checked')?.value;
-                if(!selected) return;
-                const btn=overlay.querySelector('[data-save]'); btn.disabled=true; btn.textContent='MENYIMPAN...';
-                try{ await saveHistoryManualStatus(row,selected); closeHistoryEditModal(); if(window.__refreshRiwayatJadwal) window.__refreshRiwayatJadwal(); }
-                catch(err){ console.error(err); alert('Gagal menyimpan status: '+err.message); btn.disabled=false; btn.textContent='SIMPAN'; }
-            };
-        }catch(err){ console.error('Edit status riwayat:',err); alert('Data riwayat tidak dapat diedit.'); }
-    };
 
     function renderHistoryCalendar(){
         const year=historyCalendarDate.getFullYear(),month=historyCalendarDate.getMonth();
@@ -25320,17 +25157,13 @@ body.jadwal-uang-masuk-modal-active #page-masuk {
         const totalTidakLunas=rows.filter(r=>r.status==='TIDAK LUNAS').length;
         const totalBatal=rows.filter(r=>r.status==='BATAL BOOKING').length;
 
-        const cards=rows.map(row=>{
-            const payload=encodeURIComponent(JSON.stringify({dateKey:row.dateKey,jamKey:row.jamKey,identity:row.identity,nama:row.nama,status:row.status,autoStatus:row.autoStatus})).replace(/'/g,'%27');
-            return `<article class="today-history-card">
-                <div class="today-history-card-top">
-                    <div class="today-history-time">⏰ ${esc(row.jam.replace(/:/g,'.'))}</div>
-                    <div class="today-history-team">${esc(row.nama)}<div class="today-history-kind">${esc(row.kind)}</div></div>
-                    <span class="today-history-status ${row.className}">${esc(row.status)}</span>
-                    <button type="button" class="today-history-edit" onclick="editStatusRiwayatJadwal('${payload}')" aria-label="Edit status">✏️</button>
-                </div>
-            </article>`;
-        }).join('');
+        const cards=rows.map(row=>`<article class="today-history-card">
+            <div class="today-history-card-top">
+                <div class="today-history-time">⏰ ${esc(row.jam.replace(/:/g,'.'))}</div>
+                <div class="today-history-team">${esc(row.nama)}<div class="today-history-kind">${esc(row.kind)}</div></div>
+                <span class="today-history-status ${row.className}">${esc(row.status)}</span>
+            </div>
+        </article>`).join('');
 
         const summary=`<div class="today-history-summary" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 12px;">
             <div style="border:1px solid #bbf7d0;background:#f0fdf4;border-radius:14px;padding:10px;text-align:center;">
@@ -25416,13 +25249,6 @@ body.jadwal-uang-masuk-modal-active #page-masuk {
         overlay.querySelector('[data-next]').onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()+1,1);render();};
         render();
     }
-
-    window.__refreshRiwayatJadwal=()=>{
-        if(!historySelectedDate) return;
-        const modal=document.getElementById('today-schedule-history-modal');
-        if(!modal) return;
-        try{ renderHistoryResult(historySelectedDate); }catch(err){ console.error('Refresh Riwayat Jadwal:',err); }
-    };
 
     window.bukaRiwayatJadwalDenganTanggal=(dateKey)=>{
         document.getElementById('today-schedule-history-modal')?.remove();
@@ -25516,55 +25342,6 @@ body.jadwal-uang-masuk-modal-active #page-masuk {
     }
 }
 </style>
-
-<style id="daily-recap-custom-date-control-v1">
-/* DAILY RECAP — jangan biarkan browser membuka kalender native Windows/HP. */
-#daily-dashboard-date-input{
-  cursor:pointer !important;
-  caret-color:transparent !important;
-}
-#daily-dashboard-date-input::-webkit-calendar-picker-indicator{
-  opacity:.35 !important;
-  cursor:pointer !important;
-}
-</style>
-<script id="daily-recap-custom-date-control-v1">
-(function(){
-  'use strict';
-  function bindDailyRecapCustomCalendar(){
-    const input=document.getElementById('daily-dashboard-date-input');
-    if(!input || input.dataset.customCalendarBound==='1') return;
-    input.dataset.customCalendarBound='1';
-
-    const open=function(e){
-      if(e){ e.preventDefault(); e.stopPropagation(); }
-      if(typeof window.__openGlassNativePopupFor==='function'){
-        window.__openGlassNativePopupFor(input);
-      }
-      return false;
-    };
-
-    /* pointerdown wajib dicegat karena pada HP/native picker sering terbuka
-       sebelum event click berjalan. */
-    input.addEventListener('pointerdown',open,true);
-    input.addEventListener('mousedown',function(e){
-      e.preventDefault(); e.stopPropagation();
-    },true);
-    input.addEventListener('touchstart',open,{capture:true,passive:false});
-    input.addEventListener('click',open,true);
-    input.addEventListener('keydown',function(e){
-      if(e.key==='Enter' || e.key===' ' || e.key==='ArrowDown') open(e);
-    },true);
-  }
-
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bindDailyRecapCustomCalendar);
-  else bindDailyRecapCustomCalendar();
-
-  /* Daily Recap adalah halaman yang bisa dirender ulang/ditampilkan belakangan. */
-  const observer=new MutationObserver(function(){ bindDailyRecapCustomCalendar(); });
-  observer.observe(document.documentElement,{childList:true,subtree:true});
-})();
-</script>
 </body>
 
 <style id="FINAL_FIX_UANG_KELUAR_ONE_BIG_GLASS_CARD">
@@ -32457,8 +32234,8 @@ html, body {
   color:transparent !important;
 }
 #minuman-history-modal-overlay #minuman-history-panel > .grid input[type="date"]::-webkit-calendar-picker-indicator{
-  opacity:0 !important;
-  pointer-events:none !important;
+  opacity:.72 !important;
+  cursor:pointer !important;
 }
 #minuman-history-modal-overlay #minuman-history-list{
   max-height:calc(min(84vh,760px) - 118px) !important;
