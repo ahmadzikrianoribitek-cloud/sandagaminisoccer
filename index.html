@@ -1163,7 +1163,8 @@ body:has(#page-booking:not(.hidden)) > .sticky-back-btn[data-back-context="page-
 body:has(#page-masuk:not(.hidden)) > .sticky-back-btn[data-back-context="page-masuk"],
 body:has(#page-minuman:not(.hidden)) > .sticky-back-btn[data-back-context="page-minuman"],
 body:has(#page-keluar:not(.hidden)) > .sticky-back-btn[data-back-context="page-keluar"],
-body:has(#page-sparring:not(.hidden)) > .sticky-back-btn[data-back-context="page-sparring"] {
+body:has(#page-sparring:not(.hidden)) > .sticky-back-btn[data-back-context="page-sparring"],
+body:has(#page-team-list:not(.hidden)) > .sticky-back-btn[data-back-context="page-team-list"] {
     display: inline-flex !important;
 }
 
@@ -9439,6 +9440,207 @@ body.minuman-edit-modal-open{overflow:hidden !important}
 }
 </style>
 
+
+<style id="atur-member-chooser-clean-v1">
+/* =========================================================
+   ATUR MEMBER — CHOOSER 3 MENU
+   Hanya memisahkan tampilan; data, Firebase, dan fungsi
+   member lama tetap dipakai.
+   ========================================================= */
+.atur-member-chooser-overlay{
+  position:fixed;
+  inset:0;
+  z-index:2147483646;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(15,23,42,.42);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  animation:aturMemberChooserFade .16s ease-out;
+}
+.atur-member-chooser-overlay.is-open{display:flex !important;}
+
+.atur-member-chooser{
+  width:min(100%, 470px);
+  max-height:min(90vh, 620px);
+  overflow:auto;
+  background:rgba(255,255,255,.97);
+  border:1px solid rgba(255,255,255,.95);
+  border-radius:22px;
+  padding:20px;
+  box-shadow:0 25px 70px rgba(15,23,42,.24);
+  animation:aturMemberChooserIn .2s cubic-bezier(.2,.8,.2,1);
+}
+
+.atur-member-chooser-head{
+  position:relative;
+  text-align:center;
+  padding:2px 42px 14px;
+  border-bottom:1px solid #e2e8f0;
+}
+.atur-member-chooser-head h3{
+  margin:0;
+  color:#0f172a;
+  font-size:1.05rem;
+  line-height:1.15;
+  font-weight:950;
+  letter-spacing:.02em;
+}
+.atur-member-chooser-head p{
+  margin:6px 0 0;
+  color:#64748b;
+  font-size:.68rem;
+  line-height:1.35;
+  font-weight:700;
+}
+.atur-member-chooser-close{
+  position:absolute;
+  top:-1px;
+  right:0;
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border:1px solid #e2e8f0;
+  border-radius:10px;
+  background:#f8fafc;
+  color:#475569;
+  font-size:18px;
+  font-weight:900;
+  cursor:pointer;
+  transition:.16s ease;
+}
+.atur-member-chooser-close:hover{
+  background:#eff6ff;
+  color:#1d4ed8;
+  border-color:#bfdbfe;
+  transform:translateY(-1px);
+}
+
+.atur-member-chooser-list{
+  display:grid;
+  gap:10px;
+  margin-top:15px;
+}
+.atur-member-chooser-btn{
+  width:100%;
+  display:grid;
+  grid-template-columns:48px minmax(0,1fr) 22px;
+  align-items:center;
+  gap:12px;
+  padding:13px 14px;
+  border:1px solid #e2e8f0;
+  border-radius:15px;
+  background:#fff;
+  color:#0f172a;
+  text-align:left;
+  cursor:pointer;
+  box-shadow:0 5px 16px rgba(15,23,42,.055);
+  transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease, background .16s ease;
+}
+.atur-member-chooser-btn:hover{
+  transform:translateY(-2px);
+  border-color:#bfdbfe;
+  background:#f8fbff;
+  box-shadow:0 10px 24px rgba(37,99,235,.10);
+}
+.atur-member-chooser-icon{
+  width:48px;
+  height:48px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  font-size:1.25rem;
+  border:1px solid #e2e8f0;
+}
+.atur-member-chooser-btn:nth-child(1) .atur-member-chooser-icon{
+  background:#eff6ff;
+  border-color:#dbeafe;
+}
+.atur-member-chooser-btn:nth-child(2) .atur-member-chooser-icon{
+  background:#ecfdf5;
+  border-color:#d1fae5;
+}
+.atur-member-chooser-btn:nth-child(3) .atur-member-chooser-icon{
+  background:#f5f3ff;
+  border-color:#ede9fe;
+}
+.atur-member-chooser-copy{
+  min-width:0;
+}
+.atur-member-chooser-copy strong{
+  display:block;
+  font-size:.78rem;
+  line-height:1.2;
+  font-weight:950;
+}
+.atur-member-chooser-copy small{
+  display:block;
+  margin-top:4px;
+  color:#64748b;
+  font-size:.59rem;
+  line-height:1.3;
+  font-weight:650;
+}
+.atur-member-chooser-arrow{
+  color:#94a3b8;
+  font-size:1.1rem;
+  font-weight:950;
+  text-align:center;
+}
+
+/* Saat satu bagian dipilih, dua bagian lainnya benar-benar disembunyikan. */
+#page-atur-member[data-member-section="schedule"] #member-tanpa-jadwal-panel,
+#page-atur-member[data-member-section="schedule"] #member-list-heading,
+#page-atur-member[data-member-section="schedule"] #tabel-list-member{
+  display:none !important;
+}
+#page-atur-member[data-member-section="without-schedule"] #form-member,
+#page-atur-member[data-member-section="without-schedule"] #member-list-heading,
+#page-atur-member[data-member-section="without-schedule"] #tabel-list-member{
+  display:none !important;
+}
+#page-atur-member[data-member-section="list"] #form-member,
+#page-atur-member[data-member-section="list"] #member-tanpa-jadwal-panel{
+  display:none !important;
+}
+#page-atur-member:not([data-member-section]) #form-member,
+#page-atur-member:not([data-member-section]) #member-tanpa-jadwal-panel,
+#page-atur-member:not([data-member-section]) #member-list-heading,
+#page-atur-member:not([data-member-section]) #tabel-list-member{
+  display:none !important;
+}
+
+@keyframes aturMemberChooserFade{
+  from{opacity:0}
+  to{opacity:1}
+}
+@keyframes aturMemberChooserIn{
+  from{opacity:0; transform:translateY(10px) scale(.97)}
+  to{opacity:1; transform:translateY(0) scale(1)}
+}
+@media (max-width:640px){
+  .atur-member-chooser-overlay{padding:12px}
+  .atur-member-chooser{
+    width:100%;
+    padding:15px;
+    border-radius:18px;
+  }
+  .atur-member-chooser-head{padding-bottom:12px}
+  .atur-member-chooser-btn{
+    grid-template-columns:43px minmax(0,1fr) 18px;
+    padding:12px;
+  }
+  .atur-member-chooser-icon{
+    width:43px;
+    height:43px;
+    border-radius:12px;
+  }
+}
+</style>
+
 </head>
 <body class="min-h-screen p-2 sm:p-4 pt-4 sm:pt-6 flex flex-col items-center text-slate-900 font-medium">
 
@@ -9640,15 +9842,6 @@ body.minuman-edit-modal-open{overflow:hidden !important}
 <span class="schedule-legend-item flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-rose-600 border border-rose-400 rounded-full"></span> <span class="text-rose-700 font-black">Non-Member</span></span>
 </div>
 
-<!-- KELOLA WA NON-MEMBER -->
-<div class="mt-4 p-3 sm:p-4 rounded-2xl border border-rose-300/60 bg-white/35 shadow-sm">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
-        <div>
-            <h3 class="text-sm sm:text-base font-black text-slate-900">👥 LIST NON MEMBER</h3>
-        </div>
-            </div>
-    <div id="booking-schedule-nonmember-wa-list" class="space-y-2"></div>
-</div>
 </div>
 <!-- HALAMAN DAILY RECAP -->
 <div class="sub-menu-modern hidden" id="page-daily-recap">
@@ -10147,7 +10340,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
   <div id="member-tanpa-jadwal-list" class="member-tanpa-jadwal-list"></div>
 </div>
 
-<h3 class="font-black text-sm text-slate-900 mb-2">Daftar Jadwal / Member Aktif</h3>
+<h3 id="member-list-heading" class="font-black text-sm text-slate-900 mb-2">Daftar Jadwal / Member Aktif</h3>
 <div id="tabel-list-member" class="member-cards-grid"></div>
 </div>
 
@@ -10545,9 +10738,26 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 <label id="label-pembayaran-tim-1" class="block text-xs font-black text-emerald-950">Pembayaran Tim 1</label>
 <input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-jumlah-1" placeholder="Nominal pembayaran sekarang (Rp)" type="text" inputmode="numeric" oninput="formatNominalInput(this)"/>
 <div class="grid grid-cols-2 gap-2"><div><label class="block text-[10px] font-black text-emerald-950 mb-1">DP Manual (Rp)</label><input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-dp-1" min="0" type="text" inputmode="numeric" oninput="formatNominalInput(this)" placeholder="Jika sudah DP"/></div><div><label class="block text-[10px] font-black text-emerald-950 mb-1">Tanggal DP</label><input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-tgl-dp-1" type="date"/></div></div>
-<select class="w-full p-2 rounded text-sm glass-input font-bold" id="in-metode-1" onchange="toggleFreePaymentInput(1)">
-<option value="Belum Bayar">Belum Bayar</option><option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option><option value="Free">Free / Gratis</option><option value="Campuran">Campuran (2 Metode)</option>
-</select>
+<div class="uang-masuk-method-custom" data-method="1">
+  <button type="button" class="uang-masuk-method-trigger" id="in-metode-trigger-1" onclick="toggleUangMasukMethodDropdown(1)" aria-haspopup="listbox" aria-expanded="false">
+    <span class="uang-masuk-method-icon">💵</span>
+    <span class="uang-masuk-method-value" id="in-metode-label-1">Cash</span>
+    <span class="uang-masuk-method-chevron">⌄</span>
+  </button>
+  <div class="uang-masuk-method-menu hidden" id="in-metode-menu-1" role="listbox">
+    <button type="button" class="uang-masuk-method-option selected" data-value="Cash" onclick="selectUangMasukMethod(1,'Cash')"><span>💵</span><span>Cash</span></button>
+    <button type="button" class="uang-masuk-method-option" data-value="QRIS" onclick="selectUangMasukMethod(1,'QRIS')"><span>▣</span><span>QRIS</span></button>
+    <button type="button" class="uang-masuk-method-option" data-value="Transfer" onclick="selectUangMasukMethod(1,'Transfer')"><span>🏦</span><span>Transfer</span></button>
+  </div>
+  <select class="uang-masuk-method-native" id="in-metode-1" onchange="toggleFreePaymentInput(1)" aria-hidden="true" tabindex="-1">
+    <option value="Cash">Cash</option>
+    <option value="QRIS">QRIS</option>
+    <option value="Transfer">Transfer</option>
+    <option value="Belum Bayar">Belum Bayar</option>
+    <option value="Free">Free / Gratis</option>
+    <option value="Campuran">Campuran (2 Metode)</option>
+  </select>
+</div>
 <label class="flex items-center gap-2 text-[10px] font-black text-emerald-900 cursor-pointer"><input id="in-campuran-1" type="checkbox" class="w-4 h-4" onchange="toggleMixedPayment(1)"> Bayar dengan 2 metode</label>
 <div id="in-campuran-box-1" class="hidden grid grid-cols-2 gap-2">
   <input id="in-jumlah-1b" type="text" inputmode="numeric" oninput="formatNominalInput(this)" min="0" placeholder="Nominal metode 2 (Rp)" class="w-full p-2 rounded text-sm glass-input font-bold">
@@ -10566,9 +10776,26 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 </select>
 <input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-jumlah-2" placeholder="Nominal pembayaran sekarang (Rp)" type="text" inputmode="numeric" oninput="formatNominalInput(this)"/>
 <div class="grid grid-cols-2 gap-2"><div><label class="block text-[10px] font-black text-emerald-950 mb-1">DP Manual (Rp)</label><input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-dp-2" min="0" type="text" inputmode="numeric" oninput="formatNominalInput(this)" placeholder="Jika sudah DP"/></div><div><label class="block text-[10px] font-black text-emerald-950 mb-1">Tanggal DP</label><input class="w-full p-2 rounded text-sm glass-input font-bold" id="in-tgl-dp-2" type="date"/></div></div>
-<select class="w-full p-2 rounded text-sm glass-input font-bold" id="in-metode-2" onchange="toggleFreePaymentInput(2)">
-<option value="Belum Bayar">Belum Bayar</option><option value="Cash">Cash</option><option value="QRIS">QRIS</option><option value="Transfer">Transfer</option><option value="Free">Free / Gratis</option><option value="Campuran">Campuran (2 Metode)</option>
-</select>
+<div class="uang-masuk-method-custom" data-method="2">
+  <button type="button" class="uang-masuk-method-trigger" id="in-metode-trigger-2" onclick="toggleUangMasukMethodDropdown(2)" aria-haspopup="listbox" aria-expanded="false">
+    <span class="uang-masuk-method-icon">💵</span>
+    <span class="uang-masuk-method-value" id="in-metode-label-2">Cash</span>
+    <span class="uang-masuk-method-chevron">⌄</span>
+  </button>
+  <div class="uang-masuk-method-menu hidden" id="in-metode-menu-2" role="listbox">
+    <button type="button" class="uang-masuk-method-option selected" data-value="Cash" onclick="selectUangMasukMethod(2,'Cash')"><span>💵</span><span>Cash</span></button>
+    <button type="button" class="uang-masuk-method-option" data-value="QRIS" onclick="selectUangMasukMethod(2,'QRIS')"><span>▣</span><span>QRIS</span></button>
+    <button type="button" class="uang-masuk-method-option" data-value="Transfer" onclick="selectUangMasukMethod(2,'Transfer')"><span>🏦</span><span>Transfer</span></button>
+  </div>
+  <select class="uang-masuk-method-native" id="in-metode-2" onchange="toggleFreePaymentInput(2)" aria-hidden="true" tabindex="-1">
+    <option value="Cash">Cash</option>
+    <option value="QRIS">QRIS</option>
+    <option value="Transfer">Transfer</option>
+    <option value="Belum Bayar">Belum Bayar</option>
+    <option value="Free">Free / Gratis</option>
+    <option value="Campuran">Campuran (2 Metode)</option>
+  </select>
+</div>
 <label class="flex items-center gap-2 text-[10px] font-black text-emerald-900 cursor-pointer"><input id="in-campuran-2" type="checkbox" class="w-4 h-4" onchange="toggleMixedPayment(2)"> Bayar dengan 2 metode</label>
 <div id="in-campuran-box-2" class="hidden grid grid-cols-2 gap-2">
   <input id="in-jumlah-2b" type="text" inputmode="numeric" oninput="formatNominalInput(this)" min="0" placeholder="Nominal metode 2 (Rp)" class="w-full p-2 rounded text-sm glass-input font-bold">
@@ -10590,6 +10817,132 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 </div>
 </form>
 </div>
+
+<style id="uang-masuk-custom-payment-dropdown">
+/* UANG MASUK — metode pembayaran custom dropdown.
+   Default selalu Cash; menu hanya muncul saat tombol diklik. */
+#page-masuk .uang-masuk-method-custom{
+  position:relative;
+  width:100%;
+  z-index:20;
+}
+#page-masuk .uang-masuk-method-native{
+  position:absolute !important;
+  width:1px !important;
+  height:1px !important;
+  padding:0 !important;
+  margin:-1px !important;
+  overflow:hidden !important;
+  clip:rect(0,0,0,0) !important;
+  white-space:nowrap !important;
+  border:0 !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+}
+#page-masuk .uang-masuk-method-trigger{
+  width:100%;
+  min-height:42px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border:1px solid #dbe3ee;
+  border-radius:12px;
+  background:#f8fafc;
+  color:#0f172a;
+  font-weight:900;
+  font-size:14px;
+  text-align:left;
+  cursor:pointer;
+  box-shadow:inset 0 1px 2px rgba(15,23,42,.025);
+  transition:border-color .16s ease, box-shadow .16s ease, background .16s ease;
+}
+#page-masuk .uang-masuk-method-trigger:hover,
+#page-masuk .uang-masuk-method-custom.open .uang-masuk-method-trigger{
+  background:#fff;
+  border-color:#93c5fd;
+  box-shadow:0 0 0 3px rgba(59,130,246,.10);
+}
+#page-masuk .uang-masuk-method-icon{
+  width:28px;
+  height:28px;
+  display:grid;
+  place-items:center;
+  flex:0 0 28px;
+  border-radius:9px;
+  background:#eff6ff;
+  border:1px solid #dbeafe;
+  font-size:15px;
+}
+#page-masuk .uang-masuk-method-value{
+  flex:1;
+  min-width:0;
+}
+#page-masuk .uang-masuk-method-chevron{
+  font-size:18px;
+  line-height:1;
+  color:#64748b;
+  transition:transform .16s ease;
+}
+#page-masuk .uang-masuk-method-custom.open .uang-masuk-method-chevron{
+  transform:rotate(180deg);
+}
+#page-masuk .uang-masuk-method-menu{
+  position:absolute;
+  left:0;
+  right:0;
+  top:calc(100% + 6px);
+  padding:5px;
+  border:1px solid #dbeafe;
+  border-radius:13px;
+  background:rgba(255,255,255,.98);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  box-shadow:0 16px 35px rgba(15,23,42,.16);
+  z-index:2147483000;
+  transform-origin:top;
+  animation:uangMasukMethodDrop .14s ease-out;
+}
+#page-masuk .uang-masuk-method-option{
+  width:100%;
+  min-height:40px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:9px 10px;
+  border:0;
+  border-radius:9px;
+  background:transparent;
+  color:#0f172a;
+  font-weight:850;
+  font-size:13px;
+  text-align:left;
+  cursor:pointer;
+  transition:background .14s ease, color .14s ease;
+}
+#page-masuk .uang-masuk-method-option > span:first-child{
+  width:27px;
+  text-align:center;
+  font-size:15px;
+}
+#page-masuk .uang-masuk-method-option:hover{
+  background:#eff6ff;
+  color:#1d4ed8;
+}
+#page-masuk .uang-masuk-method-option.selected{
+  background:#dbeafe;
+  color:#1e40af;
+}
+@keyframes uangMasukMethodDrop{
+  from{opacity:0;transform:translateY(-4px) scale(.985)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+@media (max-width:640px){
+  #page-masuk .uang-masuk-method-trigger{min-height:44px;font-size:16px;}
+  #page-masuk .uang-masuk-method-option{min-height:44px;font-size:16px;}
+}
+</style>
+
 <style id="uang-masuk-single-glass-cards">
 /* UANG MASUK: satu glass utama + kartu kontrol mandiri. Tidak ada glass bertumpuk. */
 #page-masuk.sub-menu-modern > form {
@@ -10992,6 +11345,36 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 </form>
 </div>
 
+<!-- LIST TIM MAIN — halaman daftar seluruh tim yang pernah bermain -->
+<div class="hidden" id="page-team-list">
+  <div class="team-list-page-shell">
+    <div class="team-list-head">
+      <button type="button" class="team-list-back" onclick="navigateBack()" aria-label="Kembali">←</button>
+      <div class="team-list-head-copy">
+        <div class="team-list-kicker">DATABASE TIM SANDAGA</div>
+        <h2>LIST TIM MAIN</h2>
+        <p>Tim yang pernah bermain sebagai member, booking, atau lawan sparing.</p>
+      </div>
+      <div class="team-list-count" id="team-list-count">0 TIM</div>
+    </div>
+
+    <div class="team-list-toolbar">
+      <div class="team-list-search-wrap">
+        <span>⌕</span>
+        <input id="team-list-search" type="search" placeholder="Cari nama tim..." autocomplete="off">
+      </div>
+      <button type="button" class="team-list-refresh" onclick="renderTeamList(true)" aria-label="Segarkan daftar">↻</button>
+    </div>
+
+    <div id="team-list-grid" class="team-list-grid"></div>
+    <div id="team-list-empty" class="team-list-empty hidden">
+      <div class="team-list-empty-icon">⚽</div>
+      <strong>Belum ada tim</strong>
+      <span>Tim akan otomatis muncul setelah pernah tercatat di Member, Booking, atau Sparing.</span>
+    </div>
+  </div>
+</div>
+
 <!-- MENU LAINNYA — HALAMAN TERSENDIRI -->
 <div class="hidden" id="page-more">
   <div class="sub-menu-modern glass-panel p-4 sm:p-6 rounded-2xl font-bold text-slate-900 more-menu-page">
@@ -10999,16 +11382,16 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
       <h2 class="text-base sm:text-lg font-black text-slate-900 text-center uppercase w-full">MENU LAINNYA</h2>
     </div>
     <div class="more-page-grid">
-      <button type="button" onclick="quickMoreOpen('masuk')"><span>💰</span><b>Uang Masuk</b><small>Catat pemasukan</small></button>
       <button type="button" onclick="quickMoreOpen('pelunasan-member')"><span>🧾</span><b>Pelunasan Member</b><small>Tagihan member</small></button>
       <button type="button" onclick="quickMoreOpen('booking')"><span>⚽</span><b>Booking</b><small>Input booking</small></button>
       <button type="button" onclick="quickMoreOpen('sparring')"><span>🤝</span><b>Sparing</b><small>Catat sparing</small></button>
       <button type="button" onclick="quickMoreOpen('admin-jaga')"><span>🧑‍💼</span><b>Admin Jaga</b><small>Jadwal admin</small></button>
-      <button type="button" onclick="quickMoreOpen('atur-member')"><span>⚙️</span><b>Atur Member</b><small>Data member</small></button>
+      <button type="button" onclick="openAturMemberChooser()"><span>⚙️</span><b>Atur Member</b><small>Data member</small></button>
       <button type="button" onclick="quickMoreOpen('booking-schedule')"><span>🗓️</span><b>Booking Schedule</b><small>Jadwal booking</small></button>
       <button type="button" onclick="quickMoreOpen('booking-history')"><span>📋</span><b>Booking History</b><small>Riwayat booking</small></button>
       <button type="button" onclick="quickMoreOpen('monthly-recap')"><span>📈</span><b>Monthly Recap</b><small>Rekap bulanan</small></button>
       <button type="button" onclick="quickMoreOpen('laporan')"><span>📊</span><b>Laporan</b><small>Pusat laporan transaksi</small></button>
+      <button type="button" onclick="quickMoreOpen('team-list')"><span>👥</span><b>List Tim Main</b><small>Semua tim yang pernah main</small></button>
     </div>
   </div>
 </div>
@@ -12168,6 +12551,94 @@ const diskonManualEl = document.getElementById('in-diskon-manual');
                 }
                 const jamMainElSubmit = document.getElementById('in-jam-main');
                 let jamMain = jamMainElSubmit?.getAttribute('data-base-jam-main') || jamMainElSubmit?.value || '';
+
+        // =========================================================
+        // UANG MASUK — CUSTOM DROPDOWN METODE PEMBAYARAN
+        // Native select tetap dipertahankan sebagai sumber nilai agar
+        // seluruh logika lama (simpan, rekap, edit) tetap kompatibel.
+        // =========================================================
+        const UANG_MASUK_METHOD_META = {
+            Cash:     { icon: '💵', label: 'Cash' },
+            QRIS:     { icon: '▣',  label: 'QRIS' },
+            Transfer: { icon: '🏦', label: 'Transfer' }
+        };
+
+        window.closeUangMasukMethodDropdowns = function(exceptNo = null){
+            [1,2].forEach(no => {
+                if(String(no) === String(exceptNo)) return;
+                const wrap = document.querySelector(`#page-masuk .uang-masuk-method-custom[data-method="${no}"]`);
+                const menu = document.getElementById(`in-metode-menu-${no}`);
+                const trigger = document.getElementById(`in-metode-trigger-${no}`);
+                if(wrap) wrap.classList.remove('open');
+                if(menu) menu.classList.add('hidden');
+                if(trigger) trigger.setAttribute('aria-expanded','false');
+            });
+        };
+
+        window.toggleUangMasukMethodDropdown = function(no){
+            const wrap = document.querySelector(`#page-masuk .uang-masuk-method-custom[data-method="${no}"]`);
+            const menu = document.getElementById(`in-metode-menu-${no}`);
+            const trigger = document.getElementById(`in-metode-trigger-${no}`);
+            if(!wrap || !menu || !trigger) return;
+
+            const willOpen = menu.classList.contains('hidden');
+            window.closeUangMasukMethodDropdowns(no);
+
+            if(willOpen){
+                menu.classList.remove('hidden');
+                wrap.classList.add('open');
+                trigger.setAttribute('aria-expanded','true');
+            }else{
+                menu.classList.add('hidden');
+                wrap.classList.remove('open');
+                trigger.setAttribute('aria-expanded','false');
+            }
+        };
+
+        window.selectUangMasukMethod = function(no, value){
+            const select = document.getElementById(`in-metode-${no}`);
+            const label = document.getElementById(`in-metode-label-${no}`);
+            const icon = document.querySelector(`#in-metode-trigger-${no} .uang-masuk-method-icon`);
+            const wrap = document.querySelector(`#page-masuk .uang-masuk-method-custom[data-method="${no}"]`);
+            const menu = document.getElementById(`in-metode-menu-${no}`);
+            const trigger = document.getElementById(`in-metode-trigger-${no}`);
+            const meta = UANG_MASUK_METHOD_META[value] || UANG_MASUK_METHOD_META.Cash;
+
+            if(select) {
+                select.value = value;
+                select.dispatchEvent(new Event('change', { bubbles:true }));
+            }
+            if(label) label.textContent = meta.label;
+            if(icon) icon.textContent = meta.icon;
+
+            menu?.querySelectorAll('.uang-masuk-method-option').forEach(btn => {
+                btn.classList.toggle('selected', btn.dataset.value === value);
+            });
+
+            menu?.classList.add('hidden');
+            wrap?.classList.remove('open');
+            trigger?.setAttribute('aria-expanded','false');
+        };
+
+        window.syncUangMasukMethodDropdown = function(no, value){
+            const safeValue = UANG_MASUK_METHOD_META[value] ? value : 'Cash';
+            const select = document.getElementById(`in-metode-${no}`);
+            if(select) select.value = safeValue;
+            window.selectUangMasukMethod(no, safeValue);
+        };
+
+        document.addEventListener('click', function(e){
+            if(!e.target.closest('#page-masuk .uang-masuk-method-custom')){
+                window.closeUangMasukMethodDropdowns();
+            }
+        });
+
+        // Pastikan saat form Uang Masuk dibuka, metode awal = Cash.
+        window.resetUangMasukPaymentMethods = function(){
+            window.syncUangMasukMethodDropdown(1, 'Cash');
+            window.syncUangMasukMethodDropdown(2, 'Cash');
+        };
+
                 let met1 = document.getElementById('in-metode-1').value;
                 let met2 = document.getElementById('in-metode-2').value;
                 const campur1 = document.getElementById('in-campuran-1')?.checked || met1 === 'Campuran';
@@ -14550,6 +15021,12 @@ kaosKakiTerjual: jumlahKaosKaki,
             if (typeof renderSparing === 'function') renderSparing();
         });
 
+        // Profil tim untuk List Tim Main: nama/WA yang sudah diedit admin.
+        onValue(ref(db, 'teamProfiles'), (snapshot) => {
+            globalCache.teamProfiles = snapshot.val() || {};
+            if (typeof window.renderTeamList === 'function') window.renderTeamList();
+        });
+
         onValue(ref(db, 'member'), (snapshot) => {
             globalCache.member = {};
             let listTbody = document.getElementById('tabel-list-member');
@@ -14937,6 +15414,7 @@ kaosKakiTerjual: jumlahKaosKaki,
             globalCache.__initialMemberLoaded = true;
             updateInitialLoadingPopup();
             if (typeof renderAll === 'function') renderAll();
+            if (typeof window.renderTeamList === 'function') window.renderTeamList();
         }
         onValue(ref(db, 'memberTanpaJadwal'), (snapshot) => {
             _memberTanpaJadwalActiveCache = {};
@@ -14950,6 +15428,8 @@ kaosKakiTerjual: jumlahKaosKaki,
                 });
             }
             renderMemberTanpaJadwalKeListAktif();
+            globalCache.memberTanpaJadwal = _memberTanpaJadwalActiveCache;
+            if (typeof window.renderTeamList === 'function') window.renderTeamList();
         });
 
 
@@ -14959,6 +15439,7 @@ kaosKakiTerjual: jumlahKaosKaki,
             globalCache.__initialBookingLoaded = true;
             updateInitialLoadingPopup();
             renderAll();
+            if (typeof window.renderTeamList === 'function') window.renderTeamList();
         });
 
         // Penanda lunas darurat untuk jadwal yang tampil dari Member tetapi
@@ -14992,6 +15473,7 @@ kaosKakiTerjual: jumlahKaosKaki,
             renderGridJadwal();
             renderTodaySchedule();
             renderTabelBooking();
+            if (typeof window.renderTeamList === 'function') window.renderTeamList();
         });
 
         onValue(ref(db, 'pendingSparingNames'), (snapshot) => { globalCache.pendingSparingNames = snapshot.val() || {}; });
@@ -17696,66 +18178,620 @@ return;
             }
         };
 
-        window.renderNonMemberWABookingSchedule = () => {
-            const el = document.getElementById('booking-schedule-nonmember-wa-list');
-            if(!el) return;
 
-            const select = document.getElementById('filter-periode-jadwal');
-            const mondayStr = select?.value || getLocalDateString();
-            const monday = new Date(mondayStr + 'T00:00:00');
-            if(Number.isNaN(monday.getTime())) {
-                el.innerHTML = '<div class="text-xs font-bold text-slate-500 text-center p-3">Pilih periode yang valid.</div>';
-                return;
-            }
+        // =========================================================
+        // BOOKING SCHEDULE — MENU AKSI TIM
+        // Nama tim sekarang menjadi titik interaksi utama.
+        // Panel LIST NON-MEMBER dihapus agar tampilan lebih minimalis.
+        // =========================================================
+        window.openTeamActionMenu = (typeEncoded, keyEncoded, namaEncoded, tanggalEncoded, jamEncoded) => {
+            const type = decodeURIComponent(String(typeEncoded || ''));
+            const key = decodeURIComponent(String(keyEncoded || ''));
+            const nama = decodeURIComponent(String(namaEncoded || ''));
+            const tanggal = decodeURIComponent(String(tanggalEncoded || ''));
+            const jam = decodeURIComponent(String(jamEncoded || ''));
 
-            const selectedOption = select?.options?.[select.selectedIndex];
-            const startStr = selectedOption?.dataset?.periodStart || mondayStr;
-            const endStr = selectedOption?.dataset?.periodEnd || startStr;
+            document.getElementById('modal-booking-team-actions')?.remove();
 
-            const entries = Object.entries(globalCache.booking || {})
-                .filter(([key,b]) => {
-                    if(!b || String(b.status || '').toLowerCase() === 'member' || !b.tgl) return false;
-                    const date = String(b.tgl).split('T')[0];
-                    return date >= startStr && date <= endStr;
+            const isBooking = type === 'booking';
+            const safe = v => String(v ?? '')
+                .replace(/&/g,'&amp;').replace(/"/g,'&quot;')
+                .replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            const tanggalText = tanggal ? tanggal.split('-').reverse().join('/') : '-';
+
+            const actionButton = (icon, label, cls, onclick, sub='') => `
+                <button type="button" onclick="${onclick}"
+                        class="team-action-menu-btn ${cls}">
+                    <span class="team-action-menu-icon">${icon}</span>
+                    <span class="min-w-0 flex-1 text-left">
+                        <span class="block font-black text-[12px] sm:text-[13px]">${label}</span>
+                        ${sub ? `<span class="block text-[9px] sm:text-[10px] opacity-70 font-bold mt-0.5">${sub}</span>` : ''}
+                    </span>
+                    <span class="text-lg opacity-40">›</span>
+                </button>`;
+
+            const bookingItemForActions = isBooking ? (globalCache.booking?.[key] || null) : null;
+            const sparringEntryForActions = isBooking
+                ? Object.entries(globalCache.sparring || {}).find(([sk, sp]) => {
+                    if(!sp) return false;
+                    if(String(sp.sparringKey || '') === String(key)) return true;
+                    const keys = Array.isArray(sp.bookingKeys) ? sp.bookingKeys.map(String) : [];
+                    return keys.includes(String(key)) || String(sp.bookingKey || '') === String(key);
                 })
-                .sort((a,b) => String(a[1].tgl || '').localeCompare(String(b[1].tgl || '')));
+                : null;
+            const sparringKeyForActions = sparringEntryForActions ? sparringEntryForActions[0] : '';
+            const sparringActionButton = sparringKeyForActions
+                ? actionButton('🥊','Edit Lawan Sparing','team-action-amber',
+                    `openEditOpponentSparingFromTeamMenu('${encodeURIComponent(sparringKeyForActions)}','${encodeURIComponent(key)}')`,
+                    'Ganti lawan dan sinkronkan otomatis ke data Sparing & Booking')
+                : actionButton('➕','Tambah Lawan Sparing','team-action-amber',
+                    `openAddOpponentSparingFromTeamMenu('${encodeURIComponent(key)}')`,
+                    'Tambahkan lawan dan buat data Sparing + Booking otomatis');
 
-            if(!entries.length) {
-                el.innerHTML = '<div class="text-xs font-bold text-slate-500 text-center p-3 rounded-xl bg-white/30 border border-slate-200">Tidak ada booking Non-Member pada periode ini.</div>';
+            let buttons = isBooking
+                ? [
+                    sparringActionButton,
+                    actionButton('↔️','Pindah Jadwal','team-action-blue',
+                        `openPindahJadwalBooking('${encodeURIComponent(key)}')`,
+                        'Ubah tanggal atau jam main'),
+                    actionButton('✏️','Edit Data Booking','team-action-indigo',
+                        `openEditBookingFromTeamMenu('${encodeURIComponent(key)}')`,
+                        'Nama, status, pembayaran, dan data booking'),
+                    actionButton('📱','Edit WA','team-action-emerald',
+                        `openEditWAFromTeamMenu('${encodeURIComponent(key)}')`,
+                        'Ubah atau hapus nomor WhatsApp'),
+                    actionButton('🖼️','Edit Logo','team-action-violet',
+                        `openLogoFromTeamMenu('${encodeURIComponent(nama)}')`,
+                        'Tambah, ganti, atau hapus logo tim'),
+                    actionButton('🗑️','Hapus Booking','team-action-rose',
+                        `hapusBookingFromTeamMenu('${encodeURIComponent(key)}')`,
+                        'Hapus booking ini')
+                ].join('')
+                : [
+                    actionButton('↔️','Pindah Jadwal','team-action-blue',
+                        `openPindahJadwalMemberFromTeamMenu('${encodeURIComponent(key)}','${encodeURIComponent(tanggal)}','${encodeURIComponent(jam)}')`,
+                        'Pindahkan member hanya untuk tanggal ini'),
+                    actionButton('✏️','Edit Data Tim','team-action-indigo',
+                        `openEditMemberFromTeamMenu('${encodeURIComponent(key)}')`,
+                        'Edit nama, jadwal rutin, dan WA'),
+                    actionButton('🖼️','Edit Logo','team-action-violet',
+                        `openLogoFromTeamMenu('${encodeURIComponent(nama)}')`,
+                        'Tambah, ganti, atau hapus logo tim'),
+                    actionButton('🗑️','Hapus Member','team-action-rose',
+                        `hapusMemberFromTeamMenu('${encodeURIComponent(key)}')`,
+                        'Hapus jadwal member permanen')
+                ].join('');
+
+            document.body.insertAdjacentHTML('beforeend', `
+                <div id="modal-booking-team-actions"
+                     class="fixed inset-0 z-[2147483647] flex items-center justify-center p-3 bg-slate-950/55 backdrop-blur-md"
+                     onclick="if(event.target===this) closeTeamActionMenu()">
+                    <div class="team-action-menu-shell w-full max-w-md max-h-[90vh] overflow-y-auto rounded-[22px] p-4 sm:p-5">
+                        <div class="flex items-start justify-between gap-3 mb-4">
+                            <div class="min-w-0">
+                                <div class="text-[9px] sm:text-[10px] font-black uppercase tracking-[.16em] text-slate-400">AKSI TIM</div>
+                                <h3 class="text-base sm:text-lg font-black text-slate-950 mt-1 truncate">${safe(nama || 'Nama tim')}</h3>
+                                <div class="text-[10px] sm:text-[11px] text-slate-500 font-bold mt-1">
+                                    ${tanggalText}${jam ? ` · ${safe(jam)}` : ''} · ${isBooking ? 'Booking' : 'Member'}
+                                </div>
+                            </div>
+                            <button type="button" onclick="closeTeamActionMenu()"
+                                    class="team-action-close" aria-label="Tutup">✕</button>
+                        </div>
+                        <div class="space-y-2">${buttons}</div>
+                    </div>
+                </div>
+            `);
+        };
+
+        window.closeTeamActionMenu = () => {
+            document.getElementById('modal-booking-team-actions')?.remove();
+        };
+
+        // =========================================================
+        // TAMBAH LAWAN SPARING DARI BOOKING SCHEDULE
+        // =========================================================
+        // Jika booking belum terhubung ke data Sparing, tombol berubah menjadi
+        // "Tambah Lawan Sparing". Saat disimpan, sistem membuat node Sparing,
+        // membuat booking lawan, lalu menghubungkan keduanya dengan booking tim A.
+        window.openAddOpponentSparingFromTeamMenu = (bookingKeyEncoded) => {
+            const bookingKey = decodeURIComponent(String(bookingKeyEncoded || ''));
+            const booking = globalCache.booking?.[bookingKey];
+            if(!booking) {
+                alert('Data booking tidak ditemukan.');
                 return;
             }
 
-            el.innerHTML = entries.map(([key,b]) => {
-                const parts = String(b.tgl || '').split('T');
-                const tanggal = parts[0] || '';
-                const jam = (parts[1] || '').substring(0,5);
-                const wa = String(b.wa || '').trim();
-                const tanggalText = tanggal ? tanggal.split('-').reverse().join('/') : '-';
-                return `
-                    <div class="flex flex-col sm:flex-row sm:items-center gap-2 p-2.5 rounded-xl bg-white/50 border ${wa ? 'border-emerald-200' : 'border-rose-200'}">
-                        <div class="min-w-0 flex-1">
-                            <div class="font-black text-xs sm:text-sm truncate">${escapeHtmlSparing(b.nama || '-')}</div>
-                            <div class="text-[9px] sm:text-[10px] text-slate-500 font-bold mt-0.5">${tanggalText} · ${escapeHtmlSparing(jam || '-')}</div>
+            closeTeamActionMenu();
+            document.getElementById('modal-add-opponent-sparing')?.remove();
+
+            const esc = v => String(v ?? '')
+                .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+            const parts = String(booking.tgl || '').split('T');
+            const tanggal = parts[0] || '';
+            const jam = (parts[1] || '').substring(0,5);
+            const statusA = String(booking.status || 'Non Member').trim() || 'Non Member';
+
+            document.body.insertAdjacentHTML('beforeend', `
+                <div id="modal-add-opponent-sparing"
+                     class="fixed inset-0 z-[2147483647] flex items-center justify-center p-3 bg-slate-950/55 backdrop-blur-md"
+                     onclick="if(event.target===this) closeAddOpponentSparingModal()">
+                    <div class="team-action-menu-shell w-full max-w-md rounded-[22px] p-4 sm:p-5">
+                        <div class="flex items-start justify-between gap-3 mb-4">
+                            <div class="min-w-0">
+                                <div class="text-[9px] sm:text-[10px] font-black uppercase tracking-[.16em] text-amber-600">TAMBAH SPARING</div>
+                                <h3 class="text-base sm:text-lg font-black text-slate-950 mt-1">🥊 Tambah Lawan Sparing</h3>
+                                <div class="text-[10px] sm:text-[11px] text-slate-500 font-bold mt-1">
+                                    ${esc(booking.nama || '-')} · ${esc(tanggal.split('-').reverse().join('/'))} · ${esc(jam || '-')}
+                                </div>
+                            </div>
+                            <button type="button" onclick="closeAddOpponentSparingModal()"
+                                    class="team-action-close" aria-label="Tutup">✕</button>
                         </div>
-                        <div class="text-[9px] sm:text-[10px] font-black ${wa ? 'text-emerald-700' : 'text-rose-600'}">
-                            ${wa ? '✅ WA tersimpan' : '⚠️ WA belum ada'}
-                        </div>
-                        <div class="shrink-0 flex items-center gap-1.5">
-                            <button type="button" onclick="bukaEditWANonMember('${escapeHtmlSparing(key)}')"
-                                    class="px-3 py-2 rounded-lg ${wa ? 'bg-amber-500 hover:bg-amber-600' : 'bg-rose-600 hover:bg-rose-700'} text-white text-[9px] sm:text-[10px] font-black shadow"
-                                    title="${wa ? 'Edit nomor WhatsApp' : 'Tambah nomor WhatsApp'}">
-                                ${wa ? '✏️ Edit WA' : '📱 Tambah WA'}
-                            </button>
-                            <button type="button" onclick="openTeamLogoEditor(decodeURIComponent('${encodeURIComponent(String(b.nama || ''))}'),'booking-schedule')"
-                                    class="px-3 py-2 rounded-lg bg-violet-600 hover:bg-violet-700 text-white text-[9px] sm:text-[10px] font-black shadow"
-                                    title="Tambah / ubah logo tim">
-                                🖼️ Logo
-                            </button>
+
+                        <div class="space-y-3">
+                            <div class="rounded-xl border border-blue-200 bg-blue-50/70 p-3 text-[10px] font-bold text-blue-800">
+                                Tim 1: <b>${esc(booking.nama || '-')}</b> · ${esc(statusA)}
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-black text-slate-600 mb-1">NAMA LAWAN SPARING</label>
+                                <input id="add-opponent-sparing-name"
+                                       class="w-full p-3 rounded-xl glass-input font-black text-sm"
+                                       placeholder="Nama tim lawan">
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-black text-slate-600 mb-1">STATUS LAWAN</label>
+                                <select id="add-opponent-sparing-status"
+                                        class="w-full p-3 rounded-xl glass-input font-black text-sm">
+                                    <option value="Member">Member</option>
+                                    <option value="Non Member" selected>Non Member</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-black text-slate-600 mb-1">WA LAWAN <span class="font-bold text-slate-400">(opsional)</span></label>
+                                <input id="add-opponent-sparing-wa"
+                                       class="w-full p-3 rounded-xl glass-input font-black text-sm"
+                                       placeholder="Nomor WhatsApp lawan">
+                            </div>
+
+                            <div class="rounded-xl border border-amber-200 bg-amber-50/70 p-3 text-[10px] font-bold text-amber-800">
+                                💡 Setelah disimpan, lawan otomatis masuk ke <b>Booking Schedule</b> dan pasangan ini dibuat sebagai data <b>Sparing</b>.
+                            </div>
+
+                            <div class="flex gap-2 pt-1">
+                                <button type="button" onclick="closeAddOpponentSparingModal()"
+                                        class="flex-1 px-4 py-3 rounded-xl bg-slate-200 text-slate-800 font-black text-xs">
+                                    Batal
+                                </button>
+                                <button type="button"
+                                        onclick="saveAddedOpponentSparing('${encodeURIComponent(bookingKey)}')"
+                                        class="flex-1 px-4 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xs shadow">
+                                    Simpan & Sinkronkan
+                                </button>
+                            </div>
                         </div>
                     </div>
-                `;
-            }).join('');
+                </div>
+            `);
+            setTimeout(() => document.getElementById('add-opponent-sparing-name')?.focus(), 50);
         };
+
+        window.closeAddOpponentSparingModal = () => {
+            document.getElementById('modal-add-opponent-sparing')?.remove();
+        };
+
+        window.saveAddedOpponentSparing = async (bookingKeyEncoded) => {
+            const bookingKey = decodeURIComponent(String(bookingKeyEncoded || ''));
+            const booking = globalCache.booking?.[bookingKey];
+            if(!booking) return;
+
+            const namaLawan = String(document.getElementById('add-opponent-sparing-name')?.value || '').trim();
+            const statusLawan = String(document.getElementById('add-opponent-sparing-status')?.value || 'Non Member').trim();
+            const waLawan = String(document.getElementById('add-opponent-sparing-wa')?.value || '').trim();
+
+            if(!namaLawan) {
+                alert('Nama lawan sparing wajib diisi.');
+                return;
+            }
+
+            const tanggal = String(booking.tgl || '').split('T')[0];
+            const jam = String(booking.tgl || '').split('T')[1]?.substring(0,5) || '';
+            const timA = String(booking.nama || '').trim();
+            const statusA = String(booking.status || 'Non Member').trim() || 'Non Member';
+
+            if(!tanggal || !jam || !timA) {
+                alert('Tanggal, jam, atau nama tim belum lengkap.');
+                return;
+            }
+            if(timA.toLowerCase() === namaLawan.toLowerCase()) {
+                alert('Tim A dan lawan tidak boleh sama.');
+                return;
+            }
+
+            const duplicate = Object.entries(globalCache.sparring || {}).find(([sk, sp]) => {
+                if(!sp || sp.status !== 'matched') return false;
+                if(String(sp.tanggal || '') !== tanggal || String(sp.jam || '').substring(0,5) !== jam) return false;
+                const a = String(sp.timA || '').trim().toLowerCase();
+                const b = String(sp.timB || '').trim().toLowerCase();
+                return a === timA.toLowerCase() || b === timA.toLowerCase() ||
+                       a === namaLawan.toLowerCase() || b === namaLawan.toLowerCase();
+            });
+            if(duplicate) {
+                const sp = duplicate[1];
+                alert(`Salah satu tim sudah tercatat sparing pada ${tanggal} ${jam}: ${sp.timA} vs ${sp.timB}.`);
+                return;
+            }
+
+            try {
+                const sparringData = {
+                    tanggal,
+                    jam,
+                    timA,
+                    timB: namaLawan,
+                    statusA,
+                    statusB: statusLawan,
+                    wa: String(booking.wa || '').trim(),
+                    waB: waLawan,
+                    waTimB: waLawan,
+                    source: 'Booking Schedule',
+                    status: 'matched',
+                    catatan: '',
+                    timestamp: Date.now(),
+                    bookingKeys: [bookingKey],
+                    bookingKey
+                };
+
+                const pushedSparing = await push(ref(db, 'sparring'), sparringData);
+                const sparringKey = pushedSparing.key || '';
+                if(!sparringKey) throw new Error('Gagal membuat data Sparing.');
+
+                const opponentBookingData = {
+                    status: statusLawan,
+                    nama: namaLawan,
+                    wa: waLawan,
+                    tgl: `${tanggal}T${jam}`,
+                    dp: 0,
+                    tglDp: '',
+                    metode: 'Cash',
+                    sparringSource: true,
+                    sparringKey,
+                    sparringOpponent: true,
+                    timestamp: Date.now()
+                };
+                const pushedBooking = await push(ref(db, 'booking'), opponentBookingData);
+                const opponentBookingKey = pushedBooking.key || '';
+                if(!opponentBookingKey) throw new Error('Gagal membuat booking lawan.');
+
+                await update(ref(db, 'sparring/' + sparringKey), {
+                    bookingKeys: [bookingKey, opponentBookingKey],
+                    bookingKey
+                });
+
+                // Hubungkan booking Tim A dengan Sparing yang baru dibuat.
+                await update(ref(db, 'booking/' + bookingKey), {
+                    sparringKey,
+                    sparringSource: true,
+                    sparringOpponent: false
+                });
+
+                globalCache.sparring = globalCache.sparring || {};
+                globalCache.sparring[sparringKey] = {
+                    ...sparringData,
+                    bookingKeys: [bookingKey, opponentBookingKey],
+                    bookingKey
+                };
+                globalCache.booking = globalCache.booking || {};
+                globalCache.booking[bookingKey] = {
+                    ...booking,
+                    sparringKey,
+                    sparringSource: true,
+                    sparringOpponent: false
+                };
+                globalCache.booking[opponentBookingKey] = opponentBookingData;
+
+                closeAddOpponentSparingModal();
+                if(typeof renderAll === 'function') renderAll();
+                if(typeof renderGridJadwal === 'function') renderGridJadwal();
+                if(typeof renderSparing === 'function') renderSparing();
+                if(typeof updateSparingBookingOptions === 'function') updateSparingBookingOptions();
+                if(typeof renderTodaySchedule === 'function') renderTodaySchedule();
+
+                showSuccessPopup('Lawan sparing berhasil ditambahkan dan otomatis disinkronkan ke Sparing & Booking Schedule.');
+            } catch(error) {
+                console.error(error);
+                alert('Gagal menambahkan lawan sparing: ' + error.message);
+            }
+        };
+
+        // =========================================================
+        // EDIT LAWAN SPARING DARI BOOKING SCHEDULE
+        // =========================================================
+        // Perubahan lawan disimpan ke node sparring dan langsung disinkronkan
+        // ke booking yang terkait. Booking lawan lama yang dibuat khusus oleh
+        // sparring akan dilepas agar tidak menyisakan tim lama di jadwal.
+        window.openEditOpponentSparingFromTeamMenu = (sparringKeyEncoded, bookingKeyEncoded) => {
+            const sparringKey = decodeURIComponent(String(sparringKeyEncoded || ''));
+            const bookingKey = decodeURIComponent(String(bookingKeyEncoded || ''));
+            const sp = globalCache.sparring?.[sparringKey];
+            const booking = globalCache.booking?.[bookingKey];
+            if(!sp) {
+                alert('Data sparing tidak ditemukan.');
+                return;
+            }
+
+            closeTeamActionMenu();
+            document.getElementById('modal-edit-opponent-sparing')?.remove();
+
+            const esc = v => String(v ?? '')
+                .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+            const opponent = String(sp.timB || '').trim();
+            const opponentStatus = String(sp.statusB || 'Non Member').trim();
+            const opponentWa = String(
+                sp.waB || sp.waTimB || ''
+            ).trim();
+
+            document.body.insertAdjacentHTML('beforeend', `
+                <div id="modal-edit-opponent-sparing"
+                     class="fixed inset-0 z-[2147483647] flex items-center justify-center p-3 bg-slate-950/55 backdrop-blur-md"
+                     onclick="if(event.target===this) closeEditOpponentSparingModal()">
+                    <div class="team-action-menu-shell w-full max-w-md rounded-[22px] p-4 sm:p-5">
+                        <div class="flex items-start justify-between gap-3 mb-4">
+                            <div class="min-w-0">
+                                <div class="text-[9px] sm:text-[10px] font-black uppercase tracking-[.16em] text-amber-600">EDIT SPARING</div>
+                                <h3 class="text-base sm:text-lg font-black text-slate-950 mt-1">🥊 Lawan Sparing</h3>
+                                <div class="text-[10px] sm:text-[11px] text-slate-500 font-bold mt-1">
+                                    ${esc(sp.timA || booking?.nama || '-')} · ${esc(sp.tanggal || '')} · ${esc(String(sp.jam || '').substring(0,5))}
+                                </div>
+                            </div>
+                            <button type="button" onclick="closeEditOpponentSparingModal()"
+                                    class="team-action-close" aria-label="Tutup">✕</button>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-[10px] font-black text-slate-600 mb-1">NAMA LAWAN</label>
+                                <input id="edit-opponent-sparing-name"
+                                       value="${esc(opponent)}"
+                                       class="w-full p-3 rounded-xl glass-input font-black text-sm"
+                                       placeholder="Nama tim lawan">
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-black text-slate-600 mb-1">STATUS LAWAN</label>
+                                <select id="edit-opponent-sparing-status"
+                                        class="w-full p-3 rounded-xl glass-input font-black text-sm">
+                                    <option value="Member" ${opponentStatus.toLowerCase()==='member'?'selected':''}>Member</option>
+                                    <option value="Non Member" ${opponentStatus.toLowerCase()!=='member'?'selected':''}>Non Member</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-black text-slate-600 mb-1">WA LAWAN <span class="font-bold text-slate-400">(opsional)</span></label>
+                                <input id="edit-opponent-sparing-wa"
+                                       value="${esc(opponentWa)}"
+                                       class="w-full p-3 rounded-xl glass-input font-black text-sm"
+                                       placeholder="Nomor WhatsApp lawan">
+                            </div>
+
+                            <div class="rounded-xl border border-amber-200 bg-amber-50/70 p-3 text-[10px] font-bold text-amber-800">
+                                💡 Setelah disimpan, data lawan akan diperbarui di <b>Sparing</b> dan booking lawan yang terhubung juga akan disinkronkan.
+                            </div>
+
+                            <div class="flex gap-2 pt-1">
+                                <button type="button" onclick="closeEditOpponentSparingModal()"
+                                        class="flex-1 px-4 py-3 rounded-xl bg-slate-200 text-slate-800 font-black text-xs">
+                                    Batal
+                                </button>
+                                <button type="button"
+                                        onclick="saveEditedOpponentSparing('${encodeURIComponent(sparringKey)}','${encodeURIComponent(bookingKey)}')"
+                                        class="flex-1 px-4 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xs shadow">
+                                    Simpan & Sinkronkan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `);
+            setTimeout(() => document.getElementById('edit-opponent-sparing-name')?.focus(), 50);
+        };
+
+        window.closeEditOpponentSparingModal = () => {
+            document.getElementById('modal-edit-opponent-sparing')?.remove();
+        };
+
+        window.saveEditedOpponentSparing = async (sparringKeyEncoded, bookingKeyEncoded) => {
+            const sparringKey = decodeURIComponent(String(sparringKeyEncoded || ''));
+            const bookingKey = decodeURIComponent(String(bookingKeyEncoded || ''));
+            const sp = globalCache.sparring?.[sparringKey];
+            if(!sp) return;
+
+            const namaBaru = String(document.getElementById('edit-opponent-sparing-name')?.value || '').trim();
+            const statusBaru = String(document.getElementById('edit-opponent-sparing-status')?.value || 'Non Member').trim();
+            const waBaru = String(document.getElementById('edit-opponent-sparing-wa')?.value || '').trim();
+
+            if(!namaBaru) {
+                alert('Nama lawan sparing wajib diisi.');
+                return;
+            }
+
+            const oldName = String(sp.timB || '').trim();
+            const oldNameLower = oldName.toLowerCase();
+            const tanggal = String(sp.tanggal || '').trim();
+            const jam = String(sp.jam || '').substring(0,5);
+            const existingKeys = Array.isArray(sp.bookingKeys)
+                ? [...new Set(sp.bookingKeys.filter(Boolean).map(String))]
+                : (sp.bookingKey ? [String(sp.bookingKey)] : []);
+
+            try {
+                // Cari booking lawan yang memang dibuat/ditandai sebagai bagian sparing.
+                let opponentBookingKey = existingKeys.find(k => {
+                    if(k === bookingKey) return false;
+                    const b = globalCache.booking?.[k];
+                    if(!b) return false;
+                    return b.sparringKey === sparringKey &&
+                        String(b.nama || '').trim().toLowerCase() === oldNameLower;
+                });
+
+                // Jika key relasi belum ada, cari berdasarkan sparringKey + flag opponent.
+                if(!opponentBookingKey) {
+                    const found = Object.entries(globalCache.booking || {}).find(([k,b]) => {
+                        if(!b || String(k) === String(bookingKey)) return false;
+                        return String(b.sparringKey || '') === String(sparringKey) &&
+                            (b.sparringOpponent === true || String(b.nama || '').trim().toLowerCase() === oldNameLower) &&
+                            String(b.tgl || '').split('T')[0] === tanggal &&
+                            String(b.tgl || '').split('T')[1]?.substring(0,5) === jam;
+                    });
+                    if(found) opponentBookingKey = found[0];
+                }
+
+                const newSparingData = {
+                    ...sp,
+                    timB: namaBaru,
+                    statusB: statusBaru,
+                    waB: waBaru,
+                    waTimB: waBaru,
+                    status: 'matched'
+                };
+
+                // Update node Sparing terlebih dahulu.
+                await update(ref(db, 'sparring/' + sparringKey), newSparingData);
+                globalCache.sparring[sparringKey] = {
+                    ...(globalCache.sparring[sparringKey] || {}),
+                    ...newSparingData
+                };
+
+                if(opponentBookingKey && globalCache.booking?.[opponentBookingKey]) {
+                    // Booking lawan yang merupakan pasangan sparing boleh diganti langsung.
+                    const patch = {
+                        nama: namaBaru,
+                        status: statusBaru,
+                        wa: waBaru,
+                        tgl: `${tanggal}T${jam}`,
+                        sparringKey,
+                        sparringSource: true,
+                        sparringOpponent: true
+                    };
+                    await update(ref(db, 'booking/' + opponentBookingKey), patch);
+                    globalCache.booking[opponentBookingKey] = {
+                        ...globalCache.booking[opponentBookingKey],
+                        ...patch
+                    };
+                } else {
+                    // Belum ada booking lawan: buat agar langsung muncul di Booking Schedule.
+                    const newBooking = {
+                        status: statusBaru,
+                        nama: namaBaru,
+                        wa: waBaru,
+                        tgl: `${tanggal}T${jam}`,
+                        dp: 0,
+                        tglDp: '',
+                        metode: 'Cash',
+                        sparringSource: true,
+                        sparringKey,
+                        sparringOpponent: true,
+                        timestamp: Date.now()
+                    };
+                    const pushed = await push(ref(db, 'booking'), newBooking);
+                    if(pushed.key) {
+                        opponentBookingKey = pushed.key;
+                        globalCache.booking = globalCache.booking || {};
+                        globalCache.booking[pushed.key] = { ...newBooking };
+                    }
+                }
+
+                // Pastikan relasi booking tetap tersimpan.
+                const finalBookingKeys = [...new Set([
+                    ...existingKeys.filter(k => k !== opponentBookingKey),
+                    opponentBookingKey
+                ].filter(Boolean))];
+
+                await update(ref(db, 'sparring/' + sparringKey), {
+                    bookingKeys: finalBookingKeys,
+                    bookingKey: finalBookingKeys[0] || ''
+                });
+                globalCache.sparring[sparringKey].bookingKeys = finalBookingKeys;
+                globalCache.sparring[sparringKey].bookingKey = finalBookingKeys[0] || '';
+
+                closeEditOpponentSparingModal();
+
+                if(typeof renderAll === 'function') renderAll();
+                if(typeof renderGridJadwal === 'function') renderGridJadwal();
+                if(typeof renderSparing === 'function') renderSparing();
+                if(typeof updateSparingBookingOptions === 'function') updateSparingBookingOptions();
+
+                showSuccessPopup('Lawan sparing berhasil diubah dan data Sparing/Booking sudah disinkronkan.');
+            } catch(error) {
+                console.error(error);
+                alert('Gagal mengubah lawan sparing: ' + error.message);
+            }
+        };
+
+        window.openPindahJadwalBooking = (keyEncoded) => {
+            const key = decodeURIComponent(String(keyEncoded || ''));
+            closeTeamActionMenu();
+            if(key) editBooking(key);
+        };
+
+        window.openEditBookingFromTeamMenu = (keyEncoded) => {
+            const key = decodeURIComponent(String(keyEncoded || ''));
+            closeTeamActionMenu();
+            if(key) editBooking(key);
+        };
+
+        window.openEditWAFromTeamMenu = (keyEncoded) => {
+            const key = decodeURIComponent(String(keyEncoded || ''));
+            closeTeamActionMenu();
+            if(!globalCache.booking?.[key]) return;
+            // Gunakan editor WA khusus untuk non-member, dan editor booking
+            // umum untuk member agar data tetap tersimpan pada struktur yang benar.
+            if(String(globalCache.booking[key].status || '').toLowerCase() === 'member') {
+                editBooking(key);
+            } else {
+                bukaEditWANonMember(key);
+            }
+        };
+
+        window.openLogoFromTeamMenu = (namaEncoded) => {
+            const nama = decodeURIComponent(String(namaEncoded || ''));
+            closeTeamActionMenu();
+            if(nama) openTeamLogoEditor(nama, 'booking-schedule');
+        };
+
+        window.hapusBookingFromTeamMenu = async (keyEncoded) => {
+            const key = decodeURIComponent(String(keyEncoded || ''));
+            closeTeamActionMenu();
+            if(key) await hapusBooking(key);
+        };
+
+        window.openPindahJadwalMemberFromTeamMenu = (keyEncoded, tanggalEncoded, jamEncoded) => {
+            const key = decodeURIComponent(String(keyEncoded || ''));
+            const tanggal = decodeURIComponent(String(tanggalEncoded || ''));
+            const jam = decodeURIComponent(String(jamEncoded || ''));
+            closeTeamActionMenu();
+            if(key) editJadwalMemberSatuHari(encodeURIComponent(key), encodeURIComponent(tanggal), encodeURIComponent(jam));
+        };
+
+        window.openEditMemberFromTeamMenu = (keyEncoded) => {
+            const key = decodeURIComponent(String(keyEncoded || ''));
+            closeTeamActionMenu();
+            if(key) editMember(key);
+        };
+
+        window.hapusMemberFromTeamMenu = async (keyEncoded) => {
+            const key = decodeURIComponent(String(keyEncoded || ''));
+            closeTeamActionMenu();
+            if(key) await hapusMember(key);
+        };
+
+        // Fungsi lama dipertahankan sebagai no-op agar pemanggilan render lama
+        // tidak menimbulkan error setelah panel LIST NON-MEMBER dihapus.
+        window.renderNonMemberWABookingSchedule = () => {};
 
         // =========================================================
         // BOOKING SCHEDULE — PERIODE BULAN TETAP SATU TABEL
@@ -17955,20 +18991,22 @@ return;
                         }
                     }
 
-                    let editHandler = '';
-                    let editHint = '';
-                    if(activeDate && cellData?.bookingKey) {
-                        editHandler = ` onclick="editBooking('${String(cellData.bookingKey).replace(/'/g,"\\'")}')"`;
-                        editHint = '';
-                    } else if(activeDate && cellData?.type === 'member' && cellData?.key) {
-                        const mk = encodeURIComponent(String(cellData.key));
-                        const td = encodeURIComponent(String(day.dateStr));
-                        const tj = encodeURIComponent(String(jam));
-                        editHandler = ` onclick="editJadwalMemberSatuHari('${mk}','${td}','${tj}')"`;
-                        editHint = '';
+                    let teamAction = '';
+                    if(activeDate && cellData && cellData.type !== 'off' && (cellData.bookingKey || cellData.key)) {
+                        const actionType = cellData.bookingKey ? 'booking' : 'member';
+                        const actionKey = cellData.bookingKey || cellData.key;
+                        const actionNama = cellData.nama || '';
+                        teamAction = ` onclick="event.stopPropagation(); openTeamActionMenu('${encodeURIComponent(String(actionType))}','${encodeURIComponent(String(actionKey))}','${encodeURIComponent(String(actionNama))}','${encodeURIComponent(String(day.dateStr))}','${encodeURIComponent(String(jam))}')" title="Klik untuk aksi tim"`;
                     }
 
-                    tr += `<td class="p-0.5 sm:p-1 ${bgClass} ${editHandler ? 'schedule-editable-cell' : ''} align-middle h-7 sm:h-14 overflow-hidden text-center relative"${editHandler}>
+                    if(teamAction) {
+                        textVal = textVal.replace(
+                            /(<span class="schedule-grid-team-holder[^>]*)(>)/,
+                            `$1${teamAction}$2`
+                        );
+                    }
+
+                    tr += `<td class="p-0.5 sm:p-1 ${bgClass} align-middle h-7 sm:h-14 overflow-hidden text-center relative">
                         <div class="flex items-center justify-center h-full text-[6px] sm:text-[10px] text-center leading-tight line-clamp-2 font-black relative z-[2]">${textVal}</div>
                         ${hariSudahLewat ? `<div class="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-1/2 bg-blue-400/90 text-white pointer-events-none z-[3] flex items-center justify-center overflow-hidden"><span class="font-black text-[7px] sm:text-[10px] leading-none whitespace-nowrap tracking-wide" style="transform:rotate(-90deg); transform-origin:center;">• DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE • DONE •</span></div>` : ''}
                     </td>`;
@@ -21258,6 +22296,10 @@ window.downloadDailyRecapJPGFull = async function() {
   <button type="button" class="quick-nav-item" data-quick="keluar" onclick="quickOpenPage('keluar')">
     <span class="quick-nav-icon">💸</span>
     <span class="quick-nav-label">Uang Keluar</span>
+  </button>
+  <button type="button" class="quick-nav-item" data-quick="masuk-manual" onclick="openManualUangMasukModal()">
+    <span class="quick-nav-icon">💰</span>
+    <span class="quick-nav-label">Uang Masuk</span>
   </button>
   <button type="button" class="quick-nav-item" data-quick="more" onclick="toggleQuickMore()" aria-expanded="false">
     <span class="quick-nav-icon">☰</span>
@@ -26702,6 +27744,808 @@ body.jadwal-uang-masuk-modal-active #page-masuk {
 })();
 </script>
 
+
+
+<style id="manual-uang-masuk-popup-v1">
+/* UANG MASUK MANUAL — popup dibuat sama seperti UANG KELUAR,
+   tetapi hanya Keterangan, Nominal, dan Tanggal. */
+#manual-uang-masuk-backdrop{
+  position:fixed!important; inset:0!important; z-index:2147483000!important;
+  display:flex!important; align-items:center!important; justify-content:center!important;
+  padding:18px!important; box-sizing:border-box!important;
+  background:rgba(15,23,42,.42)!important;
+  backdrop-filter:blur(7px)!important; -webkit-backdrop-filter:blur(7px)!important;
+}
+#manual-uang-masuk-shell{
+  position:relative!important; width:min(94vw,560px)!important; height:min(88vh,760px)!important;
+  max-width:560px!important; max-height:760px!important; overflow:hidden!important;
+  border-radius:24px!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(239,246,255,.84))!important;
+  border:1px solid rgba(255,255,255,.86)!important;
+  box-shadow:0 28px 80px rgba(15,23,42,.30),inset 0 1px 0 rgba(255,255,255,.95)!important;
+  backdrop-filter:blur(24px) saturate(145%)!important;
+  -webkit-backdrop-filter:blur(24px) saturate(145%)!important;
+  animation:manualUangMasukIn .18s ease-out!important;
+}
+#manual-uang-masuk-page{
+  width:100%!important; height:100%!important; box-sizing:border-box!important;
+  overflow-y:auto!important; overflow-x:hidden!important; scrollbar-width:none!important;
+  -ms-overflow-style:none!important; padding:16px 18px 18px!important; color:#172033!important;
+}
+#manual-uang-masuk-page::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
+#manual-uang-masuk-page h2{
+  position:sticky!important; top:-16px!important; z-index:15!important;
+  margin:-16px -18px 16px!important; padding:16px 58px 12px 16px!important; min-height:52px!important;
+  display:flex!important; align-items:center!important; justify-content:center!important;
+  text-align:center!important; box-sizing:border-box!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.995),rgba(247,250,255,.985))!important;
+  border-bottom:1px solid rgba(148,163,184,.20)!important; border-radius:24px 24px 0 0!important;
+  box-shadow:0 6px 16px rgba(15,23,42,.06)!important; color:#172033!important;
+  letter-spacing:.01em!important;
+}
+#manual-uang-masuk-page h2::after{
+  content:""!important; position:absolute!important; left:0!important; bottom:-1px!important;
+  width:72px!important; height:3px!important; background:linear-gradient(90deg,#10b981,#34d399)!important;
+  border-radius:3px!important; pointer-events:none!important;
+}
+#manual-uang-masuk-close{
+  position:absolute!important; top:10px!important; right:10px!important; z-index:40!important;
+  width:40px!important; height:40px!important; border:1px solid rgba(148,163,184,.25)!important;
+  border-radius:13px!important; background:rgba(255,255,255,.82)!important; color:#334155!important;
+  font-size:18px!important; line-height:1!important; font-weight:950!important;
+  display:flex!important; align-items:center!important; justify-content:center!important;
+  box-shadow:0 5px 14px rgba(15,23,42,.10)!important; cursor:pointer!important;
+}
+.manual-uang-masuk-field{margin-bottom:13px!important}
+.manual-uang-masuk-field label{display:block!important;font-size:11px!important;font-weight:900!important;margin-bottom:7px!important;color:#172033!important;text-transform:uppercase!important}
+.manual-uang-masuk-field input{
+  width:100%!important; box-sizing:border-box!important; min-height:50px!important; padding:12px 13px!important;
+  border-radius:12px!important; border:1px solid rgba(148,163,184,.35)!important;
+  background:rgba(255,255,255,.78)!important; color:#172033!important; font-size:13px!important; font-weight:800!important;
+  outline:none!important; box-shadow:inset 0 1px 2px rgba(15,23,42,.04),0 2px 8px rgba(15,23,42,.04)!important;
+}
+.manual-uang-masuk-field input:focus{border-color:rgba(16,185,129,.65)!important;box-shadow:0 0 0 3px rgba(16,185,129,.10)!important;background:#fff!important}
+#manual-uang-masuk-date-wrap{position:relative!important}
+#manual-uang-masuk-date-native{position:absolute!important;opacity:0!important;pointer-events:none!important;width:1px!important;height:1px!important}
+#manual-uang-masuk-date-btn{
+  width:100%!important; min-height:50px!important; display:flex!important; align-items:center!important; justify-content:space-between!important;
+  gap:10px!important; padding:11px 13px!important; box-sizing:border-box!important; border-radius:12px!important;
+  border:1px solid rgba(148,163,184,.35)!important; background:rgba(255,255,255,.78)!important;
+  color:#172033!important; font-size:13px!important; font-weight:800!important; cursor:pointer!important;
+}
+#manual-uang-masuk-method-wrap{position:relative!important;z-index:30!important}
+.manual-uang-masuk-method-btn{width:100%!important;min-height:50px!important;display:flex!important;align-items:center!important;gap:10px!important;padding:11px 13px!important;box-sizing:border-box!important;border-radius:12px!important;border:1px solid rgba(148,163,184,.35)!important;background:rgba(255,255,255,.82)!important;color:#172033!important;font-size:13px!important;font-weight:900!important;cursor:pointer!important;text-align:left!important;transition:border-color .15s,box-shadow .15s,background .15s!important}
+.manual-uang-masuk-method-btn:hover,.manual-uang-masuk-method-wrap.open .manual-uang-masuk-method-btn{border-color:rgba(59,130,246,.55)!important;background:#fff!important;box-shadow:0 0 0 3px rgba(59,130,246,.09)!important}
+.manual-uang-masuk-method-icon{width:29px!important;height:29px!important;display:grid!important;place-items:center!important;flex:0 0 29px!important;border-radius:9px!important;background:#eff6ff!important;border:1px solid #dbeafe!important;font-size:15px!important}
+.manual-uang-masuk-method-value{flex:1!important}
+.manual-uang-masuk-method-chevron{font-size:18px!important;line-height:1!important;color:#64748b!important;transition:transform .15s ease!important}
+.manual-uang-masuk-method-wrap.open .manual-uang-masuk-method-chevron{transform:rotate(180deg)!important}
+.manual-uang-masuk-method-menu{position:absolute!important;left:0!important;right:0!important;top:calc(100% + 6px)!important;padding:5px!important;border:1px solid #dbeafe!important;border-radius:13px!important;background:rgba(255,255,255,.98)!important;backdrop-filter:blur(16px)!important;-webkit-backdrop-filter:blur(16px)!important;box-shadow:0 16px 35px rgba(15,23,42,.17)!important;z-index:2147483647!important;animation:manualUangMasukMethodDrop .14s ease-out!important}
+.manual-uang-masuk-method-option{width:100%!important;min-height:42px!important;display:flex!important;align-items:center!important;gap:10px!important;padding:9px 10px!important;border:0!important;border-radius:9px!important;background:transparent!important;color:#172033!important;font-size:13px!important;font-weight:850!important;text-align:left!important;cursor:pointer!important}
+.manual-uang-masuk-method-option:hover{background:#eff6ff!important;color:#1d4ed8!important}
+.manual-uang-masuk-method-option.selected{background:#dbeafe!important;color:#1e40af!important}
+/* Dropdown metode manual dirender fixed agar tidak terpotong oleh overflow popup. */
+#manual-uang-masuk-method-menu.is-open{
+  position:fixed!important;
+  display:block!important;
+  z-index:2147483647!important;
+  min-width:180px!important;
+  max-width:calc(100vw - 24px)!important;
+}
+
+.manual-uang-masuk-method-option span:first-child{width:27px!important;text-align:center!important;font-size:15px!important}
+@keyframes manualUangMasukMethodDrop{from{opacity:0;transform:translateY(-4px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:640px){.manual-uang-masuk-method-btn{min-height:50px!important;font-size:14px!important}.manual-uang-masuk-method-option{min-height:44px!important;font-size:14px!important}}
+#manual-uang-masuk-actions{
+  position:sticky!important; bottom:-18px!important; z-index:20!important; display:flex!important; justify-content:center!important;
+  margin:18px -18px -18px!important; padding:12px 18px 14px!important;
+  background:linear-gradient(180deg,rgba(248,251,255,.90),rgba(255,255,255,.98))!important;
+  border-top:1px solid rgba(148,163,184,.22)!important; box-shadow:0 -8px 20px rgba(15,23,42,.07)!important;
+  backdrop-filter:blur(18px)!important; -webkit-backdrop-filter:blur(18px)!important;
+}
+#manual-uang-masuk-save{width:100%!important;min-height:46px!important;border-radius:12px!important;font-weight:900!important;font-size:13px!important;background:#16a34a!important;color:#fff!important;border:1px solid #22c55e!important;box-shadow:0 7px 16px rgba(22,163,74,.18)!important;cursor:pointer!important}
+@keyframes manualUangMasukIn{from{opacity:0;transform:scale(.975)}to{opacity:1;transform:scale(1)}}
+@media(max-width:640px){
+  #manual-uang-masuk-backdrop{padding:10px!important}
+  #manual-uang-masuk-shell{width:calc(100vw - 20px)!important;max-width:none!important;height:calc(100dvh - 20px)!important;max-height:none!important;border-radius:20px!important}
+  #manual-uang-masuk-page{padding:14px 14px 16px!important}
+  #manual-uang-masuk-page h2{top:-14px!important;margin:-14px -14px 14px!important;padding:14px 52px 11px 14px!important;min-height:48px!important;border-radius:20px 20px 0 0!important}
+  #manual-uang-masuk-close{top:7px!important;right:7px!important;width:38px!important;height:38px!important}
+  #manual-uang-masuk-actions{bottom:-16px!important;margin:14px -14px -16px!important;padding:10px 12px 12px!important}
+}
+</style>
+
+<script id="manual-uang-masuk-popup-v1-script">
+(function(){
+  'use strict';
+  function today(){
+    if(typeof getLocalDateString==='function') return getLocalDateString();
+    return new Date().toISOString().slice(0,10);
+  }
+  function closeModal(){
+    const bd=document.getElementById('manual-uang-masuk-backdrop');
+    if(bd) bd.remove();
+    document.body.classList.remove('manual-uang-masuk-active');
+    const btn=document.querySelector('#quick-bottom-nav [data-quick="masuk-manual"]');
+    if(btn) btn.classList.remove('active');
+  }
+  window.closeManualUangMasukModal=closeModal;
+  window.openManualUangMasukModal=function(){
+    const old=document.getElementById('manual-uang-masuk-backdrop'); if(old) old.remove();
+    const bd=document.createElement('div'); bd.id='manual-uang-masuk-backdrop';
+    bd.innerHTML=`
+      <div id="manual-uang-masuk-shell" role="dialog" aria-modal="true" aria-label="Uang Masuk">
+        <div id="manual-uang-masuk-page">
+          <button type="button" id="manual-uang-masuk-close" aria-label="Tutup">✕</button>
+          <h2>UANG MASUK</h2>
+          <form id="manual-uang-masuk-form">
+            <div class="manual-uang-masuk-field">
+              <label for="manual-uang-masuk-ket">Keterangan Pemasukan</label>
+              <input id="manual-uang-masuk-ket" type="text" placeholder="Contoh: Penjualan / tambahan pemasukan" required autocomplete="off">
+            </div>
+            <div class="manual-uang-masuk-field">
+              <label for="manual-uang-masuk-jumlah">Nominal (Rp)</label>
+              <input id="manual-uang-masuk-jumlah" type="text" inputmode="numeric" placeholder="Nominal pemasukan" required>
+            </div>
+            <div class="manual-uang-masuk-field manual-uang-masuk-method-field">
+              <label>Metode Pembayaran</label>
+              <div class="manual-uang-masuk-method-wrap" id="manual-uang-masuk-method-wrap">
+                <button type="button" id="manual-uang-masuk-method-btn" class="manual-uang-masuk-method-btn" aria-haspopup="listbox" aria-expanded="false" onclick="window.__toggleManualUangMasukMethod(event, this)">
+                  <span class="manual-uang-masuk-method-icon" id="manual-uang-masuk-method-icon">💵</span>
+                  <span class="manual-uang-masuk-method-value" id="manual-uang-masuk-method-value">Cash</span>
+                  <span class="manual-uang-masuk-method-chevron">⌄</span>
+                </button>
+                <div class="manual-uang-masuk-method-menu hidden" id="manual-uang-masuk-method-menu" role="listbox">
+                  <button type="button" class="manual-uang-masuk-method-option selected" data-value="Cash"><span>💵</span><span>Cash</span></button>
+                  <button type="button" class="manual-uang-masuk-method-option" data-value="QRIS"><span>▣</span><span>QRIS</span></button>
+                  <button type="button" class="manual-uang-masuk-method-option" data-value="Transfer"><span>🏦</span><span>Transfer</span></button>
+                </div>
+                <input type="hidden" id="manual-uang-masuk-method" value="Cash">
+              </div>
+            </div>
+            <div class="manual-uang-masuk-field">
+              <label>Tanggal Pemasukan</label>
+              <div id="manual-uang-masuk-date-wrap">
+                <input id="manual-uang-masuk-date-native" type="date" required>
+                <button type="button" id="manual-uang-masuk-date-btn"><span>📅</span><span id="manual-uang-masuk-date-text">Pilih tanggal</span><span>⌄</span></button>
+              </div>
+            </div>
+            <div id="manual-uang-masuk-actions"><button id="manual-uang-masuk-save" type="submit">💾 Simpan</button></div>
+          </form>
+        </div>
+      </div>`;
+    document.body.appendChild(bd);
+    document.body.classList.add('manual-uang-masuk-active');
+    const date=document.getElementById('manual-uang-masuk-date-native');
+    const dateText=document.getElementById('manual-uang-masuk-date-text');
+    date.value=today();
+    function syncDate(){
+      const v=date.value;
+      dateText.textContent=v ? (typeof formatTanggalFull==='function' ? formatTanggalFull(v) : v.split('-').reverse().join('/')) : 'Pilih tanggal';
+    }
+    syncDate();
+    document.getElementById('manual-uang-masuk-close').onclick=closeModal;
+    bd.addEventListener('click',e=>{if(e.target===bd)closeModal()});
+    document.getElementById('manual-uang-masuk-date-btn').onclick=()=>{try{date.showPicker()}catch(_){date.click()}};
+    date.addEventListener('change',syncDate);
+
+    // CUSTOM DROPDOWN METODE PEMBAYARAN — popup Uang Masuk manual
+    const methodWrap = document.getElementById('manual-uang-masuk-method-wrap');
+    const methodBtn = document.getElementById('manual-uang-masuk-method-btn');
+    const methodMenu = document.getElementById('manual-uang-masuk-method-menu');
+    const methodHidden = document.getElementById('manual-uang-masuk-method');
+    const methodValue = document.getElementById('manual-uang-masuk-method-value');
+    const methodIcon = document.getElementById('manual-uang-masuk-method-icon');
+    const methodMeta = {
+      Cash:{icon:'💵',label:'Cash'}, QRIS:{icon:'▣',label:'QRIS'}, Transfer:{icon:'🏦',label:'Transfer'}
+    };
+    function restoreManualMethodMenu(){
+      if(!methodMenu || !methodWrap) return;
+      if(methodMenu.parentElement !== methodWrap){
+        methodWrap.appendChild(methodMenu);
+      }
+      methodMenu.style.position='';
+      methodMenu.style.left='';
+      methodMenu.style.top='';
+      methodMenu.style.width='';
+      methodMenu.style.zIndex='';
+    }
+    function closeManualMethod(){
+      if(!methodMenu) return;
+      methodMenu.classList.remove('is-open');
+      methodMenu.classList.add('hidden');
+      if(methodWrap) methodWrap.classList.remove('open');
+      if(methodBtn) methodBtn.setAttribute('aria-expanded','false');
+      restoreManualMethodMenu();
+    }
+    function openManualMethod(){
+      if(!methodMenu || !methodBtn) return;
+      const r=methodBtn.getBoundingClientRect();
+
+      // Penting: popup Uang Masuk memiliki overflow:hidden + backdrop-filter.
+      // Karena itu dropdown dipindahkan sementara ke <body> agar benar-benar
+      // berada di atas modal dan tidak terpotong oleh card/header/footer.
+      if(methodMenu.parentElement !== document.body){
+        document.body.appendChild(methodMenu);
+      }
+
+      methodMenu.classList.remove('hidden');
+      methodMenu.classList.add('is-open');
+      methodMenu.style.position='fixed';
+      methodMenu.style.left=Math.max(12,Math.min(r.left,window.innerWidth-12-r.width))+'px';
+      methodMenu.style.top=(r.bottom+6)+'px';
+      methodMenu.style.width=r.width+'px';
+      methodMenu.style.zIndex='2147483647';
+      if(methodWrap) methodWrap.classList.add('open');
+      methodBtn.setAttribute('aria-expanded','true');
+    }
+    function setManualMethod(value){
+      if(!methodMeta[value]) value='Cash';
+      if(methodHidden) methodHidden.value=value;
+      if(methodValue) methodValue.textContent=methodMeta[value].label;
+      if(methodIcon) methodIcon.textContent=methodMeta[value].icon;
+      methodMenu?.querySelectorAll('.manual-uang-masuk-method-option').forEach(b=>b.classList.toggle('selected',b.dataset.value===value));
+      closeManualMethod();
+    }
+    methodBtn?.addEventListener('click',function(e){
+      e.preventDefault(); e.stopPropagation();
+      if(methodMenu?.classList.contains('is-open')) closeManualMethod(); else openManualMethod();
+    });
+    methodMenu?.querySelectorAll('.manual-uang-masuk-method-option').forEach(btn=>{
+      btn.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); setManualMethod(this.dataset.value); });
+    });
+    window.addEventListener('resize',()=>{
+      if(methodMenu?.classList.contains('is-open')){
+        const r=methodBtn.getBoundingClientRect();
+        methodMenu.style.left=Math.max(12,Math.min(r.left,window.innerWidth-12-r.width))+'px';
+        methodMenu.style.top=(r.bottom+6)+'px';
+        methodMenu.style.width=r.width+'px';
+      }
+    });
+    document.addEventListener('click',function(e){
+      if(!methodMenu?.classList.contains('is-open')) return;
+      if(methodWrap?.contains(e.target) || methodMenu.contains(e.target)) return;
+      closeManualMethod();
+    });
+
+    const nominal=document.getElementById('manual-uang-masuk-jumlah');
+    nominal.addEventListener('input',()=>{
+      const raw=String(nominal.value||'').replace(/\D/g,'');
+      nominal.value=raw ? Number(raw).toLocaleString('id-ID') : '';
+    });
+    document.getElementById('manual-uang-masuk-form').onsubmit=async function(e){
+      e.preventDefault();
+      const ket=document.getElementById('manual-uang-masuk-ket').value.trim();
+      const jumlah=Number(String(nominal.value||'').replace(/\D/g,''));
+      const tgl=date.value;
+      if(!ket || !jumlah || jumlah<0 || !tgl){alert('Mohon lengkapi keterangan, nominal, dan tanggal.');return}
+      const db=window.__APP_FIREBASE_DB__, pushFn=window.__APP_FIREBASE_PUSH__, refFn=window.__APP_FIREBASE_REF__;
+      if(!db||!pushFn||!refFn){alert('Koneksi database belum siap.');return}
+      const save=document.getElementById('manual-uang-masuk-save'); save.disabled=true; save.textContent='⏳ Menyimpan...';
+      try{
+        await pushFn(refFn(db,'pemasukan'),{
+          ket, jumlah, jumlah1:jumlah, jumlah2:0,
+          metode:methodHidden?.value||'Cash',
+          metode1:methodHidden?.value||'Cash',
+          metode2:'Cash',
+          tgl, sumber:'manual-uang-masuk', manual:true, timestamp:Date.now()
+        });
+        if(typeof window.showSuccessPopup==='function') window.showSuccessPopup('Uang masuk berhasil disimpan.');
+        if(typeof window.renderRekapHarian==='function') window.renderRekapHarian();
+        if(typeof window.renderTabelKeuangan==='function') window.renderTabelKeuangan();
+        setTimeout(closeModal,250);
+      }catch(err){console.error(err);alert('Gagal menyimpan uang masuk: '+err.message);save.disabled=false;save.textContent='💾 Simpan'}
+    };
+    setTimeout(()=>document.getElementById('manual-uang-masuk-ket')?.focus(),50);
+    const quick=document.querySelector('#quick-bottom-nav [data-quick="masuk-manual"]'); if(quick) quick.classList.add('active');
+  };
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('manual-uang-masuk-backdrop')) closeModal()});
+})();
+</script>
+
+
+<style id="list-tim-main-v1-css">
+/* =========================================================
+   LIST TIM MAIN — database tim member / booking / sparing
+   ========================================================= */
+#page-team-list{width:100%;box-sizing:border-box;}
+.team-list-page-shell{
+  width:100%;box-sizing:border-box;padding:14px;
+  border-radius:22px;
+  background:linear-gradient(145deg,rgba(255,255,255,.72),rgba(255,255,255,.40));
+  border:1px solid rgba(255,255,255,.78);
+  box-shadow:0 18px 45px rgba(15,23,42,.12),inset 0 1px 0 rgba(255,255,255,.82);
+  backdrop-filter:blur(16px) saturate(135%);-webkit-backdrop-filter:blur(16px) saturate(135%);
+}
+.team-list-head{position:relative;display:flex;align-items:center;gap:12px;padding:4px 2px 14px;}
+.team-list-back{
+  flex:0 0 auto;width:42px;height:42px;border:1px solid rgba(255,255,255,.78);border-radius:13px;
+  background:rgba(255,255,255,.72);color:#173b68;font-size:23px;font-weight:900;cursor:pointer;
+  box-shadow:0 7px 18px rgba(15,23,42,.10);
+}
+.team-list-head-copy{min-width:0;flex:1;text-align:left;}
+.team-list-kicker{font-size:8px;line-height:1;letter-spacing:.16em;font-weight:950;color:#64748b;text-transform:uppercase;}
+.team-list-head h2{margin:5px 0 3px;color:#0f172a;font-size:clamp(17px,3vw,22px);line-height:1;font-weight:950;letter-spacing:.01em;}
+.team-list-head p{margin:0;color:#64748b;font-size:10px;font-weight:700;line-height:1.35;}
+.team-list-count{flex:0 0 auto;padding:7px 9px;border-radius:999px;background:#eff6ff;border:1px solid #dbeafe;color:#1d4ed8;font-size:9px;font-weight:950;white-space:nowrap;}
+.team-list-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.team-list-search-wrap{flex:1;display:flex;align-items:center;gap:7px;padding:0 11px;height:40px;border-radius:12px;background:rgba(255,255,255,.78);border:1px solid #dbe3ee;box-shadow:inset 0 1px 2px rgba(15,23,42,.03);}
+.team-list-search-wrap span{color:#64748b;font-size:20px;line-height:1;}
+.team-list-search-wrap input{width:100%;border:0;outline:0;background:transparent;color:#0f172a;font-size:13px;font-weight:750;}
+.team-list-search-wrap input::placeholder{color:#94a3b8;}
+.team-list-refresh{width:40px;height:40px;border:1px solid #dbeafe;border-radius:12px;background:#eff6ff;color:#1d4ed8;font-size:20px;font-weight:900;cursor:pointer;box-shadow:0 6px 14px rgba(37,99,235,.08);}
+.team-list-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.team-list-card{
+  position:relative;display:flex;align-items:center;gap:10px;min-width:0;padding:11px;border-radius:15px;
+  background:rgba(255,255,255,.78);border:1px solid rgba(226,232,240,.92);
+  box-shadow:0 7px 18px rgba(15,23,42,.07);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease;
+}
+.team-list-card:hover{transform:translateY(-1px);border-color:#bfdbfe;box-shadow:0 10px 22px rgba(15,23,42,.10);}
+.team-list-logo{width:58px;height:58px;min-width:58px;border-radius:13px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#f8fafc;border:1px solid #dbe3ee;}
+.team-list-logo img{width:100%;height:100%;object-fit:contain;display:block;}
+.team-list-logo-placeholder{font-size:25px;opacity:.55;}
+.team-list-card-copy{min-width:0;flex:1;display:flex;flex-direction:column;gap:4px;}
+.team-list-card-name{color:#0f172a;font-size:13px;font-weight:950;line-height:1.15;overflow-wrap:anywhere;}
+.team-list-card-wa{color:#64748b;font-size:9px;font-weight:750;line-height:1.15;}
+.team-list-card-source{display:inline-flex;align-items:center;align-self:flex-start;padding:3px 6px;border-radius:999px;background:#f8fafc;border:1px solid #e2e8f0;color:#475569;font-size:7px;font-weight:900;text-transform:uppercase;letter-spacing:.03em;}
+.team-list-edit{flex:0 0 auto;align-self:flex-start;border:1px solid #c7d2fe;border-radius:9px;background:#eef2ff;color:#4338ca;padding:7px 8px;font-size:9px;font-weight:950;cursor:pointer;}
+.team-list-edit:hover{background:#e0e7ff;}
+.team-list-empty{padding:38px 18px;text-align:center;border:1px dashed #cbd5e1;border-radius:16px;background:rgba(255,255,255,.55);color:#64748b;}
+.team-list-empty-icon{font-size:34px;margin-bottom:7px;}
+.team-list-empty strong{display:block;color:#334155;font-size:13px;font-weight:950;}
+.team-list-empty span{display:block;margin:5px auto 0;max-width:420px;font-size:9px;font-weight:700;line-height:1.45;}
+.team-edit-overlay{position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;padding:14px;background:rgba(15,23,42,.50);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);}
+.team-edit-modal{width:min(100%,430px);max-height:calc(100dvh - 28px);overflow:auto;border-radius:20px;background:rgba(255,255,255,.97);border:1px solid rgba(255,255,255,.92);box-shadow:0 25px 70px rgba(15,23,42,.28);}
+.team-edit-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:15px 16px 12px;background:linear-gradient(135deg,#172554,#1d4ed8);color:#fff;}
+.team-edit-head h3{margin:0;font-size:15px;font-weight:950;}
+.team-edit-head p{margin:4px 0 0;color:rgba(255,255,255,.72);font-size:9px;font-weight:700;}
+.team-edit-close{border:0;background:rgba(255,255,255,.12);color:#fff;width:32px;height:32px;border-radius:9px;font-size:18px;font-weight:900;cursor:pointer;}
+.team-edit-body{padding:14px 16px 16px;}
+.team-edit-logo-row{display:flex;align-items:center;gap:12px;margin-bottom:13px;}
+.team-edit-logo-preview{width:72px;height:72px;min-width:72px;border-radius:15px;border:1px solid #dbe3ee;background:#f8fafc;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.team-edit-logo-preview img{width:100%;height:100%;object-fit:contain;display:block;}
+.team-edit-logo-preview span{font-size:30px;opacity:.55;}
+.team-edit-logo-actions{display:flex;flex-wrap:wrap;gap:6px;}
+.team-edit-logo-actions label,.team-edit-logo-actions button{display:inline-flex;align-items:center;justify-content:center;padding:7px 9px;border-radius:9px;border:1px solid #dbeafe;background:#eff6ff;color:#1d4ed8;font-size:9px;font-weight:950;cursor:pointer;}
+.team-edit-logo-actions button.clear{background:#fff1f2;border-color:#fecdd3;color:#be123c;}
+.team-edit-field{margin-top:10px;}
+.team-edit-field label{display:block;margin-bottom:5px;color:#334155;font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.05em;}
+.team-edit-field input{width:100%;height:40px;box-sizing:border-box;border:1px solid #dbe3ee;border-radius:11px;background:#f8fafc;padding:0 11px;outline:0;color:#0f172a;font-size:13px;font-weight:750;}
+.team-edit-field input:focus{background:#fff;border-color:#93c5fd;box-shadow:0 0 0 3px rgba(59,130,246,.10);}
+.team-edit-actions{display:flex;justify-content:flex-end;gap:7px;margin-top:15px;}
+.team-edit-actions button{border:0;border-radius:10px;padding:9px 13px;font-size:10px;font-weight:950;cursor:pointer;}
+.team-edit-cancel{background:#e2e8f0;color:#334155;}.team-edit-save{background:linear-gradient(135deg,#2563eb,#4f46e5);color:#fff;box-shadow:0 7px 16px rgba(37,99,235,.18);}
+@media(max-width:900px){.team-list-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:640px){
+  #page-team-list{padding:0 !important;}
+  .team-list-page-shell{padding:10px;border-radius:18px;}
+  .team-list-head{padding-bottom:11px;gap:8px;}
+  .team-list-back{width:38px;height:38px;border-radius:11px;font-size:21px;}
+  .team-list-head h2{font-size:16px;}
+  .team-list-head p{font-size:8px;}
+  .team-list-count{font-size:8px;padding:6px 7px;}
+  .team-list-toolbar{margin-bottom:9px;}
+  .team-list-search-wrap{height:37px;}
+  .team-list-search-wrap input{font-size:12px;}
+  .team-list-refresh{width:37px;height:37px;font-size:18px;}
+  .team-list-grid{grid-template-columns:1fr;gap:8px;}
+  .team-list-card{padding:9px;border-radius:13px;gap:8px;}
+  .team-list-logo{width:52px;height:52px;min-width:52px;border-radius:11px;}
+  .team-list-card-name{font-size:12px;}
+  .team-list-card-wa{font-size:8px;}
+  .team-list-edit{padding:7px;font-size:8px;}
+  .team-edit-overlay{padding:8px;}
+  .team-edit-modal{border-radius:18px;max-height:calc(100dvh - 16px);}
+}
+</style>
+<script type="module" id="list-tim-main-v1-script">
+/* =========================================================
+   LIST TIM MAIN
+   Sumber: Member, Member Tanpa Jadwal, Booking, Sparing.
+   Profil edit disimpan di Firebase node teamProfiles.
+   ========================================================= */
+const cache = window.__sandagaGlobalCache || {};
+cache.teamProfiles = cache.teamProfiles || {};
+
+function tlNorm(value){
+  let v=String(value||'');
+  try{v=v.normalize('NFKC');}catch(e){}
+  return v.trim().replace(/\s+/g,' ').toLowerCase();
+}
+function tlKey(value){return encodeURIComponent(tlNorm(value)).replace(/\./g,'%2E');}
+function tlEsc(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
+function tlAttr(value){return tlEsc(value);}
+function tlLogoFromSource(name){
+  const key=tlKey(name);
+  const direct=String(cache.teamLogos?.[key]?.logo||'').trim();
+  if(direct) return direct;
+  const norm=tlNorm(name);
+  const found=Object.values(cache.teamLogos||{}).find(x=>tlNorm(x?.nama)===norm && String(x?.logo||'').trim());
+  return String(found?.logo||'').trim();
+}
+function tlProfileFor(sourceName){return cache.teamProfiles?.[tlKey(sourceName)] || null;}
+function tlDisplayName(sourceName){return String(tlProfileFor(sourceName)?.nama || sourceName || '').trim();}
+function tlDisplayLogo(sourceName){return String(tlProfileFor(sourceName)?.logo || tlLogoFromSource(sourceName) || '').trim();}
+function tlDisplayWa(sourceName,fallback=''){
+  return String(tlProfileFor(sourceName)?.wa || fallback || '').trim();
+}
+function tlAdd(map,name,wa,source){
+  const raw=String(name||'').trim();
+  if(!raw || tlNorm(raw)==='off' || tlNorm(raw)==='lainnya / umum' || tlNorm(raw)==='__manual__') return;
+  const key=tlNorm(raw);
+  if(!map[key]) map[key]={sourceName:raw,wa:'',sources:new Set()};
+  const item=map[key];
+  item.sources.add(source);
+  if(!item.wa && String(wa||'').trim()) item.wa=String(wa).trim();
+}
+function tlCollect(){
+  const map={};
+  Object.values(cache.memberRawEntries||[]).forEach(m=>tlAdd(map,m?.nama,m?.wa,'Member'));
+  Object.values(cache.memberTanpaJadwal||{}).forEach(m=>tlAdd(map,m?.nama,m?.wa,'Member'));
+  Object.values(cache.booking||{}).forEach(b=>tlAdd(map,b?.nama,b?.wa,'Booking'));
+  Object.values(cache.sparing||{}).forEach(sp=>{
+    tlAdd(map,sp?.timA,sp?.wa || sp?.waA || sp?.waTimA,'Sparing');
+    tlAdd(map,sp?.timB,sp?.waB || sp?.waTimB || sp?.waLawan,'Sparing');
+  });
+  return Object.values(map);
+}
+function tlFindWaFromRecords(sourceName){
+  let found='';
+  const n=tlNorm(sourceName);
+  const check=(name,wa)=>{if(!found && tlNorm(name)===n && String(wa||'').trim()) found=String(wa).trim();};
+  Object.values(cache.memberRawEntries||[]).forEach(m=>check(m?.nama,m?.wa));
+  Object.values(cache.memberTanpaJadwal||{}).forEach(m=>check(m?.nama,m?.wa));
+  Object.values(cache.booking||{}).forEach(b=>check(b?.nama,b?.wa));
+  Object.values(cache.sparing||{}).forEach(sp=>{check(sp?.timA,sp?.wa||sp?.waA||sp?.waTimA);check(sp?.timB,sp?.waB||sp?.waTimB||sp?.waLawan);});
+  return found;
+}
+function tlSourceLabel(item){return Array.from(item.sources||[]).join(' • ');}
+function tlCard(item){
+  const source=item.sourceName;
+  const profile=tlProfileFor(source)||{};
+  const name=tlDisplayName(source);
+  const logo=tlDisplayLogo(source);
+  const wa=tlDisplayWa(source,item.wa || tlFindWaFromRecords(source));
+  const logoHtml=logo?`<img src="${tlAttr(logo)}" alt="Logo ${tlAttr(name)}" onerror="this.style.display='none'">`:'<span class="team-list-logo-placeholder">⚽</span>';
+  return `<article class="team-list-card" data-team-search="${tlAttr((name+' '+wa+' '+tlSourceLabel(item)).toLowerCase())}">
+    <div class="team-list-logo">${logoHtml}</div>
+    <div class="team-list-card-copy">
+      <div class="team-list-card-name">${tlEsc(name)}</div>
+      <div class="team-list-card-wa">${wa ? 'WA • '+tlEsc(wa) : 'WA • Belum ada'}</div>
+      <span class="team-list-card-source">${tlEsc(tlSourceLabel(item) || 'Riwayat')}</span>
+    </div>
+    <button type="button" class="team-list-edit" onclick="openTeamProfileEditor(decodeURIComponent('${encodeURIComponent(String(source))}'))">✏️ Edit</button>
+  </article>`;
+}
+
+window.renderTeamList=function(force=false){
+  const grid=document.getElementById('team-list-grid');
+  if(!grid) return;
+  const items=tlCollect().sort((a,b)=>tlDisplayName(a.sourceName).localeCompare(tlDisplayName(b.sourceName),'id',{sensitivity:'base'}));
+  const count=document.getElementById('team-list-count');
+  if(count) count.textContent=`${items.length} TIM`;
+  const empty=document.getElementById('team-list-empty');
+  if(!items.length){grid.innerHTML='';empty?.classList.remove('hidden');return;}
+  empty?.classList.add('hidden');
+  grid.innerHTML=items.map(tlCard).join('');
+  applyTeamListSearch();
+};
+function applyTeamListSearch(){
+  const input=document.getElementById('team-list-search');
+  const q=String(input?.value||'').trim().toLowerCase();
+  document.querySelectorAll('#team-list-grid .team-list-card').forEach(card=>{
+    card.classList.toggle('hidden',!!q && !String(card.dataset.teamSearch||'').includes(q));
+  });
+}
+window.openTeamList=function(){
+  if(typeof window.showPage==='function') window.showPage('team-list');
+  setTimeout(()=>window.renderTeamList(true),30);
+};
+
+window.openTeamProfileEditor=function(sourceName){
+  document.getElementById('team-profile-editor')?.remove();
+  const profile=tlProfileFor(sourceName)||{};
+  const currentName=String(profile.nama || sourceName || '').trim();
+  const currentWa=String(profile.wa || tlFindWaFromRecords(sourceName) || '').trim();
+  const currentLogo=String(profile.logo || tlLogoFromSource(sourceName) || '').trim();
+  const overlay=document.createElement('div');
+  overlay.id='team-profile-editor';
+  overlay.className='team-edit-overlay';
+  overlay.innerHTML=`
+    <div class="team-edit-modal" role="dialog" aria-modal="true" aria-label="Edit tim">
+      <div class="team-edit-head">
+        <div><h3>✏️ EDIT DATA TIM</h3><p>Nama tim, logo, dan nomor WhatsApp.</p></div>
+        <button type="button" class="team-edit-close" onclick="closeTeamProfileEditor()">✕</button>
+      </div>
+      <div class="team-edit-body">
+        <div class="team-edit-logo-row">
+          <div class="team-edit-logo-preview" id="team-edit-logo-preview">${currentLogo?`<img src="${tlAttr(currentLogo)}" alt="Preview logo">`:'<span>⚽</span>'}</div>
+          <div class="min-w-0">
+            <div style="font-size:11px;font-weight:950;color:#334155;margin-bottom:6px;">LOGO TIM</div>
+            <div class="team-edit-logo-actions">
+              <label for="team-edit-logo-file">📁 Upload</label>
+              <input id="team-edit-logo-file" type="file" accept="image/*" class="hidden">
+              <button type="button" onclick="clearTeamProfileLogo()" class="clear">Hapus logo</button>
+            </div>
+          </div>
+        </div>
+        <div class="team-edit-field"><label>Nama Tim</label><input id="team-edit-name" type="text" value="${tlAttr(currentName)}" maxlength="80"></div>
+        <div class="team-edit-field"><label>Nomor WhatsApp</label><input id="team-edit-wa" type="tel" value="${tlAttr(currentWa)}" maxlength="25" placeholder="08xxxxxxxxxx"></div>
+        <div class="team-edit-actions"><button type="button" class="team-edit-cancel" onclick="closeTeamProfileEditor()">Batal</button><button type="button" class="team-edit-save" id="team-edit-save-btn">Simpan</button></div>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click',e=>{if(e.target===overlay) closeTeamProfileEditor();});
+  const file=document.getElementById('team-edit-logo-file');
+  file?.addEventListener('change',e=>{
+    const f=e.target.files?.[0]; if(!f) return;
+    const reader=new FileReader();
+    reader.onload=()=>{
+      const logo=String(reader.result||'');
+      const holder=document.getElementById('team-edit-logo-preview');
+      if(holder) holder.innerHTML=logo?`<img src="${tlAttr(logo)}" alt="Preview logo">`:'<span>⚽</span>';
+      overlay.dataset.logo=logo;
+      overlay.dataset.logoChanged='1';
+    };
+    reader.readAsDataURL(f);
+  });
+  overlay.dataset.sourceName=sourceName;
+  overlay.dataset.logo=currentLogo;
+  document.getElementById('team-edit-save-btn')?.addEventListener('click',()=>saveTeamProfileEditor(sourceName));
+  setTimeout(()=>document.getElementById('team-edit-name')?.focus(),40);
+};
+window.clearTeamProfileLogo=function(){
+  const overlay=document.getElementById('team-profile-editor'); if(!overlay) return;
+  overlay.dataset.logo=''; overlay.dataset.logoChanged='1';
+  const holder=document.getElementById('team-edit-logo-preview'); if(holder) holder.innerHTML='<span>⚽</span>';
+  const file=document.getElementById('team-edit-logo-file'); if(file) file.value='';
+};
+window.closeTeamProfileEditor=function(){document.getElementById('team-profile-editor')?.remove();};
+
+async function saveTeamProfileEditor(sourceName){
+  const overlay=document.getElementById('team-profile-editor'); if(!overlay) return;
+  const name=String(document.getElementById('team-edit-name')?.value||'').trim();
+  const wa=String(document.getElementById('team-edit-wa')?.value||'').trim();
+  if(!name){alert('Nama tim wajib diisi.');return;}
+  const db=window.__APP_FIREBASE_DB__, refFn=window.__APP_FIREBASE_REF__, updateFn=window.__APP_FIREBASE_UPDATE__;
+  if(!db||!refFn||!updateFn){alert('Koneksi database belum siap.');return;}
+  const btn=document.getElementById('team-edit-save-btn'); if(btn?.dataset.saving==='1') return;
+  if(btn){btn.dataset.saving='1';btn.disabled=true;btn.textContent='Menyimpan...';}
+  try{
+    const key=tlKey(sourceName);
+    let logo=String(overlay.dataset.logo||'');
+    if(overlay.dataset.logoChanged!=='1') logo=String(tlProfileFor(sourceName)?.logo || tlLogoFromSource(sourceName) || '');
+    const payload={nama:name,normalizedNama:tlNorm(name),wa,logo,updatedAt:Date.now()};
+    await updateFn(refFn(db,'teamProfiles/'+key),payload);
+    // Sinkronkan logo ke nama lama dan nama baru agar seluruh tampilan lama/baru tetap mendapat logo yang sama.
+    if(logo){
+      const logoPayload={nama:sourceName,normalizedNama:tlNorm(sourceName),logo,updatedAt:Date.now()};
+      await updateFn(refFn(db,'teamLogos/'+key),logoPayload);
+      const newKey=tlKey(name);
+      await updateFn(refFn(db,'teamLogos/'+newKey),{nama:name,normalizedNama:tlNorm(name),logo,updatedAt:Date.now()});
+    }
+    cache.teamProfiles[key]=payload;
+    if(typeof window.renderTeamList==='function') window.renderTeamList(true);
+    if(typeof window.renderTodaySchedule==='function') window.renderTodaySchedule();
+    if(typeof window.renderTabelBooking==='function') window.renderTabelBooking();
+    if(typeof window.renderSparing==='function') window.renderSparing();
+    window.closeTeamProfileEditor();
+    if(typeof window.showSuccessPopup==='function') window.showSuccessPopup(`Data tim ${name} berhasil diperbarui.`); else alert(`Data tim ${name} berhasil diperbarui.`);
+  }catch(err){
+    console.error('Gagal menyimpan profil tim:',err);
+    alert('Gagal menyimpan data tim: '+(err?.message||err));
+  }finally{
+    if(btn){btn.dataset.saving='';btn.disabled=false;btn.textContent='Simpan';}
+  }
+}
+
+// Search field.
+document.addEventListener('input',e=>{if(e.target?.id==='team-list-search') applyTeamListSearch();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape' && document.getElementById('team-profile-editor')) window.closeTeamProfileEditor();});
+
+// Pastikan showPage mengenali halaman baru tanpa mengubah fungsi navigasi yang ada.
+const originalShowPageForTeamList=window.showPage;
+if(typeof originalShowPageForTeamList==='function' && !originalShowPageForTeamList.__teamListWrapped){
+  const wrappedShowPage=function(id){
+    const result=originalShowPageForTeamList.apply(this,arguments);
+    if(id==='team-list') setTimeout(()=>window.renderTeamList(true),20);
+    return result;
+  };
+  wrappedShowPage.__teamListWrapped=true;
+  wrappedShowPage.__original=originalShowPageForTeamList;
+  window.showPage=wrappedShowPage;
+}
+
+// Render pertama setelah Firebase cache mulai tersedia.
+window.renderTeamList();
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  if(typeof window.syncUangMasukMethodDropdown === 'function'){
+    window.syncUangMasukMethodDropdown(1, document.getElementById('in-metode-1')?.value || 'Cash');
+    window.syncUangMasukMethodDropdown(2, document.getElementById('in-metode-2')?.value || 'Cash');
+  }
+});
+</script>
+
+<script id="manual-uang-masuk-method-hard-fix">
+(function(){
+  function closeMenu(){
+    const menu=document.getElementById('manual-uang-masuk-method-menu');
+    const wrap=document.getElementById('manual-uang-masuk-method-wrap');
+    const btn=document.getElementById('manual-uang-masuk-method-btn');
+    if(!menu) return;
+    menu.classList.add('hidden');
+    menu.classList.remove('is-open');
+    menu.style.display='none';
+    if(wrap) wrap.classList.remove('open');
+    if(btn) btn.setAttribute('aria-expanded','false');
+  }
+  window.__toggleManualUangMasukMethod=function(ev,btn){
+    if(ev){ev.preventDefault();ev.stopPropagation();}
+    const menu=document.getElementById('manual-uang-masuk-method-menu');
+    const wrap=document.getElementById('manual-uang-masuk-method-wrap');
+    if(!menu || !btn) return;
+    const isOpen=menu.classList.contains('is-open') && menu.style.display!=='none';
+    if(isOpen){ closeMenu(); return; }
+    const r=btn.getBoundingClientRect();
+    document.body.appendChild(menu);
+    menu.classList.remove('hidden');
+    menu.classList.add('is-open');
+    menu.style.setProperty('display','block','important');
+    menu.style.setProperty('position','fixed','important');
+    menu.style.setProperty('left',Math.max(12,Math.min(r.left,window.innerWidth-r.width-12))+'px','important');
+    menu.style.setProperty('top',(r.bottom+6)+'px','important');
+    menu.style.setProperty('width',r.width+'px','important');
+    menu.style.setProperty('right','auto','important');
+    menu.style.setProperty('z-index','2147483647','important');
+    if(wrap) wrap.classList.add('open');
+    btn.setAttribute('aria-expanded','true');
+  };
+  document.addEventListener('click',function(e){
+    const opt=e.target.closest('#manual-uang-masuk-method-menu .manual-uang-masuk-method-option');
+    if(opt){
+      e.preventDefault(); e.stopPropagation();
+      const value=opt.getAttribute('data-value')||'Cash';
+      const hidden=document.getElementById('manual-uang-masuk-method');
+      const label=document.getElementById('manual-uang-masuk-method-value');
+      const icon=document.getElementById('manual-uang-masuk-method-icon');
+      const meta={Cash:['💵','Cash'],QRIS:['▣','QRIS'],Transfer:['🏦','Transfer']}[value]||['💵','Cash'];
+      if(hidden) hidden.value=value;
+      if(label) label.textContent=meta[1];
+      if(icon) icon.textContent=meta[0];
+      document.querySelectorAll('#manual-uang-masuk-method-menu .manual-uang-masuk-method-option').forEach(x=>x.classList.toggle('selected',x===opt));
+      closeMenu();
+      return;
+    }
+    const wrap=document.getElementById('manual-uang-masuk-method-wrap');
+    const menu=document.getElementById('manual-uang-masuk-method-menu');
+    if(menu && menu.classList.contains('is-open') && !wrap?.contains(e.target) && !menu.contains(e.target)) closeMenu();
+  },true);
+  window.addEventListener('resize',function(){
+    const menu=document.getElementById('manual-uang-masuk-method-menu');
+    const btn=document.getElementById('manual-uang-masuk-method-btn');
+    if(!menu||!btn||!menu.classList.contains('is-open')) return;
+    const r=btn.getBoundingClientRect();
+    menu.style.setProperty('left',Math.max(12,Math.min(r.left,window.innerWidth-r.width-12))+'px','important');
+    menu.style.setProperty('top',(r.bottom+6)+'px','important');
+    menu.style.setProperty('width',r.width+'px','important');
+  });
+})();
+</script>
+
+<!-- ATUR MEMBER — PILIH BAGIAN -->
+<div id="atur-member-chooser-overlay" class="atur-member-chooser-overlay" aria-hidden="true">
+  <div class="atur-member-chooser" role="dialog" aria-modal="true" aria-labelledby="atur-member-chooser-title">
+    <div class="atur-member-chooser-head">
+      <button type="button" class="atur-member-chooser-close" onclick="closeAturMemberChooser()" aria-label="Tutup">×</button>
+      <h3 id="atur-member-chooser-title">⚙️ ATUR MEMBER</h3>
+      <p>Pilih bagian yang ingin dibuka agar tampilan lebih rapi dan fokus.</p>
+    </div>
+
+    <div class="atur-member-chooser-list">
+      <button type="button" class="atur-member-chooser-btn" onclick="openAturMemberSection('schedule')">
+        <span class="atur-member-chooser-icon">📅</span>
+        <span class="atur-member-chooser-copy">
+          <strong>Tambah Member Baru dengan Jadwal</strong>
+          <small>Tambah member sekaligus jadwal mingguan tetap.</small>
+        </span>
+        <span class="atur-member-chooser-arrow">›</span>
+      </button>
+
+      <button type="button" class="atur-member-chooser-btn" onclick="openAturMemberSection('without-schedule')">
+        <span class="atur-member-chooser-icon">➕</span>
+        <span class="atur-member-chooser-copy">
+          <strong>Tambah Member Baru Tanpa Jadwal</strong>
+          <small>Tambah member yang tidak memiliki jadwal tetap.</small>
+        </span>
+        <span class="atur-member-chooser-arrow">›</span>
+      </button>
+
+      <button type="button" class="atur-member-chooser-btn" onclick="openAturMemberSection('list')">
+        <span class="atur-member-chooser-icon">👥</span>
+        <span class="atur-member-chooser-copy">
+          <strong>List Member Terdaftar</strong>
+          <small>Lihat dan kelola seluruh member yang sudah terdaftar.</small>
+        </span>
+        <span class="atur-member-chooser-arrow">›</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script id="atur-member-chooser-script">
+(function(){
+  'use strict';
+
+  function chooser(){
+    return document.getElementById('atur-member-chooser-overlay');
+  }
+
+  window.openAturMemberChooser = function(){
+    const overlay = chooser();
+    if(!overlay) return;
+    overlay.classList.add('is-open');
+    overlay.setAttribute('aria-hidden','false');
+    document.body.classList.add('atur-member-chooser-open');
+  };
+
+  window.closeAturMemberChooser = function(){
+    const overlay = chooser();
+    if(!overlay) return;
+    overlay.classList.remove('is-open');
+    overlay.setAttribute('aria-hidden','true');
+    document.body.classList.remove('atur-member-chooser-open');
+  };
+
+  window.openAturMemberSection = function(section){
+    /* Pakai navigasi existing supaya semua state/logic lama tetap berjalan. */
+    if(typeof window.quickMoreOpen === 'function'){
+      window.quickMoreOpen('atur-member');
+    }
+
+    setTimeout(function(){
+      const page = document.getElementById('page-atur-member');
+      if(page){
+        page.setAttribute('data-member-section', section);
+        page.scrollTop = 0;
+      }
+      window.closeAturMemberChooser();
+    }, 30);
+  };
+
+  document.addEventListener('click', function(e){
+    const overlay = chooser();
+    if(!overlay || !overlay.classList.contains('is-open')) return;
+    if(e.target === overlay) window.closeAturMemberChooser();
+  });
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') window.closeAturMemberChooser();
+  });
+
+  /* Saat keluar dari Atur Member, reset mode agar halaman berikutnya tidak membawa filter lama. */
+  const observer = new MutationObserver(function(){
+    const page = document.getElementById('page-atur-member');
+    if(page && page.classList.contains('hidden')){
+      page.removeAttribute('data-member-section');
+    }
+  });
+
+  function startObserver(){
+    const page = document.getElementById('page-atur-member');
+    if(page) observer.observe(page, {attributes:true, attributeFilter:['class']});
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', startObserver, {once:true});
+  }else{
+    startObserver();
+  }
+})();
+</script>
+
 </body>
 
 <style id="FINAL_FIX_UANG_KELUAR_ONE_BIG_GLASS_CARD">
@@ -26900,6 +28744,265 @@ body.jadwal-uang-masuk-modal-active #page-masuk {
 }
 </style>
 
+
+<style id="FINAL_FIX_UANG_MASUK_SAMA_PERSIS_DENGAN_UANG_KELUAR">
+/* =========================================================
+   UANG MASUK MANUAL — SAMAKAN DENGAN JENDELA UANG KELUAR
+   Fokus visual saja: ukuran card, header, field, tanggal,
+   footer, dan tinggi modal. ID + JS transaksi tetap sama.
+   ========================================================= */
+#manual-uang-masuk-backdrop{
+  position:fixed !important;
+  inset:0 !important;
+  z-index:2147483000 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:18px !important;
+  box-sizing:border-box !important;
+  background:rgba(15,23,42,.42) !important;
+  backdrop-filter:blur(7px) !important;
+  -webkit-backdrop-filter:blur(7px) !important;
+}
+
+/* KUNCI: Uang Masuk tidak lagi setinggi viewport.
+   Tingginya mengikuti isi seperti Uang Keluar. */
+#manual-uang-masuk-shell{
+  position:relative !important;
+  width:min(94vw,560px) !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-width:560px !important;
+  max-height:min(88vh,760px) !important;
+  overflow:hidden !important;
+  box-sizing:border-box !important;
+  margin:0 !important;
+  border-radius:24px !important;
+  background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(239,246,255,.84)) !important;
+  border:1px solid rgba(255,255,255,.86) !important;
+  box-shadow:0 28px 80px rgba(15,23,42,.30),inset 0 1px 0 rgba(255,255,255,.95) !important;
+  backdrop-filter:blur(24px) saturate(145%) !important;
+  -webkit-backdrop-filter:blur(24px) saturate(145%) !important;
+}
+
+#manual-uang-masuk-page{
+  width:100% !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:min(88vh,760px) !important;
+  margin:0 !important;
+  padding:16px 18px 0 !important;
+  box-sizing:border-box !important;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  scrollbar-width:none !important;
+  -ms-overflow-style:none !important;
+}
+#manual-uang-masuk-page::-webkit-scrollbar{display:none !important;width:0 !important;height:0 !important;}
+
+/* HEADER — pola yang sama dengan Uang Keluar */
+#manual-uang-masuk-page h2{
+  position:sticky !important;
+  top:-16px !important;
+  z-index:15 !important;
+  width:auto !important;
+  margin:-16px -18px 16px !important;
+  padding:16px 58px 12px 16px !important;
+  min-height:48px !important;
+  box-sizing:border-box !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(239,246,255,.94)) !important;
+  border:0 !important;
+  border-bottom:1px solid rgba(148,163,184,.20) !important;
+  border-radius:24px 24px 0 0 !important;
+  box-shadow:0 6px 16px rgba(15,23,42,.05) !important;
+  color:#172033 !important;
+  letter-spacing:.01em !important;
+  font-size:18px !important;
+  line-height:1.2 !important;
+}
+#manual-uang-masuk-page h2::after{
+  content:"" !important;
+  position:absolute !important;
+  left:0 !important;
+  bottom:-1px !important;
+  width:72px !important;
+  height:3px !important;
+  background:#16a34a !important;
+  border-radius:0 3px 3px 0 !important;
+  pointer-events:none !important;
+}
+#manual-uang-masuk-close{
+  position:absolute !important;
+  top:9px !important;
+  right:9px !important;
+  z-index:30 !important;
+  width:40px !important;
+  height:40px !important;
+  margin:0 !important;
+  border:1px solid rgba(148,163,184,.25) !important;
+  border-radius:12px !important;
+  background:rgba(255,255,255,.78) !important;
+  color:#334155 !important;
+  font-size:18px !important;
+  line-height:1 !important;
+  font-weight:950 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  box-shadow:0 5px 14px rgba(15,23,42,.10) !important;
+  cursor:pointer !important;
+  touch-action:manipulation !important;
+}
+
+/* Keterangan + Nominal — sama seperti dua input Uang Keluar.
+   Label lama disembunyikan supaya tidak ada jarak ekstra di atas field. */
+#manual-uang-masuk-form{
+  margin:0 !important;
+  padding:0 !important;
+}
+#manual-uang-masuk-form .manual-uang-masuk-field{
+  margin:0 0 12px !important;
+}
+#manual-uang-masuk-form .manual-uang-masuk-field:nth-child(1) label,
+#manual-uang-masuk-form .manual-uang-masuk-field:nth-child(2) label{
+  display:none !important;
+}
+#manual-uang-masuk-form .manual-uang-masuk-field input{
+  width:100% !important;
+  min-height:42px !important;
+  height:42px !important;
+  box-sizing:border-box !important;
+  display:block !important;
+  margin:0 !important;
+  padding:9px 12px !important;
+  border:1px solid rgba(255,255,255,.62) !important;
+  border-radius:.75rem !important;
+  background:rgba(255,255,255,.30) !important;
+  color:#0f172a !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.48),0 4px 14px rgba(15,23,42,.05) !important;
+  backdrop-filter:blur(12px) saturate(130%) !important;
+  -webkit-backdrop-filter:blur(12px) saturate(130%) !important;
+  font-size:13px !important;
+  font-weight:900 !important;
+  outline:none !important;
+}
+#manual-uang-masuk-form .manual-uang-masuk-field input::placeholder{
+  color:#64748b !important;
+  opacity:.9 !important;
+}
+#manual-uang-masuk-form .manual-uang-masuk-field input:focus{
+  border-color:rgba(16,185,129,.58) !important;
+  box-shadow:0 0 0 3px rgba(16,185,129,.12),inset 0 1px 0 rgba(255,255,255,.48),0 4px 14px rgba(15,23,42,.05) !important;
+  background:rgba(255,255,255,.48) !important;
+}
+
+/* TANGGAL — sama dengan field tanggal Uang Keluar */
+#manual-uang-masuk-form .manual-uang-masuk-field:nth-child(3){
+  margin:0 0 0 !important;
+}
+#manual-uang-masuk-form .manual-uang-masuk-field:nth-child(3) > label{
+  display:block !important;
+  margin:0 0 4px !important;
+  color:#172033 !important;
+  font-size:12px !important;
+  line-height:1.2 !important;
+  font-weight:950 !important;
+  text-transform:uppercase !important;
+}
+#manual-uang-masuk-date-wrap{position:relative !important;width:100% !important;}
+#manual-uang-masuk-date-btn{
+  width:100% !important;
+  min-height:52px !important;
+  padding:9px 12px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  gap:10px !important;
+  box-sizing:border-box !important;
+  border:1px solid rgba(255,255,255,.62) !important;
+  border-radius:.75rem !important;
+  background:rgba(255,255,255,.30) !important;
+  color:#0f172a !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.48),0 4px 14px rgba(15,23,42,.05) !important;
+  backdrop-filter:blur(12px) saturate(130%) !important;
+  -webkit-backdrop-filter:blur(12px) saturate(130%) !important;
+  font-size:13px !important;
+  font-weight:950 !important;
+  cursor:pointer !important;
+  text-align:left !important;
+}
+#manual-uang-masuk-date-btn span:last-child{margin-left:auto !important;font-size:17px !important;line-height:1 !important;}
+#manual-uang-masuk-date-text{white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;font-size:13px !important;font-weight:950 !important;}
+
+/* FOOTER — sama dengan Uang Keluar */
+#manual-uang-masuk-actions{
+  position:sticky !important;
+  bottom:-1px !important;
+  z-index:20 !important;
+  display:flex !important;
+  align-items:stretch !important;
+  justify-content:center !important;
+  margin:16px -18px -1px !important;
+  padding:12px 18px 14px !important;
+  background:linear-gradient(180deg,rgba(255,255,255,.84),rgba(239,246,255,.98)) !important;
+  border-top:1px solid rgba(148,163,184,.20) !important;
+  box-shadow:0 -8px 20px rgba(15,23,42,.08) !important;
+  backdrop-filter:blur(18px) saturate(135%) !important;
+  -webkit-backdrop-filter:blur(18px) saturate(135%) !important;
+}
+#manual-uang-masuk-save{
+  width:100% !important;
+  min-height:50px !important;
+  border-radius:14px !important;
+  font-weight:900 !important;
+  font-size:14px !important;
+  line-height:1.15 !important;
+  background:linear-gradient(135deg,#16a34a,#0f9f4b) !important;
+  color:#fff !important;
+  border:1px solid #22c55e !important;
+  box-shadow:0 8px 20px rgba(22,163,74,.22) !important;
+  cursor:pointer !important;
+  touch-action:manipulation !important;
+}
+
+@media(max-width:640px){
+  #manual-uang-masuk-backdrop{padding:10px !important;}
+  #manual-uang-masuk-shell{
+    width:calc(100vw - 20px) !important;
+    max-width:none !important;
+    height:auto !important;
+    max-height:calc(100dvh - 20px) !important;
+    border-radius:20px !important;
+  }
+  #manual-uang-masuk-page{
+    max-height:calc(100dvh - 20px) !important;
+    padding:14px 14px 0 !important;
+  }
+  #manual-uang-masuk-page h2{
+    top:-14px !important;
+    width:auto !important;
+    margin:-14px -14px 14px !important;
+    padding:14px 52px 11px 14px !important;
+    min-height:48px !important;
+    border-radius:20px 20px 0 0 !important;
+    font-size:17px !important;
+  }
+  #manual-uang-masuk-close{top:7px !important;right:7px !important;width:38px !important;height:38px !important;}
+  #manual-uang-masuk-form .manual-uang-masuk-field input{height:42px !important;min-height:42px !important;}
+  #manual-uang-masuk-date-btn{min-height:52px !important;}
+  #manual-uang-masuk-actions{margin:14px -14px -1px !important;padding:10px 14px 12px !important;}
+}
+</style>
+
+
+<style id="FINAL_MATCH_UANG_MASUK_HEADER_UANG_KELUAR">
+#manual-uang-masuk-page h2{font-family:inherit!important;font-size:18px!important;line-height:1.25!important;font-weight:900!important;letter-spacing:.02em!important;text-transform:uppercase!important;color:#172033!important}
+@media(max-width:640px){#manual-uang-masuk-page h2{font-family:inherit!important;font-size:17px!important;line-height:1.25!important;font-weight:900!important;letter-spacing:.02em!important;text-transform:uppercase!important}}
+</style>
 </html>
 
 <style>
@@ -32296,40 +34399,6 @@ body.daily-sub-modal-v6-open > main #sub-page-ringkasan{
     -webkit-backdrop-filter: blur(10px) !important;
 }
 
-/* List Non Member: satu card pembungkus, baris item tetap ringan. */
-#page-booking-schedule #booking-schedule-nonmember-wa-list > div {
-    border-radius: 13px !important;
-    border-color: rgba(255,255,255,.55) !important;
-    background: rgba(255,255,255,.30) !important;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 4px 12px rgba(15,23,42,.04) !important;
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
-}
-
-#page-booking-schedule .nonmember-logo-btn,
-#page-booking-schedule .nonmember-wa-btn {
-    transition: transform .15s ease, filter .15s ease;
-}
-
-#page-booking-schedule #booking-schedule-nonmember-wa-list button:hover {
-    transform: translateY(-1px);
-    filter: brightness(1.04);
-}
-
-@media (max-width:640px) {
-    #page-booking-schedule #booking-schedule-periods {
-        gap: 8px !important;
-    }
-    #page-booking-schedule .booking-month-panel {
-        border-radius: 15px !important;
-    }
-    #page-booking-schedule #booking-schedule-nonmember-wa-list > div {
-        padding: .65rem !important;
-    }
-    #page-booking-schedule #booking-schedule-nonmember-wa-list button {
-        padding: .45rem .6rem !important;
-    }
-}
 </style>
 
 <style id="uang-masuk-final-polish-v11">
@@ -33474,6 +35543,61 @@ html, body {
 }
 </style>
 
+
+<style id="booking-schedule-team-action-menu">
+/* Booking Schedule — nama tim adalah tombol aksi utama. */
+#booking-schedule-grid-wrap .schedule-grid-team-holder[onclick]{
+    cursor:pointer !important;
+    transition:transform .14s ease, filter .14s ease, box-shadow .14s ease !important;
+}
+#booking-schedule-grid-wrap .schedule-grid-team-holder[onclick]:hover{
+    transform:translateY(-1px) scale(1.015);
+    filter:brightness(.98);
+    box-shadow:0 5px 12px rgba(15,23,42,.13), inset 0 1px 0 rgba(255,255,255,.72) !important;
+}
+#booking-schedule-grid-wrap .schedule-grid-team-holder[onclick]:active{
+    transform:scale(.97);
+}
+.team-action-menu-shell{
+    background:rgba(248,250,252,.97);
+    border:1px solid rgba(255,255,255,.85);
+    box-shadow:0 28px 80px rgba(15,23,42,.28), inset 0 1px 0 rgba(255,255,255,.9);
+    backdrop-filter:blur(22px) saturate(145%);
+    -webkit-backdrop-filter:blur(22px) saturate(145%);
+    animation:teamActionIn .18s cubic-bezier(.2,.8,.2,1);
+}
+.team-action-close{
+    width:36px;height:36px;display:grid;place-items:center;
+    border:1px solid #e2e8f0;border-radius:12px;
+    background:#fff;color:#64748b;font-weight:900;
+    box-shadow:0 4px 12px rgba(15,23,42,.07);
+}
+.team-action-close:hover{background:#f1f5f9;color:#0f172a}
+.team-action-menu-btn{
+    width:100%;display:flex;align-items:center;gap:10px;
+    padding:11px 12px;border-radius:14px;border:1px solid #e2e8f0;
+    background:#fff;color:#0f172a;text-align:left;
+    box-shadow:0 4px 13px rgba(15,23,42,.055);
+    transition:transform .14s ease, box-shadow .14s ease, filter .14s ease;
+}
+.team-action-menu-btn:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(15,23,42,.09);filter:brightness(.99)}
+.team-action-menu-btn:active{transform:scale(.985)}
+.team-action-menu-icon{
+    width:36px;height:36px;flex:0 0 36px;border-radius:11px;
+    display:grid;place-items:center;font-size:17px;
+}
+.team-action-blue .team-action-menu-icon{background:#eff6ff;border:1px solid #bfdbfe}
+.team-action-indigo .team-action-menu-icon{background:#eef2ff;border:1px solid #c7d2fe}
+.team-action-emerald .team-action-menu-icon{background:#ecfdf5;border:1px solid #a7f3d0}
+.team-action-violet .team-action-menu-icon{background:#f5f3ff;border:1px solid #ddd6fe}
+.team-action-rose .team-action-menu-icon{background:#fff1f2;border:1px solid #fecdd3}
+@keyframes teamActionIn{from{opacity:0;transform:translateY(8px) scale(.975)}to{opacity:1;transform:none}}
+@media(max-width:640px){
+    .team-action-menu-shell{border-radius:20px;padding:14px}
+    .team-action-menu-btn{padding:10px}
+    .team-action-menu-icon{width:34px;height:34px;flex-basis:34px;font-size:16px}
+}
+</style>
 <style id="booking-schedule-restore-team-pill">
 /* Booking Schedule: sel tetap transparan seperti slot kosong,
    sedangkan pill nama tim dikembalikan seperti desain semula. */
@@ -36269,5 +38393,1049 @@ html:has(body > main #page-minuman:not(.hidden)) body {
     tryWrap();
     if(window.quickOpenPage?.__freshFormWrapped || ++n>100) clearInterval(timer);
   }, 50);
+})();
+</script>
+
+
+<style id="dock-single-row-final">
+/* DOCK BAR — selalu satu baris */
+.quick-bottom-nav{
+  display:flex !important;
+  flex-wrap:nowrap !important;
+  align-items:stretch !important;
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  white-space:nowrap !important;
+}
+.quick-nav-item{
+  flex:1 1 0 !important;
+  min-width:0 !important;
+  flex-shrink:1 !important;
+}
+.quick-bottom-nav::-webkit-scrollbar{display:none !important;width:0 !important;height:0 !important;}
+@media(max-width:640px){
+  .quick-bottom-nav{
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    gap:3px !important;
+  }
+  .quick-nav-item{
+    min-width:0 !important;
+    flex:1 1 0 !important;
+  }
+}
+</style>
+
+
+<style id="uang-masuk-match-uang-keluar-final">
+/* UANG MASUK — samakan shell popup dengan UANG KELUAR */
+#jadwal-uang-masuk-modal-backdrop{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:18px !important;
+  box-sizing:border-box !important;
+  background:rgba(15,23,42,.42) !important;
+  backdrop-filter:blur(7px) !important;
+  -webkit-backdrop-filter:blur(7px) !important;
+}
+body.jadwal-uang-masuk-modal-active{
+  overflow:hidden !important;
+}
+body.jadwal-uang-masuk-modal-active #page-masuk{
+  position:relative !important;
+  inset:auto !important;
+  left:auto !important;
+  top:auto !important;
+  transform:none !important;
+  width:100% !important;
+  max-width:none !important;
+  max-height:none !important;
+  margin:0 !important;
+  padding:16px 18px 18px !important;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  overscroll-behavior:contain !important;
+  scrollbar-width:none !important;
+  -ms-overflow-style:none !important;
+  box-sizing:border-box !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  color:#172033 !important;
+}
+#jadwal-uang-masuk-modal-backdrop #page-masuk::-webkit-scrollbar{
+  display:none !important;width:0 !important;height:0 !important;
+}
+
+/* Shell pengganti yang meniru ukuran Uang Keluar */
+body.jadwal-uang-masuk-modal-active #page-masuk{
+  width:min(94vw,560px) !important;
+  height:min(88vh,760px) !important;
+  max-width:560px !important;
+  max-height:760px !important;
+  border-radius:24px !important;
+  background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(239,246,255,.84)) !important;
+  border:1px solid rgba(255,255,255,.86) !important;
+  box-shadow:0 28px 80px rgba(15,23,42,.30),inset 0 1px 0 rgba(255,255,255,.95) !important;
+  backdrop-filter:blur(24px) saturate(145%) !important;
+  -webkit-backdrop-filter:blur(24px) saturate(145%) !important;
+}
+
+/* Header persis pola Uang Keluar */
+body.jadwal-uang-masuk-modal-active #page-masuk > h2{
+  position:sticky !important;
+  top:-16px !important;
+  z-index:120 !important;
+  width:calc(100% + 36px) !important;
+  margin:-16px -18px 14px !important;
+  padding:14px 54px 12px !important;
+  min-height:52px !important;
+  box-sizing:border-box !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  background:linear-gradient(180deg,rgba(255,255,255,.995),rgba(247,250,255,.985)) !important;
+  border-bottom:1px solid rgba(148,163,184,.20) !important;
+  border-radius:24px 24px 0 0 !important;
+  box-shadow:0 6px 16px rgba(15,23,42,.06) !important;
+  isolation:isolate !important;
+  color:#172033 !important;
+  letter-spacing:.01em !important;
+}
+body.jadwal-uang-masuk-modal-active #page-masuk > h2::after{
+  content:"" !important;
+  position:absolute !important;
+  left:0 !important;
+  bottom:-1px !important;
+  width:72px !important;
+  height:3px !important;
+  background:linear-gradient(90deg,#16a34a,#22c55e) !important;
+  border-radius:3px !important;
+  pointer-events:none !important;
+}
+body.jadwal-uang-masuk-modal-active #jadwal-uang-masuk-modal-close{
+  position:absolute !important;
+  top:10px !important;
+  right:10px !important;
+  z-index:140 !important;
+  width:40px !important;
+  height:40px !important;
+  margin:0 !important;
+  float:none !important;
+  border:1px solid rgba(148,163,184,.25) !important;
+  border-radius:13px !important;
+  background:rgba(255,255,255,.82) !important;
+  color:#334155 !important;
+  font-size:18px !important;
+  line-height:1 !important;
+  font-weight:950 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  box-shadow:0 5px 14px rgba(15,23,42,.10) !important;
+}
+
+/* Footer tombol sama seperti Uang Keluar */
+body.jadwal-uang-masuk-modal-active #page-masuk > form{
+  padding-bottom:82px !important;
+}
+body.jadwal-uang-masuk-modal-active #page-masuk > form > .flex.justify-end{
+  position:sticky !important;
+  bottom:-18px !important;
+  z-index:125 !important;
+  display:flex !important;
+  align-items:stretch !important;
+  justify-content:center !important;
+  gap:10px !important;
+  margin:18px -18px -18px !important;
+  padding:12px 18px 14px !important;
+  background:linear-gradient(180deg,rgba(248,251,255,.90),rgba(255,255,255,.98)) !important;
+  border-top:1px solid rgba(148,163,184,.22) !important;
+  box-shadow:0 -8px 20px rgba(15,23,42,.07) !important;
+  backdrop-filter:blur(18px) saturate(135%) !important;
+  -webkit-backdrop-filter:blur(18px) saturate(135%) !important;
+}
+body.jadwal-uang-masuk-modal-active #page-masuk > form > .flex.justify-end button[type="submit"]{
+  width:100% !important;
+  min-height:46px !important;
+  border-radius:12px !important;
+  font-weight:900 !important;
+  font-size:13px !important;
+  line-height:1.15 !important;
+  background:#16a34a !important;
+  color:#fff !important;
+  border:1px solid #22c55e !important;
+  box-shadow:0 7px 16px rgba(22,163,74,.18) !important;
+}
+
+/* Mobile persis ukuran Uang Keluar */
+@media(max-width:640px){
+  #jadwal-uang-masuk-modal-backdrop{padding:10px !important}
+  body.jadwal-uang-masuk-modal-active #page-masuk{
+    width:calc(100vw - 20px) !important;
+    max-width:none !important;
+    height:calc(100dvh - 20px) !important;
+    max-height:none !important;
+    padding:14px 14px 16px !important;
+    border-radius:20px !important;
+  }
+  body.jadwal-uang-masuk-modal-active #page-masuk > h2{
+    top:-14px !important;
+    width:calc(100% + 28px) !important;
+    margin:-14px -14px 12px !important;
+    padding:13px 48px 11px !important;
+    min-height:48px !important;
+    border-radius:20px 20px 0 0 !important;
+  }
+  body.jadwal-uang-masuk-modal-active #jadwal-uang-masuk-modal-close{
+    top:7px !important;
+    right:7px !important;
+    width:38px !important;
+    height:38px !important;
+  }
+  body.jadwal-uang-masuk-modal-active #page-masuk > form{
+    padding-bottom:78px !important;
+  }
+  body.jadwal-uang-masuk-modal-active #page-masuk > form > .flex.justify-end{
+    bottom:-16px !important;
+    gap:7px !important;
+    margin:14px -14px -16px !important;
+    padding:10px 12px 12px !important;
+  }
+}
+</style>
+
+
+<style id="uang-masuk-exact-match-uang-keluar-final">
+/* =========================================================
+   UANG MASUK — SAMAKAN STRUKTUR VISUAL DENGAN UANG KELUAR
+   Perbedaan hanya field "Cash Diambil Dari Tanggal" yang tidak ada.
+   Modal TIDAK memakai tinggi tetap agar tidak ada area kosong.
+   ========================================================= */
+#jadwal-uang-masuk-modal-backdrop{
+  position:fixed !important;
+  inset:0 !important;
+  z-index:2147483000 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:18px !important;
+  box-sizing:border-box !important;
+  background:rgba(15,23,42,.42) !important;
+  backdrop-filter:blur(7px) !important;
+  -webkit-backdrop-filter:blur(7px) !important;
+}
+
+body.jadwal-uang-masuk-modal-active{
+  overflow:hidden !important;
+}
+body.jadwal-uang-masuk-modal-active main{
+  overflow:visible !important;
+}
+
+/* SHELL — sama dengan Uang Keluar, tetapi auto-height */
+body.jadwal-uang-masuk-modal-active #page-masuk{
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  position:fixed !important;
+  inset:auto !important;
+  left:50% !important;
+  top:50% !important;
+  width:min(94vw,560px) !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-width:560px !important;
+  max-height:min(88vh,760px) !important;
+  margin:0 !important;
+  padding:16px 18px 0 !important;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  overscroll-behavior:contain !important;
+  scrollbar-width:none !important;
+  -ms-overflow-style:none !important;
+  transform:translate(-50%,-50%) !important;
+  z-index:2147483001 !important;
+  box-sizing:border-box !important;
+  border-radius:24px !important;
+  background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(239,246,255,.84)) !important;
+  border:1px solid rgba(255,255,255,.86) !important;
+  box-shadow:0 28px 80px rgba(15,23,42,.30),inset 0 1px 0 rgba(255,255,255,.95) !important;
+  backdrop-filter:blur(24px) saturate(145%) !important;
+  -webkit-backdrop-filter:blur(24px) saturate(145%) !important;
+  color:#172033 !important;
+  animation:jadwalUangMasukExactIn .18s ease-out !important;
+}
+#jadwal-uang-masuk-modal-backdrop #page-masuk::-webkit-scrollbar{
+  display:none !important;
+  width:0 !important;
+  height:0 !important;
+}
+
+/* HEADER — ukuran, ketebalan, posisi, dan X sama dengan Uang Keluar */
+body.jadwal-uang-masuk-modal-active #page-masuk > h2{
+  position:sticky !important;
+  top:-16px !important;
+  z-index:15 !important;
+  width:auto !important;
+  margin:-16px -18px 16px !important;
+  padding:16px 58px 12px 16px !important;
+  min-height:48px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(239,246,255,.94)) !important;
+  border:0 !important;
+  border-bottom:1px solid rgba(148,163,184,.20) !important;
+  border-radius:24px 24px 0 0 !important;
+  box-shadow:0 6px 16px rgba(15,23,42,.05) !important;
+  color:#172033 !important;
+  letter-spacing:.01em !important;
+  box-sizing:border-box !important;
+}
+body.jadwal-uang-masuk-modal-active #page-masuk > h2::after{
+  content:"" !important;
+  position:absolute !important;
+  left:0 !important;
+  bottom:-1px !important;
+  width:72px !important;
+  height:3px !important;
+  background:#16a34a !important;
+  border-radius:0 3px 3px 0 !important;
+  pointer-events:none !important;
+}
+#jadwal-uang-masuk-modal-close{
+  position:absolute !important;
+  top:9px !important;
+  right:9px !important;
+  z-index:30 !important;
+  width:40px !important;
+  height:40px !important;
+  margin:0 !important;
+  border:1px solid rgba(148,163,184,.25) !important;
+  border-radius:12px !important;
+  background:rgba(255,255,255,.78) !important;
+  color:#334155 !important;
+  font-size:18px !important;
+  line-height:1 !important;
+  font-weight:950 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  box-shadow:0 5px 14px rgba(15,23,42,.10) !important;
+  cursor:pointer !important;
+  touch-action:manipulation !important;
+}
+#jadwal-uang-masuk-modal-close:active{transform:scale(.94)}
+
+/* FORM — mengikuti Uang Keluar, tanpa ruang kosong tambahan */
+body.jadwal-uang-masuk-modal-active #page-masuk > form{
+  padding-bottom:82px !important;
+}
+body.jadwal-uang-masuk-modal-active #page-masuk > form > .flex.justify-end{
+  position:sticky !important;
+  bottom:-1px !important;
+  z-index:20 !important;
+  margin:16px -18px -1px !important;
+  padding:12px 18px 14px !important;
+  background:linear-gradient(180deg,rgba(255,255,255,.84),rgba(239,246,255,.98)) !important;
+  border-top:1px solid rgba(148,163,184,.20) !important;
+  box-shadow:0 -8px 20px rgba(15,23,42,.08) !important;
+}
+body.jadwal-uang-masuk-modal-active #page-masuk > form > .flex.justify-end button[type="submit"]{
+  width:100% !important;
+  min-height:50px !important;
+  border-radius:14px !important;
+  font-weight:900 !important;
+  font-size:14px !important;
+  background:linear-gradient(135deg,#16a34a,#0f9f4b) !important;
+  box-shadow:0 8px 20px rgba(22,163,74,.22) !important;
+  touch-action:manipulation !important;
+}
+
+/* Hilangkan kemungkinan spacer/min-height dari revisi sebelumnya */
+body.jadwal-uang-masuk-modal-active #page-masuk,
+body.jadwal-uang-masuk-modal-active #page-masuk > form{
+  min-height:0 !important;
+}
+body.jadwal-uang-masuk-modal-active #page-masuk > form > :last-child{
+  margin-bottom:0 !important;
+}
+
+@keyframes jadwalUangMasukExactIn{
+  from{opacity:0;transform:translate(-50%,-47%) scale(.975)}
+  to{opacity:1;transform:translate(-50%,-50%) scale(1)}
+}
+
+@media(max-width:640px){
+  #jadwal-uang-masuk-modal-backdrop{padding:10px !important}
+  body.jadwal-uang-masuk-modal-active #page-masuk{
+    width:calc(100vw - 20px) !important;
+    height:auto !important;
+    min-height:0 !important;
+    max-height:calc(100dvh - 20px) !important;
+    padding:14px 14px 0 !important;
+    border-radius:20px !important;
+  }
+  body.jadwal-uang-masuk-modal-active #page-masuk > h2{
+    top:-14px !important;
+    margin:-14px -14px 14px !important;
+    padding:14px 52px 11px 14px !important;
+    min-height:62px !important;
+    border-radius:20px 20px 0 0 !important;
+  }
+  #jadwal-uang-masuk-modal-close{
+    top:7px !important;
+    right:7px !important;
+    width:38px !important;
+    height:38px !important;
+  }
+  body.jadwal-uang-masuk-modal-active #page-masuk > form{
+    padding-bottom:78px !important;
+  }
+  body.jadwal-uang-masuk-modal-active #page-masuk > form > .flex.justify-end{
+    margin:14px -14px -1px !important;
+    padding:10px 14px 12px !important;
+  }
+}
+</style>
+
+
+
+<!-- =========================================================
+     UANG MASUK BARU — POPUP MANUAL LAPANGAN
+     Dipakai hanya dari dock/menu Uang Masuk.
+     Popup pelunasan tim dari Jadwal Hari Ini tetap memakai
+     #page-masuk / __openJadwalUangMasukModal yang lama.
+     ========================================================= -->
+<div id="uang-masuk-manual-backdrop" aria-hidden="true">
+  <div id="uang-masuk-manual-shell" role="dialog" aria-modal="true" aria-labelledby="uang-masuk-manual-title">
+    <div id="uang-masuk-manual-page">
+      <h2 id="uang-masuk-manual-title">
+        UANG MASUK
+        <button type="button" id="uang-masuk-manual-close" aria-label="Tutup Uang Masuk">✕</button>
+      </h2>
+
+      <form id="uang-masuk-manual-form">
+        <input id="um-manual-ket" class="uang-masuk-manual-input" type="text"
+               placeholder="Keterangan Pemasukan" autocomplete="off" required>
+
+        <input id="um-manual-jumlah" class="uang-masuk-manual-input" type="text"
+               inputmode="numeric" placeholder="Nominal (Rp)" autocomplete="off" required>
+
+        <div class="uang-masuk-manual-method-field">
+          <label class="uang-masuk-manual-label">METODE PEMBAYARAN</label>
+          <div class="uang-masuk-manual-method-wrap" id="uang-masuk-manual-method-wrap">
+            <button type="button" id="uang-masuk-manual-method-button" class="uang-masuk-manual-method-button" aria-haspopup="listbox" aria-expanded="false">
+              <span class="uang-masuk-manual-method-icon" id="uang-masuk-manual-method-icon">💵</span>
+              <span class="uang-masuk-manual-method-value" id="uang-masuk-manual-method-value">Cash</span>
+              <span class="uang-masuk-manual-method-chevron">⌄</span>
+            </button>
+            <div class="uang-masuk-manual-method-menu hidden" id="uang-masuk-manual-method-menu" role="listbox">
+              <button type="button" class="uang-masuk-manual-method-option selected" data-value="Cash"><span>💵</span><span>Cash</span></button>
+              <button type="button" class="uang-masuk-manual-method-option" data-value="QRIS"><span>▣</span><span>QRIS</span></button>
+              <button type="button" class="uang-masuk-manual-method-option" data-value="Transfer"><span>🏦</span><span>Transfer</span></button>
+            </div>
+            <input type="hidden" id="uang-masuk-manual-method" value="Cash">
+          </div>
+        </div>
+
+        <label class="uang-masuk-manual-label">TANGGAL PEMASUKAN</label>
+
+        <div class="uang-masuk-manual-date-wrap">
+          <input id="um-manual-tgl" class="uang-masuk-manual-native-date"
+                 type="date" tabindex="-1" aria-hidden="true" required>
+          <button type="button" id="uang-masuk-manual-date-button"
+                  class="uang-masuk-manual-date-button" aria-label="Pilih tanggal pemasukan">
+            <span class="uang-masuk-manual-date-icon">📅</span>
+            <span id="uang-masuk-manual-date-text">Pilih tanggal</span>
+            <span class="uang-masuk-manual-date-chevron">⌄</span>
+          </button>
+        </div>
+
+        <div class="uang-masuk-manual-actions">
+          <button type="submit" id="uang-masuk-manual-save">💾 <span>Simpan</span></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style id="uang-masuk-manual-exact-uang-keluar">
+/* =========================================================
+   IDENTIK DENGAN SHELL UANG KELUAR
+   ========================================================= */
+#uang-masuk-manual-backdrop{
+  position:fixed !important;
+  inset:0 !important;
+  z-index:2147483000 !important;
+  display:none;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:18px !important;
+  box-sizing:border-box !important;
+  background:rgba(15,23,42,.42) !important;
+  backdrop-filter:blur(7px) !important;
+  -webkit-backdrop-filter:blur(7px) !important;
+}
+#uang-masuk-manual-backdrop.is-open{display:flex !important}
+
+#uang-masuk-manual-shell{
+  position:relative !important;
+  width:min(94vw,560px) !important;
+  height:auto !important;
+  max-width:560px !important;
+  max-height:calc(100dvh - 36px) !important;
+  min-height:0 !important;
+  margin:0 !important;
+  flex:0 0 auto !important;
+  box-sizing:border-box !important;
+  overflow:hidden !important;
+  border-radius:24px !important;
+  background:linear-gradient(145deg,rgba(255,255,255,.97),rgba(239,246,255,.90)) !important;
+  border:1px solid rgba(255,255,255,.90) !important;
+  box-shadow:0 28px 80px rgba(15,23,42,.30),inset 0 1px 0 rgba(255,255,255,.95) !important;
+  backdrop-filter:blur(24px) saturate(145%) !important;
+  -webkit-backdrop-filter:blur(24px) saturate(145%) !important;
+  z-index:2147483001 !important;
+  animation:uangMasukManualShellIn .18s ease-out !important;
+}
+#uang-masuk-manual-page{
+  width:100% !important;
+  height:auto !important;
+  max-height:calc(100dvh - 36px) !important;
+  min-height:0 !important;
+  margin:0 !important;
+  padding:16px 18px 0 !important;
+  box-sizing:border-box !important;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  scrollbar-width:none !important;
+  -ms-overflow-style:none !important;
+  color:#172033 !important;
+}
+#uang-masuk-manual-page::-webkit-scrollbar{
+  display:none !important;width:0 !important;height:0 !important;
+}
+
+/* HEADER — sama ukuran dan ketebalan Uang Keluar */
+#uang-masuk-manual-title{
+  position:sticky !important;
+  top:-16px !important;
+  z-index:120 !important;
+  width:calc(100% + 36px) !important;
+  margin:-16px -18px 14px !important;
+  padding:14px 54px 12px !important;
+  min-height:52px !important;
+  box-sizing:border-box !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  background:linear-gradient(180deg,rgba(255,255,255,.995),rgba(247,250,255,.985)) !important;
+  border-bottom:1px solid rgba(148,163,184,.20) !important;
+  border-radius:24px 24px 0 0 !important;
+  box-shadow:0 6px 16px rgba(15,23,42,.06) !important;
+  isolation:isolate !important;
+  color:#172033 !important;
+  letter-spacing:.01em !important;
+  font-size:18px !important;
+  font-weight:950 !important;
+  line-height:1.2 !important;
+}
+#uang-masuk-manual-title::after{
+  content:"" !important;
+  position:absolute !important;
+  left:0 !important;
+  bottom:-1px !important;
+  width:72px !important;
+  height:3px !important;
+  background:linear-gradient(90deg,#16a34a,#22c55e) !important;
+  border-radius:3px !important;
+  pointer-events:none !important;
+}
+#uang-masuk-manual-close{
+  position:absolute !important;
+  top:10px !important;
+  right:10px !important;
+  z-index:140 !important;
+  width:40px !important;
+  height:40px !important;
+  margin:0 !important;
+  float:none !important;
+  border:1px solid rgba(148,163,184,.25) !important;
+  border-radius:13px !important;
+  background:rgba(255,255,255,.82) !important;
+  color:#334155 !important;
+  font-size:18px !important;
+  line-height:1 !important;
+  font-weight:950 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  box-shadow:0 5px 14px rgba(15,23,42,.10) !important;
+  cursor:pointer !important;
+  touch-action:manipulation !important;
+}
+
+/* INPUT — mengikuti field Uang Keluar */
+#uang-masuk-manual-form{
+  display:block !important;
+  margin:0 !important;
+  padding:0 0 0 !important;
+}
+.uang-masuk-manual-input{
+  width:100% !important;
+  min-height:48px !important;
+  box-sizing:border-box !important;
+  display:block !important;
+  margin:0 0 14px !important;
+  padding:10px 12px !important;
+  border:1px solid rgba(255,255,255,.62) !important;
+  border-radius:.75rem !important;
+  background:rgba(255,255,255,.30) !important;
+  color:#0f172a !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.48),0 4px 14px rgba(15,23,42,.05) !important;
+  backdrop-filter:blur(12px) saturate(130%) !important;
+  -webkit-backdrop-filter:blur(12px) saturate(130%) !important;
+  font-size:13px !important;
+  font-weight:900 !important;
+  outline:none !important;
+}
+.uang-masuk-manual-input::placeholder{
+  color:#64748b !important;
+  opacity:.78 !important;
+}
+.uang-masuk-manual-input:focus{
+  border-color:rgba(16,185,129,.58) !important;
+  box-shadow:0 0 0 3px rgba(16,185,129,.12),inset 0 1px 0 rgba(255,255,255,.48),0 4px 14px rgba(15,23,42,.05) !important;
+}
+.uang-masuk-manual-label{
+  display:block !important;
+  margin:0 0 7px !important;
+  color:#172033 !important;
+  font-size:12px !important;
+  line-height:1.2 !important;
+  font-weight:950 !important;
+  letter-spacing:.01em !important;
+}
+
+/* DATE — pola visual yang sama dengan Uang Keluar */
+.uang-masuk-manual-method-field{position:relative!important;z-index:35!important;margin:0 0 14px!important}
+.uang-masuk-manual-method-wrap{position:relative!important;width:100%!important}
+.uang-masuk-manual-method-button{width:100%!important;min-height:48px!important;box-sizing:border-box!important;display:flex!important;align-items:center!important;gap:10px!important;padding:10px 12px!important;border:1px solid rgba(255,255,255,.62)!important;border-radius:.75rem!important;background:rgba(255,255,255,.38)!important;color:#0f172a!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.48),0 4px 14px rgba(15,23,42,.05)!important;backdrop-filter:blur(12px) saturate(130%)!important;-webkit-backdrop-filter:blur(12px) saturate(130%)!important;font-size:13px!important;font-weight:900!important;text-align:left!important;cursor:pointer!important;transition:border-color .15s,box-shadow .15s,background .15s!important}
+.uang-masuk-manual-method-button:hover,.uang-masuk-manual-method-wrap.open .uang-masuk-manual-method-button{border-color:rgba(16,185,129,.58)!important;background:rgba(255,255,255,.62)!important;box-shadow:0 0 0 3px rgba(16,185,129,.10),inset 0 1px 0 rgba(255,255,255,.48),0 4px 14px rgba(15,23,42,.05)!important}
+.uang-masuk-manual-method-icon{width:28px!important;height:28px!important;display:grid!important;place-items:center!important;flex:0 0 28px!important;border-radius:8px!important;background:rgba(239,246,255,.90)!important;border:1px solid #dbeafe!important;font-size:15px!important}
+.uang-masuk-manual-method-value{flex:1!important;font-weight:900!important}
+.uang-masuk-manual-method-chevron{font-size:18px!important;line-height:1!important;color:#64748b!important;transition:transform .15s ease!important}
+.uang-masuk-manual-method-wrap.open .uang-masuk-manual-method-chevron{transform:rotate(180deg)!important}
+.uang-masuk-manual-method-menu{position:absolute!important;left:0!important;right:0!important;top:calc(100% + 6px)!important;padding:5px!important;border:1px solid rgba(191,219,254,.95)!important;border-radius:12px!important;background:rgba(255,255,255,.98)!important;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important;box-shadow:0 16px 35px rgba(15,23,42,.18)!important;z-index:2147483647!important;animation:uangMasukManualMethodDrop .14s ease-out!important}
+.uang-masuk-manual-method-option{width:100%!important;min-height:40px!important;display:flex!important;align-items:center!important;gap:10px!important;padding:9px 10px!important;border:0!important;border-radius:8px!important;background:transparent!important;color:#172033!important;font-size:13px!important;font-weight:900!important;text-align:left!important;cursor:pointer!important}
+.uang-masuk-manual-method-option span:first-child{width:27px!important;text-align:center!important;font-size:15px!important}
+.uang-masuk-manual-method-option:hover{background:#eff6ff!important;color:#1d4ed8!important}
+.uang-masuk-manual-method-option.selected{background:#dbeafe!important;color:#1e40af!important}
+@keyframes uangMasukManualMethodDrop{from{opacity:0;transform:translateY(-4px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+.uang-masuk-manual-date-wrap{
+  position:relative !important;
+  width:100% !important;
+  min-width:0 !important;
+  margin:0 0 14px !important;
+}
+.uang-masuk-manual-native-date{
+  position:absolute !important;
+  width:1px !important;
+  height:1px !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+  overflow:hidden !important;
+}
+.uang-masuk-manual-date-button{
+  width:100% !important;
+  min-height:52px !important;
+  padding:9px 12px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  gap:10px !important;
+  border:1px solid rgba(255,255,255,.62) !important;
+  border-radius:.75rem !important;
+  background:rgba(255,255,255,.30) !important;
+  color:#0f172a !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.48),0 4px 14px rgba(15,23,42,.05) !important;
+  backdrop-filter:blur(12px) saturate(130%) !important;
+  -webkit-backdrop-filter:blur(12px) saturate(130%) !important;
+  font-size:13px !important;
+  font-weight:950 !important;
+  cursor:pointer !important;
+  text-align:left !important;
+  transition:transform .16s ease,background .16s ease,box-shadow .16s ease !important;
+}
+.uang-masuk-manual-date-button:hover{background:rgba(255,255,255,.48) !important}
+.uang-masuk-manual-date-button:active{transform:scale(.985) !important}
+.uang-masuk-manual-date-icon{font-size:17px !important;line-height:1 !important;flex:0 0 auto !important}
+#uang-masuk-manual-date-text{
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  font-size:13px !important;
+  font-weight:950 !important;
+}
+.uang-masuk-manual-date-chevron{
+  font-size:17px !important;
+  line-height:1 !important;
+  margin-left:auto !important;
+}
+
+/* FOOTER — persis pola footer Uang Keluar */
+.uang-masuk-manual-actions{
+  position:sticky !important;
+  bottom:-1px !important;
+  z-index:125 !important;
+  display:flex !important;
+  align-items:stretch !important;
+  justify-content:center !important;
+  gap:10px !important;
+  margin:18px -18px 0 !important;
+  padding:12px 18px 14px !important;
+  background:linear-gradient(180deg,rgba(248,251,255,.90),rgba(255,255,255,.98)) !important;
+  border-top:1px solid rgba(148,163,184,.22) !important;
+  box-shadow:0 -8px 20px rgba(15,23,42,.07) !important;
+  backdrop-filter:blur(18px) saturate(135%) !important;
+  -webkit-backdrop-filter:blur(18px) saturate(135%) !important;
+}
+#uang-masuk-manual-save{
+  width:100% !important;
+  min-height:46px !important;
+  border-radius:12px !important;
+  font-weight:900 !important;
+  font-size:13px !important;
+  line-height:1.15 !important;
+  background:#16a34a !important;
+  color:#fff !important;
+  border:1px solid #22c55e !important;
+  box-shadow:0 7px 16px rgba(22,163,74,.18) !important;
+  cursor:pointer !important;
+  touch-action:manipulation !important;
+}
+#uang-masuk-manual-save:active{transform:scale(.985) !important}
+
+@keyframes uangMasukManualShellIn{
+  from{opacity:0;transform:scale(.975)}
+  to{opacity:1;transform:scale(1)}
+}
+
+@media(max-width:640px){
+  #uang-masuk-manual-backdrop{padding:10px !important}
+  #uang-masuk-manual-shell{
+    width:calc(100vw - 20px) !important;
+    max-width:none !important;
+    max-height:calc(100dvh - 20px) !important;
+    border-radius:20px !important;
+  }
+  #uang-masuk-manual-page{
+    max-height:calc(100dvh - 20px) !important;
+    padding:14px 14px 0 !important;
+  }
+  #uang-masuk-manual-title{
+    top:-14px !important;
+    width:calc(100% + 28px) !important;
+    margin:-14px -14px 12px !important;
+    padding:13px 48px 11px !important;
+    min-height:48px !important;
+    border-radius:20px 20px 0 0 !important;
+    font-size:17px !important;
+  }
+  #uang-masuk-manual-close{
+    top:7px !important;
+    right:7px !important;
+    width:38px !important;
+    height:38px !important;
+  }
+  .uang-masuk-manual-input{
+    min-height:48px !important;
+    margin-bottom:14px !important;
+  }
+  .uang-masuk-manual-date-button{min-height:52px !important}
+  .uang-masuk-manual-actions{
+    margin:14px -14px 0 !important;
+    padding:10px 12px 12px !important;
+  }
+}
+</style>
+
+<script id="uang-masuk-manual-popup-final">
+(function(){
+  'use strict';
+
+  const $ = id => document.getElementById(id);
+
+  function localDate(d){
+    d = d || new Date();
+    return d.getFullYear() + '-' +
+      String(d.getMonth()+1).padStart(2,'0') + '-' +
+      String(d.getDate()).padStart(2,'0');
+  }
+
+  function formatDateId(value){
+    if(!value) return 'Pilih tanggal';
+    const d = new Date(value + 'T00:00:00');
+    const hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+    const bulan = ['Januari','Februari','Maret','April','Mei','Juni',
+                   'Juli','Agustus','September','Oktober','November','Desember'];
+    return hari[d.getDay()] + ', ' + String(d.getDate()).padStart(2,'0') +
+      ' ' + bulan[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  function setDate(v){
+    const input=$('um-manual-tgl');
+    if(!input) return;
+    input.value=v || localDate();
+    const txt=$('uang-masuk-manual-date-text');
+    if(txt) txt.textContent=formatDateId(input.value);
+  }
+
+  function close(){
+    const bd=$('uang-masuk-manual-backdrop');
+    if(bd) bd.classList.remove('is-open');
+    document.body.style.overflow='';
+    const form=$('uang-masuk-manual-form');
+    if(form) form.reset();
+    setDate(localDate());
+  }
+
+  function open(){
+    const bd=$('uang-masuk-manual-backdrop');
+    if(!bd) return;
+    bd.classList.add('is-open');
+    document.body.style.overflow='hidden';
+    const form=$('uang-masuk-manual-form');
+    if(form) form.reset();
+    setMethod('Cash');
+    setDate(localDate());
+    requestAnimationFrame(function(){
+      const ket=$('um-manual-ket');
+      if(ket) ket.focus();
+    });
+  }
+
+  $('uang-masuk-manual-close')?.addEventListener('click',function(e){
+    e.preventDefault(); e.stopPropagation(); close();
+  });
+  $('uang-masuk-manual-backdrop')?.addEventListener('pointerdown',function(e){
+    if(e.target===this) close();
+  });
+
+  $('um-manual-jumlah')?.addEventListener('input',function(){
+    if(typeof window.formatNominalInput==='function') window.formatNominalInput(this);
+    else this.value=this.value.replace(/[^\d]/g,'');
+  });
+
+  // Custom dropdown metode pembayaran: default Cash, pilihan muncul saat diklik.
+  const methodWrap=$('uang-masuk-manual-method-wrap');
+  const methodBtn=$('uang-masuk-manual-method-button');
+  const methodMenu=$('uang-masuk-manual-method-menu');
+  const methodValue=$('uang-masuk-manual-method-value');
+  const methodIcon=$('uang-masuk-manual-method-icon');
+  const methodHidden=$('uang-masuk-manual-method');
+  const methodMeta={Cash:{icon:'💵',label:'Cash'},QRIS:{icon:'▣',label:'QRIS'},Transfer:{icon:'🏦',label:'Transfer'}};
+  function closeMethodMenu(){
+    methodMenu?.classList.add('hidden'); methodWrap?.classList.remove('open'); methodBtn?.setAttribute('aria-expanded','false');
+  }
+  function setMethod(value){
+    const safe=value||'Cash', meta=methodMeta[safe]||methodMeta.Cash;
+    if(methodHidden) methodHidden.value=safe;
+    if(methodValue) methodValue.textContent=meta.label;
+    if(methodIcon) methodIcon.textContent=meta.icon;
+    methodMenu?.querySelectorAll('.uang-masuk-manual-method-option').forEach(x=>x.classList.toggle('selected',x.dataset.value===safe));
+    closeMethodMenu();
+  }
+  methodBtn?.addEventListener('click',function(e){
+    e.preventDefault(); e.stopPropagation();
+    if(methodMenu?.classList.contains('hidden')){methodMenu?.classList.remove('hidden');methodWrap?.classList.add('open');methodBtn.setAttribute('aria-expanded','true');}
+    else closeMethodMenu();
+  });
+  methodMenu?.querySelectorAll('.uang-masuk-manual-method-option').forEach(function(opt){
+    opt.addEventListener('click',function(e){
+      e.preventDefault(); e.stopPropagation();
+      setMethod(this.dataset.value||'Cash');
+    });
+  });
+  document.addEventListener('click',function(e){if(methodWrap && !methodWrap.contains(e.target)) closeMethodMenu();});
+
+  $('uang-masuk-manual-date-button')?.addEventListener('click',function(e){
+    e.preventDefault(); e.stopPropagation();
+    const input=$('um-manual-tgl');
+    if(!input) return;
+    // Gunakan kalender custom Uang Keluar dengan input sementara yang terpisah.
+    openCustomCalendar();
+  });
+
+  function openCustomCalendar(){
+    const old=document.getElementById('uang-masuk-manual-calendar-overlay');
+    if(old) old.remove();
+
+    let selected=$('um-manual-tgl')?.value || localDate();
+    let view=new Date(selected+'T00:00:00');
+    view.setDate(1);
+
+    const overlay=document.createElement('div');
+    overlay.id='uang-masuk-manual-calendar-overlay';
+    overlay.className='final-date-calendar-overlay';
+    overlay.style.cssText='position:fixed!important;inset:0!important;z-index:2147483647!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:16px!important;background:rgba(15,23,42,.46)!important;backdrop-filter:blur(6px)!important;-webkit-backdrop-filter:blur(6px)!important;';
+    overlay.innerHTML=`
+      <div class="uang-keluar-calendar-card" role="dialog" aria-modal="true" aria-label="Pilih tanggal pemasukan">
+        <div class="uang-keluar-calendar-head">
+          <div><div class="uang-keluar-calendar-kicker">UANG MASUK</div><div class="uang-keluar-calendar-title">Pilih tanggal pemasukan</div></div>
+          <button type="button" class="uang-keluar-calendar-close" aria-label="Tutup">×</button>
+        </div>
+        <div class="uang-keluar-calendar-nav">
+          <button type="button" class="uang-keluar-calendar-nav-btn" data-prev aria-label="Bulan sebelumnya">‹</button>
+          <div class="uang-keluar-calendar-month" data-month></div>
+          <button type="button" class="uang-keluar-calendar-nav-btn" data-next aria-label="Bulan berikutnya">›</button>
+        </div>
+        <div class="uang-keluar-calendar-week">${['Min','Sen','Sel','Rab','Kam','Jum','Sab'].map(x=>'<span>'+x.slice(0,2)+'</span>').join('')}</div>
+        <div class="uang-keluar-calendar-days" data-days></div>
+        <div class="uang-keluar-calendar-footer">
+          <button type="button" class="uang-keluar-calendar-today">📅 Hari Ini</button>
+          <button type="button" class="uang-keluar-calendar-cancel">Tutup</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+
+    const monthNames=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+
+    function key(d){
+      return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    }
+    function render(){
+      const month=overlay.querySelector('[data-month]');
+      const grid=overlay.querySelector('[data-days]');
+      if(!month||!grid)return;
+      month.textContent=monthNames[view.getMonth()]+' '+view.getFullYear();
+      grid.innerHTML='';
+      const first=new Date(view.getFullYear(),view.getMonth(),1).getDay();
+      const total=new Date(view.getFullYear(),view.getMonth()+1,0).getDate();
+      const prevTotal=new Date(view.getFullYear(),view.getMonth(),0).getDate();
+      for(let i=0;i<42;i++){
+        let day=i-first+1, yy=view.getFullYear(), mm=view.getMonth(), muted=false;
+        if(day<1){day=prevTotal+day;mm--;muted=true;}
+        else if(day>total){day-=total;mm++;muted=true;}
+        const d=new Date(yy,mm,day), v=key(d);
+        const b=document.createElement('button');
+        b.type='button';
+        b.className='uang-keluar-calendar-day'+(muted?' muted':'')+(v===localDate()?' today':'')+(v===selected?' selected':'');
+        b.textContent=day;
+        b.addEventListener('click',function(ev){
+          ev.preventDefault();ev.stopPropagation();
+          selected=v; setDate(v); overlay.remove(); document.body.style.overflow='hidden';
+        });
+        grid.appendChild(b);
+      }
+    }
+    const closeCal=()=>{overlay.remove();document.body.style.overflow='hidden';};
+    overlay.querySelector('.uang-keluar-calendar-close').onclick=closeCal;
+    overlay.querySelector('.uang-keluar-calendar-cancel').onclick=closeCal;
+    overlay.querySelector('[data-prev]').onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()-1,1);render()};
+    overlay.querySelector('[data-next]').onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()+1,1);render()};
+    overlay.querySelector('.uang-keluar-calendar-today').onclick=()=>{selected=localDate();setDate(selected);closeCal()};
+    overlay.addEventListener('click',e=>{if(e.target===overlay)closeCal()});
+    render();
+  }
+
+  $('uang-masuk-manual-form')?.addEventListener('submit',async function(e){
+    e.preventDefault();
+    const ket=String($('um-manual-ket')?.value||'').trim();
+    const jumlah=typeof window.parseNominalInputValue==='function'
+      ? Number(window.parseNominalInputValue($('um-manual-jumlah')?.value||''))
+      : Number(String($('um-manual-jumlah')?.value||'').replace(/[^\d]/g,''));
+    const tgl=$('um-manual-tgl')?.value||localDate();
+
+    if(!ket){alert('Mohon isi keterangan pemasukan.');return;}
+    if(!Number.isFinite(jumlah)||jumlah<=0){alert('Nominal pemasukan harus lebih dari Rp 0.');return;}
+    if(!tgl){alert('Mohon pilih tanggal pemasukan.');return;}
+
+    const db=window.__APP_FIREBASE_DB__;
+    const refFn=window.__APP_FIREBASE_REF__;
+    const pushFn=window.__APP_FIREBASE_PUSH__;
+    if(!db||!refFn||!pushFn){
+      alert('Koneksi database belum siap. Silakan coba lagi.');
+      return;
+    }
+
+    const btn=$('uang-masuk-manual-save');
+    if(btn?.dataset.saving==='1') return;
+    if(btn) {btn.dataset.saving='1';btn.disabled=true;}
+
+    try{
+      await pushFn(refFn(db,'pemasukan'),{
+        ket:ket,
+        jumlah:jumlah,
+        jumlah1:jumlah,
+        jumlah2:0,
+        metode:'Cash',
+        metode1:'Cash',
+        metode2:'Cash',
+        tgl:tgl,
+        sumber:'Lapangan',
+        kategori:'Uang Masuk',
+        jenisPembayaran:'manual',
+        timNamaBersih:'',
+        timestamp:Date.now()
+      });
+
+      if(typeof window.showSuccessPopup==='function'){
+        window.showSuccessPopup('Uang Masuk berhasil disimpan.');
+      }else{
+        alert('Uang Masuk berhasil disimpan.');
+      }
+
+      setTimeout(close,220);
+    }catch(err){
+      console.error('Uang Masuk manual gagal disimpan:',err);
+      alert('Gagal menyimpan Uang Masuk: '+(err?.message||err));
+    }finally{
+      if(btn){btn.dataset.saving='';btn.disabled=false;}
+    }
+  });
+
+  // Hanya dock/menu "Uang Masuk" memakai popup manual ini.
+  function wrapQuick(){
+    if(typeof window.quickOpenPage!=='function') return false;
+    if(window.quickOpenPage.__manualUangMasukWrapped) return true;
+    const original=window.quickOpenPage;
+    const wrapped=function(id){
+      if(id==='masuk'){
+        open();
+        return;
+      }
+      return original.apply(this,arguments);
+    };
+    wrapped.__manualUangMasukWrapped=true;
+    wrapped.__original=original;
+    window.quickOpenPage=wrapped;
+    return true;
+  }
+
+  if(!wrapQuick()){
+    let tries=0;
+    const timer=setInterval(function(){
+      if(wrapQuick()||++tries>120) clearInterval(timer);
+    },100);
+  }
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){
+      const cal=document.getElementById('uang-masuk-manual-calendar-overlay');
+      if(cal){cal.remove();document.body.style.overflow='hidden';return;}
+      const bd=$('uang-masuk-manual-backdrop');
+      if(bd?.classList.contains('is-open')) close();
+    }
+  },true);
 })();
 </script>
