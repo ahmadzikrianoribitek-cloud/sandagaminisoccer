@@ -14275,6 +14275,104 @@ kaosKakiTerjual: jumlahKaosKaki,
             if(bulan && !bulan.value) bulan.value = getLocalDateString().substring(0,7);
         }
 
+        // =========================================================
+        // RIWAYAT PELUNASAN MEMBER
+        // Selalu tampilkan data pelunasan yang tersimpan di Firebase.
+        // Jika member dipilih -> riwayat difilter ke member tersebut.
+        // Jika belum memilih member -> tampilkan seluruh riwayat.
+        // Setiap alokasi tanggal + jam dibuat menjadi satu baris.
+        // =========================================================
+        function renderPelunasanMemberHistory(history, filterNama = '') {
+            if(!history) return;
+
+            const target = String(filterNama || '').trim().toLowerCase();
+            const allRecords = Object.entries(globalCache.pelunasanMember || {});
+            const records = allRecords
+                .filter(([_, r]) => {
+                    if(!target) return true;
+                    return String(r?.member || '').trim().toLowerCase() === target;
+                })
+                .sort((a,b) => Number(b[1]?.timestamp || 0) - Number(a[1]?.timestamp || 0));
+
+            const allocationRows = [];
+            records.forEach(([key, r]) => {
+                const alokasi = Array.isArray(r?.alokasi) ? r.alokasi : [];
+                if(alokasi.length) {
+                    alokasi.forEach((a, index) => {
+                        allocationRows.push({
+                            key,
+                            index,
+                            member: r?.member || '-',
+                            tanggalBayar: r?.tanggalBayar || '',
+                            metode: r?.metode || '-',
+                            tanggal: a?.tanggal || r?.tanggalJadwalDipilih || '',
+                            jam: a?.jam || '-',
+                            amount: Number(a?.amount || 0),
+                            timestamp: Number(r?.timestamp || 0)
+                        });
+                    });
+                } else {
+                    // Kompatibilitas data lama yang belum memiliki array alokasi.
+                    allocationRows.push({
+                        key,
+                        index: 0,
+                        member: r?.member || '-',
+                        tanggalBayar: r?.tanggalBayar || '',
+                        metode: r?.metode || '-',
+                        tanggal: r?.tanggalJadwalDipilih || '',
+                        jam: '-',
+                        amount: Number(r?.jumlah || 0),
+                        timestamp: Number(r?.timestamp || 0)
+                    });
+                }
+            });
+
+            allocationRows.sort((a,b) => {
+                const dateA = String(a.tanggal || '');
+                const dateB = String(b.tanggal || '');
+                if(dateA !== dateB) return dateB.localeCompare(dateA);
+                const jamA = String(a.jam || '');
+                const jamB = String(b.jam || '');
+                if(jamA !== jamB) return jamB.localeCompare(jamA);
+                return b.timestamp - a.timestamp;
+            });
+
+            if(!allocationRows.length) {
+                history.innerHTML = '<div class="text-xs text-slate-500 p-2">Belum ada riwayat pelunasan member.</div>';
+                return;
+            }
+
+            history.innerHTML = `
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs min-w-[760px]">
+                        <thead>
+                            <tr class="border-b bg-slate-50">
+                                ${!target ? '<th class="text-left p-2">Member</th>' : ''}
+                                <th class="text-left p-2">Tanggal Jadwal</th>
+                                <th class="text-left p-2">Jam</th>
+                                <th class="text-left p-2">Tanggal Bayar</th>
+                                <th class="text-left p-2">Bayar</th>
+                                <th class="text-left p-2">Metode</th>
+                                <th class="text-left p-2">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${allocationRows.slice(0,100).map(a => `
+                                <tr class="border-b">
+                                    ${!target ? `<td class="p-2 font-black">${escapeHtmlSparing(a.member)}</td>` : ''}
+                                    <td class="p-2 font-black">${formatTanggalFull(a.tanggal || '')}</td>
+                                    <td class="p-2 font-bold">${escapeHtmlSparing(a.jam || '-')}</td>
+                                    <td class="p-2">${formatTanggalFull(a.tanggalBayar || '')}</td>
+                                    <td class="p-2 font-black text-emerald-700">${formatRupiah(a.amount)}</td>
+                                    <td class="p-2">${escapeHtmlSparing(a.metode || '-')}</td>
+                                    <td class="p-2 font-black text-emerald-700">LUNAS</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>`;
+        }
+
         window.renderPelunasanMember = () => {
             refreshPelunasanMemberSelect();
             ensurePelunasanPaymentDate();
@@ -14284,14 +14382,18 @@ kaosKakiTerjual: jumlahKaosKaki,
             const summary = document.getElementById('pm-summary');
             const history = document.getElementById('pm-riwayat');
             if(!box || !summary) return;
+
+            // Riwayat tetap ditampilkan walaupun belum memilih member.
+            renderPelunasanMemberHistory(history, nama);
+
             if(!nama) {
                 const tanggalSelect = document.getElementById('pm-tanggal-jadwal');
                 if(tanggalSelect) tanggalSelect.innerHTML='<option value="">-- Pilih Tanggal Jadwal --</option>';
                 summary.innerHTML='<div class="rounded-xl bg-slate-100 p-3 text-xs text-slate-500">Pilih member untuk melihat tagihan.</div>';
                 box.innerHTML='';
-                if(history) history.innerHTML='';
                 return;
             }
+
             const dues = getOpenDuesForMember(nama, month);
             refreshPelunasanTanggalSelect(dues);
             const total = dues.reduce((s,d)=>s+d.nominal,0);
@@ -14303,8 +14405,6 @@ kaosKakiTerjual: jumlahKaosKaki,
             } else {
                 box.innerHTML = dues.map(d=>`<div class="flex items-center justify-between gap-3 rounded-xl border ${d.sisa>0?'border-amber-300 bg-amber-50':'border-emerald-300 bg-emerald-50'} p-3"><div><div class="text-xs font-black">${formatTanggalFull(d.tanggal)} · ${d.jam}</div><div class="text-[10px] text-slate-500">Tagihan ${formatRupiah(d.nominal)}</div></div><div class="text-right"><div class="text-xs font-black ${d.sisa>0?'text-rose-700':'text-emerald-700'}">${d.sisa>0?'Sisa '+formatRupiah(d.sisa):'LUNAS'}</div><div class="text-[10px] text-slate-500">Bayar ${formatRupiah(d.terbayar)}</div></div></div>`).join('');
             }
-            const records = Object.entries(globalCache.pelunasanMember || {}).filter(([_,r])=>String(r.member||'').trim().toLowerCase()===nama.trim().toLowerCase()).sort((a,b)=>Number(b.timestamp||0)-Number(a.timestamp||0));
-            if(history) history.innerHTML = records.length ? `<table class="w-full text-xs"><thead><tr class="border-b"><th class="text-left p-2">Tanggal</th><th class="text-left p-2">Bayar</th><th class="text-left p-2">Metode</th><th class="text-left p-2">Alokasi</th></tr></thead><tbody>${records.slice(0,20).map(([k,r])=>`<tr class="border-b"><td class="p-2">${formatTanggalFull(r.tanggalBayar || '')}</td><td class="p-2 font-black">${formatRupiah(r.jumlah)}</td><td class="p-2">${r.metode||'-'}</td><td class="p-2">${r.tanggalJadwalDipilih ? formatTanggalFull(r.tanggalJadwalDipilih) + '<br>' : ''}${(r.alokasi||[]).map(a=>`${a.tanggal} ${a.jam}: ${formatRupiah(a.amount)}`).join('<br>')||'-'}</td></tr>`).join('')}</tbody></table>` : '<div class="text-xs text-slate-500 p-2">Belum ada riwayat pelunasan.</div>';
             updatePelunasanMemberPreview();
         };
 
