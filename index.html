@@ -12959,6 +12959,28 @@ kaosKakiTerjual: jumlahKaosKaki,
             }
         };
 
+        // =========================================================
+        // KONFIRMASI PERPANJANGAN MEMBER VIA WHATSAPP
+        // Membuka WhatsApp dengan pesan konfirmasi yang otomatis
+        // mengambil nama tim dan bulan berjalan.
+        // =========================================================
+        window.konfirmasiPerpanjanganMember = (nama, wa) => {
+            const nomor = String(wa || '').trim();
+            if(!nomor) {
+                alert('Nomor WhatsApp untuk tim ini belum tersedia. Silakan tambahkan nomor WA terlebih dahulu.');
+                return;
+            }
+
+            const bulan = new Intl.DateTimeFormat('id-ID', { month: 'long' }).format(new Date());
+            const pesan =
+                `Permisi kak, kami dari tim admin Sandaga Minisoccer 2 ingin konfirmasi untuk ${String(nama || 'tim ini')}, ` +
+                `apakah di bulan ${bulan} ini ingin melanjutkan menjadi member di Sandaga Minisoccer 2, ` +
+                `kami tunggu konfirmasinya kak, Terimakasih`;
+
+            const url = getWhatsAppUrl(nomor, pesan);
+            if(url) window.open(url, '_blank', 'noopener,noreferrer');
+        };
+
         window.editWaMember = async (key) => {
             let current = '';
             Object.values(globalCache.member || {}).forEach(perHari => {
@@ -14611,6 +14633,12 @@ kaosKakiTerjual: jumlahKaosKaki,
                                 ${berhentiButton}
                                 ${hapusButton}
                                 ${waButton}
+                                <button type="button"
+                                        onclick="konfirmasiPerpanjanganMember(decodeURIComponent('${encodeURIComponent(String(group.nama))}'), decodeURIComponent('${encodeURIComponent(String(waEntry?.wa || ''))}'))"
+                                        class="bg-green-600 hover:bg-green-700 text-white member-renew-button"
+                                        title="Konfirmasi perpanjangan member melalui WhatsApp">
+                                    📲 Perpanjang
+                                </button>
                                 ${logoButton}
                             </div>
                         </article>
@@ -16830,6 +16858,7 @@ return;
                         nama:String(cell.nama).trim(),
                         tanggal,
                         jam:jamNormal,
+                        wa:String(cell.wa || '').trim(),
                         memberKey:cell.key || ''
                     });
                 });
@@ -16849,7 +16878,8 @@ return;
                     bookingKey:key,
                     nama:String(item.nama).trim(),
                     tanggal:dt.date,
-                    jam:dt.jam
+                    jam:dt.jam,
+                    wa:String(item.wa || '').trim()
                 });
             });
             return options;
@@ -16906,7 +16936,7 @@ return;
             const options = getSparingTeamOptions();
 
             selectTimA.innerHTML = '<option value="">Pilih tim dari jadwal</option><option value="__manual__">✏️ Tim Tanpa Jadwal Tetap</option>' + options.map(item =>
-                `<option value="${escapeHtmlSparing(item.key)}" data-source="${escapeHtmlSparing(item.source)}" data-booking-key="${escapeHtmlSparing(item.bookingKey || '')}" data-tanggal="${escapeHtmlSparing(item.tanggal)}" data-jam="${escapeHtmlSparing(item.jam)}">${escapeHtmlSparing(item.nama)} · ${escapeHtmlSparing(formatTanggalSparing(item.tanggal))} · ${escapeHtmlSparing(item.jam)}${item.source === 'Member' ? ' · Member' : ' · Booking'}</option>`
+                `<option value="${escapeHtmlSparing(item.key)}" data-source="${escapeHtmlSparing(item.source)}" data-booking-key="${escapeHtmlSparing(item.bookingKey || '')}" data-tanggal="${escapeHtmlSparing(item.tanggal)}" data-jam="${escapeHtmlSparing(item.jam)}" data-wa="${escapeHtmlSparing(item.wa || '')}">${escapeHtmlSparing(item.nama)} · ${escapeHtmlSparing(formatTanggalSparing(item.tanggal))} · ${escapeHtmlSparing(item.jam)}${item.source === 'Member' ? ' · Member' : ' · Booking'}</option>`
             ).join('');
 
             let selected = null;
@@ -16953,6 +16983,15 @@ return;
                 selectTimA.value = selected.key;
                 if(tanggal) tanggal.value = selected.tanggal;
                 if(jam) jam.value = selected.jam;
+
+                // Otomatis isi No. WhatsApp dari data Tim Member/Booking.
+                // Tetap editable: admin bisa mengganti nomor secara manual setelah terisi.
+                const waInput = document.getElementById('sparring-wa');
+                const selectedWa = String(selected.wa || '').trim();
+                if(waInput && !currentItem) {
+                    waInput.value = selectedWa;
+                }
+
                 if(info) info.innerHTML = `🔗 <b>${escapeHtmlSparing(selected.nama)}</b> · ${escapeHtmlSparing(formatTanggalSparing(selected.tanggal))} · ${escapeHtmlSparing(selected.jam)} · ${selected.source === 'Member' ? 'Jadwal Member' : 'Booking'}`;
             } else {
                 if(tanggal) tanggal.value = '';
@@ -28911,6 +28950,27 @@ body.jadwal-uang-masuk-modal-active #page-masuk {
     font-size:7px !important;
     padding:1px !important;
     border-radius:6px !important;
+  }
+}
+</style>
+<style id="member-renew-button-v1">
+/* Tombol baru: konfirmasi perpanjangan member via WhatsApp */
+#page-atur-member .member-card-actions .member-renew-button{
+  background:#16a34a !important;
+  color:#fff !important;
+  border:1px solid #15803d !important;
+}
+#page-atur-member .member-card-actions .member-renew-button:hover{
+  background:#15803d !important;
+}
+@media (max-width:640px){
+  #page-atur-member .member-card-actions .member-renew-button{
+    font-size:7.5px !important;
+  }
+}
+@media (max-width:380px){
+  #page-atur-member .member-card-actions .member-renew-button{
+    font-size:7px !important;
   }
 }
 </style>
