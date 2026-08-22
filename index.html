@@ -21272,14 +21272,15 @@ window.downloadDailyRecapJPGFull = async function() {
         });
 
         setProgress(92, 'Menyiapkan file...', 'JPG hampir selesai dibuat.');
-        const link = document.createElement('a');
-        link.download = (typeof window.getDailyReportFullFileName === 'function')
+        const fileName = (typeof window.getDailyReportFullFileName === 'function')
             ? window.getDailyReportFullFileName()
             : `Daily Report ${rawDate} - Versi Lengkap.jpg`;
-        link.href = canvas.toDataURL('image/jpeg', .95);
-        link.click();
-        showResult(true, 'Laporan JPG berhasil disimpan ke perangkat.');
-        setTimeout(() => progressOverlay.remove(), 1800);
+        const dataUrl = canvas.toDataURL('image/jpeg', .95);
+        const saveResult = window.dailyReportSaveFile(dataUrl, fileName);
+        showResult(true, saveResult.ios
+            ? 'Laporan siap disimpan. Tekan lama gambar lalu pilih “Simpan ke Foto”.'
+            : 'Laporan JPG berhasil disimpan ke perangkat.');
+        setTimeout(() => progressOverlay.remove(), saveResult.ios ? 900 : 1800);
     } catch (error) {
         console.error('Gagal membuat Daily Report JPG:', error);
         showResult(false, 'Terjadi kesalahan saat membuat atau mengunduh laporan.');
@@ -25755,6 +25756,28 @@ body.minuman-history-modal-open{overflow:hidden !important}
 #daily-report-download-choice .secondary{color:#0f172a;background:rgba(255,255,255,.48);box-shadow:0 8px 22px rgba(15,23,42,.08),inset 0 1px 0 rgba(255,255,255,.7)}
 #daily-report-download-choice .daily-glass-cancel{width:100%;border:0;background:transparent;color:#475569;padding:10px 8px 3px;cursor:pointer;font:inherit;font-size:14px;font-weight:700}
 </style>
+<script id="daily-report-ios-download-fix">
+(function(){
+'use strict';
+function isIOS(){return /iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)}
+function safeName(n){return String(n||'Daily-Report.jpg').replace(/[\\/:*?"<>|]+/g,'-')}
+window.openDailyReportIOSPreview=function(dataUrl,fileName){
+ const old=document.getElementById('daily-report-ios-save-overlay'); if(old)old.remove();
+ const o=document.createElement('div');o.id='daily-report-ios-save-overlay';o.style.cssText='position:fixed;inset:0;z-index:2147483647;background:rgba(15,23,42,.94);display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box';
+ const s=document.createElement('div');s.style.cssText='width:min(100%,520px);max-height:94vh;overflow:auto;background:#fff;border-radius:22px;padding:16px;box-sizing:border-box;text-align:center;box-shadow:0 25px 70px rgba(0,0,0,.35)';
+ const h=document.createElement('div');h.textContent='📥 Simpan Daily Report';h.style.cssText='font-size:18px;font-weight:900;color:#0f172a;margin-bottom:6px';
+ const p=document.createElement('div');p.textContent='Tekan lama gambar lalu pilih “Simpan ke Foto”, atau gunakan Bagikan.';p.style.cssText='font-size:12px;line-height:1.45;font-weight:700;color:#64748b;margin-bottom:12px';
+ const img=document.createElement('img');img.src=dataUrl;img.alt=fileName||'Daily Report';img.style.cssText='display:block;width:100%;height:auto;border-radius:12px;background:#f8fafc;user-select:none;-webkit-user-select:none;-webkit-touch-callout:default';
+ const row=document.createElement('div');row.style.cssText='display:flex;gap:8px;margin-top:12px';
+ const sh=document.createElement('button');sh.type='button';sh.textContent='↗ Bagikan';sh.style.cssText='flex:1;border:0;border-radius:12px;padding:12px;background:#0f172a;color:#fff;font-weight:900';
+ const cl=document.createElement('button');cl.type='button';cl.textContent='Tutup';cl.style.cssText='flex:1;border:1px solid #cbd5e1;border-radius:12px;padding:12px;background:#fff;color:#0f172a;font-weight:900';
+ sh.onclick=async()=>{try{if(navigator.share&&navigator.canShare&&typeof File!=='undefined'){const blob=await(await fetch(dataUrl)).blob();const f=new File([blob],safeName(fileName),{type:'image/jpeg'});if(navigator.canShare({files:[f]})){await navigator.share({files:[f],title:'Daily Report'});return}}if(navigator.share){await navigator.share({title:'Daily Report',text:fileName||'Daily Report'});return}alert('Tekan lama gambar lalu pilih “Simpan ke Foto”.')}catch(e){if(e?.name!=='AbortError')alert('Tekan lama gambar lalu pilih “Simpan ke Foto”.')}};
+ cl.onclick=()=>o.remove();o.onclick=e=>{if(e.target===o)o.remove()};row.append(sh,cl);s.append(h,p,img,row);o.append(s);document.body.append(o);return true;
+};
+window.dailyReportSaveFile=function(dataUrl,fileName){if(!isIOS()){const a=document.createElement('a');a.download=fileName||'Daily-Report.jpg';a.href=dataUrl;document.body.append(a);a.click();a.remove();return{ios:false}}window.openDailyReportIOSPreview(dataUrl,fileName);return{ios:true}};
+})();
+</script>
+
 <script id="daily-report-wa-final-v2">
 (function(){
   function reportDate(){return document.getElementById('daily-dashboard-date-input')?.value||document.getElementById('filter-tanggal-lapangan')?.value||new Date().toISOString().slice(0,10)}
@@ -25929,7 +25952,7 @@ body.minuman-history-modal-open{overflow:hidden !important}
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">${minumanRows}</div>`;
 
-      document.body.appendChild(root);await new Promise(r=>setTimeout(r,100));pr.set(62,'Membuat gambar...','Menyiapkan JPG versi singkat.');const canvas=await html2canvas(root,{scale:2,backgroundColor:'#f8fafc',useCORS:true,logging:false,width:900,windowWidth:900});pr.set(92,'Menyiapkan file...','JPG hampir selesai dibuat.');const a=document.createElement('a');a.download=`Daily Report ${dateLabel(raw)} - Versi Singkat.jpg`;a.href=canvas.toDataURL('image/jpeg',.95);a.click();pr.ok();setTimeout(()=>pr.o.remove(),1800);root.remove();
+      document.body.appendChild(root);await new Promise(r=>setTimeout(r,100));pr.set(62,'Membuat gambar...','Menyiapkan JPG versi singkat.');const canvas=await html2canvas(root,{scale:2,backgroundColor:'#f8fafc',useCORS:true,logging:false,width:900,windowWidth:900});pr.set(92,'Menyiapkan file...','JPG hampir selesai dibuat.');const fileName=`Daily Report ${dateLabel(raw)} - Versi Singkat.jpg`;const dataUrl=canvas.toDataURL('image/jpeg',.95);const saveResult=window.dailyReportSaveFile(dataUrl,fileName);pr.ok(saveResult.ios?'Laporan siap disimpan. Tekan lama gambar lalu pilih “Simpan ke Foto”.':'Laporan JPG berhasil disimpan ke perangkat.');setTimeout(()=>pr.o.remove(),saveResult.ios?900:1800);root.remove();
     }catch(e){console.error(e);pr.err(e.message||'Terjadi kesalahan saat membuat laporan.');setTimeout(()=>pr.o.remove(),2200)}finally{if(btn){delete btn.dataset.downloadBusy;btn.disabled=false}}
   };
   window.showDailyReportDownloadChoice=showChoice;
