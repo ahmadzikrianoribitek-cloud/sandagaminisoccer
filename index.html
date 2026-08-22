@@ -10281,6 +10281,35 @@ body > header h1{
     <div id="sparring-list" class="space-y-2"></div>
   </div>
 </div>
+
+<!-- SPARING — PILIH BAGIAN -->
+<div id="sparing-chooser-overlay" class="sparing-chooser-overlay" aria-hidden="true">
+  <div class="sparing-chooser" role="dialog" aria-modal="true" aria-labelledby="sparing-chooser-title">
+    <div class="sparing-chooser-head">
+      <button type="button" class="sparing-chooser-close" onclick="closeSparingChooser()" aria-label="Tutup">×</button>
+      <h3 id="sparing-chooser-title">🤝 SPARING</h3>
+      <p>Pilih aktivitas yang ingin dibuka agar tampilan lebih rapi dan fokus.</p>
+    </div>
+    <div class="sparing-chooser-list">
+      <button type="button" class="sparing-chooser-btn" onclick="openSparingSection('form')">
+        <span class="sparing-chooser-icon">➕</span>
+        <span class="sparing-chooser-copy">
+          <strong>Buat Sparing Baru</strong>
+          <small>Buat permintaan sparing baru dan isi form sparing.</small>
+        </span>
+        <span class="sparing-chooser-arrow">›</span>
+      </button>
+      <button type="button" class="sparing-chooser-btn" onclick="openSparingSection('list')">
+        <span class="sparing-chooser-icon">📋</span>
+        <span class="sparing-chooser-copy">
+          <strong>Edit Sparing yang Sudah Ada</strong>
+          <small>Lihat daftar sparing, lalu pilih data yang ingin diedit.</small>
+        </span>
+        <span class="sparing-chooser-arrow">›</span>
+      </button>
+    </div>
+  </div>
+</div>
 <!-- HALAMAN BOOKING SCHEDULE -->
 <div class="sub-menu-modern glass-panel p-3 sm:p-6 rounded-2xl hidden" id="page-booking-schedule">
 
@@ -11844,7 +11873,7 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
     <div class="more-page-grid">
       <button type="button" onclick="quickMoreOpen('pelunasan-member')"><span>🧾</span><b>Pelunasan Member</b><small>Tagihan member</small></button>
       <button type="button" onclick="quickMoreOpen('booking')"><span>⚽</span><b>Booking</b><small>Input booking</small></button>
-      <button type="button" onclick="quickMoreOpen('sparring')"><span>🤝</span><b>Sparing</b><small>Catat sparing</small></button>
+      <button type="button" onclick="openSparingChooser()"><span>🤝</span><b>Sparing</b><small>Catat sparing</small></button>
       <button type="button" onclick="quickMoreOpen('admin-jaga')"><span>🧑‍💼</span><b>Admin Jaga</b><small>Jadwal admin</small></button>
       <button type="button" onclick="openAturMemberChooser()"><span>⚙️</span><b>Atur Member</b><small>Data member</small></button>
       <button type="button" onclick="quickMoreOpen('booking-schedule')"><span>🗓️</span><b>Booking Schedule</b><small>Jadwal booking</small></button>
@@ -11858,6 +11887,32 @@ Alur pengeluaran: Cash Lapangan dipakai terlebih dahulu → jika kurang, otomati
 
 </main>
 <!-- Script Firebase & Logika Aplikasi -->
+
+<style id="sparing-chooser-ui-v1">
+.sparing-chooser-overlay{position:fixed;inset:0;z-index:2147483646;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(15,23,42,.42);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:sparingChooserFade .16s ease-out}
+.sparing-chooser-overlay.is-open{display:flex!important}
+.sparing-chooser{width:min(100%,470px);max-height:min(90vh,620px);overflow:auto;background:rgba(255,255,255,.98);border:1px solid rgba(255,255,255,.95);border-radius:22px;padding:20px;box-shadow:0 25px 70px rgba(15,23,42,.24);animation:sparingChooserIn .2s cubic-bezier(.2,.8,.2,1)}
+.sparing-chooser-head{position:relative;text-align:center;padding:2px 42px 14px;border-bottom:1px solid #e2e8f0}
+.sparing-chooser-head h3{margin:0;color:#0f172a;font-size:1.05rem;line-height:1.15;font-weight:950;letter-spacing:.02em}
+.sparing-chooser-head p{margin:6px 0 0;color:#64748b;font-size:.68rem;line-height:1.35;font-weight:700}
+.sparing-chooser-close{position:absolute;top:-1px;right:0;width:34px;height:34px;display:grid;place-items:center;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc;color:#475569;font-size:18px;font-weight:900;cursor:pointer;transition:.16s ease}
+.sparing-chooser-close:hover{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe;transform:translateY(-1px)}
+.sparing-chooser-list{display:grid;gap:10px;margin-top:15px}
+.sparing-chooser-btn{width:100%;display:grid;grid-template-columns:48px minmax(0,1fr) 22px;align-items:center;gap:12px;padding:13px 14px;border:1px solid #e2e8f0;border-radius:15px;background:#fff;color:#0f172a;text-align:left;cursor:pointer;box-shadow:0 5px 16px rgba(15,23,42,.055);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease,background .16s ease}
+.sparing-chooser-btn:hover{transform:translateY(-2px);border-color:#c4b5fd;background:#faf8ff;box-shadow:0 10px 24px rgba(124,58,237,.10)}
+.sparing-chooser-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:14px;font-size:1.25rem;background:#f5f3ff;border:1px solid #ede9fe}
+.sparing-chooser-copy{min-width:0}
+.sparing-chooser-copy strong{display:block;font-size:.78rem;line-height:1.2;font-weight:950}
+.sparing-chooser-copy small{display:block;margin-top:4px;color:#64748b;font-size:.62rem;line-height:1.3;font-weight:700}
+.sparing-chooser-arrow{color:#94a3b8;font-size:1.35rem;font-weight:900}
+@keyframes sparingChooserFade{from{opacity:0}to{opacity:1}}
+@keyframes sparingChooserIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+#page-sparring[data-sparring-mode="form"] .sparring-list-wrap{display:none!important}
+#page-sparring[data-sparring-mode="list"] .sparring-form-wrap{display:none!important}
+#page-sparring[data-sparring-mode="form"] .sparring-form-wrap,#page-sparring[data-sparring-mode="list"] .sparring-list-wrap{display:block}
+@media(max-width:640px){.sparring-chooser{padding:16px;border-radius:20px}.sparring-chooser-btn{grid-template-columns:42px minmax(0,1fr) 18px;padding:11px 12px}.sparring-chooser-icon{width:42px;height:42px;border-radius:12px}}
+</style>
+
 <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getDatabase, ref, push, remove, update, onValue, get } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
@@ -28970,6 +29025,85 @@ document.addEventListener('DOMContentLoaded', function(){
     </div>
   </div>
 </div>
+
+
+<script id="sparing-chooser-script">
+(function(){
+  'use strict';
+  const chooser=()=>document.getElementById('sparing-chooser-overlay');
+  const page=()=>document.getElementById('page-sparring');
+
+  window.openSparingChooser=function(){
+    const overlay=chooser(), p=page();
+    if(!overlay) return;
+    if(p) p.removeAttribute('data-sparring-mode');
+    overlay.classList.add('is-open');
+    overlay.setAttribute('aria-hidden','false');
+    document.body.classList.add('sparing-chooser-open');
+  };
+
+  window.closeSparingChooser=function(){
+    const overlay=chooser();
+    if(!overlay) return;
+    overlay.classList.remove('is-open');
+    overlay.setAttribute('aria-hidden','true');
+    document.body.classList.remove('sparing-chooser-open');
+  };
+
+  window.openSparingSection=function(section){
+    const p=page();
+    if(!p) return;
+    if(typeof window.quickMoreOpen==='function') window.quickMoreOpen('sparring');
+
+    setTimeout(function(){
+      p.setAttribute('data-sparring-mode',section==='list'?'list':'form');
+      p.scrollTop=0;
+
+      if(section==='form'){
+        if(typeof window.batalEditSparing==='function') window.batalEditSparing();
+        const first=document.getElementById('sparring-tim-a');
+        if(first) first.scrollIntoView({behavior:'smooth',block:'start'});
+      }else{
+        if(typeof window.renderSparing==='function') window.renderSparing();
+        const list=document.getElementById('sparring-list');
+        if(list) list.scrollIntoView({behavior:'smooth',block:'start'});
+      }
+      window.closeSparingChooser();
+    },30);
+  };
+
+  const originalEditSparing=window.editSparing;
+  window.editSparing=function(key){
+    const p=page();
+    if(p) p.setAttribute('data-sparring-mode','form');
+    if(typeof originalEditSparing==='function') originalEditSparing(key);
+  };
+
+  document.addEventListener('click',function(e){
+    const overlay=chooser();
+    if(overlay&&overlay.classList.contains('is-open')&&e.target===overlay) window.closeSparingChooser();
+  });
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&chooser()?.classList.contains('is-open')) window.closeSparingChooser();
+  });
+
+  const observer=new MutationObserver(function(){
+    const p=page();
+    if(p&&p.classList.contains('hidden')){
+      p.removeAttribute('data-sparring-mode');
+      if(chooser()) window.closeSparingChooser();
+    }
+  });
+
+  function startObserver(){
+    const p=page();
+    if(p) observer.observe(p,{attributes:true,attributeFilter:['class']});
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',startObserver,{once:true});
+  else startObserver();
+})();
+</script>
 
 <script id="atur-member-chooser-script">
 (function(){
